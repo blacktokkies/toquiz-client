@@ -1,4 +1,4 @@
-import { SuccessResponse } from '../response';
+import { type SuccessResponse } from '../response';
 
 export interface LogOutResult {
   message: string;

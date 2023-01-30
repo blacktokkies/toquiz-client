@@ -1,5 +1,5 @@
-import { SuccessResponse } from '../response';
-import { User } from './domain';
+import { type SuccessResponse } from '../response';
+import { type User } from './domain';
 
 export type LogInResult = Pick<User, 'id' | 'nickname'>;
 
