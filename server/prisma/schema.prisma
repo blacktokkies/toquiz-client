@@ -75,10 +75,10 @@ model Question {
 model Answer {
   id Int @id @default(autoincrement())
 
-  User       User     @relation(fields: [userId], references: [id])
-  userId     String
-  Question   Question @relation(fields: [questionId], references: [id])
-  questionId Int
+  User        User     @relation(fields: [user_id], references: [id])
+  user_id     String
+  Question    Question @relation(fields: [question_id], references: [id])
+  question_id Int
 
   content    String
   created_at DateTime  @default(now())
