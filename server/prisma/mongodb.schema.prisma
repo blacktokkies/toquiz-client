@@ -11,9 +11,15 @@ datasource db {
   url      = env("MONGODB_DATABASE_URL")
 }
 
-model ToquizModel {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+type Pannel {
   pannelId  Int
+  likes     String[]
+  questions String[]
+}
+
+model ToquizUser {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  pannel    Pannel[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
