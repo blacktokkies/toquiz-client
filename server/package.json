@@ -24,7 +24,6 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/user/test/jest-e2e.json",
     "migrate:mysql:dev": "dotenv -e ./config/.env.dev -- prisma migrate dev --schema ./prisma/mysql.schema.prisma --name mysql",
-    "migrate:mongodb:dev": "dotenv -e ./config/.env.dev -- prisma migrate --schema ./prisma/mongodb.schema.prisma --name mongodb",
     "generate:mysql": "prisma generate --schema ./prisma/mysql.schema.prisma",
     "generate:mongodb": "prisma generate --schema ./prisma/mongodb.schema.prisma",
     "generate": "yarn generate:mysql; yarn generate:mongodb "
