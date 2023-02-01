@@ -13,75 +13,75 @@ datasource db {
 model User {
   id String @id @default(uuid())
 
-  pannels          Pannel[]
-  answers          Answer[]
-  scrapped_pannels Scrap[]
+  pannels         Pannel[]
+  answers         Answer[]
+  scrappedPannels Scrap[]
 
-  username   String
-  password   String
-  nickname   String
-  provider   String
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt()
-  deleted_at DateTime?
+  username  String
+  password  String
+  nickname  String
+  provider  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+  deletedAt DateTime?
 }
 
 model Scrap {
-  user      User   @relation(fields: [user_id], references: [id])
-  user_id   String
-  pannel    Pannel @relation(fields: [pannel_id], references: [id])
-  pannel_id Int
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String
+  pannel   Pannel @relation(fields: [pannelId], references: [id])
+  pannelId Int
 
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt()
-  deleted_at DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+  deletedAt DateTime?
 
-  @@id([user_id, pannel_id])
+  @@id([userId, pannelId])
 }
 
 model Pannel {
   id Int @id @default(autoincrement())
 
-  user    User   @relation(fields: [user_id], references: [id])
-  user_id String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
-  scrapped_users Scrap[]
-  questions      Question[]
+  scrappedUsers Scrap[]
+  questions     Question[]
 
-  describe    String
-  is_archived Boolean   @default(false)
-  scrap_num   Int       @default(0)
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  deleted_at  DateTime?
+  describe   String
+  isArchived Boolean   @default(false)
+  scrapNum   Int       @default(0)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
 }
 
 model Question {
   id Int @id @default(autoincrement())
 
-  pannel    Pannel @relation(fields: [pannel_id], references: [id])
-  pannel_id Int
+  pannel   Pannel @relation(fields: [pannelId], references: [id])
+  pannelId Int
 
   answers Answer[]
 
-  content    String
-  answer_num Int       @default(0)
-  like_num   Int       @default(0)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  deleted_at DateTime?
+  content   String
+  answerNum Int       @default(0)
+  likeNum   Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
 
 model Answer {
   id Int @id @default(autoincrement())
 
-  User        User     @relation(fields: [user_id], references: [id])
-  user_id     String
-  Question    Question @relation(fields: [question_id], references: [id])
-  question_id Int
+  User       User     @relation(fields: [userId], references: [id])
+  userId     String
+  Question   Question @relation(fields: [questionId], references: [id])
+  questionId Int
 
-  content    String
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  deleted_at DateTime?
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }
