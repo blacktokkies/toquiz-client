@@ -1,8 +1,8 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient as MysqlPrismaClient } from '../../prisma/generated/mysql';
+import { PrismaClient } from '../../prisma/generated/mysql';
 
 @Injectable()
-export class MysqlPrismaService extends MysqlPrismaClient implements OnModuleInit {
+export class MysqlPrismaService extends PrismaClient implements OnModuleInit {
   async onModuleInit() {
     await this.$connect();
   }
