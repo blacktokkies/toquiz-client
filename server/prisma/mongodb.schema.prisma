@@ -11,15 +11,15 @@ datasource db {
   url      = env("MONGODB_DATABASE_URL")
 }
 
-type Pannel {
-  pannelId  Int
+type Panel {
+  panelId   Int
   likes     String[]
   questions String[]
 }
 
-model ToquizUser {
+model AnonymousUser {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  pannel    Pannel[]
+  panels    Panel[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
