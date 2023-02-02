@@ -14,9 +14,9 @@ datasource db {
 model User {
   id String @id @default(uuid())
 
-  pannels         Pannel[]
-  answers         Answer[]
-  scrappedPannels Scrap[]
+  panels  Panel[]
+  answers Answer[]
+  scraps  Scrap[]
 
   username  String
   password  String
@@ -28,40 +28,38 @@ model User {
 }
 
 model Scrap {
-  user     User   @relation(fields: [userId], references: [id])
-  userId   String
-  pannel   Pannel @relation(fields: [pannelId], references: [id])
-  pannelId Int
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  panel   Panel  @relation(fields: [panelId], references: [id])
+  panelId Int
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt()
-  deletedAt DateTime?
+  createdAt DateTime @default(now())
 
-  @@id([userId, pannelId])
+  @@id([userId, panelId])
 }
 
-model Pannel {
+model Panel {
   id Int @id @default(autoincrement())
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  scrappedUsers Scrap[]
-  questions     Question[]
+  scraps    Scrap[]
+  questions Question[]
 
-  describe   String
-  isArchived Boolean   @default(false)
-  scrapNum   Int       @default(0)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  deletedAt  DateTime?
+  description String
+  isArchived  Boolean   @default(false)
+  scrapNum    Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
 }
 
 model Question {
   id Int @id @default(autoincrement())
 
-  pannel   Pannel @relation(fields: [pannelId], references: [id])
-  pannelId Int
+  panel   Panel @relation(fields: [panelId], references: [id])
+  panelId Int
 
   answers Answer[]
 
