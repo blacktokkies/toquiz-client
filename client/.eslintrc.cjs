@@ -35,6 +35,8 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/triple-slash-reference': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/no-floating-promises': 'off',
   },
   settings: {
     react: {
