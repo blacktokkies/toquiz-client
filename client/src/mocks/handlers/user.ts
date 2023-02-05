@@ -16,6 +16,4 @@ export const getUser = rest.get<
   GetUserRequestBody,
   GetUserRequestParams,
   GetUserResponseBody
->('/api/user', (req, res, ctx) => {
-  return res(ctx.json({ name: '사용자' }));
-});
+>('/api/user', (req, res, ctx) => res(ctx.json({ name: '사용자' })));
