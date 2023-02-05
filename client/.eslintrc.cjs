@@ -17,6 +17,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'standard-with-typescript',
     'plugin:prettier/recommended',
+    'plugin:tailwindcss/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -26,13 +27,7 @@ module.exports = {
     project: './tsconfig.json',
   },
   plugins: ['@typescript-eslint'],
-  ignorePatterns: [
-    '.eslintrc.cjs',
-    'public',
-    'dist',
-    '**/*.config.ts',
-    '**/*.config.js',
-  ],
+  ignorePatterns: ['.eslintrc.cjs', 'public', 'dist', '*.config.*'],
   rules: {
     'arrow-body-style': 'error',
     'import/newline-after-import': 'error',
