@@ -11,29 +11,29 @@
   "projects": {
     "server": {
       "type": "application",
-      "root": "apps/user",
+      "root": "apps/api",
       "entryFile": "main",
-      "sourceRoot": "apps/user/src",
+      "sourceRoot": "apps/api/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/user/tsconfig.app.json"
+        "tsConfigPath": "apps/api/tsconfig.app.json"
       }
     },
-    "user": {
+    "api": {
       "type": "application",
-      "root": "apps/user",
+      "root": "apps/api",
       "entryFile": "main",
-      "sourceRoot": "apps/user/src",
+      "sourceRoot": "apps/api/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/user/tsconfig.app.json"
+        "tsConfigPath": "apps/api/tsconfig.app.json"
       }
     },
-    "panel": {
+    "socket": {
       "type": "application",
-      "root": "apps/panel",
+      "root": "apps/socket",
       "entryFile": "main",
-      "sourceRoot": "apps/panel/src",
+      "sourceRoot": "apps/socket/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/panel/tsconfig.app.json"
+        "tsConfigPath": "apps/socket/tsconfig.app.json"
       }
     }
   }
