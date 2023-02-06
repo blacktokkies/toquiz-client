@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { PanelModule } from '../src/panel.module';
+import { ApiModule } from '../src/api.module';
 
-describe('PanelController (e2e)', () => {
+describe('ApiController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [PanelModule],
+      imports: [ApiModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -16,9 +16,6 @@ describe('PanelController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+    return request(app.getHttpServer()).get('/').expect(200).expect('Hello World!');
   });
 });
