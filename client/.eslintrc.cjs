@@ -27,7 +27,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'jsx-a11y'],
+  plugins: ['@typescript-eslint', 'jsx-a11y', 'tailwindcss'],
   ignorePatterns: ['.eslintrc.cjs', 'public', 'dist', '*.config.*'],
   rules: {
     'arrow-body-style': 'error',
@@ -76,6 +76,7 @@ module.exports = {
         fixStyle: 'separate-type-imports',
       },
     ],
+    'tailwindcss/no-custom-classname': 'off',
   },
   settings: {
     react: {
