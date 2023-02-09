@@ -12,6 +12,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:jsx-a11y/recommended',
     'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
@@ -26,7 +27,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'jsx-a11y'],
   ignorePatterns: ['.eslintrc.cjs', 'public', 'dist', '*.config.*'],
   rules: {
     'arrow-body-style': 'error',
@@ -64,6 +65,7 @@ module.exports = {
       },
     ],
     'react/self-closing-comp': 'error',
+    'react/button-has-type': 'error',
     '@typescript-eslint/triple-slash-reference': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-floating-promises': 'off',
