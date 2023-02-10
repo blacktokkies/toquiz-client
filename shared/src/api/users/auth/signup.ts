@@ -1,4 +1,4 @@
-import { type SuccessResponse } from '../response';
+import { type SuccessResponse } from '@api/response';
 
 export interface SignUpResult {
   message: string;

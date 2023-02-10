@@ -12,7 +12,10 @@
     "declarationMap": true,
     "sourceMap": true,
     "removeComments": true,
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "@api/*": ["./src/api/*"],
+    }
   },
-  "include": ["src"]
+  "include": ["src"],
 }
