@@ -18,6 +18,7 @@ module.exports = {
       'off-black': '#242424',
       primary: {
         light: '#ABE1FF',
+        400: '#57C2FF',
         DEFAULT: '#2DB3FF',
         dark: '#0C3045',
       },
