@@ -1,6 +1,5 @@
 import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ApiController } from './api.controller';
 import { LoggerMiddleware } from 'libs/middleware/logger.middleware';
 
 @Module({
@@ -10,7 +9,7 @@ import { LoggerMiddleware } from 'libs/middleware/logger.middleware';
       isGlobal: true,
     }),
   ],
-  controllers: [ApiController],
+  controllers: [],
   providers: [ConfigService, Logger],
 })
 export class ApiModule implements NestModule {
