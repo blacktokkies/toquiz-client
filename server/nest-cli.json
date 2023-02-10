@@ -6,7 +6,13 @@
   "root": "apps/user",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/user/tsconfig.app.json"
+    "tsConfigPath": "apps/user/tsconfig.app.json",
+    "assets": [
+      {
+        "include": "./config/*.env",
+        "outDir": "./dist"
+      }
+    ]
   },
   "projects": {
     "server": {
