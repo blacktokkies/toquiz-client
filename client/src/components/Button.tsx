@@ -13,8 +13,9 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(
-  ({ variant = 'filled', className = '', ...rest }) => (
+  ({ variant = 'filled', className = '', ...rest }, ref) => (
     <button
+      ref={ref}
       className={`text-off-black hover:bg-primary-400 min-h-[48px] min-w-[128px] rounded-md py-3 font-bold disabled:opacity-30 ${variantStyle[variant]} ${className}`}
       type="button"
       {...rest}

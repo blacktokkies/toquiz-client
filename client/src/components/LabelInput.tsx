@@ -18,7 +18,7 @@ const LabelInput = forwardRef<HTMLInputElement, Props>(
         {label}
         {required && <Emergency className="fill-error-dark h-2 w-2" />}
       </label>
-      <Input id={id} {...rest} />
+      <Input id={id} {...rest} ref={ref} />
     </div>
   ),
 );
