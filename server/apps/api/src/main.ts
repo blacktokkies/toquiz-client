@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ApiModule } from './api.module';
 import { setSwagger } from 'libs/swagger-setting';
-import { winstonLogger } from 'libs/wisnton-logger/winston-logger';
+import { winstonLogger } from 'libs/wisnton-logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiModule, {
