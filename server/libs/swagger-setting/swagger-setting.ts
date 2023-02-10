@@ -1,7 +1,7 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication, Logger } from '@nestjs/common';
 
-const setSwagger = (app: INestApplication): void => {
+const setSwagger = (app: INestApplication, path: string): void => {
   const config = new DocumentBuilder()
     .setTitle('Toquiz API')
     .setDescription('The Toquiz API')
@@ -10,7 +10,7 @@ const setSwagger = (app: INestApplication): void => {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, document);
+  SwaggerModule.setup(path, app, document);
 
   new Logger('SettingSwagger').log(`Swagger setting success`);
 };
