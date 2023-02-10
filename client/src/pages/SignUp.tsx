@@ -1,15 +1,29 @@
+import type { FormEvent } from 'react';
+
 import React from 'react';
 
 import { Link } from 'react-router-dom';
 
 import Button from '@/components/Button';
 import LabelInput from '@/components/LabelInput';
+import { useSignUpMutation } from '@/lib/hooks/mutations/auth';
 
 function Signup(): JSX.Element {
+  const mutation = useSignUpMutation();
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const id = formData.get('id') as string;
+    const password = formData.get('password') as string;
+    const nickname = formData.get('nickname') as string;
+    mutation.mutate({ username: id, password, nickname });
+  };
+
   return (
     <div className="mx-auto flex h-full max-w-xl flex-col items-center justify-center px-9">
       <div className="mb-14 text-3xl font-bold">toquiz</div>
-      <form className="flex w-full flex-col gap-8">
+      <form className="flex w-full flex-col gap-8" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-5">
           <LabelInput
             label="아이디"
@@ -38,7 +52,9 @@ function Signup(): JSX.Element {
             placeholder="닉네임을 입력하세요"
           />
         </div>
-        <Button className="w-full">회원가입</Button>
+        <Button type="submit" className="w-full">
+          회원가입
+        </Button>
       </form>
       <div className="mt-2">
         계정이 있나요?{' '}
