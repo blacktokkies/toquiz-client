@@ -33,7 +33,7 @@ function Signup(): JSX.Element {
           />
           <LabelInput
             label="닉네임"
-            id="username"
+            id="nickname"
             required
             placeholder="닉네임을 입력하세요"
           />
