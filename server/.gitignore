@@ -35,5 +35,5 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 config/*
-prisma/generated/*
-prisma/migrations/*
+libs/prisma/prisma/generated/*
+libs/prisma/prisma/migrations/*
