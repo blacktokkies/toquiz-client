@@ -3,7 +3,7 @@ import { type User } from '@api/users/domain';
 
 export interface SignUpBody {
   username: User['username'];
-  password: string;
+  password: User['password'];
   nickname: User['nickname'];
 }
 
