@@ -23,9 +23,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/user/test/jest-e2e.json",
-    "migrate:mysql:dev": "dotenv -e ./config/.development.env -- prisma migrate dev --schema ./prisma/mysql.schema.prisma --name mysql",
-    "generate:mysql": "prisma generate --schema ./prisma/mysql.schema.prisma",
-    "generate:mongodb": "prisma generate --schema ./prisma/mongodb.schema.prisma",
+    "migrate:mysql:dev": "dotenv -e ./config/.development.env -- libs/prisma/prisma migrate dev --schema ./prisma/mysql.schema.prisma --name mysql",
+    "generate:mysql": "libs/prisma/prisma generate --schema ./prisma/mysql.schema.prisma",
+    "generate:mongodb": "libs/prisma/prisma generate --schema ./prisma/mongodb.schema.prisma",
     "generate": "yarn generate:mysql; yarn generate:mongodb "
   },
   "dependencies": {
@@ -36,6 +36,8 @@
     "@nestjs/swagger": "^6.1.4",
     "@prisma/client": "^4.9.0",
     "app-root-path": "^3.1.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "dotenv-cli": "^7.0.0",
     "nest-winston": "^1.8.0",
     "reflect-metadata": "^0.1.13",
