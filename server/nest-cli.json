@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/user/src",
+  "sourceRoot": "apps/api/src",
   "monorepo": true,
-  "root": "apps/user",
+  "root": "apps/api",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/user/tsconfig.app.json",
+    "tsConfigPath": "apps/api/tsconfig.app.json",
     "assets": [
       {
         "include": "./config/*.env",
@@ -15,15 +15,6 @@
     ]
   },
   "projects": {
-    "server": {
-      "type": "application",
-      "root": "apps/api",
-      "entryFile": "main",
-      "sourceRoot": "apps/api/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/api/tsconfig.app.json"
-      }
-    },
     "api": {
       "type": "application",
       "root": "apps/api",
@@ -40,6 +31,15 @@
       "sourceRoot": "apps/socket/src",
       "compilerOptions": {
         "tsConfigPath": "apps/socket/tsconfig.app.json"
+      }
+    },
+    "prisma": {
+      "type": "library",
+      "root": "libs/prisma",
+      "entryFile": "index",
+      "sourceRoot": "libs/prisma/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/prisma/tsconfig.lib.json"
       }
     }
   }
