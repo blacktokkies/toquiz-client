@@ -1,10 +1,9 @@
 import { type SuccessResponse } from '@api/response';
-import { type User } from '@api/users/domain';
 
 export interface SignUpBody {
-  username: User['username'];
-  password: User['password'];
-  nickname: User['nickname'];
+  username: string;
+  password: string;
+  nickname: string;
 }
 
 export interface SignUpResult {
