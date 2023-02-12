@@ -1,6 +1,5 @@
-import type { SignUpParams } from '@/lib/api/auth';
 import type { UseMutationResult } from '@tanstack/react-query';
-import type { SignUpResult } from 'shared';
+import type { SignUpBody, SignUpResult } from 'shared';
 
 import { useMutation } from '@tanstack/react-query';
 
@@ -11,11 +10,11 @@ import { queryKey } from '@/lib/constants';
 export const useSignUpMutation = (): UseMutationResult<
   SignUpResult,
   Error,
-  SignUpParams,
+  SignUpBody,
   unknown
 > => {
   const key = queryKey.auth.signup();
-  const mutation = useMutation<SignUpResult, Error, SignUpParams, unknown>(
+  const mutation = useMutation<SignUpResult, Error, SignUpBody, unknown>(
     key,
     signUp,
   );
