@@ -7,7 +7,7 @@ export const queryKey = {
 };
 
 const authApiUrl = {
-  signup: () => `/api/user/auth/signup`,
+  signup: () => `/api/users/auth/signup`,
 };
 
 export const apiUrl = {
