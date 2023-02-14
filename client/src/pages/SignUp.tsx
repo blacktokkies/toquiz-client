@@ -27,27 +27,28 @@ function Signup(): JSX.Element {
         <div className="flex flex-col gap-5">
           <LabelInput
             label="아이디"
-            id="id"
+            name="username"
             required
             placeholder="아이디를 입력하세요"
+            errorMessage="잘못된 아이디 형식입니다"
           />
           <LabelInput
             label="비밀번호"
-            id="password"
+            name="password"
             type="password"
             required
             placeholder="비밀번호를 입력하세요"
           />
           <LabelInput
             label="비밀번호 확인"
-            id="confirm-password"
+            name="confirm-password"
             type="password"
             required
             placeholder="비밀번호를 다시 입력하세요"
           />
           <LabelInput
             label="닉네임"
-            id="nickname"
+            name="nickname"
             required
             placeholder="닉네임을 입력하세요"
           />
