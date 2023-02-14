@@ -5,7 +5,7 @@ import { Emergency } from '@/components/vectors';
 
 interface Props extends InputProps {
   label: string;
-  id: string;
+  id?: string;
 }
 
 const LabelInput = forwardRef<HTMLInputElement, Props>(
