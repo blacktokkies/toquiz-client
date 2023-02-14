@@ -21,6 +21,7 @@
       "@/pages/*": ["src/pages/*"],
       "@/components/*": ["src/components/*"],
       "@/mocks/*": ["src/mocks/*"],
+      "@/hooks/*": ["src/hooks/*"],
       "@/*": ["src/*"]
     }
   },
