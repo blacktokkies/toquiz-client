@@ -12,7 +12,7 @@ interface Props {
 }
 const SignUpForm = ({ action }: Props): JSX.Element => {
   const passwordRef = useRef<HTMLInputElement | null>(null);
-  const { handleChangeWithValidation, errors } = useFormError({
+  const { onChange, errors } = useFormError({
     form: {
       username: {
         errorMessage: '5~16자 이하의 영문 대소문자, 숫자, @를 입력하세요',
@@ -47,7 +47,7 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
           required
           placeholder="아이디를 입력하세요"
           errorMessage={errors.username}
-          onChange={handleChangeWithValidation.username}
+          onChange={onChange.username}
         />
         <LabelInput
           ref={passwordRef}
@@ -64,7 +64,7 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
           required
           placeholder="비밀번호를 다시 입력하세요"
           errorMessage={errors.confirm_password}
-          onChange={handleChangeWithValidation.confirm_password}
+          onChange={onChange.confirm_password}
         />
         <LabelInput
           label="닉네임"

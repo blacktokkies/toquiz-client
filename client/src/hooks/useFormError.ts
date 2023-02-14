@@ -8,27 +8,22 @@ export interface FormInputConfig {
   errorMessage?: string;
 }
 
-export interface FormInputProps {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
-
 interface UseFormErrorParams<T extends string> {
   form: Record<T, FormInputConfig>;
 }
 
 interface UseFormErrorReturn<T extends string> {
-  handleChangeWithValidation: Partial<
-    Record<T, ChangeEventHandler<HTMLInputElement>>
-  >;
+  onChange: Partial<Record<T, ChangeEventHandler<HTMLInputElement>>>;
   errors: Partial<Record<T, string | null>>;
 }
 
+const DEFAULT_ERROR_MESSAGE = '유효한 입력값이 아닙니다.';
 export const useFormError = <T extends string>({
   form,
 }: UseFormErrorParams<T>): UseFormErrorReturn<T> => {
   const [errors, setErrors] = useState<Partial<Record<T, string | null>>>({});
 
-  const handleChangeWithValidation = useMemo(() => {
+  const onChange = useMemo(() => {
     const handlers: Partial<Record<T, ChangeEventHandler<HTMLInputElement>>> =
       {};
 
@@ -42,7 +37,7 @@ export const useFormError = <T extends string>({
         const isValid = validate(value);
         const errorMessage = isValid
           ? null
-          : inputConfig.errorMessage ?? '유효한 입력값이 아닙니다.';
+          : inputConfig.errorMessage ?? DEFAULT_ERROR_MESSAGE;
 
         if (errors[inputName] !== errorMessage)
           setErrors((prev) => ({ ...prev, [inputName]: errorMessage }));
@@ -55,5 +50,5 @@ export const useFormError = <T extends string>({
     });
     return handlers;
   }, [form, errors]);
-  return { handleChangeWithValidation, errors };
+  return { onChange, errors };
 };
