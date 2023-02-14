@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import Button from '@/components/Button';
 import LabelInput from '@/components/LabelInput';
-import { useSignUpMutation } from '@/lib/hooks/mutations/auth';
+import { useSignUpMutation } from '@/hooks/mutations/auth';
 
 function Signup(): JSX.Element {
   const mutation = useSignUpMutation();
