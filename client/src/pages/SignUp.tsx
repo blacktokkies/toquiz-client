@@ -1,14 +1,31 @@
 import type { FormEvent } from 'react';
 
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { Link } from 'react-router-dom';
 
 import Button from '@/components/Button';
 import LabelInput from '@/components/LabelInput';
 import { useSignUpMutation } from '@/hooks/mutations/auth';
+import { useFormError } from '@/hooks/useFormError';
 
 function Signup(): JSX.Element {
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+  const { handleChangeWithValidation, errors } = useFormError({
+    form: {
+      username: {
+        errorMessage: '5~16자 이하의 영문 대소문자, 숫자, @를 입력하세요',
+      },
+      password: {
+        errorMessage:
+          '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
+      },
+      confirm_password: {
+        validate: (value) => value === passwordRef.current?.value,
+        errorMessage: '동일한 비밀번호를 입력하세요',
+      },
+    },
+  });
   const mutation = useSignUpMutation();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
@@ -29,12 +46,13 @@ function Signup(): JSX.Element {
         <div className="flex flex-col gap-5">
           <LabelInput
             label="아이디"
-            name="username"
             required
             placeholder="아이디를 입력하세요"
-            errorMessage="잘못된 아이디 형식입니다"
+            errorMessage={errors.username}
+            onChange={handleChangeWithValidation.username}
           />
           <LabelInput
+            ref={passwordRef}
             label="비밀번호"
             name="password"
             type="password"
@@ -47,6 +65,8 @@ function Signup(): JSX.Element {
             type="password"
             required
             placeholder="비밀번호를 다시 입력하세요"
+            errorMessage={errors.confirm_password}
+            onChange={handleChangeWithValidation.confirm_password}
           />
           <LabelInput
             label="닉네임"
