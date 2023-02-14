@@ -3,7 +3,7 @@ import type { InputHTMLAttributes } from 'react';
 import React, { forwardRef } from 'react';
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
-  errorMessage?: string;
+  errorMessage?: string | null;
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
