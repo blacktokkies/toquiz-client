@@ -44,6 +44,7 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
       <div className="flex flex-col gap-5">
         <LabelInput
           label="아이디"
+          name="username"
           required
           placeholder="아이디를 입력하세요"
           errorMessage={errors.username}
@@ -56,6 +57,8 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
           type="password"
           required
           placeholder="비밀번호를 입력하세요"
+          errorMessage={errors.password}
+          onChange={onChange.password}
         />
         <LabelInput
           label="비밀번호 확인"
