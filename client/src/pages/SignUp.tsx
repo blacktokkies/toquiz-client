@@ -14,10 +14,12 @@ function Signup(): JSX.Element {
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const id = formData.get('id') as string;
-    const password = formData.get('password') as string;
-    const nickname = formData.get('nickname') as string;
-    mutation.mutate({ username: id, password, nickname });
+    const formDataRecord = Object.fromEntries(formData) as Record<
+      string,
+      string
+    >;
+    const { username, password, nickname } = formDataRecord;
+    mutation.mutate({ username, password, nickname });
   };
 
   return (
