@@ -1,6 +1,8 @@
 import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { LoggerMiddleware } from 'libs/middleware/logger.middleware';
+import { LoggerMiddleware } from 'libs/common/middlewares/logger.middleware';
+import { UsersModule } from '@users/users.module';
+import { PrismaModule } from 'libs/prisma/src';
 
 @Module({
   imports: [
@@ -8,8 +10,9 @@ import { LoggerMiddleware } from 'libs/middleware/logger.middleware';
       envFilePath: process.env.NODE_ENV === 'production' ? '.production.env' : '.development.env',
       isGlobal: true,
     }),
+    UsersModule,
+    PrismaModule,
   ],
-  controllers: [],
   providers: [Logger],
 })
 export class ApiModule implements NestModule {
