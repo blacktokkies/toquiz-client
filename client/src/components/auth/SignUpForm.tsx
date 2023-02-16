@@ -6,7 +6,7 @@ import React, { useRef } from 'react';
 import Button from '@/components/Button';
 import LabelInput from '@/components/LabelInput';
 import { useFormError } from '@/hooks/useFormError';
-import { isNickname } from '@/lib/validator';
+import { isEmail, isNickname } from '@/lib/validator';
 
 interface Props {
   action: (props: SignUpBody) => void;
@@ -16,7 +16,8 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
   const { onChange, errors } = useFormError({
     form: {
       username: {
-        errorMessage: '5~16자 이하의 영문 대소문자, 숫자, @를 입력하세요',
+        validate: (value) => isEmail(value),
+        errorMessage: '이메일 형식의 아이디를 입력하세요',
       },
       password: {
         errorMessage:
