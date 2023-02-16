@@ -5,9 +5,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import LoginForm from '@/components/auth/LoginForm';
+import { useLoginMutation } from '@/hooks/mutations/auth';
 
 function Login(): JSX.Element {
-  const handleSubmit = ({ username, password }: LoginBody): void => {};
+  const loginMutation = useLoginMutation();
+  const handleSubmit = ({ username, password }: LoginBody): void => {
+    loginMutation.mutate({ username, password });
+  };
 
   return (
     <div className="mx-auto flex h-full max-w-xl flex-col items-center justify-center px-9">
