@@ -6,6 +6,7 @@ import React, { useRef } from 'react';
 import Button from '@/components/Button';
 import LabelInput from '@/components/LabelInput';
 import { useFormError } from '@/hooks/useFormError';
+import { isNickname } from '@/lib/validator';
 
 interface Props {
   action: (props: SignUpBody) => void;
@@ -25,6 +26,10 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
         validate: (value) => value === passwordRef.current?.value,
         errorMessage: '동일한 비밀번호를 입력하세요',
       },
+      nickname: {
+        validate: (value) => isNickname(value),
+        errorMessage: '1자 이상의 문자를 입력하세요',
+      },
     },
   });
 
@@ -36,7 +41,7 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
       string
     >;
     const { username, password, nickname } = formDataRecord;
-    action({ username, password, nickname });
+    action({ username, password, nickname: nickname.trim() });
   };
 
   return (
@@ -74,6 +79,8 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
           name="nickname"
           required
           placeholder="닉네임을 입력하세요"
+          errorMessage={errors.nickname}
+          onChange={onChange.nickname}
         />
       </div>
       <Button type="submit" className="w-full">
