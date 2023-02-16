@@ -1,4 +1,3 @@
-import type { FormEvent } from 'react';
 import type { SignUpBody } from 'shared';
 
 import React from 'react';
@@ -12,7 +11,7 @@ interface Props {
   action: (props: SignUpBody) => void;
 }
 const SignUpForm = ({ action }: Props): JSX.Element => {
-  const { inputProps, errors } = useFormError({
+  const { inputProps, errors, handleSubmit } = useFormError({
     form: {
       username: {
         validate: (value) => isEmail(value),
@@ -23,7 +22,7 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
         errorMessage:
           '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
       },
-      confirm_password: {
+      'confirm-password': {
         validate: (value, refs) => value === refs.password?.value,
         errorMessage: '동일한 비밀번호를 입력하세요',
       },
@@ -34,19 +33,13 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
     },
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const formDataRecord = Object.fromEntries(formData) as Record<
-      string,
-      string
-    >;
-    const { username, password, nickname } = formDataRecord;
-    action({ username, password, nickname: nickname.trim() });
-  };
+  const submit = handleSubmit((data) => {
+    const { username, password, nickname } = data;
+    action({ username, password, nickname });
+  });
 
   return (
-    <form className="flex w-full flex-col gap-8" onSubmit={handleSubmit}>
+    <form className="flex w-full flex-col gap-8" onSubmit={submit}>
       <div className="flex flex-col gap-5">
         <LabelInput
           label="아이디"
@@ -71,8 +64,8 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
           type="password"
           required
           placeholder="비밀번호를 다시 입력하세요"
-          errorMessage={errors.confirm_password}
-          {...inputProps.confirm_password}
+          errorMessage={errors['confirm-password']}
+          {...inputProps['confirm-password']}
         />
         <LabelInput
           label="닉네임"

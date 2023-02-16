@@ -1,6 +1,11 @@
-import type { ChangeEvent, ChangeEventHandler } from 'react';
+import type {
+  ChangeEvent,
+  ChangeEventHandler,
+  FormEvent,
+  FormEventHandler,
+} from 'react';
 
-import { useRef, useState, useMemo } from 'react';
+import { useCallback, useRef, useState, useMemo } from 'react';
 
 export interface FormInputConfig<T extends string> {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -18,16 +23,23 @@ export interface FormInputProps {
 
 interface UseFormErrorParams<T extends string> {
   form: Record<T, FormInputConfig<T>>;
+  onSubmit?: FormEventHandler<HTMLFormElement>;
 }
+
+type HandleSubmit<T extends string> = (
+  onSubmit: (data: Record<T, string>, e: FormEvent<HTMLFormElement>) => void,
+) => FormEventHandler<HTMLFormElement>;
 
 interface UseFormErrorReturn<T extends string> {
   inputProps: Partial<Record<T, FormInputProps>>;
+  handleSubmit: HandleSubmit<T>;
   errors: Partial<Record<T, string | null>>;
 }
 
 const DEFAULT_ERROR_MESSAGE = '유효한 입력값이 아닙니다.';
 export const useFormError = <T extends string>({
   form,
+  onSubmit,
 }: UseFormErrorParams<T>): UseFormErrorReturn<T> => {
   const [errors, setErrors] = useState<Partial<Record<T, string | null>>>({});
 
@@ -39,17 +51,15 @@ export const useFormError = <T extends string>({
     const inputNames = Object.keys(form) as T[];
     inputNames.forEach((inputName) => {
       const inputConfig = form[inputName];
-      const { validate, onChange } = inputConfig;
+      const { validate, onChange, errorMessage } = inputConfig;
       const handleValidation = (value: string): void => {
         if (!validate) return;
 
         const isValid = validate(value, inputRefs.current);
-        const errorMessage = isValid
-          ? null
-          : inputConfig.errorMessage ?? DEFAULT_ERROR_MESSAGE;
+        const error = isValid ? null : errorMessage ?? DEFAULT_ERROR_MESSAGE;
 
-        if (errors[inputName] !== errorMessage)
-          setErrors((prev) => ({ ...prev, [inputName]: errorMessage }));
+        if (errors[inputName] !== error)
+          setErrors((prev) => ({ ...prev, [inputName]: error }));
       };
 
       props[inputName] = {
@@ -64,5 +74,48 @@ export const useFormError = <T extends string>({
     });
     return props;
   }, [form, errors]);
-  return { inputProps, errors };
+
+  const handleSubmit = useCallback(
+    (
+        onSubmit: (
+          data: Record<T, string>,
+          e: FormEvent<HTMLFormElement>,
+        ) => void,
+      ) =>
+      (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const formDataRecord = Object.fromEntries(formData) as Record<
+          T,
+          string
+        >;
+        const formDataEntries = Object.entries(formDataRecord) as Array<
+          [T, string]
+        >;
+
+        formDataEntries.forEach(([name, value]) => {
+          const { validate, errorMessage } = form[name];
+          const isValid = validate?.(value, inputRefs.current);
+
+          const error = isValid ? null : errorMessage ?? DEFAULT_ERROR_MESSAGE;
+          if (errors[name] !== error)
+            setErrors((prev) => ({ ...prev, [name]: error }));
+        });
+
+        const isValidAll = Object.values(errors).every(
+          (error) => error === null,
+        );
+
+        if (isValidAll) {
+          const data = formDataEntries.reduce(
+            (acc, [value, name]) => ({ ...acc, [value]: name }),
+            {},
+          ) as Record<T, string>;
+          onSubmit?.(data, e);
+        }
+      },
+    [errors, form],
+  );
+
+  return { inputProps, errors, handleSubmit };
 };
