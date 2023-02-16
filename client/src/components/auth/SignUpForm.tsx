@@ -6,7 +6,7 @@ import React from 'react';
 import Button from '@/components/Button';
 import LabelInput from '@/components/LabelInput';
 import { useFormError } from '@/hooks/useFormError';
-import { isEmail, isNickname } from '@/lib/validator';
+import { isEmail, isNickname, isPassword } from '@/lib/validator';
 
 interface Props {
   action: (props: SignUpBody) => void;
@@ -19,6 +19,7 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
         errorMessage: '이메일 형식의 아이디를 입력하세요',
       },
       password: {
+        validate: (value) => isPassword(value),
         errorMessage:
           '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
       },
