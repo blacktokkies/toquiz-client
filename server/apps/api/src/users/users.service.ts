@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto';
 import { UsersRepository } from './users.repository';
 import { PROVIDER, User } from 'shared';
@@ -9,10 +9,7 @@ export class UsersService {
   constructor(private usersRepository: UsersRepository) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<void> {
-    const { username, password } = createUserDto;
-
-    await this.checkUser(username); // 아이디가 존재하면 에러 처리
-    const encryptedPassword = await this.encryptionPassword(password); // 비밀번호 암호화
+    const encryptedPassword = await this.encryptPassword(createUserDto.password); // 비밀번호 암호화
 
     await this.usersRepository.createUser(
       { ...createUserDto, password: encryptedPassword },
@@ -20,15 +17,10 @@ export class UsersService {
     );
   }
 
-  async checkUser(username: User['username']): Promise<void> {
-    const user = await this.usersRepository.getUserByUsername(username);
-    if (user) {
-      throw new BadRequestException('이미 존재하는 아이디가 있습니다.');
-    }
-  }
-
-  async encryptionPassword(password: User['password']): Promise<User['password']> {
-    const salt = await bcrypt.genSalt();
+  async encryptPassword(
+    password: User['password'],
+    salt: string = bcrypt.genSaltSync(),
+  ): Promise<User['password']> {
     return await bcrypt.hash(password, salt);
   }
 }
