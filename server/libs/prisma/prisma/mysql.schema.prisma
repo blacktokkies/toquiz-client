@@ -25,6 +25,8 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt()
   deletedAt DateTime?
+
+  @@unique([username, provider])
 }
 
 model Scrap {
