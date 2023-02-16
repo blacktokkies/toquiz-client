@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react';
 import type { SignUpBody } from 'shared';
 
-import React, { useRef } from 'react';
+import React from 'react';
 
 import Button from '@/components/Button';
 import LabelInput from '@/components/LabelInput';
@@ -12,8 +12,7 @@ interface Props {
   action: (props: SignUpBody) => void;
 }
 const SignUpForm = ({ action }: Props): JSX.Element => {
-  const passwordRef = useRef<HTMLInputElement | null>(null);
-  const { onChange, errors } = useFormError({
+  const { inputProps, errors } = useFormError({
     form: {
       username: {
         validate: (value) => isEmail(value),
@@ -24,7 +23,7 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
           '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
       },
       confirm_password: {
-        validate: (value) => value === passwordRef.current?.value,
+        validate: (value, refs) => value === refs.password?.value,
         errorMessage: '동일한 비밀번호를 입력하세요',
       },
       nickname: {
@@ -54,17 +53,16 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
           required
           placeholder="아이디를 입력하세요"
           errorMessage={errors.username}
-          onChange={onChange.username}
+          {...inputProps.username}
         />
         <LabelInput
-          ref={passwordRef}
           label="비밀번호"
           name="password"
           type="password"
           required
           placeholder="비밀번호를 입력하세요"
           errorMessage={errors.password}
-          onChange={onChange.password}
+          {...inputProps.password}
         />
         <LabelInput
           label="비밀번호 확인"
@@ -73,7 +71,7 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
           required
           placeholder="비밀번호를 다시 입력하세요"
           errorMessage={errors.confirm_password}
-          onChange={onChange.confirm_password}
+          {...inputProps.confirm_password}
         />
         <LabelInput
           label="닉네임"
@@ -81,7 +79,7 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
           required
           placeholder="닉네임을 입력하세요"
           errorMessage={errors.nickname}
-          onChange={onChange.nickname}
+          {...inputProps.nickname}
         />
       </div>
       <Button type="submit" className="w-full">
