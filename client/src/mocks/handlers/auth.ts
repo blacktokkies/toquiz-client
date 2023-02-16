@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import type { LoginBody, LoginResponse } from '@/lib/api/auth';
 import type { SignUpResponse, SignUpBody } from 'shared';
 
 import { rest } from 'msw';
@@ -18,4 +19,20 @@ export const signUp = rest.post<SignUpBody, never, SignUpResponse>(
       }),
     );
   },
+);
+
+export const login = rest.post<LoginBody, never, LoginResponse>(
+  apiUrl.auth.login(),
+  (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.cookie('access-token', '액세스 토큰'),
+      ctx.cookie('refresh-token', '리프레쉬 토큰'),
+      ctx.json({
+        statusCode: 200,
+        result: {
+          nickname: '사용자 닉네임',
+        },
+      }),
+    ),
 );
