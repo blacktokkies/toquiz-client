@@ -1,19 +1,27 @@
 import type { ChangeEvent, ChangeEventHandler } from 'react';
 
-import { useState, useMemo } from 'react';
+import { useRef, useState, useMemo } from 'react';
 
-export interface FormInputConfig {
+export interface FormInputConfig<T extends string> {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  validate?: (value: string) => boolean;
+  validate?: (
+    value: string,
+    refs: Partial<Record<T, HTMLInputElement>>,
+  ) => boolean;
   errorMessage?: string;
 }
 
+export interface FormInputProps {
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  ref: (ref: HTMLInputElement) => void;
+}
+
 interface UseFormErrorParams<T extends string> {
-  form: Record<T, FormInputConfig>;
+  form: Record<T, FormInputConfig<T>>;
 }
 
 interface UseFormErrorReturn<T extends string> {
-  onChange: Partial<Record<T, ChangeEventHandler<HTMLInputElement>>>;
+  inputProps: Partial<Record<T, FormInputProps>>;
   errors: Partial<Record<T, string | null>>;
 }
 
@@ -23,9 +31,10 @@ export const useFormError = <T extends string>({
 }: UseFormErrorParams<T>): UseFormErrorReturn<T> => {
   const [errors, setErrors] = useState<Partial<Record<T, string | null>>>({});
 
-  const onChange = useMemo(() => {
-    const handlers: Partial<Record<T, ChangeEventHandler<HTMLInputElement>>> =
-      {};
+  const inputRefs = useRef<Partial<Record<T, HTMLInputElement>>>({});
+
+  const inputProps = useMemo(() => {
+    const props: Partial<Record<T, FormInputProps>> = {};
 
     const inputNames = Object.keys(form) as T[];
     inputNames.forEach((inputName) => {
@@ -34,7 +43,7 @@ export const useFormError = <T extends string>({
       const handleValidation = (value: string): void => {
         if (!validate) return;
 
-        const isValid = validate(value);
+        const isValid = validate(value, inputRefs.current);
         const errorMessage = isValid
           ? null
           : inputConfig.errorMessage ?? DEFAULT_ERROR_MESSAGE;
@@ -43,12 +52,17 @@ export const useFormError = <T extends string>({
           setErrors((prev) => ({ ...prev, [inputName]: errorMessage }));
       };
 
-      handlers[inputName] = (e) => {
-        onChange?.(e);
-        handleValidation(e.currentTarget.value);
+      props[inputName] = {
+        onChange: (e) => {
+          onChange?.(e);
+          handleValidation(e.currentTarget.value);
+        },
+        ref: (ref) => {
+          inputRefs.current[inputName] = ref;
+        },
       };
     });
-    return handlers;
+    return props;
   }, [form, errors]);
-  return { onChange, errors };
+  return { inputProps, errors };
 };
