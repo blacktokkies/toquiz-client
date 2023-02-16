@@ -1,5 +1,6 @@
 const authQueryKey = {
   signup: () => ['signup'] as const,
+  login: () => ['login'] as const,
 };
 
 export const queryKey = {
