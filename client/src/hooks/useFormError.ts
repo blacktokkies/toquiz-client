@@ -93,18 +93,16 @@ export const useFormError = <T extends string>({
           [T, string]
         >;
 
+        let isValidAll = true;
         formDataEntries.forEach(([name, value]) => {
           const { validate, errorMessage } = form[name];
           const isValid = validate?.(value, inputRefs.current);
+          if (isValid === false) isValidAll = false;
 
           const error = isValid ? null : errorMessage ?? DEFAULT_ERROR_MESSAGE;
           if (errors[name] !== error)
             setErrors((prev) => ({ ...prev, [name]: error }));
         });
-
-        const isValidAll = Object.values(errors).every(
-          (error) => error === null,
-        );
 
         if (isValidAll) {
           const data = formDataEntries.reduce(
