@@ -1,9 +1,10 @@
+import type { LoginBody, LoginResult } from '@/lib/api/auth';
 import type { UseMutationResult } from '@tanstack/react-query';
 import type { SignUpBody, SignUpResult } from 'shared';
 
 import { useMutation } from '@tanstack/react-query';
 
-import { signUp } from '@/lib/api/auth';
+import { login, signUp } from '@/lib/api/auth';
 import { queryKey } from '@/lib/constants';
 
 // TODO: Error 타입은 Api Error랑 error instanceof SyntaxError
@@ -18,5 +19,20 @@ export const useSignUpMutation = (): UseMutationResult<
     key,
     signUp,
   );
+  return mutation;
+};
+
+export const useLoginMutation = (): UseMutationResult<
+  LoginResult,
+  Error,
+  LoginBody,
+  unknown
+> => {
+  const key = queryKey.auth.login();
+  const mutation = useMutation<LoginResult, Error, LoginBody, unknown>(
+    key,
+    login,
+  );
+
   return mutation;
 };
