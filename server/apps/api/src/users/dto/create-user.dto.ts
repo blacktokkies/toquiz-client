@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, Matches, MaxLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Length, Matches, MaxLength } from 'class-validator';
 import { User } from 'shared';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -19,6 +19,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsString()
+  @Length(2, 20)
   @ApiProperty()
   nickname: User['nickname'];
 }
