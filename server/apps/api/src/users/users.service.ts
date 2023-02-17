@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto';
+import { SignUpDto } from './dto';
 import { UsersRepository } from './users.repository';
 import { PROVIDER, User } from 'shared';
 import * as bcrypt from 'bcryptjs';
@@ -8,11 +8,11 @@ import * as bcrypt from 'bcryptjs';
 export class UsersService {
   constructor(private usersRepository: UsersRepository) {}
 
-  async signUp(createUserDto: CreateUserDto): Promise<void> {
-    const encryptedPassword = await this.encryptPassword(createUserDto.password); // 비밀번호 암호화
+  async signUp(signUpDto: SignUpDto): Promise<void> {
+    const encryptedPassword = await this.encryptPassword(signUpDto.password); // 비밀번호 암호화
 
     await this.usersRepository.createUser(
-      { ...createUserDto, password: encryptedPassword },
+      { ...signUpDto, password: encryptedPassword },
       PROVIDER.LOCAL,
     );
   }

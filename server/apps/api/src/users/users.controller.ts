@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto';
+import { SignUpDto } from './dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SignUpResponse } from 'shared';
 
@@ -11,8 +11,8 @@ export class UsersController {
 
   @Post('auth/signup')
   @ApiOperation({ summary: '유저 생성 API', description: '유저를 생성한다.' })
-  async signUp(@Body() createUserDto: CreateUserDto): Promise<SignUpResponse> {
-    await this.usersService.signUp(createUserDto);
+  async signUp(@Body() signUpDto: SignUpDto): Promise<SignUpResponse> {
+    await this.usersService.signUp(signUpDto);
 
     return {
       statusCode: 200,

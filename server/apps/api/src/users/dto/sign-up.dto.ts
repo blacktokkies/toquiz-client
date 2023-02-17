@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 // 8~20자 영문, 숫자, 특수문자 최소 한가지씩 조합
 const passwordRegex = /^(?=\S*[a-zA-z])(?=\S*[0-9])(?=\S*[$`~!@$!%*#^?&\\(\\)\-_=+])\S{8,20}$/;
 
-export class CreateUserDto {
+export class SignUpDto {
   @IsNotEmpty()
   @IsEmail()
   @MaxLength(50)
