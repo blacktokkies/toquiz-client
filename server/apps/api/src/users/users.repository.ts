@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { MysqlPrismaService } from 'libs/prisma/src/mysql-prisma.service';
 import { SignUpDto } from './dto';
-import { type PROVIDER } from 'shared';
+import { type PROVIDER, User } from 'shared';
 import { Prisma } from 'libs/prisma/prisma/generated/mysql';
 
 @Injectable()
@@ -17,5 +17,9 @@ export class UsersRepository {
           throw new BadRequestException('같은 아이디를 가진 회원이 존재합니다.');
       }
     }
+  }
+
+  async findUserByUsername(username: User['username']): Promise<User> {
+    return await this.mysqlService.user.findFirst({ where: { username } });
   }
 }
