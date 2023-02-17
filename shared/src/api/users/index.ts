@@ -1,2 +1,1 @@
-export * from './auth/index';
-export * from './domain';
+export * from './auth';

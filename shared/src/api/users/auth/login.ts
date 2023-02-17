@@ -1,5 +1,5 @@
-import { type SuccessResponse } from '@api/response';
-import { type User } from '@api/users/domain';
+import type { SuccessResponse } from '../../response';
+import type { User } from '../../../libs';
 
 export interface LogInBody {
   username: User['username'];
