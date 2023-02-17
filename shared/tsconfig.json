@@ -13,9 +13,6 @@
     "sourceMap": true,
     "removeComments": true,
     "incremental": true,
-    "paths": {
-      "@api/*": ["./src/api/*"],
-    }
   },
   "include": ["src"],
 }
