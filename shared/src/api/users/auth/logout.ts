@@ -1,4 +1,4 @@
-import { type SuccessResponse } from '@api/response';
+import type { SuccessResponse } from '../../response';
 
 export interface LogOutResult {
   message: string;
