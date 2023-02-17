@@ -28,7 +28,7 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
       },
       nickname: {
         validate: (value) => isNickname(value),
-        errorMessage: '1자 이상의 문자를 입력하세요',
+        errorMessage: '2~20자 이하의 문자를 입력하세요',
       },
     },
   });
