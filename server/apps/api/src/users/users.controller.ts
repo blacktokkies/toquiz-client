@@ -4,6 +4,7 @@ import { LoginDto, SignUpDto } from './dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LogInResponse, SignUpResponse } from 'shared';
 import { Response } from 'express';
+import { cookieOption } from 'libs/utils/cookie-option';
 
 @Controller('api/users')
 @ApiTags('유저 API')
@@ -33,18 +34,8 @@ export class UsersController {
       loginDto,
     );
 
-    res.cookie('refreshToken', refreshToken, {
-      path: '/api/users/auth/refresh',
-      httpOnly: true,
-      secure: true,
-      maxAge: 1000 * 60 * 60 * 24 * 14, // 14일 동안 유지
-    });
-
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 1000 * 60 * 60 * 1, // 1시간 동안 유지
-    });
+    res.cookie('accessToken', accessToken, cookieOption.accessToken);
+    res.cookie('refreshToken', refreshToken, cookieOption.refreshToken);
 
     return {
       statusCode: 200,
