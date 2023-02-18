@@ -4,29 +4,38 @@ import * as bcrypt from 'bcryptjs';
 import { User } from 'shared';
 import { UsersModule } from '@users/users.module';
 import { PrismaModule } from 'libs/prisma/src';
+import { BadRequestException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { SignToken } from 'libs/utils/sign-token';
 
 describe('UsersService', () => {
-  let sut: UsersService;
+  let usersService: UsersService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [UsersModule, PrismaModule],
+      providers: [JwtService, ConfigService, SignToken],
     }).compile();
 
-    sut = module.get<UsersService>(UsersService);
+    usersService = module.get<UsersService>(UsersService);
   });
 
   it('should be defined', () => {
-    expect(sut).toBeDefined();
+    expect(usersService).toBeDefined();
   });
 
-  describe('bcrypt 패키지 테스트', () => {
+  describe('[function] encryptPassword 테스트', () => {
+    let sut;
+    beforeAll(() => {
+      sut = usersService.encryptPassword;
+    });
     it('암호화된 비밀번호는 암호화 된기 전 비밀번호와 달라야 한다.', async () => {
       //Given
       const salt: string = await bcrypt.genSalt();
       const password: User['password'] = 'test@1234';
       // When
-      const encryptedPassword: User['password'] = await bcrypt.hash(password, salt);
+      const encryptedPassword: User['password'] = await sut(password, salt);
       // Then
       expect(password).not.toEqual(encryptedPassword);
     });
@@ -34,11 +43,37 @@ describe('UsersService', () => {
       // Given
       const salt: string = await bcrypt.genSalt();
       const password: User['password'] = 'test@1234';
-      const expectedPassword: User['password'] = await bcrypt.hash(password, salt);
+      const expectedPassword: User['password'] = await sut(password, salt);
       // When
-      const result: User['password'] = await sut.encryptPassword(password, salt);
+      const result: User['password'] = await sut(password, salt);
       // Then
       expect(result).toEqual(expectedPassword);
+    });
+  });
+
+  describe('[function] checkPasswordMatch 테스트', () => {
+    let sut;
+    beforeAll(() => {
+      sut = usersService.checkPasswordMatch;
+    });
+    it('비밀번호가 일치하지 않으면 예외를 반환한다.', () => {
+      // Given
+      const inputPassword = 'input@1234';
+      const registeredPassword = 'registerd@1234';
+      // When, Then
+      expect(async () => await sut(inputPassword, registeredPassword)).rejects.toThrowError(
+        new BadRequestException('비밀번호가 일치하지 않습니다.'),
+      );
+    });
+
+    it('비밀번호가 일치하면 예외를 반환하지 않는다.', async () => {
+      // Given
+      const inputPassword = 'same@1234';
+      const registeredPassword = await usersService.encryptPassword(inputPassword);
+      // When, Then
+      expect(async () => await sut(inputPassword, registeredPassword)).not.toThrowError(
+        new BadRequestException('비밀번호가 일치하지 않습니다.'),
+      );
     });
   });
 });
