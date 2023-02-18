@@ -3,11 +3,11 @@ import { LoginDto, SignUpDto } from './dto';
 import { UsersRepository } from './users.repository';
 import { PROVIDER, User } from 'shared';
 import * as bcrypt from 'bcryptjs';
-import { TokenService } from 'libs/common/authentication/token.service';
+import { SignToken } from 'libs/utils/sign-token';
 
 @Injectable()
 export class UsersService {
-  constructor(private usersRepository: UsersRepository, private toeknService: TokenService) {}
+  constructor(private usersRepository: UsersRepository, private signToken: SignToken) {}
 
   async signUp(signUpDto: SignUpDto): Promise<void> {
     const encryptedPassword = await this.encryptPassword(signUpDto.password); // 비밀번호 암호화
@@ -25,11 +25,6 @@ export class UsersService {
     return await bcrypt.hash(password, salt);
   }
 
-  async checkPasswordMatch(inputPassword, registeredPassword) {
-    if (!(await bcrypt.compare(inputPassword, registeredPassword)))
-      throw new BadRequestException('비밀번호가 일치하지 않습니다.');
-  }
-
   async login(loginDto: LoginDto): Promise<Record<string, string>> {
     const { username, password } = loginDto;
     const user: User = await this.usersRepository.findUserByUsername(username);
@@ -38,9 +33,14 @@ export class UsersService {
     this.checkPasswordMatch(password, user.password); // 비밀번호가 일치하지 않으면 예외처리
 
     // accessToken, refreshToken 발급
-    const accessToken = await this.toeknService.signAccessToken(user.id, user.password);
-    const refreshToken = await this.toeknService.signRefreshToken(user.id);
+    const accessToken = await this.signToken.signAccessToken(user.id, user.password);
+    const refreshToken = await this.signToken.signRefreshToken(user.id);
 
     return { username: user.username, nickname: user.nickname, accessToken, refreshToken };
+  }
+
+  async checkPasswordMatch(inputPassword, registeredPassword) {
+    if (!(await bcrypt.compare(inputPassword, registeredPassword)))
+      throw new BadRequestException('비밀번호가 일치하지 않습니다.');
   }
 }
