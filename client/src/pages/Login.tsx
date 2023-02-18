@@ -1,4 +1,4 @@
-import type { LoginBody } from '@/lib/api/auth';
+import type { LogInBody } from 'shared';
 
 import React from 'react';
 
@@ -9,7 +9,7 @@ import { useLoginMutation } from '@/hooks/mutations/auth';
 
 function Login(): JSX.Element {
   const loginMutation = useLoginMutation();
-  const handleSubmit = ({ username, password }: LoginBody): void => {
+  const handleSubmit = ({ username, password }: LogInBody): void => {
     loginMutation.mutate({ username, password });
   };
 

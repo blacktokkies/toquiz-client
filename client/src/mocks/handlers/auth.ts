@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type { LoginBody, LoginResponse } from '@/lib/api/auth';
-import type { SignUpResponse, SignUpBody } from 'shared';
+import type {
+  SignUpResponse,
+  SignUpBody,
+  LogInBody,
+  LogInResponse,
+} from 'shared';
 
 import { rest } from 'msw';
 
@@ -21,18 +25,22 @@ export const signUp = rest.post<SignUpBody, never, SignUpResponse>(
   },
 );
 
-export const login = rest.post<LoginBody, never, LoginResponse>(
+export const login = rest.post<LogInBody, never, LogInResponse>(
   apiUrl.auth.login(),
-  (req, res, ctx) =>
-    res(
+  async (req, res, ctx) => {
+    const { username }: LogInBody = await req.json();
+
+    return res(
       ctx.status(200),
       ctx.cookie('accessTooken', '액세스 토큰'),
       ctx.cookie('refreshTooken', '리프레쉬 토큰'),
       ctx.json({
         statusCode: 200,
         result: {
+          username,
           nickname: '사용자 닉네임',
         },
       }),
-    ),
+    );
+  },
 );

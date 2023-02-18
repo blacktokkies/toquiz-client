@@ -1,4 +1,4 @@
-import type { LoginBody } from '@/lib/api/auth';
+import type { LogInBody } from 'shared';
 
 import React from 'react';
 
@@ -8,7 +8,7 @@ import { useFormError } from '@/hooks/useFormError';
 import { isEmail, isPassword } from '@/lib/validator';
 
 interface Props {
-  action: (props: LoginBody) => void;
+  action: (props: LogInBody) => void;
 }
 const SignUpForm = ({ action }: Props): JSX.Element => {
   const { inputProps, errors, handleSubmit } = useFormError({
