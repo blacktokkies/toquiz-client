@@ -1,6 +1,5 @@
-import type { LoginBody, LoginResult } from '@/lib/api/auth';
 import type { UseMutationResult } from '@tanstack/react-query';
-import type { SignUpBody, SignUpResult } from 'shared';
+import type { LogInBody, LogInResult, SignUpBody, SignUpResult } from 'shared';
 
 import { useMutation } from '@tanstack/react-query';
 
@@ -23,13 +22,13 @@ export const useSignUpMutation = (): UseMutationResult<
 };
 
 export const useLoginMutation = (): UseMutationResult<
-  LoginResult,
+  LogInResult,
   Error,
-  LoginBody,
+  LogInBody,
   unknown
 > => {
   const key = queryKey.auth.login();
-  const mutation = useMutation<LoginResult, Error, LoginBody, unknown>(
+  const mutation = useMutation<LogInResult, Error, LogInBody, unknown>(
     key,
     login,
   );
