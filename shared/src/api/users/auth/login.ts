@@ -3,7 +3,7 @@ import type { User } from '../../../libs';
 
 export interface LogInBody {
   username: User['username'];
-  nickname: User['nickname'];
+  password: User['password'];
 }
 
 export interface LogInResult {
