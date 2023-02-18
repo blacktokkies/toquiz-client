@@ -26,8 +26,8 @@ export const login = rest.post<LoginBody, never, LoginResponse>(
   (req, res, ctx) =>
     res(
       ctx.status(200),
-      ctx.cookie('access-token', '액세스 토큰'),
-      ctx.cookie('refresh-token', '리프레쉬 토큰'),
+      ctx.cookie('accessTooken', '액세스 토큰'),
+      ctx.cookie('refreshTooken', '리프레쉬 토큰'),
       ctx.json({
         statusCode: 200,
         result: {
