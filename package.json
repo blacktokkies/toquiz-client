@@ -1,0 +1,25 @@
+{
+  "name": "toquiz",
+  "version": "1.0.0",
+  "private": true,
+  "repository": "https://github.com/blacktokkies/toquiz.git",
+  "license": "MIT",
+  "main": "index.js",
+  "workspaces": {
+    "packages": [
+      "shared",
+      "client",
+      "server"
+    ],
+    "nohoist": [
+      "server",
+      "server/**"
+    ]
+  },
+  "scripts": {
+    "root": "yarn workspace -W",
+    "server": "yarn workspace server",
+    "shared": "yarn workspace shared",
+    "client": "yarn workspace client"
+  }
+}
