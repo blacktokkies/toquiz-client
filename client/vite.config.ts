@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: mode === 'proxy' && {
         '/api': {
-          target: ENV.API_ORIGIN,
+          target: ENV.API_ORIGIN || 'http://localhost:3000',
           changeOrigin: true,
         },
       },
