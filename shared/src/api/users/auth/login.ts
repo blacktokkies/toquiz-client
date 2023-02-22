@@ -7,8 +7,13 @@ export interface LogInBody {
 }
 
 export interface LogInResult {
-  username: User['username'];
-  nickname: User['nickname'];
+  user: {
+    id: User['id'];
+    username: User['username'];
+    nickname: User['nickname'];
+    createdAt: User['createdAt'];
+  };
+  accessToken: string;
 }
 
 export type LogInResponse = SuccessResponse<LogInResult>;
