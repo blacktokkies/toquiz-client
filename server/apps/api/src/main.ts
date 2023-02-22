@@ -5,12 +5,15 @@ import { winstonLogger } from 'libs/utils/wisnton-logger';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
+import { SuccessInterceptor } from 'libs/common/interceptors/success.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiModule, {
     logger: winstonLogger, // winston Logger 사용
   });
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true })); // request validation
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true })); // request validation pipe
+  app.useGlobalInterceptors(new SuccessInterceptor()); // success response interceptor
+
   app.use(cookieParser()); // Cookie 사용
   setSwagger(app, 'api-swagger'); // Swagger 사용
 
