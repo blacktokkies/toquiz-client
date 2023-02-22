@@ -1,10 +1,11 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { LoginDto, SignUpDto } from './dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { LogInResponse, SignUpResponse } from 'shared';
-import { Response } from 'express';
+import { LogInResponse, RefreshResponse, SignUpResponse } from 'shared';
+import { Request, Response } from 'express';
 import { cookieOption } from 'libs/utils/cookie-option';
+import { JwtRefreshGuard } from 'libs/common/guards/jwt-refresh.guard';
 
 @Controller('api/users')
 @ApiTags('유저 API')
@@ -18,9 +19,7 @@ export class UsersController {
 
     return {
       statusCode: 200,
-      result: {
-        message: '회원가입 성공',
-      },
+      result: { message: '회원가입 성공' },
     };
   }
 
@@ -30,18 +29,44 @@ export class UsersController {
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ): Promise<LogInResponse> {
-    const { username, nickname, accessToken, refreshToken } = await this.usersService.login(
-      loginDto,
-    );
+    const { user, accessToken, refreshToken } = await this.usersService.login(loginDto);
 
-    res.cookie('accessToken', accessToken, cookieOption.accessToken);
     res.cookie('refreshToken', refreshToken, cookieOption.refreshToken);
 
     return {
       statusCode: 200,
       result: {
-        username,
-        nickname,
+        user: {
+          id: user.id,
+          username: user.username,
+          nickname: user.nickname,
+          createdAt: user.createdAt,
+        },
+        accessToken,
+      },
+    };
+  }
+
+  @Post('/auth/refresh')
+  @UseGuards(JwtRefreshGuard)
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<RefreshResponse> {
+    const { user, accessToken, refreshToken } = await this.usersService.refresh(req.user['id']);
+
+    res.cookie('refreshToken', refreshToken, cookieOption.refreshToken);
+
+    return {
+      statusCode: 200,
+      result: {
+        user: {
+          id: user.id,
+          username: user.username,
+          nickname: user.nickname,
+          createdAt: user.createdAt,
+        },
+        accessToken,
       },
     };
   }

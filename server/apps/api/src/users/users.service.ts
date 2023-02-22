@@ -25,21 +25,39 @@ export class UsersService {
     return await bcrypt.hash(password, salt);
   }
 
-  async login(loginDto: LoginDto): Promise<Record<string, string>> {
+  async login(
+    loginDto: LoginDto,
+  ): Promise<{ user: User; accessToken: string; refreshToken: string }> {
     const { username, password } = loginDto;
-    const user: User = await this.usersRepository.findUserByUsername(username);
+    const user: User = await this.getUser({ username });
 
-    if (!user) throw new BadRequestException('아이디가 존재하지 않습니다.'); // 아이디가 존재하는지 않으면 예외처리
     this.checkPasswordMatch(password, user.password); // 비밀번호가 일치하지 않으면 예외처리
 
-    // accessToken, refreshToken 발급
-    const accessToken = await this.signToken.signAccessToken(user.id, user.password);
-    const refreshToken = await this.signToken.signRefreshToken(user.id);
+    const accessToken = this.signToken.signAccessToken(user.id, user.nickname);
+    const refreshToken = this.signToken.signRefreshToken(user.id);
 
-    return { username: user.username, nickname: user.nickname, accessToken, refreshToken };
+    return { user, accessToken, refreshToken };
   }
 
-  async checkPasswordMatch(inputPassword, registeredPassword) {
+  async refresh(
+    id: User['id'],
+  ): Promise<{ user: User; accessToken: string; refreshToken: string }> {
+    const user: User = await this.getUser({ id });
+
+    const accessToken = this.signToken.signAccessToken(user.id, user.nickname);
+    const refreshToken = this.signToken.signRefreshToken(user.id);
+
+    return { user, accessToken, refreshToken };
+  }
+
+  async getUser(condition: any): Promise<User> {
+    const user: User = await this.usersRepository.findUser(condition);
+    if (!user) throw new BadRequestException('아이디가 존재하지 않습니다.');
+
+    return user;
+  }
+
+  async checkPasswordMatch(inputPassword, registeredPassword): Promise<void> {
     if (!(await bcrypt.compare(inputPassword, registeredPassword)))
       throw new BadRequestException('비밀번호가 일치하지 않습니다.');
   }
