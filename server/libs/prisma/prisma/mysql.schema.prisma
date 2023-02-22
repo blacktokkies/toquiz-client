@@ -33,7 +33,7 @@ model Scrap {
   user    User   @relation(fields: [userId], references: [id])
   userId  String
   panel   Panel  @relation(fields: [panelId], references: [id])
-  panelId Int
+  panelId String
 
   createdAt DateTime @default(now())
 
@@ -41,7 +41,7 @@ model Scrap {
 }
 
 model Panel {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
@@ -49,6 +49,7 @@ model Panel {
   scraps    Scrap[]
   questions Question[]
 
+  title       String
   description String
   isArchived  Boolean   @default(false)
   scrapNum    Int       @default(0)
@@ -58,10 +59,10 @@ model Panel {
 }
 
 model Question {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
-  panel   Panel @relation(fields: [panelId], references: [id])
-  panelId Int
+  panel   Panel  @relation(fields: [panelId], references: [id])
+  panelId String
 
   answers Answer[]
 
@@ -74,12 +75,12 @@ model Question {
 }
 
 model Answer {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
   User       User     @relation(fields: [userId], references: [id])
   userId     String
   Question   Question @relation(fields: [questionId], references: [id])
-  questionId Int
+  questionId String
 
   content   String
   createdAt DateTime  @default(now())
