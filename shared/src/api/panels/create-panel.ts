@@ -1,6 +1,5 @@
-import type { User } from '../../libs';
+import type { User, Panel } from '../../libs';
 import type { SuccessResponse } from '../response';
-import type { Panel } from '../../libs/domains/panel';
 
 export interface CreatePanelBody {
   username: User['username'];
