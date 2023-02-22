@@ -7,13 +7,11 @@ import { ConfigService } from '@nestjs/config';
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'jwt-access-token') {
   constructor(config: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (request) => {
-          return request?.cookies?.accessToken;
-        },
-      ]),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: config.get('JWT_ACCESS_SECRET'),
-      passReqToCallback: true,
     });
+  }
+  async validate(payload: { id: string; nickname: string }) {
+    return { id: payload.id, nickname: payload.nickname };
   }
 }
