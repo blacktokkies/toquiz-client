@@ -19,7 +19,7 @@ export class UsersRepository {
     }
   }
 
-  async findUserByUsername(username: User['username']): Promise<User> {
-    return await this.mysqlService.user.findFirst({ where: { username } });
+  async findUser(condition: any): Promise<User> {
+    return await this.mysqlService.user.findFirst({ where: { ...condition } });
   }
 }
