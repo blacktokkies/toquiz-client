@@ -24,7 +24,7 @@ describe('UsersService', () => {
   describe('[function] encryptPassword 테스트', () => {
     it('암호화된 비밀번호는 암호화 된기 전 비밀번호와 달라야 한다.', async () => {
       //Given
-      const salt: string = await bcrypt.genSalt();
+      const salt: string = bcrypt.genSaltSync();
       const password: User['password'] = 'test@1234';
       // When
       const encryptedPassword: User['password'] = await sut.encryptPassword(password, salt);
@@ -33,7 +33,7 @@ describe('UsersService', () => {
     });
     it('같은 salt 로 암호화 된 비밀번호는 같아야 한다.', async () => {
       // Given
-      const salt: string = await bcrypt.genSalt();
+      const salt: string = bcrypt.genSaltSync();
       const password: User['password'] = 'test@1234';
       const expectedPassword: User['password'] = await sut.encryptPassword(password, salt);
       // When
