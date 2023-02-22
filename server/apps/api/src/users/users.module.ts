@@ -2,12 +2,11 @@ import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { UsersRepository } from './users.repository';
-import { JwtService } from '@nestjs/jwt';
-import { SignToken } from 'libs/utils/sign-token';
-import { ConfigService } from '@nestjs/config';
+import { AuthModule } from 'libs/common/authorization/auth.module';
 
 @Module({
+  imports: [AuthModule],
   controllers: [UsersController],
-  providers: [UsersService, UsersRepository, ConfigService, JwtService, SignToken],
+  providers: [UsersService, UsersRepository],
 })
 export class UsersModule {}
