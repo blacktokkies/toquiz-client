@@ -4,6 +4,7 @@ import { UsersRepository } from './users.repository';
 import { PROVIDER, User } from 'shared';
 import * as bcrypt from 'bcryptjs';
 import { SignToken } from 'libs/utils/sign-token';
+import { Prisma } from 'libs/prisma/prisma/generated/mysql';
 
 @Injectable()
 export class UsersService {
@@ -50,8 +51,8 @@ export class UsersService {
     return { user, accessToken, refreshToken };
   }
 
-  async getUser(condition: any): Promise<User> {
-    const user: User = await this.usersRepository.findUser(condition);
+  async getUser(userWhereInput: Prisma.UserWhereInput): Promise<User> {
+    const user: User = await this.usersRepository.findUser(userWhereInput);
     if (!user) throw new BadRequestException('아이디가 존재하지 않습니다.');
 
     return user;
