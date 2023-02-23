@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from 'libs/common/middlewares/logger.middleware';
 import { UsersModule } from '@users/users.module';
 import { PrismaModule } from 'libs/prisma/src';
+import { PanelsModule } from '@api/src/panels/panels.module';
 
 @Module({
   imports: [
@@ -10,8 +11,9 @@ import { PrismaModule } from 'libs/prisma/src';
       envFilePath: `.{process.env.NODE_ENV}.env`,
       isGlobal: true,
     }),
-    UsersModule,
     PrismaModule,
+    UsersModule,
+    PanelsModule,
   ],
   providers: [Logger],
 })
