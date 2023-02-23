@@ -6,8 +6,6 @@ export interface CreatePanelBody {
   description: Panel['title'];
 }
 
-export interface CreatePanelResult {
-  panel: Panel;
-}
+export interface CreatePanelResult extends Panel {}
 
 export type CreatePanelResponse = SuccessResponse<CreatePanelResult>;
