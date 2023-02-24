@@ -19,7 +19,7 @@ export class UsersRepository {
     }
   }
 
-  async findUser(condition: any): Promise<User> {
-    return await this.mysqlService.user.findFirst({ where: { ...condition } });
+  async findUser(userWhereInput: Prisma.UserWhereInput): Promise<User> {
+    return await this.mysqlService.user.findFirst({ where: userWhereInput });
   }
 }
