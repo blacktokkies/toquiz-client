@@ -77,7 +77,7 @@ model Question {
 model Answer {
   id String @id @default(uuid())
 
-  user       User     @relation(fields: [userId], references: [id])
+  User       User     @relation(fields: [userId], references: [id])
   userId     String
   Question   Question @relation(fields: [questionId], references: [id])
   questionId String
