@@ -21,5 +21,8 @@
     "server": "yarn workspace server",
     "shared": "yarn workspace shared",
     "client": "yarn workspace client"
+  },
+  "engines": {
+    "npm": "please use yarn"
   }
 }
