@@ -37,8 +37,13 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
       ctx.json({
         statusCode: 200,
         result: {
-          username,
-          nickname: '사용자 닉네임',
+          user: {
+            id: username,
+            username,
+            nickname: '사용자 이름',
+            createdAt: new Date(),
+          },
+          accessToken: '액세스 토큰',
         },
       }),
     );
