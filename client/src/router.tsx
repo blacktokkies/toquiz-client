@@ -6,7 +6,7 @@ import Error from '@/pages/Error';
 import Login, { loginLoader } from '@/pages/Login';
 import Main, { mainLoader } from '@/pages/Main';
 import Root from '@/pages/Root';
-import SignUp from '@/pages/SignUp';
+import SignUp, { signupLoader } from '@/pages/SignUp';
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +17,7 @@ export const router = createBrowserRouter([
       {
         path: 'signup',
         element: <SignUp />,
+        loader: signupLoader,
       },
       {
         path: 'login',
