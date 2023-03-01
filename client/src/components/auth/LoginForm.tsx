@@ -10,6 +10,8 @@ import { isEmail, isPassword } from '@/lib/validator';
 interface Props {
   action: (props: LogInBody) => void;
 }
+// https://reactrouter.com/en/main/hooks/use-action-data
+// TODO: action, useActionData 사용해서 리다이렉트 처리해보기
 const SignUpForm = ({ action }: Props): JSX.Element => {
   const { inputProps, errors, handleSubmit } = useFormError({
     form: {
