@@ -4,7 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import Error from '@/pages/Error';
 import Login, { loginLoader } from '@/pages/Login';
-import Main from '@/pages/Main';
+import Main, { mainLoader } from '@/pages/Main';
 import Root from '@/pages/Root';
 import SignUp from '@/pages/SignUp';
 
@@ -26,6 +26,7 @@ export const router = createBrowserRouter([
       {
         path: 'main',
         element: <Main />,
+        loader: mainLoader,
       },
     ],
   },
