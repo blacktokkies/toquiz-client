@@ -3,22 +3,24 @@ import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import Error from '@/pages/Error';
-import Home from '@/pages/Home';
 import Login from '@/pages/Login';
+import Root from '@/pages/Root';
 import SignUp from '@/pages/SignUp';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: <Root />,
     errorElement: <Error />,
-  },
-  {
-    path: '/signup',
-    element: <SignUp />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
+    children: [
+      {
+        path: 'signup',
+        element: <SignUp />,
+      },
+      {
+        path: 'login',
+        element: <Login />,
+      },
+    ],
   },
 ]);
