@@ -2,7 +2,7 @@ import type { SignUpBody } from 'shared';
 
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import SignUpForm from '@/components/auth/SignUpForm';
 import { useSignUpMutation } from '@/hooks/mutations/auth';
@@ -10,8 +10,17 @@ import { useSignUpMutation } from '@/hooks/mutations/auth';
 function Signup(): JSX.Element {
   const mutation = useSignUpMutation();
 
+  const navigate = useNavigate();
+
   const handleSubmit = ({ username, password, nickname }: SignUpBody): void => {
-    mutation.mutate({ username, password, nickname });
+    mutation.mutate(
+      { username, password, nickname },
+      {
+        onSuccess: () => {
+          navigate('/login');
+        },
+      },
+    );
   };
 
   return (
