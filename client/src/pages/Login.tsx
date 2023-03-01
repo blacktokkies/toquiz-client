@@ -2,15 +2,30 @@ import type { LogInBody } from 'shared';
 
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 
 import LoginForm from '@/components/auth/LoginForm';
 import { useLoginMutation } from '@/hooks/mutations/auth';
+import { useUserStore } from '@/hooks/store/useUserStore';
 
 function Login(): JSX.Element {
+  const setUser = useUserStore((state) => state.setUser);
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const next = searchParams.get('from') ?? '/main';
+
   const loginMutation = useLoginMutation();
   const handleSubmit = ({ username, password }: LogInBody): void => {
-    loginMutation.mutate({ username, password });
+    loginMutation.mutate(
+      { username, password },
+      {
+        onSuccess: (data) => {
+          setUser(data.user);
+          navigate(`${next}`);
+        },
+      },
+    );
   };
 
   return (
