@@ -1,12 +1,21 @@
+import type { LoaderFunction } from 'react-router-dom';
 import type { LogInBody } from 'shared';
 
 import React from 'react';
 
-import { useSearchParams, useNavigate, Link } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link, redirect } from 'react-router-dom';
 
 import LoginForm from '@/components/auth/LoginForm';
 import { useLoginMutation } from '@/hooks/mutations/auth';
 import { useUserStore } from '@/hooks/store/useUserStore';
+import { getUser } from '@/store/userStore';
+
+export const loginLoader: LoaderFunction = () => {
+  const user = getUser();
+
+  if (user) return redirect('/main');
+  return null;
+};
 
 function Login(): JSX.Element {
   const setUser = useUserStore((state) => state.setUser);
