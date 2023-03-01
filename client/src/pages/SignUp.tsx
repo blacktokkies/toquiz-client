@@ -1,12 +1,20 @@
+import type { LoaderFunction } from 'react-router-dom';
 import type { SignUpBody } from 'shared';
 
 import React from 'react';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, redirect } from 'react-router-dom';
 
 import SignUpForm from '@/components/auth/SignUpForm';
 import { useSignUpMutation } from '@/hooks/mutations/auth';
+import { getUser } from '@/store/userStore';
 
+export const signupLoader: LoaderFunction = () => {
+  const user = getUser();
+
+  if (user) return redirect('/main');
+  return null;
+};
 function Signup(): JSX.Element {
   const mutation = useSignUpMutation();
 
