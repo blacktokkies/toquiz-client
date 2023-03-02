@@ -4,6 +4,10 @@ import type {
   SignUpBody,
   LogInBody,
   LogInResponse,
+  User,
+  SuccessResponse,
+  RefreshResponse,
+  ErrorResponse,
 } from 'shared';
 
 import { rest } from 'msw';
@@ -32,14 +36,67 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
 
     return res(
       ctx.status(200),
-      ctx.cookie('refreshToken', '리프레쉬 토큰', { httpOnly: true }),
+      ctx.cookie('refreshToken', 'dev refreshToken', { httpOnly: true }),
       ctx.json({
         statusCode: 200,
         result: {
           user: {
             id: username,
             username,
-            nickname: '토끼',
+            nickname: 'dev nickname',
+            createdAt: new Date(),
+          },
+          accessToken: 'dev accessToken',
+        },
+      }),
+    );
+  },
+);
+
+// TODO: shared에서 제공하는 인터페이스로 바꾸기
+export type GetMyInfoResult = Pick<
+  User,
+  'id' | 'nickname' | 'username' | 'createdAt'
+>;
+export type GetMyInfoResponse = SuccessResponse<GetMyInfoResult>;
+export interface GetMyInfoBody {}
+
+export const me = rest.get<
+  GetMyInfoBody,
+  never,
+  GetMyInfoResponse | ErrorResponse
+>(apiUrl.auth.me(), async (req, res, ctx) => {
+  const { headers } = req;
+  const accessToken = /(?<=Bearer ).*/.exec(
+    headers.get('Authorization') ?? '',
+  )?.[0];
+
+  const isValid = Number(accessToken?.length) > 0;
+
+  if (isValid)
+    return res(
+      ctx.status(200),
+      ctx.json({
+        statusCode: 200,
+        result: {
+          id: 'dev id',
+          username: 'dev username',
+          nickname: 'dev nickname',
+          createdAt: new Date(),
+        },
+      }),
+    );
+  else {
+    return res(
+      ctx.status(401),
+      ctx.json({
+        statusCode: 401,
+        message: 'unauthorized error',
+        error: 'unauthorized error',
+      }),
+    );
+  }
+});
             createdAt: new Date(),
           },
           accessToken: 'dev access token',
