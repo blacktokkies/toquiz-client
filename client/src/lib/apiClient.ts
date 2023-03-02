@@ -28,3 +28,76 @@ export async function request<T>(
   const response = await fetch(url, { method, ...options });
   return handleResponse(response);
 }
+
+export const apiClient = {
+  async get<T>(url: string, headers: HeadersInit | undefined = {}): Promise<T> {
+    const _headers: HeadersInit = {
+      Authorization: `Bearer ${_accessToken}`,
+      ...headers,
+    };
+    const data = request<T>('GET', url, { headers: _headers });
+    return data;
+  },
+  async post<T>(
+    url: string,
+    body: Record<string, any> | undefined = undefined,
+    headers: HeadersInit | undefined = {},
+  ): Promise<T> {
+    const _headers: HeadersInit = {
+      Authorization: `Bearer ${_accessToken}`,
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...headers,
+    };
+    const _body = body && JSON.stringify(body);
+    const data: Promise<T> = request('POST', url, {
+      headers: _headers,
+      body: _body,
+    });
+    return data;
+  },
+  async delete<T>(
+    url: string,
+    headers: HeadersInit | undefined = {},
+  ): Promise<T> {
+    const _headers: HeadersInit = {
+      Authorization: `Bearer ${_accessToken}`,
+      ...headers,
+    };
+    const data = request<T>('DELETE', url, { headers: _headers });
+    return data;
+  },
+  async patch<T>(
+    url: string,
+    body: Record<string, any> | undefined = undefined,
+    headers: HeadersInit | undefined = {},
+  ): Promise<T> {
+    const _headers: HeadersInit = {
+      Authorization: `Bearer ${_accessToken}`,
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...headers,
+    };
+    const _body = body && JSON.stringify(body);
+    const data: Promise<T> = request('PATCH', url, {
+      headers: _headers,
+      body: _body,
+    });
+    return data;
+  },
+  async put<T>(
+    url: string,
+    body: Record<string, any> | undefined = undefined,
+    headers: HeadersInit | undefined = {},
+  ): Promise<T> {
+    const _headers: HeadersInit = {
+      Authorization: `Bearer ${_accessToken}`,
+      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...headers,
+    };
+    const _body = body && JSON.stringify(body);
+    const data: Promise<T> = request('PUT', url, {
+      headers: _headers,
+      body: _body,
+    });
+    return data;
+  },
+};
