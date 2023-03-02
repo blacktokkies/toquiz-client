@@ -6,13 +6,13 @@ import React from 'react';
 import { redirect } from 'react-router-dom';
 
 import { useUserStore } from '@/hooks/store/useUserStore';
-import { getUser } from '@/store/userStore';
+import { isUserLoggedIn } from '@/lib/routeGuard';
 
 // https://reactrouter.com/en/main/fetch/redirect
-export const mainLoader: LoaderFunction = ({ request }) => {
-  const user = getUser();
+export const mainLoader: LoaderFunction = async () => {
+  const isLoggedIn = await isUserLoggedIn();
 
-  if (!user) return redirect('/login?from=/main');
+  if (!isLoggedIn) return redirect('/login');
   return null;
 };
 
