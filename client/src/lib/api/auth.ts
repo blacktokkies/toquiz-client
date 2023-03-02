@@ -1,3 +1,4 @@
+import type { GetMyInfoResponse, GetMyInfoResult } from '@/mocks/handlers/auth';
 import type {
   SignUpBody,
   SignUpResult,
