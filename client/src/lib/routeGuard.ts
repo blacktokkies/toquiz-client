@@ -25,3 +25,19 @@ async function checkAndRefreshAccessToken(): Promise<void> {
     throw e;
   }
 }
+
+/**
+ * ## 사용자가 로그인했는지 검사
+ * `checkAndRefreshAccessToken` 결과로 오류가 발생한다면
+ * 액세스 토큰과 리프레쉬 토큰 모두 유효하지 않으므로
+ * 사용자를 로그인한 상태로 볼 수 없다
+ * @returns 사용자가 로그인했는지 여부
+ */
+export async function isUserLoggedIn(): Promise<boolean> {
+  try {
+    await checkAndRefreshAccessToken();
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
