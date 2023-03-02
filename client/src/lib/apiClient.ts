@@ -7,3 +7,10 @@ export const setToken = (token: string): void => {
 export const clearToken = (): void => {
   _accessToken = '';
 };
+
+export class ApiError extends Error {
+  constructor(public response: Response, public data: any = undefined) {
+    super(`status ${response.status}: Failed to fetch`);
+  }
+}
+
