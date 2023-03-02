@@ -7,14 +7,15 @@ import { Link, useNavigate, redirect } from 'react-router-dom';
 
 import SignUpForm from '@/components/auth/SignUpForm';
 import { useSignUpMutation } from '@/hooks/mutations/auth';
-import { getUser } from '@/store/userStore';
+import { isUserLoggedIn } from '@/lib/routeGuard';
 
-export const signupLoader: LoaderFunction = () => {
-  const user = getUser();
+export const signupLoader: LoaderFunction = async () => {
+  const isLoggedIn = await isUserLoggedIn();
 
-  if (user) return redirect('/main');
+  if (isLoggedIn) return redirect('/main');
   return null;
 };
+
 function Signup(): JSX.Element {
   const mutation = useSignUpMutation();
 

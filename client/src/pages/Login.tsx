@@ -8,12 +8,13 @@ import { useSearchParams, useNavigate, Link, redirect } from 'react-router-dom';
 import LoginForm from '@/components/auth/LoginForm';
 import { useLoginMutation } from '@/hooks/mutations/auth';
 import { useUserStore } from '@/hooks/store/useUserStore';
-import { getUser } from '@/store/userStore';
+import { setAccessToken } from '@/lib/apiClient';
+import { isUserLoggedIn } from '@/lib/routeGuard';
 
-export const loginLoader: LoaderFunction = () => {
-  const user = getUser();
+export const loginLoader: LoaderFunction = async () => {
+  const isLoggedIn = await isUserLoggedIn();
 
-  if (user) return redirect('/main');
+  if (isLoggedIn) return redirect('/main');
   return null;
 };
 
@@ -22,15 +23,16 @@ function Login(): JSX.Element {
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const next = searchParams.get('from') ?? '/main';
+  const next = searchParams.get('next') ?? '/main';
 
   const loginMutation = useLoginMutation();
   const handleSubmit = ({ username, password }: LogInBody): void => {
     loginMutation.mutate(
       { username, password },
       {
-        onSuccess: (data) => {
-          setUser(data.user);
+        onSuccess: ({ accessToken, user }) => {
+          setAccessToken(accessToken);
+          setUser(user);
           navigate(`${next}`);
         },
       },
