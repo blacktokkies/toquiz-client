@@ -97,11 +97,43 @@ export const me = rest.get<
     );
   }
 });
-            createdAt: new Date(),
+
+export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
+  apiUrl.auth.refresh(),
+  async (req, res, ctx) => {
+    const { headers } = req;
+    const refreshToken = /(?<=refreshToken=).*/.exec(
+      headers.get('Cookie') ?? '',
+    )?.[0];
+
+    const isValid = Number(refreshToken?.length) > 0;
+
+    if (isValid)
+      return res(
+        ctx.status(200),
+        ctx.cookie('refreshToken', 'dev refresh token', { httpOnly: true }),
+        ctx.json({
+          statusCode: 200,
+          result: {
+            user: {
+              id: 'dev id',
+              username: 'dev username',
+              nickname: 'dev nickname',
+              createdAt: new Date(),
+            },
+            accessToken: 'dev accessToken',
           },
-          accessToken: 'dev access token',
-        },
-      }),
-    );
+        }),
+      );
+    else {
+      return res(
+        ctx.status(401),
+        ctx.json({
+          statusCode: 401,
+          message: 'unauthorized error',
+          error: 'unauthorized error',
+        }),
+      );
+    }
   },
 );
