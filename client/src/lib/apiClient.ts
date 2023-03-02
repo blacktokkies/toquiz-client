@@ -14,3 +14,17 @@ export class ApiError extends Error {
   }
 }
 
+async function handleResponse<T>(response: Response): Promise<T> {
+  const data: Promise<T> = response.json();
+  if (response.ok) return data;
+  return Promise.reject(new ApiError(response, data));
+}
+
+export async function request<T>(
+  method: string,
+  url: string,
+  options: RequestInit | undefined = {},
+): Promise<T> {
+  const response = await fetch(url, { method, ...options });
+  return handleResponse(response);
+}
