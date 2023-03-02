@@ -30,3 +30,6 @@ export const userStore = createStore<UserState>()(
 );
 
 export const getUser = (): UserState['user'] => userStore.getState().user;
+export const setUser = (newUser: User | null): void => {
+  userStore.getState().setUser(newUser);
+};
