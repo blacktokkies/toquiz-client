@@ -1,22 +1,21 @@
-import type { SignUpBody, LogInBody } from 'shared';
+import type {
+  SignUpBody,
+  SignUpResult,
+  SignUpResponse,
+  LogInBody,
+  LogInResult,
+  LogInResponse,
+} from 'shared';
 
+import { apiClient } from '@/lib/apiClient';
 import { apiUrl } from '@/lib/constants';
 
-// TODO: 정의한 fetch 모듈로 바꿔야한다
-export const signUp = async (body: SignUpBody): Promise<any> =>
-  fetch(apiUrl.auth.signup(), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  }).then(async (res) => res.json());
+export const signUp = async (body: SignUpBody): Promise<SignUpResult> =>
+  apiClient
+    .post<SignUpResponse>(apiUrl.auth.signup(), body)
+    .then((data) => data.result);
 
-export const login = async (body: LogInBody): Promise<any> =>
-  fetch(apiUrl.auth.login(), {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  }).then(async (res) => res.json());
+export const login = async (body: LogInBody): Promise<LogInResult> =>
+  apiClient
+    .post<LogInResponse>(apiUrl.auth.login(), body)
+    .then((data) => data.result);
