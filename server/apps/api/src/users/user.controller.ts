@@ -11,6 +11,9 @@ export class UserController {
   @Get()
   @UseGuards(JwtAccessGuard)
   async getUserInfo(@Req() req: Request): Promise<User> {
-    return await this.usersService.getUser({ id: req.user['userId'] });
+    const user = await this.usersService.getUser({ id: req.user['userId'] });
+    delete user.password;
+
+    return user;
   }
 }
