@@ -5,10 +5,18 @@ import { JwtAccessStrategy } from 'libs/common/guards/strategies/jwt-access.stra
 import { JwtRefreshStrategy } from 'libs/common/guards/strategies/jwt-refresh.strategy';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
+import { CacheService } from 'libs/common/cache/cache.service';
 
 @Module({
   imports: [JwtModule, PassportModule.register({ defaultStrategy: 'jwt' })],
-  providers: [JwtService, SignToken, JwtAccessStrategy, JwtRefreshStrategy, ConfigService],
+  providers: [
+    JwtService,
+    SignToken,
+    JwtAccessStrategy,
+    JwtRefreshStrategy,
+    ConfigService,
+    CacheService,
+  ],
   exports: [JwtService, SignToken, JwtAccessStrategy, JwtRefreshStrategy, ConfigService],
 })
 export class AuthModule {}
