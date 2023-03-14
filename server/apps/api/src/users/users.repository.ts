@@ -1,16 +1,20 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { MysqlPrismaService } from 'libs/prisma/src/mysql-prisma.service';
 import { SignUpDto } from './dto';
-import { type PROVIDER, User } from 'shared';
+import { type PROVIDER, ToquizUser, User } from 'shared';
 import { Prisma } from 'libs/prisma/prisma/generated/mysql';
+import { MongodbPrismaService } from 'libs/prisma/src/mongodb-prisma.service';
 
 @Injectable()
 export class UsersRepository {
-  constructor(private mysqlService: MysqlPrismaService) {}
+  constructor(
+    private mysqlService: MysqlPrismaService,
+    private mongodbService: MongodbPrismaService,
+  ) {}
 
-  async createUser(signUpDto: SignUpDto, provider: PROVIDER): Promise<void> {
+  async createUser(signUpDto: SignUpDto, provider: PROVIDER): Promise<User> {
     try {
-      await this.mysqlService.user.create({ data: { ...signUpDto, provider } });
+      return await this.mysqlService.user.create({ data: { ...signUpDto, provider } });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {
         if (e.code === 'P2002')
@@ -21,5 +25,13 @@ export class UsersRepository {
 
   async findUser(userWhereInput: Prisma.UserWhereInput): Promise<User> {
     return await this.mysqlService.user.findFirst({ where: userWhereInput });
+  }
+
+  async findToquizUserByUserId(userId: User['id']): Promise<ToquizUser> {
+    return await this.mongodbService.toquizUser.findFirst({ where: { userId } });
+  }
+
+  async createToquizUser(userId: User['id'] = null): Promise<ToquizUser> {
+    return await this.mongodbService.toquizUser.create({ data: { userId: userId, panels: [] } });
   }
 }

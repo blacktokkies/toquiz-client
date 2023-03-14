@@ -17,8 +17,9 @@ type Panel {
   questions String[]
 }
 
-model AnonymousUser {
+model ToquizUser {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String?
   panels    Panel[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
