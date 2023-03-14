@@ -11,15 +11,13 @@ import { queryKey } from '@/lib/constants';
 export const useSignUpMutation = (): UseMutationResult<
   SignUpResult,
   ApiError | SyntaxError,
-  SignUpBody,
-  unknown
+  SignUpBody
 > => {
   const key = queryKey.auth.signup();
   const mutation = useMutation<
     SignUpResult,
     ApiError | SyntaxError,
-    SignUpBody,
-    unknown
+    SignUpBody
   >(key, signUp);
   return mutation;
 };
@@ -27,16 +25,13 @@ export const useSignUpMutation = (): UseMutationResult<
 export const useLoginMutation = (): UseMutationResult<
   LogInResult,
   ApiError | SyntaxError,
-  LogInBody,
-  unknown
+  LogInBody
 > => {
   const key = queryKey.auth.login();
-  const mutation = useMutation<
-    LogInResult,
-    ApiError | SyntaxError,
-    LogInBody,
-    unknown
-  >(key, login);
+  const mutation = useMutation<LogInResult, ApiError | SyntaxError, LogInBody>(
+    key,
+    login,
+  );
 
   return mutation;
 };
