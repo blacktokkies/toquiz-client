@@ -21,12 +21,17 @@
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^4.24.4",
+    "@testing-library/dom": "^9.0.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "@types/validator": "^13.7.12",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
     "@vitejs/plugin-react": "^3.0.0",
+    "@vitest/ui": "^0.29.2",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
@@ -39,6 +44,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tailwindcss": "^3.8.3",
+    "jsdom": "^21.1.1",
     "msw": "^1.0.0",
     "postcss": "^8.4.21",
     "prettier": "2.8.3",
@@ -46,7 +52,8 @@
     "typescript": "^4.9.3",
     "vite": "^4.0.0",
     "vite-plugin-checker": "^0.5.5",
-    "vite-tsconfig-paths": "^4.0.5"
+    "vite-tsconfig-paths": "^4.0.5",
+    "vitest": "^0.29.2"
   },
   "msw": {
     "workerDirectory": "./public"
