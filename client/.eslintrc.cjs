@@ -19,6 +19,8 @@ module.exports = {
     'standard-with-typescript',
     'plugin:prettier/recommended',
     'plugin:tailwindcss/recommended',
+    'plugin:testing-library/react',
+    'plugin:vitest/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
