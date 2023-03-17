@@ -2,7 +2,7 @@ import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { LoginDto, SignUpDto } from './dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { IssueToquizCookieResult, LogInResult, RefreshResult, SignUpResult } from 'shared';
+import { IssueToquizTokenResult, LogInResult, RefreshResult, SignUpResult } from 'shared';
 import { Request, Response } from 'express';
 import { cookieOption } from 'libs/utils/cookie-option';
 import { JwtRefreshGuard } from 'libs/common/guards/jwt-refresh.guard';
@@ -66,13 +66,13 @@ export class UsersController {
   }
 
   @Post('/auth/toquiz')
-  async issueToquizCookie(
+  async issueToquizToken(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<IssueToquizCookieResult> {
-    const toquizUserId = await this.usersService.issueToquizCookie(req?.cookies?.toquizUserId);
+  ): Promise<IssueToquizTokenResult> {
+    const toquizUserId = await this.usersService.issueToquizToken(req?.cookies?.toquizToken);
 
-    res.cookie('toquizUserId', toquizUserId, cookieOption.refreshToken);
+    res.cookie('toquizToken', toquizUserId, cookieOption.toquizToken);
 
     return { message: 'toquizToken 발급 성공' };
   }
