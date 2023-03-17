@@ -71,8 +71,8 @@ export class UsersService {
       throw new BadRequestException('비밀번호가 일치하지 않습니다.');
   }
 
-  async issueToquizCookie(toquizId: ToquizUser['id']): Promise<ToquizUser['id']> {
-    if (toquizId) return toquizId;
+  async issueToquizToken(toquizUserId: ToquizUser['id']): Promise<ToquizUser['id']> {
+    if (toquizUserId) return toquizUserId;
 
     const toquizUser = await this.usersRepository.createToquizUser();
     return toquizUser.id;
