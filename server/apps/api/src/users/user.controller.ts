@@ -1,8 +1,8 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from '@users/users.service';
 import { JwtAccessGuard } from 'libs/common/guards/jwt-access.guard';
-import { User } from 'shared';
 import { Request } from 'express';
+import { GetUserInfoResult } from 'shared';
 
 @Controller('api/user')
 export class UserController {
@@ -10,7 +10,7 @@ export class UserController {
 
   @Get()
   @UseGuards(JwtAccessGuard)
-  async getUserInfo(@Req() req: Request): Promise<User> {
+  async getUserInfo(@Req() req: Request): Promise<GetUserInfoResult> {
     const user = await this.usersService.getUser({ id: req.user['userId'] });
     delete user.password;
 
