@@ -12,8 +12,6 @@ export class PanelController {
   @Post()
   @UseGuards(JwtAccessGuard)
   async createPanel(@ReceivedData() createPanelDto: CreatePanelDto): Promise<CreatePanelResult> {
-    const panel = await this.panelsService.createPanel(createPanelDto);
-
-    return { ...panel };
+    return await this.panelsService.createPanel(createPanelDto);
   }
 }
