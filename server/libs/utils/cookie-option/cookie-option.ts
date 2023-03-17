@@ -1,9 +1,4 @@
 export const cookieOption = {
-  accessToken: {
-    httpOnly: true,
-    secure: true,
-    maxAge: 1000 * 60 * 60 * 1, // 1시간 동안 유지
-  },
   refreshToken: {
     path: '/api/users/auth/refresh',
     httpOnly: true,
