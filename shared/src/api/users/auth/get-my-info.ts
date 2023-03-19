@@ -1,7 +1,7 @@
 import type { SuccessResponse } from '../../response';
 import type { User } from '../../../libs';
 
-export interface GetUserInfoResult {
+export interface GetMyInfoResult {
   id: User['id'];
   username: User['username'];
   nickname: User['nickname'];
@@ -11,4 +11,4 @@ export interface GetUserInfoResult {
   deletedAt: User['deletedAt'];
 }
 
-export type GetUserInfoResponse = SuccessResponse<GetUserInfoResult>;
+export type GetMyInfoResponse = SuccessResponse<GetMyInfoResult>;
