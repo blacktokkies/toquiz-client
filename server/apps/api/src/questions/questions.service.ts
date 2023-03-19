@@ -32,8 +32,8 @@ export class QuestionsService {
     cursor: Question['id'] | null,
   ): Promise<GetPanelQuestionsResult> {
     let questions: Question[];
-    if (cursor) questions = await this.questionsRepository.getQuestionsNextPage(panelId, cursor);
-    else questions = await this.questionsRepository.getQuestionsFirstPage(panelId);
+    if (cursor) questions = await this.questionsRepository.getQuestionsPage(panelId, cursor);
+    else questions = await this.questionsRepository.getQuestionsPageFirst(panelId);
 
     const nextCursor = questions?.at(-1)?.id;
 
