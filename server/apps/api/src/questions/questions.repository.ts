@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MysqlPrismaService } from 'libs/prisma/src/mysql-prisma.service';
 import { MongodbPrismaService } from 'libs/prisma/src/mongodb-prisma.service';
 import { CreateQuestionDto } from '@api/src/questions/dto';
-import { PAGENUM, Question } from 'shared';
+import { PAGENUM, Question, ToquizUser } from 'shared';
 
 @Injectable()
 export class QuestionsRepository {
@@ -15,40 +15,46 @@ export class QuestionsRepository {
     return await this.mysqlService.question.create({ data: createQuestionDto });
   }
 
+  async getPanelsByToquizUserId(
+    toquizUserId: ToquizUser['id'],
+  ): Promise<{ panels: { panelId: string }[] }> {
+    return await this.mongodbService.toquizUser.findUnique({
+      where: { id: toquizUserId },
+      select: { panels: { select: { panelId: true } } },
+    });
+  }
+
   async insertQuestionToToquizUser(
     panelId: Question['panelId'],
     questionId: Question['id'],
     toquizUserId: Question['toquizUserId'],
-  ) {
-    const user = await this.mongodbService.toquizUser.findUnique({
+  ): Promise<void> {
+    await this.mongodbService.toquizUser.update({
       where: { id: toquizUserId },
-      select: { panels: true },
+      data: {
+        panels: {
+          updateMany: {
+            where: { panelId: panelId },
+            data: { questions: { push: questionId } },
+          },
+        },
+      },
     });
-    const existingPanel = user.panels.find((panel) => panel.panelId === panelId);
+  }
 
-    if (existingPanel) {
-      await this.mongodbService.toquizUser.update({
-        where: { id: toquizUserId },
-        data: {
-          panels: {
-            updateMany: {
-              where: { panelId: panelId },
-              data: { questions: { push: questionId } },
-            },
-          },
+  async insertQuestionToToquizUserFirst(
+    panelId: Question['panelId'],
+    questionId: Question['id'],
+    toquizUserId: Question['toquizUserId'],
+  ): Promise<void> {
+    await this.mongodbService.toquizUser.update({
+      where: { id: toquizUserId },
+      data: {
+        panels: {
+          push: [{ panelId: panelId, questions: [questionId], likes: [] }],
         },
-      });
-    } else {
-      // 패널에서 첫 활동일 경우(panels 배열에 생성 필요)
-      await this.mongodbService.toquizUser.update({
-        where: { id: toquizUserId },
-        data: {
-          panels: {
-            push: [{ panelId: panelId, questions: [questionId], likes: [] }],
-          },
-        },
-      });
-    }
+      },
+    });
   }
 
   async getQuestionsFirstPage(panelId: Question['panelId']): Promise<Question[]> {
