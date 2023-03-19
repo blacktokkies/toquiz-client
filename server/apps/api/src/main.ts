@@ -11,7 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(ApiModule, {
     logger: winstonLogger, // winston Logger 사용
   });
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true })); // request validation pipe
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, validateCustomDecorators: true })); // request validation pipe
   app.useGlobalInterceptors(new SuccessInterceptor()); // success response interceptor
 
   app.use(cookieParser()); // Cookie 사용
