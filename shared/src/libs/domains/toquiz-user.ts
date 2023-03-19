@@ -1,5 +1,5 @@
 interface Panel {
-  panelId: number;
+  panelId: string;
   likes: string[];
   questions: string[];
 }
