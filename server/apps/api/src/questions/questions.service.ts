@@ -10,7 +10,19 @@ export class QuestionsService {
   async createQuestion(createQuestionDto: CreateQuestionDto): Promise<Question> {
     const { panelId, toquizUserId } = createQuestionDto;
     const question = await this.questionsRepository.createQuestion(createQuestionDto);
-    await this.questionsRepository.insertQuestionToToquizUser(panelId, question.id, toquizUserId);
+
+    const user = await this.questionsRepository.getPanelsByToquizUserId(toquizUserId);
+    const existingPanel = user.panels.find((panel) => panel.panelId === panelId);
+
+    if (existingPanel) {
+      await this.questionsRepository.insertQuestionToToquizUser(panelId, question.id, toquizUserId);
+    } else {
+      await this.questionsRepository.insertQuestionToToquizUserFirst(
+        panelId,
+        question.id,
+        toquizUserId,
+      );
+    }
 
     return question;
   }
