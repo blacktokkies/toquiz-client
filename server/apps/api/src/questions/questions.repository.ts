@@ -57,7 +57,7 @@ export class QuestionsRepository {
     });
   }
 
-  async getQuestionsFirstPage(panelId: Question['panelId']): Promise<Question[]> {
+  async getQuestionsPageFirst(panelId: Question['panelId']): Promise<Question[]> {
     return await this.mysqlService.question.findMany({
       take: PAGENUM,
       where: { panelId: panelId },
@@ -65,7 +65,7 @@ export class QuestionsRepository {
     });
   }
 
-  async getQuestionsNextPage(
+  async getQuestionsPage(
     panelId: Question['panelId'],
     cursor: Question['id'],
   ): Promise<Question[]> {
