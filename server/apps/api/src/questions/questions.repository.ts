@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MysqlPrismaService } from 'libs/prisma/src/mysql-prisma.service';
 import { MongodbPrismaService } from 'libs/prisma/src/mongodb-prisma.service';
 import { CreateQuestionDto } from '@api/src/questions/dto';
-import { Question } from 'shared';
+import { PAGENUM, Question } from 'shared';
 
 @Injectable()
 export class QuestionsRepository {
@@ -49,5 +49,26 @@ export class QuestionsRepository {
         },
       });
     }
+  }
+
+  async getQuestionsFirstPage(panelId: Question['panelId']): Promise<Question[]> {
+    return await this.mysqlService.question.findMany({
+      take: PAGENUM,
+      where: { panelId: panelId },
+      orderBy: [{ createdAt: 'desc' }],
+    });
+  }
+
+  async getQuestionsNextPage(
+    panelId: Question['panelId'],
+    cursor: Question['id'],
+  ): Promise<Question[]> {
+    return await this.mysqlService.question.findMany({
+      skip: 1,
+      take: PAGENUM,
+      cursor: { id: cursor },
+      where: { panelId: panelId },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 }
