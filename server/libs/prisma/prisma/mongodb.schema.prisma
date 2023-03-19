@@ -12,7 +12,7 @@ datasource db {
 }
 
 type Panel {
-  panelId   Int
+  panelId   String
   likes     String[]
   questions String[]
 }

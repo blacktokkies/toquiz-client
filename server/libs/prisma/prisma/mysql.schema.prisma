@@ -66,12 +66,13 @@ model Question {
 
   answers Answer[]
 
-  content   String
-  answerNum Int       @default(0)
-  likeNum   Int       @default(0)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  toquizUserId String
+  content      String
+  answerNum    Int       @default(0)
+  likeNum      Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
 }
 
 model Answer {
