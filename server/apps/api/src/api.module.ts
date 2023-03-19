@@ -6,6 +6,7 @@ import { PrismaModule } from 'libs/prisma/src';
 import { PanelsModule } from '@api/src/panels/panels.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { RedisConfigService } from 'libs/common/cache/cache.config';
+import { QuestionsModule } from '@api/src/questions/questions.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { RedisConfigService } from 'libs/common/cache/cache.config';
     PrismaModule,
     UsersModule,
     PanelsModule,
+    QuestionsModule,
   ],
   providers: [Logger],
 })

@@ -6,6 +6,7 @@ import { JwtRefreshStrategy } from 'libs/common/guards/strategies/jwt-refresh.st
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { CacheService } from 'libs/common/cache/cache.service';
+import { ToquizGuard } from 'libs/common/guards/toquiz.guard';
 
 @Module({
   imports: [JwtModule, PassportModule.register({ defaultStrategy: 'jwt' })],
@@ -16,7 +17,15 @@ import { CacheService } from 'libs/common/cache/cache.service';
     JwtRefreshStrategy,
     ConfigService,
     CacheService,
+    ToquizGuard,
   ],
-  exports: [JwtService, SignToken, JwtAccessStrategy, JwtRefreshStrategy, ConfigService],
+  exports: [
+    JwtService,
+    SignToken,
+    JwtAccessStrategy,
+    JwtRefreshStrategy,
+    ConfigService,
+    ToquizGuard,
+  ],
 })
 export class AuthModule {}
