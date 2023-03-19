@@ -4,4 +4,4 @@ export * from './login';
 export * from './logout';
 export * from './refresh';
 export * from './issue-toquiz-token';
-export * from './get-user-info';
+export * from './get-my-info';
