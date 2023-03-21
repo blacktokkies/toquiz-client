@@ -11,7 +11,7 @@ import type {
 } from 'shared';
 
 import { apiClient } from '@/lib/apiClient';
-import { apiUrl } from '@/lib/constants';
+import { apiUrl } from '@/lib/apiUrl';
 
 export const signUp = async (body: SignUpBody): Promise<SignUpResult> =>
   apiClient

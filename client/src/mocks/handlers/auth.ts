@@ -13,7 +13,7 @@ import type {
 import { rest } from 'msw';
 
 import { API_BASE_URL } from '@/lib/apiClient';
-import { apiUrl } from '@/lib/constants';
+import { apiUrl } from '@/lib/apiUrl';
 
 export const signUp = rest.post<SignUpBody, never, SignUpResponse>(
   `${API_BASE_URL}${apiUrl.auth.signup()}`,
