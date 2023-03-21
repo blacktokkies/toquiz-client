@@ -15,15 +15,15 @@ export default defineConfig(({ mode }) => {
       react(),
       tsconfigPaths(),
       mode !== 'test' &&
-      checker({
-        typescript: true,
-        eslint: { lintCommand: 'eslint "./src/**/*.{ts,tsx}"' },
-      }),
+        checker({
+          typescript: true,
+          eslint: { lintCommand: 'eslint "./src/**/*.{ts,tsx}"' },
+        }),
     ],
     server: {
       proxy: mode === 'proxy' && {
         '/api': {
-          target: ENV.API_ORIGIN || 'http://localhost:3000',
+          target: ENV.VITE_API_BASE_URL || 'http://localhost:3000',
           changeOrigin: true,
         },
       },
