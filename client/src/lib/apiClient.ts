@@ -33,12 +33,12 @@ export async function request<T>(
 
 /**
  * ### Ajax 요청할 BASE_URL
- * 환경 변수 `VITE_API_ORIGIN`의 값을 기본으로 한다.
+ * 환경 변수 `VITE_API_BASE_URL`의 값을 기본으로 한다.
  * 설정되어있지 않은 경우, 브라우저 환경일 때는 상대 경로를 사용하고
  * 그 외의 런타임은 임의의 origin을 사용한다.
  */
-export const API_ORIGIN =
-  import.meta.env.VITE_API_ORIGIN ?? (isNode ? 'http://localhost' : '');
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ?? (isNode ? 'http://localhost' : '');
 
 export const apiClient = {
   async get<T>(url: string, headers: HeadersInit | undefined = {}): Promise<T> {
@@ -46,7 +46,7 @@ export const apiClient = {
       Authorization: `Bearer ${_accessToken}`,
       ...headers,
     };
-    const data = request<T>('GET', `${API_ORIGIN}${url}`, {
+    const data = request<T>('GET', `${API_BASE_URL}${url}`, {
       headers: _headers,
     });
     return data;
@@ -62,7 +62,7 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('POST', `${API_ORIGIN}${url}`, {
+    const data: Promise<T> = request('POST', `${API_BASE_URL}${url}`, {
       headers: _headers,
       body: _body,
     });
@@ -76,7 +76,7 @@ export const apiClient = {
       Authorization: `Bearer ${_accessToken}`,
       ...headers,
     };
-    const data = request<T>('DELETE', `${API_ORIGIN}${url}`, {
+    const data = request<T>('DELETE', `${API_BASE_URL}${url}`, {
       headers: _headers,
     });
     return data;
@@ -92,7 +92,7 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('PATCH', `${API_ORIGIN}${url}`, {
+    const data: Promise<T> = request('PATCH', `${API_BASE_URL}${url}`, {
       headers: _headers,
       body: _body,
     });
@@ -109,7 +109,7 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('PUT', `${API_ORIGIN}${url}`, {
+    const data: Promise<T> = request('PUT', `${API_BASE_URL}${url}`, {
       headers: _headers,
       body: _body,
     });
