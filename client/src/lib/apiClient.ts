@@ -1,3 +1,5 @@
+import isNode from 'detect-node';
+
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment */
 let _accessToken = '';
 
@@ -29,13 +31,24 @@ export async function request<T>(
   return handleResponse(response);
 }
 
+/**
+ * ### Ajax 요청할 BASE_URL
+ * 환경 변수 `VITE_API_ORIGIN`의 값을 기본으로 한다.
+ * 설정되어있지 않은 경우, 브라우저 환경일 때는 상대 경로를 사용하고
+ * 그 외의 런타임은 임의의 origin을 사용한다.
+ */
+export const API_ORIGIN =
+  import.meta.env.VITE_API_ORIGIN ?? (isNode ? 'http://localhost' : '');
+
 export const apiClient = {
   async get<T>(url: string, headers: HeadersInit | undefined = {}): Promise<T> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...headers,
     };
-    const data = request<T>('GET', url, { headers: _headers });
+    const data = request<T>('GET', `${API_ORIGIN}${url}`, {
+      headers: _headers,
+    });
     return data;
   },
   async post<T>(
@@ -49,7 +62,7 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('POST', url, {
+    const data: Promise<T> = request('POST', `${API_ORIGIN}${url}`, {
       headers: _headers,
       body: _body,
     });
@@ -63,7 +76,9 @@ export const apiClient = {
       Authorization: `Bearer ${_accessToken}`,
       ...headers,
     };
-    const data = request<T>('DELETE', url, { headers: _headers });
+    const data = request<T>('DELETE', `${API_ORIGIN}${url}`, {
+      headers: _headers,
+    });
     return data;
   },
   async patch<T>(
@@ -77,7 +92,7 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('PATCH', url, {
+    const data: Promise<T> = request('PATCH', `${API_ORIGIN}${url}`, {
       headers: _headers,
       body: _body,
     });
@@ -94,10 +109,10 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('PUT', url, {
+    const data: Promise<T> = request('PUT', `${API_ORIGIN}${url}`, {
       headers: _headers,
       body: _body,
     });
     return data;
   },
-};
+} as const;

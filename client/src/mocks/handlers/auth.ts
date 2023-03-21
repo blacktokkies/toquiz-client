@@ -12,10 +12,11 @@ import type {
 
 import { rest } from 'msw';
 
+import { API_ORIGIN } from '@/lib/apiClient';
 import { apiUrl } from '@/lib/constants';
 
 export const signUp = rest.post<SignUpBody, never, SignUpResponse>(
-  apiUrl.auth.signup(),
+  `${API_ORIGIN}${apiUrl.auth.signup()}`,
   async (req, res, ctx) => {
     const { nickname }: SignUpBody = await req.json();
 
@@ -30,7 +31,7 @@ export const signUp = rest.post<SignUpBody, never, SignUpResponse>(
 );
 
 export const login = rest.post<LogInBody, never, LogInResponse>(
-  apiUrl.auth.login(),
+  `${API_ORIGIN}${apiUrl.auth.login()}`,
   async (req, res, ctx) => {
     const { username }: LogInBody = await req.json();
 
@@ -65,7 +66,7 @@ export const me = rest.get<
   GetMyInfoBody,
   never,
   GetMyInfoResponse | ErrorResponse
->(apiUrl.auth.me(), async (req, res, ctx) => {
+>(`${API_ORIGIN}${apiUrl.auth.me()}`, async (req, res, ctx) => {
   const { headers } = req;
   const accessToken = /(?<=Bearer ).*/.exec(
     headers.get('Authorization') ?? '',
@@ -99,7 +100,7 @@ export const me = rest.get<
 });
 
 export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
-  apiUrl.auth.refresh(),
+  `${API_ORIGIN}${apiUrl.auth.refresh()}`,
   async (req, res, ctx) => {
     const { headers } = req;
     const refreshToken = /(?<=refreshToken=).*/.exec(
