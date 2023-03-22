@@ -1,7 +1,10 @@
 /* eslint-disable react/display-name */
+import type { RenderResult } from '@testing-library/react';
+
 import React from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render } from '@testing-library/react';
 
 // tanstack.com/query/v4/docs/react/guides/testing#turn-off-retries
 // tanstack.com/query/v4/docs/react/guides/testing#turn-off-network-error-logging
@@ -30,4 +33,21 @@ export function createQueryClientWrapper(): QueryClientWrapper {
   return ({ children }) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
+}
+
+export function renderWithQueryClient(ui: React.ReactElement): RenderResult {
+  const queryClient = createQueryClient();
+  const { rerender, ...renderResult } = render(
+    <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
+  );
+  return {
+    ...renderResult,
+    rerender: (rerenderUi: React.ReactElement) => {
+      rerender(
+        <QueryClientProvider client={queryClient}>
+          {rerenderUi}
+        </QueryClientProvider>,
+      );
+    },
+  };
 }
