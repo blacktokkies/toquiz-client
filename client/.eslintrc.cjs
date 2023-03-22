@@ -68,6 +68,7 @@ module.exports = {
     ],
     'react/self-closing-comp': 'error',
     'react/button-has-type': 'error',
+    'react/prop-types': 'off',
     '@typescript-eslint/return-await': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
