@@ -1,5 +1,6 @@
-import type { GetMyInfoResponse, GetMyInfoResult } from '@/mocks/handlers/auth';
 import type {
+  GetMyInfoResponse,
+  GetMyInfoResult,
   SignUpBody,
   SignUpResult,
   SignUpResponse,
