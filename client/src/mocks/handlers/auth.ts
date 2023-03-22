@@ -4,10 +4,9 @@ import type {
   SignUpBody,
   LogInBody,
   LogInResponse,
-  User,
-  SuccessResponse,
   RefreshResponse,
   ErrorResponse,
+  GetMyInfoResponse,
 } from 'shared';
 
 import { rest } from 'msw';
@@ -54,50 +53,44 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
   },
 );
 
-// TODO: shared에서 제공하는 인터페이스로 바꾸기
-export type GetMyInfoResult = Pick<
-  User,
-  'id' | 'nickname' | 'username' | 'createdAt'
->;
-export type GetMyInfoResponse = SuccessResponse<GetMyInfoResult>;
-export interface GetMyInfoBody {}
+export const me = rest.get<never, never, GetMyInfoResponse | ErrorResponse>(
+  `${API_BASE_URL}${apiUrl.auth.me()}`,
+  async (req, res, ctx) => {
+    const { headers } = req;
+    const accessToken = /(?<=Bearer ).*/.exec(
+      headers.get('Authorization') ?? '',
+    )?.[0];
 
-export const me = rest.get<
-  GetMyInfoBody,
-  never,
-  GetMyInfoResponse | ErrorResponse
->(`${API_BASE_URL}${apiUrl.auth.me()}`, async (req, res, ctx) => {
-  const { headers } = req;
-  const accessToken = /(?<=Bearer ).*/.exec(
-    headers.get('Authorization') ?? '',
-  )?.[0];
+    const isValid = Number(accessToken?.length) > 0;
 
-  const isValid = Number(accessToken?.length) > 0;
-
-  if (isValid)
-    return res(
-      ctx.status(200),
-      ctx.json({
-        statusCode: 200,
-        result: {
-          id: 'dev id',
-          username: 'dev username',
-          nickname: 'dev nickname',
-          createdAt: new Date(),
-        },
-      }),
-    );
-  else {
-    return res(
-      ctx.status(401),
-      ctx.json({
-        statusCode: 401,
-        message: 'unauthorized error',
-        error: 'unauthorized error',
-      }),
-    );
-  }
-});
+    if (isValid)
+      return res(
+        ctx.status(200),
+        ctx.json({
+          statusCode: 200,
+          result: {
+            id: 'dev id',
+            username: 'dev username',
+            nickname: 'dev nickname',
+            provider: 'dev provider',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            deletedAt: null,
+          },
+        }),
+      );
+    else {
+      return res(
+        ctx.status(401),
+        ctx.json({
+          statusCode: 401,
+          message: 'unauthorized error',
+          error: 'unauthorized error',
+        }),
+      );
+    }
+  },
+);
 
 export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
   `${API_BASE_URL}${apiUrl.auth.refresh()}`,
