@@ -2,11 +2,10 @@ import type { LoaderFunction } from 'react-router-dom';
 
 import React from 'react';
 
-import { useQuery } from '@tanstack/react-query';
 import { redirect } from 'react-router-dom';
 
 import PanelList from '@/components/panel/PanelList';
-import { getMyPanels } from '@/lib/api/panel';
+import { useMyPanelsQuery } from '@/hooks/panel';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 
 // https://reactrouter.com/en/main/fetch/redirect
@@ -18,7 +17,7 @@ export const mainLoader: LoaderFunction = async () => {
 };
 
 const Main = (): JSX.Element => {
-  const panelsQuery = useQuery(['panels'], getMyPanels);
+  const panelsQuery = useMyPanelsQuery();
 
   if (panelsQuery.isLoading) return <div>loading...</div>;
   if (panelsQuery.isError) return <div>error occurred</div>;
