@@ -15,15 +15,6 @@ export class QuestionsRepository {
     return await this.mysqlService.question.create({ data: createQuestionDto });
   }
 
-  async getPanelsByToquizUserId(
-    toquizUserId: ToquizUser['id'],
-  ): Promise<{ panels: { panelId: string }[] }> {
-    return await this.mongodbService.toquizUser.findUnique({
-      where: { id: toquizUserId },
-      select: { panels: { select: { panelId: true } } },
-    });
-  }
-
   async getPanelLikesOfToquizUser(
     toquizUserId: ToquizUser['id'],
   ): Promise<{ panelId: string; likes: string[] }[]> {
@@ -32,21 +23,6 @@ export class QuestionsRepository {
       select: { panels: { select: { panelId: true, likes: true } } },
     });
     return panelInfo.panels;
-  }
-
-  async insertQuestionToToquizUserFirst(
-    panelId: Question['panelId'],
-    questionId: Question['id'],
-    toquizUserId: Question['toquizUserId'],
-  ): Promise<void> {
-    await this.mongodbService.toquizUser.update({
-      where: { id: toquizUserId },
-      data: {
-        panels: {
-          push: [{ panelId: panelId, questions: [questionId], likes: [] }],
-        },
-      },
-    });
   }
 
   async insertQuestionToToquizUser(
@@ -85,18 +61,6 @@ export class QuestionsRepository {
       cursor: { id: cursor },
       where: { panelId: panelId },
       orderBy: { createdAt: 'desc' },
-    });
-  }
-
-  async insertLikeToToquizUserFirst(likeQuestionDto: LikeQuestionDto): Promise<void> {
-    const { panelId, questionId, toquizUserId } = likeQuestionDto;
-    await this.mongodbService.toquizUser.update({
-      where: { id: toquizUserId },
-      data: {
-        panels: {
-          push: [{ panelId: panelId, questions: [], likes: [questionId] }],
-        },
-      },
     });
   }
 
