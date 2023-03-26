@@ -34,21 +34,6 @@ export class QuestionsRepository {
     return panelInfo.panels;
   }
 
-  async insertQuestionToToquizUserFirst(
-    panelId: Question['panelId'],
-    questionId: Question['id'],
-    toquizUserId: Question['toquizUserId'],
-  ): Promise<void> {
-    await this.mongodbService.toquizUser.update({
-      where: { id: toquizUserId },
-      data: {
-        panels: {
-          push: [{ panelId: panelId, questions: [questionId], likes: [] }],
-        },
-      },
-    });
-  }
-
   async insertQuestionToToquizUser(
     panelId: Question['panelId'],
     questionId: Question['id'],
@@ -85,18 +70,6 @@ export class QuestionsRepository {
       cursor: { id: cursor },
       where: { panelId: panelId },
       orderBy: { createdAt: 'desc' },
-    });
-  }
-
-  async insertLikeToToquizUserFirst(likeQuestionDto: LikeQuestionDto): Promise<void> {
-    const { panelId, questionId, toquizUserId } = likeQuestionDto;
-    await this.mongodbService.toquizUser.update({
-      where: { id: toquizUserId },
-      data: {
-        panels: {
-          push: [{ panelId: panelId, questions: [], likes: [questionId] }],
-        },
-      },
     });
   }
 
