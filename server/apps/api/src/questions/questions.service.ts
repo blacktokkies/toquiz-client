@@ -11,15 +11,7 @@ export class QuestionsService {
     const { toquizUserId, panelId } = createQuestionDto;
     const question = await this.questionsRepository.createQuestion(createQuestionDto);
 
-    if (await this.isExistPanelSession(toquizUserId, panelId)) {
-      await this.questionsRepository.insertQuestionToToquizUser(panelId, question.id, toquizUserId);
-    } else {
-      await this.questionsRepository.insertQuestionToToquizUserFirst(
-        panelId,
-        question.id,
-        toquizUserId,
-      );
-    }
+    await this.questionsRepository.insertQuestionToToquizUser(panelId, question.id, toquizUserId);
 
     return question;
   }
@@ -44,15 +36,8 @@ export class QuestionsService {
   }
 
   async insertLike(likeQuestionDto: LikeQuestionDto): Promise<void> {
-    const { toquizUserId, panelId, questionId } = likeQuestionDto;
-
-    if (await this.isExistPanelSession(toquizUserId, panelId)) {
-      await this.questionsRepository.insertLikeToToquizUser(likeQuestionDto);
-    } else {
-      await this.questionsRepository.insertLikeToToquizUserFirst(likeQuestionDto);
-    }
-
-    await this.questionsRepository.incrementLikeNumToQuestion(questionId);
+    await this.questionsRepository.insertLikeToToquizUser(likeQuestionDto);
+    await this.questionsRepository.incrementLikeNumToQuestion(likeQuestionDto.questionId);
   }
 
   async removeLike(likeQuestionDto: LikeQuestionDto): Promise<void> {
@@ -67,15 +52,5 @@ export class QuestionsService {
     );
 
     await this.questionsRepository.decrementLikeNumToQuestion(questionId);
-  }
-
-  async isExistPanelSession(
-    toquizUserId: Question['toquizUserId'],
-    panelId: Question['panelId'],
-  ): Promise<boolean> {
-    const user = await this.questionsRepository.getPanelsByToquizUserId(toquizUserId);
-    const existingPanel = user.panels.find((panel) => panel.panelId === panelId);
-
-    return Boolean(existingPanel);
   }
 }
