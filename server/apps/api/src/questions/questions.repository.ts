@@ -15,15 +15,6 @@ export class QuestionsRepository {
     return await this.mysqlService.question.create({ data: createQuestionDto });
   }
 
-  async getPanelsByToquizUserId(
-    toquizUserId: ToquizUser['id'],
-  ): Promise<{ panels: { panelId: string }[] }> {
-    return await this.mongodbService.toquizUser.findUnique({
-      where: { id: toquizUserId },
-      select: { panels: { select: { panelId: true } } },
-    });
-  }
-
   async getPanelLikesOfToquizUser(
     toquizUserId: ToquizUser['id'],
   ): Promise<{ panelId: string; likes: string[] }[]> {
