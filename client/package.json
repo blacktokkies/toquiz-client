@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "preinstall": "yarn workspace shared install && yarn workspace shared build",
     "dev": "vite",
     "dev:proxy": "vite --mode proxy",
     "build": "tsc && vite build",
