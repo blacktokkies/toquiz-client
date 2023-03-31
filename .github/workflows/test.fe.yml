@@ -24,13 +24,13 @@ jobs:
           node-version: ${{ matrix.node }}
       
       - name: Install shared dependencies
-        run: yarn shared install --immutable --immutable-cache --check-cache
+        run: yarn shared install
       
       - name: Build shared code
         run: yarn shared build
       
       - name: Install client dependencies
-        run: yarn client install --immutable --immutable-cache --check-cache
+        run: yarn client install
         
       - name: Build production bundle
         run: yarn client build
