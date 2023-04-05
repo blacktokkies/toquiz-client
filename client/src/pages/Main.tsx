@@ -4,6 +4,7 @@ import React from 'react';
 
 import { redirect } from 'react-router-dom';
 
+import HomeHeader from '@/components/home/HomeHeader';
 import PanelList from '@/components/panel/PanelList';
 import { useMyPanelsQuery } from '@/hooks/panel';
 import { isUserLoggedIn } from '@/lib/routeGuard';
@@ -24,7 +25,14 @@ const Main = (): JSX.Element => {
 
   const { panels } = panelsQuery.data;
 
-  return <PanelList panels={panels} />;
+  return (
+    <>
+      <HomeHeader />
+      <section>
+        <PanelList panels={panels} />
+      </section>
+    </>
+  );
 };
 
 export default Main;
