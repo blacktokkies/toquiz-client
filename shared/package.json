@@ -1,25 +1,12 @@
 {
   "name": "shared",
   "version": "1.0.0",
-  "main": "dist/cjs/index.js",
-  "exports": {
-    ".": {
-      "require": {
-        "default": "./dist/cjs/index.js",
-        "types": "./dist/cjs/index.d.ts"
-      },
-      "import": {
-        "default": "./dist/esm/index.js",
-        "types": "./dist/esm/index.d.ts"
-      }
-    }
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "license": "MIT",
   "scripts": {
     "prebuild": "rm -rf dist",
-    "build": "yarn build:cjs & yarn build:esm",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build:esm": "tsc -p tsconfig.esm.json",
+    "build": "tsc",
     "lint": "eslint \"src/**/*.ts\" --fix"
   },
   "devDependencies": {
