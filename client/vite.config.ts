@@ -20,6 +20,14 @@ export default defineConfig(({ mode }) => {
           eslint: { lintCommand: 'eslint "./src/**/*.{ts,tsx}"' },
         }),
     ],
+    optimizeDeps: {
+      include: ['shared'],
+    },
+    build: {
+      commonjsOptions: {
+        include: [/shared/, /node_modules/],
+      },
+    },
     server: {
       proxy: mode === 'proxy' && {
         '/api': {

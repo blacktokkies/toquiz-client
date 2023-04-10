@@ -2,6 +2,8 @@
   "compilerOptions": {
     "target": "es2016",
     "lib": ["ESNext"],
+    "module": "commonjs",
+    "outDir": "dist",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,7 +14,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "removeComments": true,
-    "incremental": true,
+    "incremental": true
   },
-  "include": ["src"],
+  "include": ["src"]
 }
