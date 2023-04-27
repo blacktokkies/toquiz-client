@@ -35,7 +35,12 @@ module.exports = {
         dark: '#656060',
       },
     },
-    extend: {},
+    extend: {
+      boxShadow: {
+        item: '0px 4px 12px 0px rgba(173, 173, 173, 0.1)',
+        'item-hover': '0px 4px 12px rgba(0, 0, 0, 0.1)',
+      },
+    },
   },
   plugins: [],
 };

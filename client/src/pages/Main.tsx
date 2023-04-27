@@ -28,10 +28,10 @@ const Main = (): JSX.Element => {
   const { panels } = panelsQuery.data;
 
   return (
-    <>
+    <div className="flex h-full w-full flex-col">
       <HomeHeader />
-      <main>
-        <div className="mx-auto max-w-7xl">
+      <main className="flex-1">
+        <div className="container flex h-full max-w-7xl flex-col">
           <div className="flex flex-col gap-2 px-3 py-6">
             <div className="text-off-white">
               <span className="bg-primary text-off-white rounded-2xl py-1 px-3 text-base font-medium">
@@ -42,10 +42,18 @@ const Main = (): JSX.Element => {
               내 패널 모아보기
             </h1>
           </div>
-          <PanelList panels={panels} />
+          <div className="flex flex-1 flex-col pt-9">
+            <div className="flex justify-between p-3">
+              <span className="text-grey-dark text-sm font-bold">최신순</span>
+              <span className="text-grey-dark text-sm">내 패널</span>
+            </div>
+            <div className="bg-off-white flex-1 px-3 pt-4 pb-32">
+              <PanelList panels={panels} />
+            </div>
+          </div>
         </div>
       </main>
-    </>
+    </div>
   );
 };
 
