@@ -28,9 +28,12 @@ const Main = (): JSX.Element => {
   return (
     <>
       <HomeHeader />
-      <section>
+      <main>
+        <div>
+          <h1>내 패널 모아보기</h1>
+        </div>
         <PanelList panels={panels} />
-      </section>
+      </main>
     </>
   );
 };

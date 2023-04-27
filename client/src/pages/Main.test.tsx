@@ -7,6 +7,18 @@ import { renderWithQueryClient } from '@/lib/test-utils';
 import Main from '@/pages/Main';
 
 describe('메인 페이지', () => {
+  it('내 패널 모아보기 헤딩을 보여준다.', async () => {
+    renderWithQueryClient(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading')).toHaveTextContent('내 패널 모아보기');
+    });
+  });
+
   it('사용자가 작성한 패널의 목록을 보여준다.', async () => {
     renderWithQueryClient(
       <MemoryRouter>
