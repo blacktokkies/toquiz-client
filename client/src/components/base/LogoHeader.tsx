@@ -13,7 +13,7 @@ interface Props {
 }
 
 const LogoHeader = ({ to, children }: Props): JSX.Element => (
-  <header>
+  <header className="bg-white shadow-md">
     <div className="mx-auto flex h-16 max-w-7xl items-center px-5 ">
       <Link
         to={to}
