@@ -1,26 +1,17 @@
 import type { Panel } from 'shared';
 
-export const myPanelData: Panel[] = [
-  {
-    id: '1',
-    title: '무엇이든 물어보세요',
-    createdAt: new Date(),
+import { faker } from '@faker-js/faker';
+
+export const myPanelData: Panel[] = new Array(20)
+  .fill(undefined)
+  .map((_, idx) => ({
+    id: `${idx}`,
     userId: 'userId',
-    description: '1 설명',
-    isArchived: false,
-    updatedAt: new Date(),
-    deletedAt: null,
-    scrapNum: 0,
-  },
-  {
-    id: '2',
-    title: '세계 역사 이야기',
+    title: faker.music.songName(),
+    description: `${idx} 설명`,
+    isArchived: faker.datatype.boolean(),
+    scrapNum: faker.datatype.number({ min: 0, max: 100 }),
     createdAt: new Date(),
-    userId: 'userId',
-    description: '2 설명',
-    isArchived: false,
-    updatedAt: new Date(),
     deletedAt: null,
-    scrapNum: 0,
-  },
-];
+    updatedAt: new Date(),
+  }));
