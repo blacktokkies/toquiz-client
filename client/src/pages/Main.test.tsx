@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { it } from 'vitest';
 
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { myPanelData } from '@/mocks/data/panel/myPanelData';
 import Main from '@/pages/Main';
 
 describe('메인 페이지', () => {
@@ -38,7 +39,7 @@ describe('메인 페이지', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('테스트 닉네임')).toBeInTheDocument();
+      expect(screen.getByText(/테스트 닉네임/i)).toBeInTheDocument();
     });
   });
 
@@ -50,7 +51,7 @@ describe('메인 페이지', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('무엇이든 물어보세요')).toBeInTheDocument();
+      expect(screen.getByText(myPanelData[0].title)).toBeInTheDocument();
     });
   });
 });
