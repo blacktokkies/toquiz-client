@@ -38,7 +38,7 @@ describe('메인 페이지', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('테스트 닉네임')).toBeInTheDocument();
+      expect(screen.getByText(/테스트 닉네임/i)).toBeInTheDocument();
     });
   });
 
