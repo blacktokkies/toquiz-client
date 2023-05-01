@@ -9,7 +9,7 @@ describe('PanelList', () => {
   it('renders panels', () => {
     const { container } = render(<PanelList panels={myPanelData} />);
 
-    expect(container).toHaveTextContent('무엇이든 물어보세요');
-    expect(container).toHaveTextContent('세계 역사 이야기');
+    expect(container).toHaveTextContent(myPanelData[0].title);
+    expect(container).toHaveTextContent(myPanelData[1].title);
   });
 });
