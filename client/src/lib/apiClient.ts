@@ -41,78 +41,93 @@ export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? (isNode ? 'http://localhost' : '');
 
 export const apiClient = {
-  async get<T>(url: string, headers: HeadersInit | undefined = {}): Promise<T> {
+  async get<ResponseBody>(
+    url: string,
+    headers: HeadersInit | undefined = {},
+  ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...headers,
     };
-    const data = request<T>('GET', `${API_BASE_URL}${url}`, {
+    const data = request<ResponseBody>('GET', `${API_BASE_URL}${url}`, {
       headers: _headers,
     });
     return data;
   },
-  async post<T>(
+  async post<ResponseBody>(
     url: string,
     body: Record<string, any> | undefined = undefined,
     headers: HeadersInit | undefined = {},
-  ): Promise<T> {
+  ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('POST', `${API_BASE_URL}${url}`, {
-      headers: _headers,
-      body: _body,
-    });
+    const data: Promise<ResponseBody> = request(
+      'POST',
+      `${API_BASE_URL}${url}`,
+      {
+        headers: _headers,
+        body: _body,
+      },
+    );
     return data;
   },
-  async delete<T>(
+  async delete<ResponseBody>(
     url: string,
     headers: HeadersInit | undefined = {},
-  ): Promise<T> {
+  ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...headers,
     };
-    const data = request<T>('DELETE', `${API_BASE_URL}${url}`, {
+    const data = request<ResponseBody>('DELETE', `${API_BASE_URL}${url}`, {
       headers: _headers,
     });
     return data;
   },
-  async patch<T>(
+  async patch<ResponseBody>(
     url: string,
     body: Record<string, any> | undefined = undefined,
     headers: HeadersInit | undefined = {},
-  ): Promise<T> {
+  ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('PATCH', `${API_BASE_URL}${url}`, {
-      headers: _headers,
-      body: _body,
-    });
+    const data: Promise<ResponseBody> = request(
+      'PATCH',
+      `${API_BASE_URL}${url}`,
+      {
+        headers: _headers,
+        body: _body,
+      },
+    );
     return data;
   },
-  async put<T>(
+  async put<ResponseBody>(
     url: string,
     body: Record<string, any> | undefined = undefined,
     headers: HeadersInit | undefined = {},
-  ): Promise<T> {
+  ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('PUT', `${API_BASE_URL}${url}`, {
-      headers: _headers,
-      body: _body,
-    });
+    const data: Promise<ResponseBody> = request(
+      'PUT',
+      `${API_BASE_URL}${url}`,
+      {
+        headers: _headers,
+        body: _body,
+      },
+    );
     return data;
   },
 } as const;
