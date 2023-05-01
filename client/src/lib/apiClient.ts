@@ -59,7 +59,7 @@ export const apiClient = {
     const queryString = new URLSearchParams(queryParams).toString();
     const data = request<ResponseBody>(
       'GET',
-      `${API_BASE_URL}${url}${queryString}`,
+      `${API_BASE_URL}${url}?${queryString}`,
       {
         headers: _headers,
       },
@@ -86,7 +86,7 @@ export const apiClient = {
     const queryString = new URLSearchParams(queryParams).toString();
     const data = request<ResponseBody>(
       'POST',
-      `${API_BASE_URL}${url}${queryString}`,
+      `${API_BASE_URL}${url}?${queryString}`,
       {
         headers: _headers,
         body: _body,
@@ -110,7 +110,7 @@ export const apiClient = {
     const queryString = new URLSearchParams(queryParams).toString();
     const data = request<ResponseBody>(
       'DELETE',
-      `${API_BASE_URL}${url}${queryString}`,
+      `${API_BASE_URL}${url}?${queryString}`,
       {
         headers: _headers,
       },
@@ -137,7 +137,7 @@ export const apiClient = {
     const queryString = new URLSearchParams(queryParams).toString();
     const data = request<ResponseBody>(
       'PATCH',
-      `${API_BASE_URL}${url}${queryString}`,
+      `${API_BASE_URL}${url}?${queryString}`,
       {
         headers: _headers,
         body: _body,
@@ -165,7 +165,7 @@ export const apiClient = {
     const queryString = new URLSearchParams(queryParams).toString();
     const data = request<ResponseBody>(
       'PUT',
-      `${API_BASE_URL}${url}${queryString}`,
+      `${API_BASE_URL}${url}?${queryString}`,
       {
         headers: _headers,
         body: _body,
