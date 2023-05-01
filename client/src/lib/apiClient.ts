@@ -54,7 +54,7 @@ export const apiClient = {
   >(
     url: string,
     queryParams?: QueryParams,
-    headers: HeadersInit | undefined = {},
+    headers?: HeadersInit,
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
@@ -79,7 +79,7 @@ export const apiClient = {
     url: string,
     body: RequestBody | undefined = undefined,
     queryParams?: QueryParams,
-    headers: HeadersInit | undefined = {},
+    headers?: HeadersInit,
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
@@ -105,7 +105,7 @@ export const apiClient = {
   >(
     url: string,
     queryParams?: QueryParams,
-    headers: HeadersInit | undefined = {},
+    headers?: HeadersInit,
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
@@ -130,7 +130,7 @@ export const apiClient = {
     url: string,
     body: RequestBody | undefined = undefined,
     queryParams?: QueryParams,
-    headers: HeadersInit | undefined = {},
+    headers?: HeadersInit,
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
@@ -158,7 +158,7 @@ export const apiClient = {
     url: string,
     body: RequestBody | undefined = undefined,
     queryParams?: QueryParams,
-    headers: HeadersInit | undefined = {},
+    headers?: HeadersInit,
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
