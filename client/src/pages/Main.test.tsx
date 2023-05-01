@@ -18,6 +18,13 @@ describe('메인 페이지', () => {
     };
   });
 
+  // TODO: 모킹 함수 따로 빼기
+  window.IntersectionObserver = vi.fn().mockImplementation(() => ({
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+  }));
+
   it('내 패널 모아보기 헤딩을 보여준다.', async () => {
     renderWithQueryClient(
       <MemoryRouter>
