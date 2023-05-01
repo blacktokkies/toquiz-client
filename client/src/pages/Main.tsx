@@ -6,7 +6,7 @@ import { redirect } from 'react-router-dom';
 
 import HomeHeader from '@/components/home/HomeHeader';
 import PanelList from '@/components/panel/PanelList';
-import { useMyPanelsQuery } from '@/hooks/panel';
+import { useMyPanelsInfiniteQuery } from '@/hooks/panel';
 import { useUserStore } from '@/hooks/store/useUserStore';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 
@@ -19,13 +19,11 @@ export const mainLoader: LoaderFunction = async () => {
 };
 
 const Main = (): JSX.Element => {
-  const panelsQuery = useMyPanelsQuery();
+  const panelsQuery = useMyPanelsInfiniteQuery();
   const user = useUserStore((state) => state.user);
 
   if (panelsQuery.isLoading) return <div>loading...</div>;
   if (panelsQuery.isError) return <div>error occurred</div>;
-
-  const { panels } = panelsQuery.data;
 
   return (
     <div className="flex h-full w-full flex-col">
@@ -48,7 +46,9 @@ const Main = (): JSX.Element => {
               <span className="text-grey-dark text-sm">내 패널</span>
             </div>
             <div className="bg-off-white flex-1 px-3 pt-4 pb-32">
-              <PanelList panels={panels} />
+              {panelsQuery.data.pages.map((page) => (
+                <PanelList key={page.panels[0].id} panels={page.panels} />
+              ))}
             </div>
           </div>
         </div>

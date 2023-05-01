@@ -1,20 +1,27 @@
 import type { ApiError } from '@/lib/apiClient';
-import type { GetMyPanelsResult } from '@/mocks/handlers/panel';
-import type { UseQueryResult } from '@tanstack/react-query';
+import type {
+  GetMyPanelsParams,
+  GetMyPanelsResult,
+} from '@/mocks/handlers/panel';
+import type { UseInfiniteQueryResult } from '@tanstack/react-query';
 
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { getMyPanels } from '@/lib/api/panel';
 import { queryKey } from '@/lib/queryKey';
 
-export const useMyPanelsQuery = (): UseQueryResult<
+export const useMyPanelsInfiniteQuery = (): UseInfiniteQueryResult<
   GetMyPanelsResult,
   ApiError | SyntaxError
 > => {
-  const key = queryKey.panel.list();
-  const query = useQuery<GetMyPanelsResult, ApiError | SyntaxError>(
+  const key = queryKey.panel.lists();
+  const query = useInfiniteQuery<GetMyPanelsResult, ApiError | SyntaxError>(
     key,
-    getMyPanels,
+    async ({ pageParam = '' }) =>
+      getMyPanels({ nextCursor: pageParam as GetMyPanelsParams['nextCursor'] }),
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    },
   );
 
   return query;

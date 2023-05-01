@@ -5,7 +5,7 @@ const authQueryKey = {
 
 const panelQueryKey = {
   all: ['panels'] as const,
-  list: () => [...panelQueryKey.all, 'list'] as const,
+  lists: () => [...panelQueryKey.all, 'list'] as const,
 };
 
 export const queryKey = {
