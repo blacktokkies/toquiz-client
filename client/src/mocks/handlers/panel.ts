@@ -23,7 +23,7 @@ export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
 
     const start = Number(nextCursor);
     const end = start + 20;
-    const newPanelData = myPanelsData.splice(start, end);
+    const newPanelData = myPanelsData.slice(start, end);
 
     let newNextCursor: undefined | Panel['id'];
     if (end >= myPanelsData.length) newNextCursor = undefined;
