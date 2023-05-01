@@ -2,9 +2,8 @@ import type { Panel } from 'shared';
 
 import { faker } from '@faker-js/faker';
 
-export const myPanelData: Panel[] = new Array(20)
-  .fill(undefined)
-  .map((_, idx) => ({
+export const createPanelList = (size = 20): Panel[] =>
+  new Array(size).fill(undefined).map((_, idx) => ({
     id: `${idx}`,
     userId: 'userId',
     title: faker.music.songName(),
@@ -15,3 +14,6 @@ export const myPanelData: Panel[] = new Array(20)
     deletedAt: null,
     updatedAt: new Date(),
   }));
+
+// TODO: myPanelsData로 이름 수정하기
+export const myPanelData: Panel[] = createPanelList(20 * 3);
