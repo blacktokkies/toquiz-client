@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { it } from 'vitest';
 
 import { renderWithQueryClient } from '@/lib/test-utils';
-import { myPanelData } from '@/mocks/data/panel/myPanelData';
+import { myPanelsData } from '@/mocks/data/panel/myPanelsData';
 import Main from '@/pages/Main';
 
 describe('메인 페이지', () => {
@@ -51,7 +51,7 @@ describe('메인 페이지', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(myPanelData[0].title)).toBeInTheDocument();
+      expect(screen.getByText(myPanelsData[0].title)).toBeInTheDocument();
     });
   });
 });

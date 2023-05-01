@@ -16,4 +16,4 @@ export const createPanelList = (size = 20): Panel[] =>
   }));
 
 // TODO: myPanelsData로 이름 수정하기
-export const myPanelData: Panel[] = createPanelList(20 * 3);
+export const myPanelsData: Panel[] = createPanelList(20 * 3);
