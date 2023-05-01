@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { redirect } from 'react-router-dom';
 
 import HomeHeader from '@/components/home/HomeHeader';
-import PanelList from '@/components/panel/PanelList';
+import PanelItem from '@/components/panel/PanelItem';
 import { useMyPanelsInfiniteQuery } from '@/hooks/panel';
 import { useUserStore } from '@/hooks/store/useUserStore';
 import useInView from '@/hooks/useInView';
@@ -54,9 +54,13 @@ const Main = (): JSX.Element => {
               <span className="text-grey-dark text-sm">내 패널</span>
             </div>
             <div className="bg-off-white flex-1 px-3 pt-4 pb-16">
-              {panelsQuery.data.pages.map((page) => (
-                <PanelList key={page.panels[0].id} panels={page.panels} />
-              ))}
+              <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {panelsQuery.data.pages.map((page) =>
+                  page.panels.map((panel) => (
+                    <PanelItem key={panel.id} panel={panel} />
+                  )),
+                )}
+              </ul>
               <div ref={fetchMoreRef} />
             </div>
           </div>
