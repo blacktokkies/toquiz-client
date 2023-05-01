@@ -40,79 +40,137 @@ export async function request<T>(
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? (isNode ? 'http://localhost' : '');
 
+type DefaultQueryParams = Record<string, any>;
+type DefaultBody = Record<string, any>;
+
 export const apiClient = {
-  async get<T>(url: string, headers: HeadersInit | undefined = {}): Promise<T> {
+  async get<
+    ResponseBody extends DefaultBody = DefaultBody,
+    QueryParams extends DefaultQueryParams = DefaultQueryParams,
+  >(
+    url: string,
+    queryParams?: QueryParams,
+    headers?: HeadersInit,
+  ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...headers,
     };
-    const data = request<T>('GET', `${API_BASE_URL}${url}`, {
-      headers: _headers,
-    });
+    const queryString = new URLSearchParams(queryParams).toString();
+    const data = request<ResponseBody>(
+      'GET',
+      `${API_BASE_URL}${url}${queryString}`,
+      {
+        headers: _headers,
+      },
+    );
     return data;
   },
-  async post<T>(
+
+  async post<
+    ResponseBody extends DefaultBody = DefaultBody,
+    RequestBody extends DefaultBody = DefaultBody,
+    QueryParams extends DefaultQueryParams = DefaultQueryParams,
+  >(
     url: string,
-    body: Record<string, any> | undefined = undefined,
-    headers: HeadersInit | undefined = {},
-  ): Promise<T> {
+    body?: RequestBody,
+    queryParams?: QueryParams,
+    headers?: HeadersInit,
+  ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('POST', `${API_BASE_URL}${url}`, {
-      headers: _headers,
-      body: _body,
-    });
+    const queryString = new URLSearchParams(queryParams).toString();
+    const data = request<ResponseBody>(
+      'POST',
+      `${API_BASE_URL}${url}${queryString}`,
+      {
+        headers: _headers,
+        body: _body,
+      },
+    );
     return data;
   },
-  async delete<T>(
+
+  async delete<
+    ResponseBody extends DefaultBody = DefaultBody,
+    QueryParams extends DefaultQueryParams = DefaultQueryParams,
+  >(
     url: string,
-    headers: HeadersInit | undefined = {},
-  ): Promise<T> {
+    queryParams?: QueryParams,
+    headers?: HeadersInit,
+  ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...headers,
     };
-    const data = request<T>('DELETE', `${API_BASE_URL}${url}`, {
-      headers: _headers,
-    });
+    const queryString = new URLSearchParams(queryParams).toString();
+    const data = request<ResponseBody>(
+      'DELETE',
+      `${API_BASE_URL}${url}${queryString}`,
+      {
+        headers: _headers,
+      },
+    );
     return data;
   },
-  async patch<T>(
+
+  async patch<
+    ResponseBody extends DefaultBody = DefaultBody,
+    RequestBody extends DefaultBody = DefaultBody,
+    QueryParams extends DefaultQueryParams = DefaultQueryParams,
+  >(
     url: string,
-    body: Record<string, any> | undefined = undefined,
-    headers: HeadersInit | undefined = {},
-  ): Promise<T> {
+    body?: RequestBody,
+    queryParams?: QueryParams,
+    headers?: HeadersInit,
+  ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('PATCH', `${API_BASE_URL}${url}`, {
-      headers: _headers,
-      body: _body,
-    });
+    const queryString = new URLSearchParams(queryParams).toString();
+    const data = request<ResponseBody>(
+      'PATCH',
+      `${API_BASE_URL}${url}${queryString}`,
+      {
+        headers: _headers,
+        body: _body,
+      },
+    );
     return data;
   },
-  async put<T>(
+
+  async put<
+    ResponseBody extends DefaultBody = DefaultBody,
+    RequestBody extends DefaultBody = DefaultBody,
+    QueryParams extends DefaultQueryParams = DefaultQueryParams,
+  >(
     url: string,
-    body: Record<string, any> | undefined = undefined,
-    headers: HeadersInit | undefined = {},
-  ): Promise<T> {
+    body?: RequestBody,
+    queryParams?: QueryParams,
+    headers?: HeadersInit,
+  ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const data: Promise<T> = request('PUT', `${API_BASE_URL}${url}`, {
-      headers: _headers,
-      body: _body,
-    });
+    const queryString = new URLSearchParams(queryParams).toString();
+    const data = request<ResponseBody>(
+      'PUT',
+      `${API_BASE_URL}${url}${queryString}`,
+      {
+        headers: _headers,
+        body: _body,
+      },
+    );
     return data;
   },
 } as const;

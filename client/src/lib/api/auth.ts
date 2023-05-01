@@ -16,12 +16,12 @@ import { apiUrl } from '@/lib/apiUrl';
 
 export const signUp = async (body: SignUpBody): Promise<SignUpResult> =>
   apiClient
-    .post<SignUpResponse>(apiUrl.auth.signup(), body)
+    .post<SignUpResponse, SignUpBody>(apiUrl.auth.signup(), body)
     .then((data) => data.result);
 
 export const login = async (body: LogInBody): Promise<LogInResult> =>
   apiClient
-    .post<LogInResponse>(apiUrl.auth.login(), body)
+    .post<LogInResponse, LogInBody>(apiUrl.auth.login(), body)
     .then((data) => data.result);
 
 export const me = async (): Promise<GetMyInfoResult> =>
