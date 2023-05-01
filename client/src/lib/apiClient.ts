@@ -40,16 +40,12 @@ export async function request<T>(
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? (isNode ? 'http://localhost' : '');
 
-type DefaultQueryParams =
-  | string
-  | Record<string, string>
-  | string[][]
-  | URLSearchParams
-  | undefined;
+type DefaultQueryParams = Record<string, any>;
+type DefaultBody = Record<string, any>;
 
 export const apiClient = {
   async get<
-    ResponseBody,
+    ResponseBody extends DefaultBody = DefaultBody,
     QueryParams extends DefaultQueryParams = DefaultQueryParams,
   >(
     url: string,
@@ -72,12 +68,12 @@ export const apiClient = {
   },
 
   async post<
-    ResponseBody,
-    RequestBody = undefined,
+    ResponseBody extends DefaultBody = DefaultBody,
+    RequestBody extends DefaultBody = DefaultBody,
     QueryParams extends DefaultQueryParams = DefaultQueryParams,
   >(
     url: string,
-    body: RequestBody | undefined = undefined,
+    body?: RequestBody,
     queryParams?: QueryParams,
     headers?: HeadersInit,
   ): Promise<ResponseBody> {
@@ -88,7 +84,7 @@ export const apiClient = {
     };
     const _body = body && JSON.stringify(body);
     const queryString = new URLSearchParams(queryParams).toString();
-    const data: Promise<ResponseBody> = request(
+    const data = request<ResponseBody>(
       'POST',
       `${API_BASE_URL}${url}${queryString}`,
       {
@@ -100,7 +96,7 @@ export const apiClient = {
   },
 
   async delete<
-    ResponseBody,
+    ResponseBody extends DefaultBody = DefaultBody,
     QueryParams extends DefaultQueryParams = DefaultQueryParams,
   >(
     url: string,
@@ -123,12 +119,12 @@ export const apiClient = {
   },
 
   async patch<
-    ResponseBody,
-    RequestBody = undefined,
+    ResponseBody extends DefaultBody = DefaultBody,
+    RequestBody extends DefaultBody = DefaultBody,
     QueryParams extends DefaultQueryParams = DefaultQueryParams,
   >(
     url: string,
-    body: RequestBody | undefined = undefined,
+    body?: RequestBody,
     queryParams?: QueryParams,
     headers?: HeadersInit,
   ): Promise<ResponseBody> {
@@ -139,7 +135,7 @@ export const apiClient = {
     };
     const _body = body && JSON.stringify(body);
     const queryString = new URLSearchParams(queryParams).toString();
-    const data: Promise<ResponseBody> = request(
+    const data = request<ResponseBody>(
       'PATCH',
       `${API_BASE_URL}${url}${queryString}`,
       {
@@ -151,12 +147,12 @@ export const apiClient = {
   },
 
   async put<
-    ResponseBody,
-    RequestBody = undefined,
+    ResponseBody extends DefaultBody = DefaultBody,
+    RequestBody extends DefaultBody = DefaultBody,
     QueryParams extends DefaultQueryParams = DefaultQueryParams,
   >(
     url: string,
-    body: RequestBody | undefined = undefined,
+    body?: RequestBody,
     queryParams?: QueryParams,
     headers?: HeadersInit,
   ): Promise<ResponseBody> {
@@ -167,7 +163,7 @@ export const apiClient = {
     };
     const _body = body && JSON.stringify(body);
     const queryString = new URLSearchParams(queryParams).toString();
-    const data: Promise<ResponseBody> = request(
+    const data = request<ResponseBody>(
       'PUT',
       `${API_BASE_URL}${url}${queryString}`,
       {
