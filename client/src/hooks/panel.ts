@@ -10,7 +10,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { getMyPanels } from '@/lib/api/panel';
 import { queryKey } from '@/lib/queryKey';
 
-export const useMyPanelsQuery = (): UseInfiniteQueryResult<
+export const useMyPanelsInfiniteQuery = (): UseInfiniteQueryResult<
   GetMyPanelsResult,
   ApiError | SyntaxError
 > => {

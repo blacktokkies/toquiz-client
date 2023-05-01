@@ -6,7 +6,7 @@ import { redirect } from 'react-router-dom';
 
 import HomeHeader from '@/components/home/HomeHeader';
 import PanelList from '@/components/panel/PanelList';
-import { useMyPanelsQuery } from '@/hooks/panel';
+import { useMyPanelsInfiniteQuery } from '@/hooks/panel';
 import { useUserStore } from '@/hooks/store/useUserStore';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 
@@ -19,7 +19,7 @@ export const mainLoader: LoaderFunction = async () => {
 };
 
 const Main = (): JSX.Element => {
-  const panelsQuery = useMyPanelsQuery();
+  const panelsQuery = useMyPanelsInfiniteQuery();
   const user = useUserStore((state) => state.user);
 
   if (panelsQuery.isLoading) return <div>loading...</div>;
