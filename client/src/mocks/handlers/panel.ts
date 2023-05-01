@@ -3,6 +3,7 @@ import type { Panel, SuccessResponse } from 'shared';
 import { rest } from 'msw';
 
 import { API_BASE_URL } from '@/lib/apiClient';
+import { apiUrl } from '@/lib/apiUrl';
 import { myPanelData } from '@/mocks/data/panel/myPanelData';
 
 export interface GetMyPanelsResult {
@@ -13,7 +14,7 @@ export interface GetMyPanelsResult {
 export type GetMyPanelsResponse = SuccessResponse<GetMyPanelsResult>;
 
 export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
-  `${API_BASE_URL}/panels`,
+  `${API_BASE_URL}${apiUrl.panel.getMyPanels()}`,
   (req, res, ctx) => {
     // nextCursor가 null이면 첫 요청
     const nextCursor = req.url.searchParams.get('nextCursor');

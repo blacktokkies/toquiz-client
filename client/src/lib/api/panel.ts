@@ -3,7 +3,10 @@ import type {
   GetMyPanelsResult,
 } from '@/mocks/handlers/panel';
 
-import { apiClient } from '../apiClient';
+import { apiClient } from '@/lib/apiClient';
+import { apiUrl } from '@/lib/apiUrl';
 
 export const getMyPanels = async (): Promise<GetMyPanelsResult> =>
-  apiClient.get<GetMyPanelsResponse>('/panels').then((data) => data.result);
+  apiClient
+    .get<GetMyPanelsResponse>(apiUrl.panel.getMyPanels())
+    .then((data) => data.result);

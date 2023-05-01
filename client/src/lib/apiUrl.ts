@@ -5,6 +5,11 @@ const authApiUrl = {
   refresh: () => `/api/users/auth/refresh` as const,
 };
 
+const panelApiUrl = {
+  getMyPanels: () => `/api/panels` as const,
+};
+
 export const apiUrl = {
   auth: authApiUrl,
+  panel: panelApiUrl,
 };
