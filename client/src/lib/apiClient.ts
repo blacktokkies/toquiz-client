@@ -54,9 +54,9 @@ export const apiClient = {
     });
     return data;
   },
-  async post<ResponseBody>(
+  async post<ResponseBody, RequestBody>(
     url: string,
-    body: Record<string, any> | undefined = undefined,
+    body: RequestBody | undefined = undefined,
     headers: HeadersInit | undefined = {},
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
@@ -88,9 +88,9 @@ export const apiClient = {
     });
     return data;
   },
-  async patch<ResponseBody>(
+  async patch<ResponseBody, RequestBody>(
     url: string,
-    body: Record<string, any> | undefined = undefined,
+    body: RequestBody | undefined = undefined,
     headers: HeadersInit | undefined = {},
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
@@ -109,9 +109,9 @@ export const apiClient = {
     );
     return data;
   },
-  async put<ResponseBody>(
+  async put<ResponseBody, RequestBody>(
     url: string,
-    body: Record<string, any> | undefined = undefined,
+    body: RequestBody | undefined = undefined,
     headers: HeadersInit | undefined = {},
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
