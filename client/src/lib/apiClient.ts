@@ -54,7 +54,7 @@ export const apiClient = {
     });
     return data;
   },
-  async post<ResponseBody, RequestBody>(
+  async post<ResponseBody, RequestBody = undefined>(
     url: string,
     body: RequestBody | undefined = undefined,
     headers: HeadersInit | undefined = {},
@@ -88,7 +88,7 @@ export const apiClient = {
     });
     return data;
   },
-  async patch<ResponseBody, RequestBody>(
+  async patch<ResponseBody, RequestBody = undefined>(
     url: string,
     body: RequestBody | undefined = undefined,
     headers: HeadersInit | undefined = {},
@@ -109,7 +109,7 @@ export const apiClient = {
     );
     return data;
   },
-  async put<ResponseBody, RequestBody>(
+  async put<ResponseBody, RequestBody = undefined>(
     url: string,
     body: RequestBody | undefined = undefined,
     headers: HeadersInit | undefined = {},
