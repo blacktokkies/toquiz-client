@@ -25,28 +25,24 @@ describe('메인 페이지', () => {
     disconnect: vi.fn(),
   }));
 
-  it('내 패널 모아보기 헤딩을 보여준다.', async () => {
+  it('내 패널 모아보기 헤딩을 보여준다.', () => {
     renderWithQueryClient(
       <MemoryRouter>
         <Main />
       </MemoryRouter>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('heading')).toHaveTextContent('내 패널 모아보기');
-    });
+    expect(screen.getByRole('heading')).toHaveTextContent('내 패널 모아보기');
   });
 
-  it('사용자의 닉네임을 보여준다.', async () => {
+  it('사용자의 닉네임을 보여준다.', () => {
     renderWithQueryClient(
       <MemoryRouter>
         <Main />
       </MemoryRouter>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(/테스트 닉네임/i)).toBeInTheDocument();
-    });
+    expect(screen.getByText(/테스트 닉네임/i)).toBeInTheDocument();
   });
 
   it('사용자가 작성한 패널의 목록을 보여준다.', async () => {
