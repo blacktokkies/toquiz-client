@@ -11,7 +11,7 @@ export const useMyPanelsQuery = (): UseQueryResult<
   GetMyPanelsResult,
   ApiError | SyntaxError
 > => {
-  const key = queryKey.panel.list();
+  const key = queryKey.panel.lists();
   const query = useQuery<GetMyPanelsResult, ApiError | SyntaxError>(
     key,
     getMyPanels,
