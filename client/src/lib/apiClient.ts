@@ -40,23 +40,45 @@ export async function request<T>(
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? (isNode ? 'http://localhost' : '');
 
+type DefaultQueryParams =
+  | string
+  | Record<string, string>
+  | string[][]
+  | URLSearchParams
+  | undefined;
+
 export const apiClient = {
-  async get<ResponseBody>(
+  async get<
+    ResponseBody,
+    QueryParams extends DefaultQueryParams = DefaultQueryParams,
+  >(
     url: string,
+    queryParams?: QueryParams,
     headers: HeadersInit | undefined = {},
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...headers,
     };
-    const data = request<ResponseBody>('GET', `${API_BASE_URL}${url}`, {
-      headers: _headers,
-    });
+    const queryString = new URLSearchParams(queryParams).toString();
+    const data = request<ResponseBody>(
+      'GET',
+      `${API_BASE_URL}${url}${queryString}`,
+      {
+        headers: _headers,
+      },
+    );
     return data;
   },
-  async post<ResponseBody, RequestBody = undefined>(
+
+  async post<
+    ResponseBody,
+    RequestBody = undefined,
+    QueryParams extends DefaultQueryParams = DefaultQueryParams,
+  >(
     url: string,
     body: RequestBody | undefined = undefined,
+    queryParams?: QueryParams,
     headers: HeadersInit | undefined = {},
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
@@ -65,9 +87,10 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
+    const queryString = new URLSearchParams(queryParams).toString();
     const data: Promise<ResponseBody> = request(
       'POST',
-      `${API_BASE_URL}${url}`,
+      `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
         body: _body,
@@ -75,22 +98,38 @@ export const apiClient = {
     );
     return data;
   },
-  async delete<ResponseBody>(
+
+  async delete<
+    ResponseBody,
+    QueryParams extends DefaultQueryParams = DefaultQueryParams,
+  >(
     url: string,
+    queryParams?: QueryParams,
     headers: HeadersInit | undefined = {},
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
       Authorization: `Bearer ${_accessToken}`,
       ...headers,
     };
-    const data = request<ResponseBody>('DELETE', `${API_BASE_URL}${url}`, {
-      headers: _headers,
-    });
+    const queryString = new URLSearchParams(queryParams).toString();
+    const data = request<ResponseBody>(
+      'DELETE',
+      `${API_BASE_URL}${url}${queryString}`,
+      {
+        headers: _headers,
+      },
+    );
     return data;
   },
-  async patch<ResponseBody, RequestBody = undefined>(
+
+  async patch<
+    ResponseBody,
+    RequestBody = undefined,
+    QueryParams extends DefaultQueryParams = DefaultQueryParams,
+  >(
     url: string,
     body: RequestBody | undefined = undefined,
+    queryParams?: QueryParams,
     headers: HeadersInit | undefined = {},
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
@@ -99,9 +138,10 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
+    const queryString = new URLSearchParams(queryParams).toString();
     const data: Promise<ResponseBody> = request(
       'PATCH',
-      `${API_BASE_URL}${url}`,
+      `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
         body: _body,
@@ -109,9 +149,15 @@ export const apiClient = {
     );
     return data;
   },
-  async put<ResponseBody, RequestBody = undefined>(
+
+  async put<
+    ResponseBody,
+    RequestBody = undefined,
+    QueryParams extends DefaultQueryParams = DefaultQueryParams,
+  >(
     url: string,
     body: RequestBody | undefined = undefined,
+    queryParams?: QueryParams,
     headers: HeadersInit | undefined = {},
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
@@ -120,9 +166,10 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
+    const queryString = new URLSearchParams(queryParams).toString();
     const data: Promise<ResponseBody> = request(
       'PUT',
-      `${API_BASE_URL}${url}`,
+      `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
         body: _body,
