@@ -1,14 +1,12 @@
 import type { LoaderFunction } from 'react-router-dom';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { redirect } from 'react-router-dom';
 
 import HomeHeader from '@/components/home/HomeHeader';
-import PanelItem from '@/components/panel/PanelItem';
-import { useMyPanelsInfiniteQuery } from '@/hooks/panel';
+import InfinitePanelGrid from '@/components/panel/InfinitePanelGrid';
 import { useUserStore } from '@/hooks/store/useUserStore';
-import useInView from '@/hooks/useInView';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 
 // https://reactrouter.com/en/main/fetch/redirect
@@ -20,18 +18,7 @@ export const mainLoader: LoaderFunction = async () => {
 };
 
 const Main = (): JSX.Element => {
-  const panelsQuery = useMyPanelsInfiniteQuery();
   const user = useUserStore((state) => state.user);
-  const [fetchMoreRef, inView] = useInView();
-
-  useEffect(() => {
-    if (!inView || panelsQuery.isFetchingNextPage || !panelsQuery.hasNextPage)
-      return;
-    panelsQuery.fetchNextPage();
-  }, [inView, panelsQuery]);
-
-  if (panelsQuery.isLoading) return <div>loading...</div>;
-  if (panelsQuery.isError) return <div>error occurred</div>;
 
   return (
     <div className="flex h-full w-full flex-col">
@@ -54,14 +41,7 @@ const Main = (): JSX.Element => {
               <span className="text-grey-dark text-sm">내 패널</span>
             </div>
             <div className="bg-off-white flex-1 px-3 pt-4 pb-16">
-              <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {panelsQuery.data.pages.map((page) =>
-                  page.panels.map((panel) => (
-                    <PanelItem key={panel.id} panel={panel} />
-                  )),
-                )}
-              </ul>
-              <div ref={fetchMoreRef} />
+              <InfinitePanelGrid />
             </div>
           </div>
         </div>
