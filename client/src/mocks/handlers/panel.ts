@@ -6,8 +6,10 @@ import { API_BASE_URL } from '@/lib/apiClient';
 import { myPanelData } from '@/mocks/data/panel/myPanelData';
 
 export interface GetMyPanelsResult {
+  nextCursor: undefined | Panel['id'];
   panels: Panel[];
 }
+
 export type GetMyPanelsResponse = SuccessResponse<GetMyPanelsResult>;
 
 export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
