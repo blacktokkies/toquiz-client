@@ -16,6 +16,7 @@ toquiz(토퀴즈)는 사용자가 패널에 익명으로 질문을 올리고 답
 |[이준영]("https://github.com/leegwae")|[백수만]("https://github.com/soomanbaek")|
 
 ## 🛠️ 기술스택
+<img width="1652" alt="기술 스택 (1)" src="https://user-images.githubusercontent.com/72093196/235558564-bb601b6e-4f8e-40ed-9229-f6e284947c73.png">
 
 ## 🕋 시스템 아키텍처
 
