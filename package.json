@@ -7,13 +7,11 @@
   "main": "index.js",
   "workspaces": {
     "packages": [
-      "shared",
       "client"
     ]
   },
   "scripts": {
     "root": "yarn workspace -W",
-    "server": "yarn workspace server",
     "client": "yarn workspace client"
   },
   "engines": {
