@@ -1,4 +1,5 @@
-import type { Panel, SuccessResponse } from 'shared';
+import type { Panel } from '@/lib/api/panel';
+import type { SuccessResponse } from '@/lib/api/response';
 
 import { rest } from 'msw';
 

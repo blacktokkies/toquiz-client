@@ -1,4 +1,4 @@
-import type { Panel } from 'shared';
+import type { Panel } from '@/lib/api/panel';
 
 import { faker } from '@faker-js/faker';
 

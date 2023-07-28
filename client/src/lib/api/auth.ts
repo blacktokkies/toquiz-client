@@ -1,35 +1,88 @@
-import type {
-  GetMyInfoResponse,
-  GetMyInfoResult,
-  SignUpBody,
-  SignUpResult,
-  SignUpResponse,
-  LogInBody,
-  LogInResult,
-  LogInResponse,
-  RefreshResult,
-  RefreshResponse,
-} from 'shared';
+import type { SuccessResponse } from '@/lib/api/response';
 
 import { apiClient } from '@/lib/apiClient';
 import { apiUrl } from '@/lib/apiUrl';
+
+export interface SignUpBody {
+  username: User['username'];
+  password: User['password'];
+  nickname: User['nickname'];
+}
+
+export interface SignUpResult {
+  message: string;
+}
+
+export type SignUpResponse = SuccessResponse<SignUpResult>;
 
 export const signUp = async (body: SignUpBody): Promise<SignUpResult> =>
   apiClient
     .post<SignUpResponse, SignUpBody>(apiUrl.auth.signup(), body)
     .then((data) => data.result);
 
+export interface LogInBody {
+  username: User['username'];
+  password: User['password'];
+}
+
+export interface LogInResult {
+  user: {
+    id: User['id'];
+    username: User['username'];
+    nickname: User['nickname'];
+    createdAt: User['createdAt'];
+  };
+  accessToken: string;
+}
+
+export type LogInResponse = SuccessResponse<LogInResult>;
+
 export const login = async (body: LogInBody): Promise<LogInResult> =>
   apiClient
     .post<LogInResponse, LogInBody>(apiUrl.auth.login(), body)
     .then((data) => data.result);
+
+export interface GetMyInfoResult {
+  id: User['id'];
+  username: User['username'];
+  nickname: User['nickname'];
+  provider: User['provider'];
+  createdAt: User['createdAt'];
+  updatedAt: User['updatedAt'];
+  deletedAt: User['deletedAt'];
+}
+
+export type GetMyInfoResponse = SuccessResponse<GetMyInfoResult>;
 
 export const me = async (): Promise<GetMyInfoResult> =>
   apiClient
     .get<GetMyInfoResponse>(apiUrl.auth.me())
     .then((data) => data.result);
 
+export interface RefreshResult {
+  user: {
+    id: User['id'];
+    username: User['username'];
+    nickname: User['nickname'];
+    createdAt: User['createdAt'];
+  };
+  accessToken: string;
+}
+
+export type RefreshResponse = SuccessResponse<RefreshResult>;
+
 export const refresh = async (): Promise<RefreshResult> =>
   apiClient
     .post<RefreshResponse>(apiUrl.auth.refresh())
     .then((data) => data.result);
+
+export interface User {
+  id: string;
+  username: string;
+  password: string;
+  nickname: string;
+  provider: string;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+}

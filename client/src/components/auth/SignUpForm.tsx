@@ -1,4 +1,4 @@
-import type { SignUpBody } from 'shared';
+import type { SignUpBody } from '@/lib/api/auth';
 
 import React from 'react';
 

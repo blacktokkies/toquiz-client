@@ -1,5 +1,5 @@
+import type { SignUpBody } from '@/lib/api/auth';
 import type { LoaderFunction } from 'react-router-dom';
-import type { SignUpBody } from 'shared';
 
 import React from 'react';
 
