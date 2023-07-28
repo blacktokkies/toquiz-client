@@ -8,18 +8,12 @@
   "workspaces": {
     "packages": [
       "shared",
-      "client",
-      "server"
-    ],
-    "nohoist": [
-      "server",
-      "server/**"
+      "client"
     ]
   },
   "scripts": {
     "root": "yarn workspace -W",
     "server": "yarn workspace server",
-    "shared": "yarn workspace shared",
     "client": "yarn workspace client"
   },
   "engines": {
