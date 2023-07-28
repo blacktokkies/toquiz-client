@@ -1,8 +1,8 @@
 {
-  "name": "toquiz",
+  "name": "toquiz-client",
   "version": "0.0.0",
   "private": true,
-  "repository": "https://github.com/blacktokkies/toquiz.git",
+  "repository": "https://github.com/blacktokkies/toquiz-client.git",
   "license": "MIT",
   "type": "module",
   "scripts": {
