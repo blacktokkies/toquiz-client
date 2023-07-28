@@ -19,7 +19,7 @@ export type GetMyPanelsResponse = SuccessResponse<GetMyPanelsResult>;
 
 export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
   `${API_BASE_URL}${apiUrl.panel.getMyPanels()}`,
-  (req, res, ctx) => {
+  async (req, res, ctx) => {
     const nextCursor = req.url.searchParams.get('nextCursor');
 
     const start = Number(nextCursor);
