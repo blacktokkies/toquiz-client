@@ -3,37 +3,28 @@ name: Frontend CI
 on:
   pull_request:
     branches: [dev]
-    paths:
-      - "client/**"
 
 jobs:
   build:
-  
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node: [18.x]
-        
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set Node.js ${{ matrix.node }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-      
-      - name: Install shared dependencies
-        run: yarn shared install
-      
-      - name: Build shared code
-        run: yarn shared build
-      
-      - name: Install client dependencies
-        run: yarn client install
-        
+
+      - name: Install dependencies
+        run: yarn install
+
       - name: Build production bundle
-        run: yarn client build
-        
+        run: yarn build
+
       - name: Run tests
-        run: yarn client test
+        run: yarn test
