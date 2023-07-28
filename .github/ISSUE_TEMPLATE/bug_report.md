@@ -1,10 +1,9 @@
 ---
 name: Bug report
 about: 버그를 이슈에 등록한다.
-title: "[BUG] TITLE"
+title: '[BUG] TITLE'
 labels: "\U0001F6A8 bug"
-assignees: leegwae, soomanbaek
-
+assignees: leegwae
 ---
 
 ## 🔄 How to reproduce bug
@@ -23,7 +22,6 @@ assignees: leegwae, soomanbaek
 ## 📷 Screenshots
 
 <!--스크린샷으로 보여줄 수 있는 이미지가 있다면 첨부해주세요!-->
-
 
 ## ⚙ Environments
 
