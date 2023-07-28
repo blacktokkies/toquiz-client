@@ -1,5 +1,5 @@
+import type { LogInBody } from '@/lib/api/auth';
 import type { LoaderFunction } from 'react-router-dom';
-import type { LogInBody } from 'shared';
 
 import React from 'react';
 

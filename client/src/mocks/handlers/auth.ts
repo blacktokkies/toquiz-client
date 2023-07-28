@@ -5,9 +5,9 @@ import type {
   LogInBody,
   LogInResponse,
   RefreshResponse,
-  ErrorResponse,
   GetMyInfoResponse,
-} from 'shared';
+} from '@/lib/api/auth';
+import type { ErrorResponse } from '@/lib/api/response';
 
 import { rest } from 'msw';
 

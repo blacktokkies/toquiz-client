@@ -1,6 +1,11 @@
+import type {
+  LogInBody,
+  LogInResult,
+  SignUpBody,
+  SignUpResult,
+} from '@/lib/api/auth';
 import type { ApiError } from '@/lib/apiClient';
 import type { UseMutationResult } from '@tanstack/react-query';
-import type { LogInBody, LogInResult, SignUpBody, SignUpResult } from 'shared';
 
 import { useMutation } from '@tanstack/react-query';
 
