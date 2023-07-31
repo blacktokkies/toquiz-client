@@ -23,8 +23,9 @@ module.exports = {
         DEFAULT: '#2DB3FF',
         dark: '#0C3045',
       },
-      error: {
-        dark: '#F42828',
+      danger: {
+        DEFAULT: '#E83333',
+        hover: '#C52B2B',
       },
       success: {
         dark: '#198E48',

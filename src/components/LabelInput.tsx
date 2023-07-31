@@ -16,7 +16,7 @@ const LabelInput = forwardRef<HTMLInputElement, Props>(
         className="text-off-black flex items-center gap-[1px] font-medium"
       >
         {label}
-        {required && <Emergency className="fill-error-dark h-2 w-2" />}
+        {required && <Emergency className="fill-danger h-2 w-2" />}
       </label>
       <Input id={id} {...rest} ref={ref} />
     </div>
