@@ -27,8 +27,8 @@ module.exports = {
         DEFAULT: '#E83333',
         hover: '#C52B2B',
       },
-      success: {
-        dark: '#198E48',
+      green: {
+        DEFAULT: '#198E48',
         light: '#E2FEED',
       },
       grey: {
