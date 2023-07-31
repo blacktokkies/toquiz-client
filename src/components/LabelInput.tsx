@@ -13,7 +13,7 @@ const LabelInput = forwardRef<HTMLInputElement, Props>(
     <div className="flex flex-col gap-2">
       <label
         htmlFor={id}
-        className="text-off-black flex items-center gap-[1px] font-medium"
+        className="text-grey-darkest flex items-center gap-[1px] font-medium"
       >
         {label}
         {required && <Emergency className="fill-danger h-2 w-2" />}

@@ -16,7 +16,6 @@ module.exports = {
       white: '#FFFFFF',
       'off-white': '#F8F8F8',
       black: '#000000',
-      'off-black': '#242424',
       primary: {
         DEFAULT: '#2DB3FF',
         hover: '#2698D9',
@@ -32,9 +31,11 @@ module.exports = {
         light: '#E2FEED',
       },
       grey: {
-        light: '#ECE3E3',
-        DEFAULT: '#B3B3B3',
-        dark: '#656060',
+        lighter: '#F5F5F5', // white-hover
+        light: '#ECE3E3', // border
+        DEFAULT: '#B3B3B3', // placeholder
+        dark: '#656060', // text-secondary
+        darkest: '#242424', // text-primary
       },
     },
     extend: {
