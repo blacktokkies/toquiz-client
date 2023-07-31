@@ -14,12 +14,12 @@ module.exports = {
     colors: {
       overlay: 'rgba(36, 36, 36, 0.45)',
       white: '#FFFFFF',
-      'off-white': '#F8F8F8',
       black: '#000000',
+      'off-white': '#F8F8F8',
       primary: {
+        light: '#ABE1FF',
         DEFAULT: '#2DB3FF',
         hover: '#2698D9',
-        light: '#ABE1FF',
         dark: '#0C3045',
       },
       danger: {
@@ -27,8 +27,8 @@ module.exports = {
         hover: '#C52B2B',
       },
       green: {
-        DEFAULT: '#198E48',
         light: '#E2FEED',
+        DEFAULT: '#198E48',
       },
       grey: {
         lighter: '#F5F5F5', // white-hover
