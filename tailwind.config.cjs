@@ -18,9 +18,9 @@ module.exports = {
       black: '#000000',
       'off-black': '#242424',
       primary: {
-        light: '#ABE1FF',
-        400: '#57C2FF',
         DEFAULT: '#2DB3FF',
+        hover: '#2698D9',
+        light: '#ABE1FF',
         dark: '#0C3045',
       },
       danger: {
