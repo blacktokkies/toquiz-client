@@ -14,9 +14,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
         ref={ref}
         {...rest}
       />
-      {errorMessage && (
-        <div className="text-error-dark px-1">{errorMessage}</div>
-      )}
+      {errorMessage && <div className="text-danger px-1">{errorMessage}</div>}
     </>
   ),
 );
