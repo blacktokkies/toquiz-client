@@ -18,7 +18,6 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'standard-with-typescript',
     'plugin:prettier/recommended',
-    'plugin:tailwindcss/recommended',
     'plugin:testing-library/react',
     'plugin:vitest/recommended',
   ],
@@ -82,7 +81,6 @@ module.exports = {
         fixStyle: 'separate-type-imports',
       },
     ],
-    'tailwindcss/no-custom-classname': 'off',
   },
   settings: {
     react: {
