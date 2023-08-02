@@ -1,4 +1,42 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useContext, useMemo } from 'react';
+
+import { OverlayContext } from '@/contexts/OverlayContext';
+
+export function useOverlay(): {
+  open: (createOverlayContent: CreateOverlayContent) => void;
+} {
+  const context = useContext(OverlayContext);
+
+  if (context === null)
+    throw new Error(
+      'Error: OverlayContext not found. Make sure you are using the OverlayProvider higher up in the component tree.',
+    );
+
+  const { mount, unmount } = context;
+
+  useEffect(
+    () => () => {
+      unmount();
+    },
+    [unmount],
+  );
+
+  return useMemo(
+    () => ({
+      open: (createOverlayContent) => {
+        mount(
+          <OverlayController
+            createOverlayContent={createOverlayContent}
+            close={() => {
+              unmount();
+            }}
+          />,
+        );
+      },
+    }),
+    [mount, unmount],
+  );
+}
 
 export interface OverlayContentProps {
   close: () => void;
