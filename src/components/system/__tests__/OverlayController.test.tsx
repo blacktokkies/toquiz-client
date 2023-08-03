@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { OverlayController } from '@/components/OverlayController';
+import { OverlayController } from '@/components/system/OverlayController';
 
 describe('OverlayController', () => {
   const handleClose = vi.fn();

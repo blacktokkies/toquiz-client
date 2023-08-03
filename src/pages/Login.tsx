@@ -6,7 +6,7 @@ import React from 'react';
 import { useSearchParams, useNavigate, Link, redirect } from 'react-router-dom';
 
 import LoginForm from '@/components/auth/LoginForm';
-import { useLoginMutation } from '@/hooks/mutations/auth';
+import { useLoginMutation } from '@/hooks/queries/auth';
 import { useUserStore } from '@/hooks/store/useUserStore';
 import { setAccessToken } from '@/lib/apiClient';
 import { isUserLoggedIn } from '@/lib/routeGuard';

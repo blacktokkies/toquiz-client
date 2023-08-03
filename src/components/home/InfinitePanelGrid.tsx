@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import PanelItem from '@/components/panel/PanelItem';
-import { useMyPanelsInfiniteQuery } from '@/hooks/panel';
+import PanelItem from '@/components/home/PanelItem';
+import { useMyPanelsInfiniteQuery } from '@/hooks/queries/panel';
 import useInView from '@/hooks/useInView';
 
 const InfinitePanelGrid = (): JSX.Element => {
