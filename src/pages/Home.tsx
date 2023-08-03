@@ -2,10 +2,10 @@ import type { LoaderFunction } from 'react-router-dom';
 
 import React from 'react';
 
-import { redirect } from 'react-router-dom';
+import { redirect, Link } from 'react-router-dom';
 
-import HomeHeader from '@/components/home/HomeHeader';
 import InfinitePanelGrid from '@/components/home/InfinitePanelGrid';
+import { Logo, Account } from '@/components/vectors';
 import { useUserStore } from '@/hooks/store/useUserStore';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 
@@ -21,9 +21,24 @@ const Home = (): JSX.Element => {
   const user = useUserStore((state) => state.user);
 
   return (
-    <div className="flex h-full w-full flex-col">
-      <HomeHeader />
-      <main className="flex-1">
+    <div className="flex w-full h-full flex-col">
+      <header className="bg-white shadow-md">
+        <div className="container flex justify-between items-center max-w-7xl px-5 h-16">
+          <Link
+            to="/home"
+            className="hover:bg-grey-light rounded-full hover:shadow-lg"
+          >
+            <Logo className="h-12 w-12" />
+          </Link>
+          <button
+            type="button"
+            className="hover:bg-grey-light rounded-full p-2"
+          >
+            <Account className="fill-primary-dark" />
+          </button>
+        </div>
+      </header>
+      <div className="flex-1">
         <div className="container flex h-full max-w-7xl flex-col">
           <div className="flex flex-col gap-2 px-3 py-6">
             <div className="text-off-white">
@@ -45,7 +60,7 @@ const Home = (): JSX.Element => {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };
