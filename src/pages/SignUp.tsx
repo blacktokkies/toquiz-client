@@ -12,7 +12,7 @@ import { isUserLoggedIn } from '@/lib/routeGuard';
 export const signupLoader: LoaderFunction = async () => {
   const isLoggedIn = await isUserLoggedIn();
 
-  if (isLoggedIn) return redirect('/main');
+  if (isLoggedIn) return redirect('/home');
   return null;
 };
 

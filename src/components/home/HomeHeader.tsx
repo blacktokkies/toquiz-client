@@ -4,7 +4,7 @@ import LogoHeader from '@/components/base/LogoHeader';
 import { Search, Account } from '@/components/vectors';
 
 const HomeHeader = (): JSX.Element => (
-  <LogoHeader to="/main">
+  <LogoHeader to="/home">
     <ul className="flex items-center gap-2">
       <li>
         <button type="button" className="hover:bg-grey-light rounded-full p-2">

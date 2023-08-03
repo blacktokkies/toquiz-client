@@ -10,7 +10,7 @@ const Index = (): JSX.Element => (
     <Link to="/signup" className="border">
       회원가입
     </Link>
-    <Link to="/main" className="border">
+    <Link to="/home" className="border">
       메인
     </Link>
   </div>
