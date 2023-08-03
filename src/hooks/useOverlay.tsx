@@ -3,7 +3,10 @@ import React, { useRef, useEffect, useContext, useMemo } from 'react';
 import { OverlayContext } from '@/contexts/OverlayContext';
 
 export function useOverlay(): {
-  open: (createOverlayContent: CreateOverlayContent) => void;
+  open: (
+    createOverlayContent: CreateOverlayContent,
+    options?: OverlayControllerOptions,
+  ) => void;
 } {
   const context = useContext(OverlayContext);
 
@@ -23,13 +26,14 @@ export function useOverlay(): {
 
   return useMemo(
     () => ({
-      open: (createOverlayContent) => {
+      open: (createOverlayContent, options) => {
         mount(
           <OverlayController
             createOverlayContent={createOverlayContent}
             close={() => {
               unmount();
             }}
+            {...options}
           />,
         );
       },
@@ -38,20 +42,27 @@ export function useOverlay(): {
   );
 }
 
-export interface OverlayContentProps {
+export interface CreateOverlayContentProps {
   close: () => void;
 }
 
-export type CreateOverlayContent = (props: OverlayContentProps) => JSX.Element;
+export type CreateOverlayContent = (
+  props: CreateOverlayContentProps,
+) => JSX.Element;
 
-interface OverlayControllerProps {
+interface OverlayControllerOptions {
+  backdrop?: boolean;
+}
+
+type OverlayControllerProps = OverlayControllerOptions & {
   createOverlayContent: CreateOverlayContent;
   close: () => void;
-}
+};
 
 export function OverlayController({
   createOverlayContent: OverlayContent,
   close,
+  backdrop = true,
 }: OverlayControllerProps): JSX.Element {
   const overlay = useRef<HTMLDivElement>(null);
 
@@ -74,12 +85,8 @@ export function OverlayController({
 
   return (
     <>
-      <div className="fixed inset-0 bg-overlay" />
-      <div
-        ref={overlay}
-        role="dialog"
-        className="fixed left-1/2 top-1/2 bg-white "
-      >
+      {backdrop && <div className="fixed inset-0 bg-overlay" />}
+      <div ref={overlay} role="dialog" className="fixed left-1/2 top-1/2">
         <OverlayContent close={close} />
       </div>
     </>
