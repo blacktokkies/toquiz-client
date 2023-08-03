@@ -28,13 +28,17 @@ const Home = (): JSX.Element => {
             to="/home"
             className="hover:bg-grey-light rounded-full hover:shadow-lg"
           >
-            <Logo className="h-12 w-12" />
+            <div role="img" aria-label="toquiz 로고">
+              <Logo className="h-12 w-12" />
+            </div>
           </Link>
           <button
             type="button"
             className="hover:bg-grey-light rounded-full p-2"
           >
-            <Account className="fill-primary-dark" />
+            <div role="img" aria-label="내 계정 아이콘">
+              <Account className="fill-primary-dark" />
+            </div>
           </button>
         </div>
       </header>
