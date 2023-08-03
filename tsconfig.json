@@ -17,12 +17,13 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/assets/*": ["src/assets/*"],
-      "@/pages/*": ["src/pages/*"],
       "@/components/*": ["src/components/*"],
-      "@/mocks/*": ["src/mocks/*"],
       "@/hooks/*": ["src/hooks/*"],
+      "@/lib/*": ["src/lib/*"],
+      "@/contexts/*": ["src/contexts/*"],
+      "@/pages/*": ["src/pages/*"],
       "@/store/*": ["src/store/*"],
+      "@/mocks/*": ["src/mocks/*"],
       "@/*": ["src/*"]
     },
     "types": ["vitest/globals"]
