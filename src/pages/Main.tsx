@@ -5,7 +5,7 @@ import React from 'react';
 import { redirect } from 'react-router-dom';
 
 import HomeHeader from '@/components/home/HomeHeader';
-import InfinitePanelGrid from '@/components/panel/InfinitePanelGrid';
+import InfinitePanelGrid from '@/components/home/InfinitePanelGrid';
 import { useUserStore } from '@/hooks/store/useUserStore';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 

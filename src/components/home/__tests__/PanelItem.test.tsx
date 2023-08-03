@@ -2,7 +2,7 @@ import React from 'react';
 
 import { render } from '@testing-library/react';
 
-import PanelItem from '@/components/panel/PanelItem';
+import PanelItem from '@/components/home/PanelItem';
 import { myPanelsData } from '@/mocks/data/panel/myPanelsData';
 
 describe('PanelItem', () => {
