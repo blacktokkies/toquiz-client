@@ -6,7 +6,7 @@ import React from 'react';
 import { Link, useNavigate, redirect } from 'react-router-dom';
 
 import SignUpForm from '@/components/auth/SignUpForm';
-import { useSignUpMutation } from '@/hooks/mutations/auth';
+import { useSignUpMutation } from '@/hooks/queries/auth';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 
 export const signupLoader: LoaderFunction = async () => {
