@@ -38,7 +38,7 @@ export async function request<T>(
  * 그 외의 런타임은 임의의 origin을 사용한다.
  */
 export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? (isNode ? 'http://localhost' : '');
+  import.meta.env.VITE_API_BASE_URL ?? (isNode ? 'http://localhost:3000' : '');
 
 type DefaultQueryParams = Record<string, any>;
 type DefaultBody = Record<string, any>;
