@@ -29,7 +29,7 @@ const Home = (): JSX.Element => {
             className="hover:bg-grey-light rounded-full hover:shadow-lg"
           >
             <div role="img" aria-label="toquiz 로고">
-              <Logo className="h-12 w-12" />
+              <Logo className="h-11 w-11" />
             </div>
           </Link>
           <button
@@ -44,15 +44,16 @@ const Home = (): JSX.Element => {
       </header>
       <div className="flex-1">
         <div className="container flex h-full max-w-7xl flex-col">
-          <div className="flex flex-col gap-2 px-3 py-6">
-            <div className="text-off-white">
-              <span className="bg-primary text-off-white rounded-2xl py-1 px-3 text-base font-medium">
-                @{user?.nickname}
-              </span>
-            </div>
-            <h1 className="font text-primary-dark text-4xl font-medium tracking-tight md:text-5xl">
+          <div className="flex flex-col items-start gap-5 px-5 py-7">
+            <h1 className="font text-grey-darkest text-2xl font-medium tracking-tighter md:text-5xl">
               내 패널 모아보기
             </h1>
+            <span className="flex gap-1 items-center py-1">
+              <div role="img" aria-label="내 계정 아이콘">
+                <Account className="fill-primary-dark w-4 h-4" />
+              </div>
+              <span className="text-sm tracking-tight">{user?.nickname}</span>
+            </span>
           </div>
           <div className="flex flex-1 flex-col pt-9">
             <div className="flex justify-between p-3">
