@@ -53,27 +53,35 @@ export function OverlayController({
   createOverlayContent: OverlayContent,
   close,
 }: OverlayControllerProps): JSX.Element {
-  const backdrop = useRef<HTMLDivElement>(null);
+  const overlay = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    function handleBackdropClick(event: MouseEvent): void {
-      if (event.target !== backdrop.current) return;
+    function handleOutsideClick(event: MouseEvent): void {
+      if (
+        event.target instanceof Node &&
+        overlay.current?.contains(event.target)
+      )
+        return;
+
       close();
     }
 
-    window.addEventListener('mousedown', handleBackdropClick);
+    window.addEventListener('mousedown', handleOutsideClick);
     return () => {
-      window.removeEventListener('mousedown', handleBackdropClick);
+      window.removeEventListener('mousedown', handleOutsideClick);
     };
   }, [close]);
 
   return (
-    <div
-      role="dialog"
-      ref={backdrop}
-      className="fixed inset-0 flex justify-center items-center bg-overlay"
-    >
-      <OverlayContent close={close} />
-    </div>
+    <>
+      <div className="fixed inset-0 bg-overlay" />
+      <div
+        ref={overlay}
+        role="dialog"
+        className="fixed left-1/2 top-1/2 bg-white "
+      >
+        <OverlayContent close={close} />
+      </div>
+    </>
   );
 }
