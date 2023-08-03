@@ -3,9 +3,9 @@ import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import Error from '@/pages/Error';
+import Home, { homeLoader } from '@/pages/Home';
 import Index from '@/pages/Index';
 import Login, { loginLoader } from '@/pages/Login';
-import Main, { mainLoader } from '@/pages/Main';
 import Root from '@/pages/Root';
 import SignUp, { signupLoader } from '@/pages/SignUp';
 
@@ -30,9 +30,9 @@ export const router = createBrowserRouter([
         loader: loginLoader,
       },
       {
-        path: 'main',
-        element: <Main />,
-        loader: mainLoader,
+        path: 'home',
+        element: <Home />,
+        loader: homeLoader,
       },
     ],
   },

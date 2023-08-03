@@ -10,14 +10,14 @@ import { useUserStore } from '@/hooks/store/useUserStore';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 
 // https://reactrouter.com/en/main/fetch/redirect
-export const mainLoader: LoaderFunction = async () => {
+export const homeLoader: LoaderFunction = async () => {
   const isLoggedIn = await isUserLoggedIn();
 
   if (!isLoggedIn) return redirect('/login');
   return null;
 };
 
-const Main = (): JSX.Element => {
+const Home = (): JSX.Element => {
   const user = useUserStore((state) => state.user);
 
   return (
@@ -50,4 +50,4 @@ const Main = (): JSX.Element => {
   );
 };
 
-export default Main;
+export default Home;

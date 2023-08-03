@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { it } from 'vitest';
 
 import { renderWithQueryClient } from '@/lib/test-utils';
-import Main from '@/pages/Main';
+import Main from '@/pages/Home';
 
 describe('메인 페이지', () => {
   vi.mock('@/hooks/store/useUserStore', () => {
