@@ -7,7 +7,7 @@ import { it } from 'vitest';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import Main from '@/pages/Home';
 
-describe('메인 페이지', () => {
+describe('홈 페이지', () => {
   vi.mock('@/hooks/store/useUserStore', () => {
     const useUserStore = vi.fn();
     useUserStore.mockImplementation(() => ({
@@ -25,6 +25,15 @@ describe('메인 페이지', () => {
     disconnect: vi.fn(),
   }));
 
+  it('홈 페이지 헤더를 보여준다', () => {
+    renderWithQueryClient(
+      <MemoryRouter>
+        <Main />
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByRole('banner')).toBeInTheDocument();
+  });
   it('내 패널 모아보기 헤딩을 보여준다.', () => {
     renderWithQueryClient(
       <MemoryRouter>
