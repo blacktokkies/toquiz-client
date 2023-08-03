@@ -1,11 +1,11 @@
 import type {
   CreateOverlayContent,
   OverlayControllerOptions,
-} from '@/components/OverlayController';
+} from '@/components/system/OverlayController';
 
 import React, { useEffect, useContext, useMemo } from 'react';
 
-import { OverlayController } from '@/components/OverlayController';
+import { OverlayController } from '@/components/system/OverlayController';
 import { OverlayContext } from '@/contexts/OverlayContext';
 
 export function useOverlay(): {

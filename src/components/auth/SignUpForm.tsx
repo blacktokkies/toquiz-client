@@ -2,8 +2,8 @@ import type { SignUpBody } from '@/lib/api/auth';
 
 import React from 'react';
 
-import Button from '@/components/Button';
-import LabelInput from '@/components/LabelInput';
+import Button from '@/components/system/Button';
+import LabelInput from '@/components/system/LabelInput';
 import { useFormError } from '@/hooks/useFormError';
 import { isEmail, isNickname, isPassword } from '@/lib/validator';
 

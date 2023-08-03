@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 
-import Input, { type Props as InputProps } from '@/components/Input';
+import Input, { type Props as InputProps } from '@/components/system/Input';
 import { Emergency } from '@/components/vectors';
 
 interface Props extends InputProps {
