@@ -14,7 +14,7 @@ import { isUserLoggedIn } from '@/lib/routeGuard';
 export const loginLoader: LoaderFunction = async () => {
   const isLoggedIn = await isUserLoggedIn();
 
-  if (isLoggedIn) return redirect('/main');
+  if (isLoggedIn) return redirect('/home');
   return null;
 };
 
@@ -23,7 +23,7 @@ function Login(): JSX.Element {
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const next = searchParams.get('next') ?? '/main';
+  const next = searchParams.get('next') ?? '/home';
 
   const loginMutation = useLoginMutation();
   const handleSubmit = ({ username, password }: LogInBody): void => {
