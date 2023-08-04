@@ -37,7 +37,7 @@ const Home = (): JSX.Element => {
             className="hover:bg-grey-light rounded-full p-2"
           >
             <div role="img" aria-label="내 계정 아이콘">
-              <Account className="fill-primary-dark" />
+              <Account className="fill-grey-darkest" />
             </div>
           </button>
         </div>
@@ -50,7 +50,7 @@ const Home = (): JSX.Element => {
             </h1>
             <span className="flex gap-1 items-center py-1">
               <div role="img" aria-label="내 계정 아이콘">
-                <Account className="fill-primary-dark w-4 h-4" />
+                <Account className="fill-grey-darkest w-5 h-5" />
               </div>
               <span className="text-sm tracking-tight">{user?.nickname}</span>
             </span>
