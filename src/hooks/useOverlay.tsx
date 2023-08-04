@@ -12,6 +12,7 @@ export type CreateOveralyContent = (
 
 export function useOverlay(): {
   open: (createOveralyContent: CreateOveralyContent) => void;
+  close: () => void;
 } {
   const context = useContext(OverlayContext);
 
@@ -32,7 +33,16 @@ export function useOverlay(): {
   return useMemo(
     () => ({
       open: (CreateOveralyContent) => {
-        mount(<CreateOveralyContent close={unmount} />);
+        mount(
+          <CreateOveralyContent
+            close={() => {
+              unmount();
+            }}
+          />,
+        );
+      },
+      close: () => {
+        unmount();
       },
     }),
     [mount, unmount],
