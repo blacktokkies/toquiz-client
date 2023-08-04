@@ -1,12 +1,6 @@
+import type { CreateOverlayContent } from '@/hooks/useOverlay';
+
 import React, { useRef, useEffect } from 'react';
-
-export interface CreateModalContentProps {
-  close: () => void;
-}
-
-export type CreateModalContent = (
-  props: CreateModalContentProps,
-) => JSX.Element;
 
 type VerticalAlignment = 'top' | 'bottom' | 'middle';
 type HorizontalAlignment = 'left' | 'right' | 'center';
@@ -36,7 +30,7 @@ export function ModalController({
   vertical = 'middle',
   horizontal = 'center',
 }: ModalControllerOptions & {
-  createModalContent: CreateModalContent;
+  createModalContent: CreateOverlayContent;
   close: () => void;
 }): JSX.Element {
   const verticalAlignment = verticalAlignments[vertical];
