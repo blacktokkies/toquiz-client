@@ -1,6 +1,8 @@
 import type { CreateOverlayContent } from '@/hooks/useOverlay';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
+
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 export interface ActionMenuControllerOptions {
   backdrop?: boolean;
@@ -16,22 +18,7 @@ export function ActionMenuController({
 }): JSX.Element {
   const actionMenu = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    function handleOutsideClick(event: MouseEvent): void {
-      if (
-        event.target instanceof Node &&
-        actionMenu.current?.contains(event.target)
-      )
-        return;
-
-      close();
-    }
-
-    window.addEventListener('mousedown', handleOutsideClick);
-    return () => {
-      window.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, [close]);
+  useOutsideClick(actionMenu, close);
 
   return (
     <>
