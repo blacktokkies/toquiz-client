@@ -1,18 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useCallback } from 'react';
 
 import PanelItem from '@/components/home/PanelItem';
+import { IntersectionArea } from '@/components/system/IntersectionArea';
 import { useMyPanelsInfiniteQuery } from '@/hooks/queries/panel';
-import useInView from '@/hooks/useInView';
 
 const InfinitePanelGrid = (): JSX.Element => {
   const panelsQuery = useMyPanelsInfiniteQuery();
-  const [fetchMoreRef, inView] = useInView();
 
-  useEffect(() => {
-    if (!inView || panelsQuery.isFetchingNextPage || !panelsQuery.hasNextPage)
-      return;
-    panelsQuery.fetchNextPage();
-  }, [inView, panelsQuery]);
+  const fetchPanels = useCallback(
+    (isIntersecting: boolean) => {
+      if (
+        isIntersecting &&
+        !panelsQuery.isFetchingNextPage &&
+        panelsQuery.hasNextPage
+      )
+        panelsQuery.fetchNextPage();
+    },
+    [panelsQuery],
+  );
 
   if (panelsQuery.isLoading) return <div>loading...</div>;
   if (panelsQuery.isError) return <div>error occurred</div>;
@@ -26,7 +31,7 @@ const InfinitePanelGrid = (): JSX.Element => {
           )),
         )}
       </ul>
-      <div ref={fetchMoreRef} />
+      <IntersectionArea onIntersection={fetchPanels} />
     </>
   );
 };
