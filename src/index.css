@@ -21,8 +21,19 @@ body {
     Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR',
     'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     sans-serif;
+  letter-spacing: -0.48px;
 }
 
 #root {
   height: 100%;
+}
+
+@layer base {
+  body {
+    @apply text-grey-darkest;
+  }
+
+  svg {
+    @apply text-grey-darkest;
+  }
 }
