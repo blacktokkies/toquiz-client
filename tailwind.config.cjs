@@ -12,7 +12,7 @@ module.exports = {
       xl: '1200px',
     },
     colors: {
-      overlay: 'rgba(36, 36, 36, 0.45)',
+      backdrop: 'rgba(36, 36, 36, 0.45)',
       white: '#FFFFFF',
       black: '#000000',
       'off-white': '#F8F8F8',
