@@ -53,7 +53,7 @@ export function ModalController({
 
   return (
     <>
-      {backdrop && <div className="fixed inset-0 bg-Modal" />}
+      {backdrop && <div className="fixed inset-0 bg-backdrop" />}
       <div
         ref={modal}
         role="dialog"
