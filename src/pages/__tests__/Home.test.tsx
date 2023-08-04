@@ -18,13 +18,6 @@ describe('홈 페이지', () => {
     };
   });
 
-  // TODO: 모킹 함수 따로 빼기
-  window.IntersectionObserver = vi.fn().mockImplementation(() => ({
-    observe: vi.fn(),
-    unobserve: vi.fn(),
-    disconnect: vi.fn(),
-  }));
-
   it('홈 페이지 헤더를 보여준다', () => {
     renderWithQueryClient(
       <MemoryRouter>

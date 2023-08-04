@@ -5,6 +5,13 @@ import { server } from '@/mocks/server';
 
 globalThis.fetch = fetch;
 
+const IntersectionObserverMock = vi.fn(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
+vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
+
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'error' });
 });
