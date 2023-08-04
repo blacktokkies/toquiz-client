@@ -3,6 +3,8 @@ import type { PropsWithChildren } from 'react';
 
 import React from 'react';
 
+import { clsx } from 'clsx';
+
 import { Backdrop } from '@/components/system/Backdrop';
 import { OverlayController } from '@/components/system/OverlayController';
 
@@ -43,7 +45,12 @@ export function ModalController({
     <>
       {backdrop && <Backdrop />}
       <OverlayController
-        className={`${verticalAlignment} ${horizontalAlginment}`}
+        className={clsx(
+          `${verticalAlignment} ${horizontalAlginment} w-11/12 bg-white shadow-md rounded-sm`,
+          {
+            '-translate-x-1/2 -translate-y-1/2': horizontal === 'center',
+          },
+        )}
         close={close}
       >
         {children}
