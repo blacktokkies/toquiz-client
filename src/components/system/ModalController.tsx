@@ -1,6 +1,8 @@
 import type { CreateOverlayContent } from '@/hooks/useOverlay';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
+
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 type VerticalAlignment = 'top' | 'bottom' | 'middle';
 type HorizontalAlignment = 'left' | 'right' | 'center';
@@ -37,19 +39,7 @@ export function ModalController({
   const horizontalAlginment = horizontalAlignments[horizontal];
   const modal = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    function handleOutsideClick(event: MouseEvent): void {
-      if (event.target instanceof Node && modal.current?.contains(event.target))
-        return;
-
-      close();
-    }
-
-    window.addEventListener('mousedown', handleOutsideClick);
-    return () => {
-      window.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, [close]);
+  useOutsideClick(modal, close);
 
   return (
     <>
