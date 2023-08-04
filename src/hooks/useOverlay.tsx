@@ -1,18 +1,17 @@
-import type {
-  CreateModalContent,
-  ModalControllerOptions,
-} from '@/components/system/ModalController';
-
 import React, { useEffect, useContext, useMemo } from 'react';
 
-import { ModalController } from '@/components/system/ModalController';
 import { OverlayContext } from '@/contexts/OverlayContext';
 
+export interface CreateOveralyContentProps {
+  close: () => void;
+}
+
+export type CreateOveralyContent = (
+  props: CreateOveralyContentProps,
+) => JSX.Element;
+
 export function useOverlay(): {
-  open: (
-    createModalContent: CreateModalContent,
-    options?: ModalControllerOptions,
-  ) => void;
+  open: (createOveralyContent: CreateOveralyContent) => void;
 } {
   const context = useContext(OverlayContext);
 
@@ -32,16 +31,8 @@ export function useOverlay(): {
 
   return useMemo(
     () => ({
-      open: (createModalContent, options) => {
-        mount(
-          <ModalController
-            createModalContent={createModalContent}
-            close={() => {
-              unmount();
-            }}
-            {...options}
-          />,
-        );
+      open: (CreateOveralyContent) => {
+        mount(<CreateOveralyContent close={unmount} />);
       },
     }),
     [mount, unmount],
