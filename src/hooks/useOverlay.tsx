@@ -2,16 +2,16 @@ import React, { useEffect, useContext, useMemo } from 'react';
 
 import { OverlayContext } from '@/contexts/OverlayContext';
 
-export interface CreateOveralyContentProps {
+export interface CreateOverlayContentProps {
   close: () => void;
 }
 
-export type CreateOveralyContent = (
-  props: CreateOveralyContentProps,
+export type CreateOverlayContent = (
+  props: CreateOverlayContentProps,
 ) => JSX.Element;
 
 export function useOverlay(): {
-  open: (createOveralyContent: CreateOveralyContent) => void;
+  open: (createOverlayContent: CreateOverlayContent) => void;
   close: () => void;
 } {
   const context = useContext(OverlayContext);
@@ -32,9 +32,9 @@ export function useOverlay(): {
 
   return useMemo(
     () => ({
-      open: (CreateOveralyContent) => {
+      open: (CreateOverlayContent) => {
         mount(
-          <CreateOveralyContent
+          <CreateOverlayContent
             close={() => {
               unmount();
             }}
