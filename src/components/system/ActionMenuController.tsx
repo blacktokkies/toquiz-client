@@ -1,35 +1,28 @@
-import type { CreateOverlayContent } from '@/hooks/useOverlay';
+import type { OverlayControllerProps } from '@/components/system/OverlayController';
+import type { PropsWithChildren } from 'react';
 
-import React, { useRef } from 'react';
+import React from 'react';
 
-import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { Backdrop } from '@/components/system/Backdrop';
+import { OverlayController } from '@/components/system/OverlayController';
 
-export interface ActionMenuControllerOptions {
+export interface Props {
   backdrop?: boolean;
 }
 
 export function ActionMenuController({
-  createActionMenuContent: ActionMenuContent,
+  backdrop = false,
+  children,
   close,
-  backdrop = true,
-}: ActionMenuControllerOptions & {
-  createActionMenuContent: CreateOverlayContent;
-  close: () => void;
-}): JSX.Element {
-  const actionMenu = useRef<HTMLDivElement>(null);
-
-  useOutsideClick(actionMenu, close);
-
+}: Props &
+  Omit<OverlayControllerProps, 'className'> &
+  PropsWithChildren): JSX.Element {
   return (
     <>
-      {backdrop && <div className="fixed inset-0 bg-backdrop" />}
-      <div
-        ref={actionMenu}
-        role="dialog"
-        className={`fixed bottom-0 left-0 w-full`}
-      >
-        <ActionMenuContent close={close} />
-      </div>
+      {backdrop && <Backdrop />}
+      <OverlayController className={`bottom-0 left-0 w-full`} close={close}>
+        {children}
+      </OverlayController>
     </>
   );
 }

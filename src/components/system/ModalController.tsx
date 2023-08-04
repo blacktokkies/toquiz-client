@@ -1,13 +1,15 @@
-import type { CreateOverlayContent } from '@/hooks/useOverlay';
+import type { OverlayControllerProps } from '@/components/system/OverlayController';
+import type { PropsWithChildren } from 'react';
 
-import React, { useRef } from 'react';
+import React from 'react';
 
-import { useOutsideClick } from '@/hooks/useOutsideClick';
+import { Backdrop } from '@/components/system/Backdrop';
+import { OverlayController } from '@/components/system/OverlayController';
 
 type VerticalAlignment = 'top' | 'bottom' | 'middle';
 type HorizontalAlignment = 'left' | 'right' | 'center';
 
-export interface ModalControllerOptions {
+interface Props {
   backdrop?: boolean;
   vertical?: VerticalAlignment;
   horizontal?: HorizontalAlignment;
@@ -26,31 +28,26 @@ const horizontalAlignments: Record<HorizontalAlignment, string> = {
 };
 
 export function ModalController({
-  createModalContent: ModalContent,
   close,
   backdrop = true,
   vertical = 'middle',
   horizontal = 'center',
-}: ModalControllerOptions & {
-  createModalContent: CreateOverlayContent;
-  close: () => void;
-}): JSX.Element {
+  children,
+}: Props &
+  Omit<OverlayControllerProps, 'className'> &
+  PropsWithChildren): JSX.Element {
   const verticalAlignment = verticalAlignments[vertical];
   const horizontalAlginment = horizontalAlignments[horizontal];
-  const modal = useRef<HTMLDivElement>(null);
-
-  useOutsideClick(modal, close);
 
   return (
     <>
-      {backdrop && <div className="fixed inset-0 bg-backdrop" />}
-      <div
-        ref={modal}
-        role="dialog"
-        className={`fixed ${verticalAlignment} ${horizontalAlginment}`}
+      {backdrop && <Backdrop />}
+      <OverlayController
+        className={`${verticalAlignment} ${horizontalAlginment}`}
+        close={close}
       >
-        <ModalContent close={close} />
-      </div>
+        {children}
+      </OverlayController>
     </>
   );
 }
