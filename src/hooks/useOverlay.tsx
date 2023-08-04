@@ -1,24 +1,24 @@
 import type {
-  CreateOverlayContent,
-  OverlayControllerOptions,
-} from '@/components/system/OverlayController';
+  CreateModalContent,
+  ModalControllerOptions,
+} from '@/components/system/ModalController';
 
 import React, { useEffect, useContext, useMemo } from 'react';
 
-import { OverlayController } from '@/components/system/OverlayController';
+import { ModalController } from '@/components/system/ModalController';
 import { OverlayContext } from '@/contexts/OverlayContext';
 
 export function useOverlay(): {
   open: (
-    createOverlayContent: CreateOverlayContent,
-    options?: OverlayControllerOptions,
+    createModalContent: CreateModalContent,
+    options?: ModalControllerOptions,
   ) => void;
 } {
   const context = useContext(OverlayContext);
 
   if (context === null)
     throw new Error(
-      'Error: OverlayContext not found. Make sure you are using the OverlayProvider higher up in the component tree.',
+      'Error: OverlayContext not found. Make sure you are using the ModalProvider higher up in the component tree.',
     );
 
   const { mount, unmount } = context;
@@ -32,10 +32,10 @@ export function useOverlay(): {
 
   return useMemo(
     () => ({
-      open: (createOverlayContent, options) => {
+      open: (createModalContent, options) => {
         mount(
-          <OverlayController
-            createOverlayContent={createOverlayContent}
+          <ModalController
+            createModalContent={createModalContent}
             close={() => {
               unmount();
             }}

@@ -1,17 +1,17 @@
 import React, { useRef, useEffect } from 'react';
 
-export interface CreateOverlayContentProps {
+export interface CreateModalContentProps {
   close: () => void;
 }
 
-export type CreateOverlayContent = (
-  props: CreateOverlayContentProps,
+export type CreateModalContent = (
+  props: CreateModalContentProps,
 ) => JSX.Element;
 
 type VerticalAlignment = 'top' | 'bottom' | 'middle';
 type HorizontalAlignment = 'left' | 'right' | 'center';
 
-export interface OverlayControllerOptions {
+export interface ModalControllerOptions {
   backdrop?: boolean;
   vertical?: VerticalAlignment;
   horizontal?: HorizontalAlignment;
@@ -29,26 +29,23 @@ const horizontalAlignments: Record<HorizontalAlignment, string> = {
   right: 'right-8',
 };
 
-export function OverlayController({
-  createOverlayContent: OverlayContent,
+export function ModalController({
+  createModalContent: ModalContent,
   close,
   backdrop = true,
   vertical = 'middle',
   horizontal = 'center',
-}: OverlayControllerOptions & {
-  createOverlayContent: CreateOverlayContent;
+}: ModalControllerOptions & {
+  createModalContent: CreateModalContent;
   close: () => void;
 }): JSX.Element {
   const verticalAlignment = verticalAlignments[vertical];
   const horizontalAlginment = horizontalAlignments[horizontal];
-  const overlay = useRef<HTMLDivElement>(null);
+  const modal = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleOutsideClick(event: MouseEvent): void {
-      if (
-        event.target instanceof Node &&
-        overlay.current?.contains(event.target)
-      )
+      if (event.target instanceof Node && modal.current?.contains(event.target))
         return;
 
       close();
@@ -62,13 +59,13 @@ export function OverlayController({
 
   return (
     <>
-      {backdrop && <div className="fixed inset-0 bg-overlay" />}
+      {backdrop && <div className="fixed inset-0 bg-Modal" />}
       <div
-        ref={overlay}
+        ref={modal}
         role="dialog"
         className={`fixed ${verticalAlignment} ${horizontalAlginment}`}
       >
-        <OverlayContent close={close} />
+        <ModalContent close={close} />
       </div>
     </>
   );
