@@ -4,16 +4,16 @@ import React, { useRef } from 'react';
 
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 
-export interface OverlayControllerProps {
+export type OverlayControllerProps = {
   className?: string;
   close: () => void;
-}
+} & PropsWithChildren;
 
 export function OverlayController({
   close,
   className = '',
   children,
-}: OverlayControllerProps & PropsWithChildren): JSX.Element {
+}: OverlayControllerProps): JSX.Element {
   const overlay = useRef<HTMLDivElement>(null);
 
   useOutsideClick(overlay, close);

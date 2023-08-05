@@ -1,5 +1,4 @@
 import type { OverlayControllerProps } from '@/components/system/OverlayController';
-import type { PropsWithChildren } from 'react';
 
 import React from 'react';
 
@@ -30,14 +29,12 @@ const horizontalAlignments: Record<HorizontalAlignment, string> = {
 };
 
 export function ModalController({
-  close,
   backdrop = true,
   vertical = 'middle',
   horizontal = 'center',
+  close,
   children,
-}: Props &
-  Omit<OverlayControllerProps, 'className'> &
-  PropsWithChildren): JSX.Element {
+}: Props & Omit<OverlayControllerProps, 'className'>): JSX.Element {
   const verticalAlignment = verticalAlignments[vertical];
   const horizontalAlginment = horizontalAlignments[horizontal];
 
