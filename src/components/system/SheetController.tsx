@@ -24,7 +24,7 @@ export function SheetController({
   type = 'bottom',
   close,
   children,
-}: Props & Omit<OverlayControllerProps, 'className'>): JSX.Element {
+}: Props & Omit<OverlayControllerProps, 'className' | 'style'>): JSX.Element {
   const sheetStyle = sheetStyles[type];
 
   return (

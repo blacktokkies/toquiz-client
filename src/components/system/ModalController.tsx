@@ -34,7 +34,7 @@ export function ModalController({
   horizontal = 'center',
   close,
   children,
-}: Props & Omit<OverlayControllerProps, 'className'>): JSX.Element {
+}: Props & Omit<OverlayControllerProps, 'className' | 'style'>): JSX.Element {
   const verticalAlignment = verticalAlignments[vertical];
   const horizontalAlginment = horizontalAlignments[horizontal];
 
