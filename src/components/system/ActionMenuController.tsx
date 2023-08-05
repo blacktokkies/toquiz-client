@@ -17,7 +17,10 @@ export function ActionMenuController({
   return (
     <>
       {backdrop && <Backdrop />}
-      <OverlayController className={`bottom-0 left-0 w-full`} close={close}>
+      <OverlayController
+        className={`fixed bottom-0 left-0 w-full`}
+        close={close}
+      >
         {children}
       </OverlayController>
     </>

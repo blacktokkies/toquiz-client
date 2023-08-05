@@ -21,12 +21,7 @@ export function OverlayController({
   useOutsideClick(overlay, close);
 
   return (
-    <div
-      ref={overlay}
-      role="dialog"
-      className={`fixed ${className}`}
-      style={style}
-    >
+    <div ref={overlay} role="dialog" className={className} style={style}>
       {children}
     </div>
   );

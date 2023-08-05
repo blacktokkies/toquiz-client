@@ -30,7 +30,7 @@ export function SheetController({
   return (
     <>
       {backdrop && <Backdrop />}
-      <OverlayController className={`${sheetStyle}`} close={close}>
+      <OverlayController className={`fixed ${sheetStyle}`} close={close}>
         {children}
       </OverlayController>
     </>

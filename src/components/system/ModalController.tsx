@@ -43,10 +43,11 @@ export function ModalController({
       {backdrop && <Backdrop />}
       <OverlayController
         className={clsx(
-          `${verticalAlignment} ${horizontalAlginment} w-11/12 bg-white shadow-md rounded-sm`,
+          `fixed ${verticalAlignment} ${horizontalAlginment} w-11/12`,
           {
             '-translate-x-1/2 -translate-y-1/2': horizontal === 'center',
           },
+          'bg-white shadow-md rounded-sm',
         )}
         close={close}
       >
