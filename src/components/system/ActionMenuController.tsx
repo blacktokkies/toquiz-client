@@ -1,5 +1,4 @@
 import type { OverlayControllerProps } from '@/components/system/OverlayController';
-import type { PropsWithChildren } from 'react';
 
 import React from 'react';
 
@@ -12,11 +11,9 @@ export interface Props {
 
 export function ActionMenuController({
   backdrop = false,
-  children,
   close,
-}: Props &
-  Omit<OverlayControllerProps, 'className'> &
-  PropsWithChildren): JSX.Element {
+  children,
+}: Props & Omit<OverlayControllerProps, 'className'>): JSX.Element {
   return (
     <>
       {backdrop && <Backdrop />}

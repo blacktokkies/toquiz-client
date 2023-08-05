@@ -1,5 +1,4 @@
 import type { OverlayControllerProps } from '@/components/system/OverlayController';
-import type { PropsWithChildren } from 'react';
 
 import React from 'react';
 
@@ -21,13 +20,11 @@ const sheetStyles: Record<SheetType, string> = {
 };
 
 export function SheetController({
-  close,
   backdrop = true,
   type = 'bottom',
+  close,
   children,
-}: Props &
-  Omit<OverlayControllerProps, 'className'> &
-  PropsWithChildren): JSX.Element {
+}: Props & Omit<OverlayControllerProps, 'className'>): JSX.Element {
   const sheetStyle = sheetStyles[type];
 
   return (
