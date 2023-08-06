@@ -17,7 +17,7 @@ export function ActionMenuController({
 }: Props & Omit<OverlayControllerProps, 'className'>): JSX.Element {
   return (
     <>
-      {backdrop && <Backdrop transparent={!backdrop} />}
+      {backdrop && <Backdrop />}
       <OverlayController
         className="absolute bg-white shadow-md"
         style={style}
