@@ -11,14 +11,16 @@ export interface Props {
 
 export function ActionMenuController({
   backdrop = false,
+  style,
   close,
   children,
 }: Props & Omit<OverlayControllerProps, 'className'>): JSX.Element {
   return (
     <>
-      {backdrop && <Backdrop />}
+      {backdrop && <Backdrop transparent={!backdrop} />}
       <OverlayController
-        className={`fixed bottom-0 left-0 w-full`}
+        className="absolute bg-white shadow-md"
+        style={style}
         close={close}
       >
         {children}
