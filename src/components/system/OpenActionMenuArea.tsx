@@ -8,7 +8,7 @@ import { useInsideClick } from '@/hooks/useInsideClick';
 interface Props {
   open: CreateOverlayContent;
 }
-export function OpenActionMenu({
+export function OpenActionMenuArea({
   open: CreateActionMenuContent,
   children,
 }: Props & React.PropsWithChildren): JSX.Element {
