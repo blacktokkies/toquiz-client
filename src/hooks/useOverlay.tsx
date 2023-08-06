@@ -32,9 +32,9 @@ export function useOverlay(): {
 
   return useMemo(
     () => ({
-      open: (CreateOverlayContent) => {
+      open: (OverlayContent) => {
         mount(
-          <CreateOverlayContent
+          <OverlayContent
             close={() => {
               unmount();
             }}
