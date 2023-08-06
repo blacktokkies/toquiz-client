@@ -1,8 +1,9 @@
 import type { CreateOverlayContent } from '@/hooks/useOverlay';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 
 import { ActionMenuController } from '@/components/system/ActionMenuController';
+import { useInsideClick } from '@/hooks/useInsideClick';
 
 interface Props {
   open: CreateOverlayContent;
@@ -11,28 +12,22 @@ export function OpenActionMenu({
   open: CreateActionMenuContent,
   children,
 }: Props & React.PropsWithChildren): JSX.Element {
-  const [open, setOpen] = useState(false);
   const area = useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    function handleClick(event: MouseEvent): void {
-      if (!(event.target instanceof Node) || area.current === null) return;
-
+  const handleActionMenuOpen = useCallback(
+    (event: MouseEvent) => {
       if (
-        !area.current.contains(event.target) ||
-        (open && area.current.lastChild?.contains(event.target))
+        !(event.target instanceof Node) ||
+        (open && area.current?.lastChild?.contains(event.target))
       )
         return;
-
       setOpen(!open);
-    }
+    },
+    [open],
+  );
 
-    window.addEventListener('mousedown', handleClick);
-
-    return () => {
-      window.removeEventListener('mousedown', handleClick);
-    };
-  }, [open]);
+  useInsideClick(area, handleActionMenuOpen);
 
   return (
     <div ref={area} className="relative">
