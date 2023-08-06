@@ -40,7 +40,7 @@ export function ModalController({
 
   return (
     <>
-      {backdrop && <Backdrop />}
+      {backdrop && <Backdrop transparent={!backdrop} />}
       <OverlayController
         className={clsx(
           `fixed ${verticalAlignment} ${horizontalAlginment} w-11/12`,
