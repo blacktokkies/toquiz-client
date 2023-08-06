@@ -1,8 +1,12 @@
 import React from 'react';
 
 interface Props {
-  className?: string;
+  transparent?: boolean;
 }
-export function Backdrop({ className = '' }: Props): JSX.Element {
-  return <div className={`fixed inset-0 bg-backdrop ${className}`} />;
+export function Backdrop({ transparent = false }: Props): JSX.Element {
+  return (
+    <div
+      className={`fixed inset-0 ${transparent ? 'opacity-0' : 'bg-backdrop'}`}
+    />
+  );
 }
