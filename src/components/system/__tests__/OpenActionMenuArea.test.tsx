@@ -3,16 +3,18 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { OpenActionMenu } from '@/components/system/OpenActionMenu';
+import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
 
-describe('OpenActionMenu', () => {
+describe('OpenActionMenuArea', () => {
   function TestComponent1(): JSX.Element {
     return (
-      <OpenActionMenu open={() => <>액션 메뉴</>}>영역 내부</OpenActionMenu>
+      <OpenActionMenuArea open={() => <>액션 메뉴</>}>
+        영역 내부
+      </OpenActionMenuArea>
     );
   }
 
-  it('OpenActionMenu 내부를 누르면 open에 전달한 액션 메뉴가 열린다', async () => {
+  it('OpenActionMenuArea 내부를 누르면 open에 전달한 액션 메뉴가 열린다', async () => {
     render(<TestComponent1 />);
 
     await userEvent.click(screen.getByText(/영역 내부/));
@@ -42,7 +44,7 @@ describe('OpenActionMenu', () => {
 
   function TestComponent2(): JSX.Element {
     return (
-      <OpenActionMenu
+      <OpenActionMenuArea
         open={({ close }) => (
           <>
             <button type="button" onClick={close}>
@@ -53,7 +55,7 @@ describe('OpenActionMenu', () => {
         )}
       >
         영역 내부
-      </OpenActionMenu>
+      </OpenActionMenuArea>
     );
   }
 
