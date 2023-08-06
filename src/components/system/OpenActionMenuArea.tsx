@@ -9,7 +9,7 @@ interface Props {
   open: CreateOverlayContent;
 }
 export function OpenActionMenuArea({
-  open: CreateActionMenuContent,
+  open: ActionMenu,
   children,
 }: Props & React.PropsWithChildren): JSX.Element {
   const area = useRef<HTMLDivElement | null>(null);
@@ -29,20 +29,16 @@ export function OpenActionMenuArea({
 
   useInsideClick(area, handleActionMenuOpen);
 
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+
   return (
     <div ref={area} className="relative">
       {children}
       {open && (
-        <ActionMenuController
-          close={() => {
-            setOpen(false);
-          }}
-        >
-          <CreateActionMenuContent
-            close={() => {
-              setOpen(false);
-            }}
-          />
+        <ActionMenuController close={handleClose}>
+          <ActionMenu close={handleClose} />
         </ActionMenuController>
       )}
     </div>
