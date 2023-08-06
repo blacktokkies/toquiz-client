@@ -2,24 +2,24 @@ import type React from 'react';
 
 import { useEffect } from 'react';
 
-export const useOutsideClick = (
+export const useInsideClick = (
   target: React.RefObject<HTMLElement>,
-  onOutsideClick: (event: MouseEvent) => void,
+  onInsideClick: (event: MouseEvent) => void,
 ): void => {
   useEffect(() => {
     function handleOutsideClick(event: MouseEvent): void {
       if (
         event.target instanceof Node &&
-        target.current?.contains(event.target)
+        !target.current?.contains(event.target)
       )
         return;
 
-      onOutsideClick(event);
+      onInsideClick(event);
     }
 
     window.addEventListener('mousedown', handleOutsideClick);
     return () => {
       window.removeEventListener('mousedown', handleOutsideClick);
     };
-  }, [onOutsideClick, target]);
+  }, [onInsideClick, target]);
 };
