@@ -11,8 +11,8 @@ interface Props {
   action: (props: SignUpBody) => void;
 }
 const SignUpForm = ({ action }: Props): JSX.Element => {
-  const { inputProps, errors, handleSubmit } = useForm({
-    form: {
+  const { inputProps, errors, formProps } = useForm({
+    inputConfigs: {
       username: {
         validate: (value) => isEmail(value),
         errorMessage: '이메일 형식의 아이디를 입력하세요',
@@ -31,15 +31,16 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
         errorMessage: '2~20자 이하의 문자를 입력하세요',
       },
     },
-  });
-
-  const submit = handleSubmit((data) => {
-    const { username, password, nickname } = data;
-    action({ username, password, nickname });
+    formConfig: {
+      onSubmit: (data) => {
+        const { username, password, nickname } = data;
+        action({ username, password, nickname });
+      },
+    },
   });
 
   return (
-    <form className="flex w-full flex-col gap-8" onSubmit={submit}>
+    <form className="flex w-full flex-col gap-8" {...formProps}>
       <div className="flex flex-col gap-5">
         <LabelInput
           label="아이디"

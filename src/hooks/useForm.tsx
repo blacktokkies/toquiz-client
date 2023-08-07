@@ -1,14 +1,9 @@
-import type {
-  ChangeEvent,
-  ChangeEventHandler,
-  FormEvent,
-  FormEventHandler,
-} from 'react';
+import type { ChangeEventHandler, FormEvent, FormEventHandler } from 'react';
 
 import { useCallback, useRef, useState, useMemo } from 'react';
 
-export interface FormInputConfig<T extends string> {
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+export interface InputConfig<T extends string> {
+  onChange?: ChangeEventHandler;
   validate?: (
     value: string,
     refs: Partial<Record<T, HTMLInputElement>>,
@@ -16,104 +11,123 @@ export interface FormInputConfig<T extends string> {
   errorMessage?: string;
 }
 
-export interface FormInputProps {
-  onChange: ChangeEventHandler<HTMLInputElement>;
+export interface FormConfig<T extends string> {
+  onSubmit?: (data: Record<T, string>, e: FormEvent<HTMLFormElement>) => void;
+}
+
+export interface InputProps {
+  name: string;
   ref: (ref: HTMLInputElement) => void;
+  onChange: ChangeEventHandler<HTMLInputElement>;
 }
 
-interface useFormParams<T extends string> {
-  form: Record<T, FormInputConfig<T>>;
-  onSubmit?: FormEventHandler<HTMLFormElement>;
-}
-
-type HandleSubmit<T extends string> = (
-  onSubmit: (data: Record<T, string>, e: FormEvent<HTMLFormElement>) => void,
-) => FormEventHandler<HTMLFormElement>;
-
-interface useFormReturn<T extends string> {
-  inputProps: Partial<Record<T, FormInputProps>>;
-  handleSubmit: HandleSubmit<T>;
-  errors: Partial<Record<T, string | null>>;
+export interface FormProps {
+  ref: (ref: HTMLFormElement) => void;
+  onSubmit?: FormEventHandler;
 }
 
 const DEFAULT_ERROR_MESSAGE = '유효한 입력값이 아닙니다.';
+
 export const useForm = <T extends string>({
-  form,
-  onSubmit,
-}: useFormParams<T>): useFormReturn<T> => {
+  inputConfigs,
+  formConfig = null,
+}: {
+  inputConfigs: Record<T, InputConfig<T>>;
+  formConfig?: FormConfig<T> | null;
+}): {
+  inputProps: Partial<Record<T, InputProps>>;
+  errors: Partial<Record<T, string | null>>;
+  hasError: boolean;
+  setError: (name: T, error: string | null) => void;
+  formProps: Partial<FormProps>;
+} => {
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const inputRefs = useRef<Partial<Record<T, HTMLInputElement>>>({});
   const [errors, setErrors] = useState<Partial<Record<T, string | null>>>({});
 
-  const inputRefs = useRef<Partial<Record<T, HTMLInputElement>>>({});
-
-  const inputProps = useMemo(() => {
-    const props: Partial<Record<T, FormInputProps>> = {};
-
-    const inputNames = Object.keys(form) as T[];
-    inputNames.forEach((inputName) => {
-      const inputConfig = form[inputName];
-      const { validate, onChange, errorMessage } = inputConfig;
-      const handleValidation = (value: string): void => {
-        if (!validate) return;
-
-        const isValid = validate(value, inputRefs.current);
-        const error = isValid ? null : errorMessage ?? DEFAULT_ERROR_MESSAGE;
-
-        if (errors[inputName] !== error)
-          setErrors((prev) => ({ ...prev, [inputName]: error }));
-      };
-
-      props[inputName] = {
-        onChange: (e) => {
-          onChange?.(e);
-          handleValidation(e.currentTarget.value);
-        },
-        ref: (ref) => {
-          inputRefs.current[inputName] = ref;
-        },
-      };
-    });
-    return props;
-  }, [form, errors]);
-
-  const handleSubmit = useCallback(
-    (
-        onSubmit: (
-          data: Record<T, string>,
-          e: FormEvent<HTMLFormElement>,
-        ) => void,
-      ) =>
-      (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const formDataRecord = Object.fromEntries(formData) as Record<
-          T,
-          string
-        >;
-        const formDataEntries = Object.entries(formDataRecord) as Array<
-          [T, string]
-        >;
-
-        let isValidAll = true;
-        formDataEntries.forEach(([name, value]) => {
-          const { validate, errorMessage } = form[name];
-          const isValid = validate?.(value, inputRefs.current);
-          if (isValid === false) isValidAll = false;
-
-          const error = isValid ? null : errorMessage ?? DEFAULT_ERROR_MESSAGE;
-          if (errors[name] !== error)
-            setErrors((prev) => ({ ...prev, [name]: error }));
-        });
-
-        if (isValidAll) {
-          const data = formDataEntries.reduce(
-            (acc, [value, name]) => ({ ...acc, [value]: name }),
-            {},
-          ) as Record<T, string>;
-          onSubmit?.(data, e);
-        }
-      },
-    [errors, form],
+  const setError = useCallback(
+    (name: T, error: string | null) => {
+      if (errors[name] !== error)
+        setErrors((prev) => ({ ...prev, [name]: error }));
+    },
+    [errors],
   );
 
-  return { inputProps, errors, handleSubmit };
+  const inputProps: Partial<Record<T, InputProps>> = useMemo(() => {
+    const names = Object.keys(inputConfigs) as T[];
+
+    return names.reduce((acc, name) => {
+      const { validate, onChange, errorMessage } = inputConfigs[name];
+
+      const handleValidationError = (value: string): string | null => {
+        const isValid = validate?.(value, inputRefs.current);
+        const error = isValid ? null : errorMessage ?? DEFAULT_ERROR_MESSAGE;
+        return error;
+      };
+
+      const props: InputProps = {
+        name,
+        ref: (ref) => {
+          inputRefs.current[name] = ref;
+        },
+        onChange: (e) => {
+          onChange?.(e);
+          setError(name, handleValidationError(e.currentTarget.value));
+        },
+      };
+
+      return {
+        ...acc,
+        [name]: props,
+      };
+    }, {});
+  }, [inputConfigs, setError]);
+
+  // [NOTE]: input 값의 validation은 사용자가 해당 input에 Change 이벤트를 발생시킬 때,
+  // 그리고 모든 input 값의 validation은 사용자가 Form에 Submit 이벤트를 발생시킬 때 실행된다.
+  // 따라서, 최초로 렌더링되었을 때 validation은 실행되어있지 않으므로
+  // errors는 에러 메시지를 저장하고 있지 않으며 hasError의 초기값은 반드시 false이다.
+  // (최초로 렌더링된 input들에 에러 메시지를 띄우지 않기 위함이다)
+  const hasError = useMemo(() => {
+    const errorMessages = Object.values(errors);
+    return errorMessages.some(
+      (errorMessage) =>
+        typeof errorMessage === 'string' && errorMessage.length > 0,
+    );
+  }, [errors]);
+
+  const formProps: Partial<FormProps> = useMemo(() => {
+    if (formConfig === null) return {};
+
+    const { onSubmit } = formConfig;
+
+    function handleSubmit(e: FormEvent<HTMLFormElement>): void {
+      e.preventDefault();
+
+      const formData = new FormData(e.currentTarget);
+      const formDataRecord = Object.fromEntries(formData) as Record<T, string>;
+      const formDataEntries = Object.entries(formDataRecord) as Array<
+        [T, string]
+      >;
+
+      const isValidForm = formDataEntries.reduce((acc, [name, value]) => {
+        const { validate, errorMessage } = inputConfigs[name];
+        const isValid = Boolean(validate?.(value, inputRefs.current));
+        const error = isValid ? null : errorMessage ?? DEFAULT_ERROR_MESSAGE;
+        setError(name, error);
+        return acc && isValid;
+      }, true);
+
+      if (isValidForm) onSubmit?.(formDataRecord, e);
+    }
+
+    return {
+      ref: (ref) => {
+        formRef.current = ref;
+      },
+      onSubmit: handleSubmit,
+    };
+  }, [formConfig, inputConfigs, setError]);
+
+  return { inputProps, errors, hasError, setError, formProps };
 };
