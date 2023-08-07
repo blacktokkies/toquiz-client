@@ -4,14 +4,14 @@ import React from 'react';
 
 import Button from '@/components/system/Button';
 import LabelInput from '@/components/system/LabelInput';
-import { useFormError } from '@/hooks/useFormError';
+import { useForm } from '@/hooks/useForm';
 import { isEmail, isNickname, isPassword } from '@/lib/validator';
 
 interface Props {
   action: (props: SignUpBody) => void;
 }
 const SignUpForm = ({ action }: Props): JSX.Element => {
-  const { inputProps, errors, handleSubmit } = useFormError({
+  const { inputProps, errors, handleSubmit } = useForm({
     form: {
       username: {
         validate: (value) => isEmail(value),

@@ -4,7 +4,7 @@ import React from 'react';
 
 import Button from '@/components/system/Button';
 import LabelInput from '@/components/system/LabelInput';
-import { useFormError } from '@/hooks/useFormError';
+import { useForm } from '@/hooks/useForm';
 import { isEmail, isPassword } from '@/lib/validator';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 // https://reactrouter.com/en/main/hooks/use-action-data
 // TODO: action, useActionData 사용해서 리다이렉트 처리해보기
 const SignUpForm = ({ action }: Props): JSX.Element => {
-  const { inputProps, errors, handleSubmit } = useFormError({
+  const { inputProps, errors, handleSubmit } = useForm({
     form: {
       username: {
         validate: (value) => isEmail(value),
