@@ -21,7 +21,7 @@ export interface FormInputProps {
   ref: (ref: HTMLInputElement) => void;
 }
 
-interface UseFormErrorParams<T extends string> {
+interface useFormParams<T extends string> {
   form: Record<T, FormInputConfig<T>>;
   onSubmit?: FormEventHandler<HTMLFormElement>;
 }
@@ -30,17 +30,17 @@ type HandleSubmit<T extends string> = (
   onSubmit: (data: Record<T, string>, e: FormEvent<HTMLFormElement>) => void,
 ) => FormEventHandler<HTMLFormElement>;
 
-interface UseFormErrorReturn<T extends string> {
+interface useFormReturn<T extends string> {
   inputProps: Partial<Record<T, FormInputProps>>;
   handleSubmit: HandleSubmit<T>;
   errors: Partial<Record<T, string | null>>;
 }
 
 const DEFAULT_ERROR_MESSAGE = '유효한 입력값이 아닙니다.';
-export const useFormError = <T extends string>({
+export const useForm = <T extends string>({
   form,
   onSubmit,
-}: UseFormErrorParams<T>): UseFormErrorReturn<T> => {
+}: useFormParams<T>): useFormReturn<T> => {
   const [errors, setErrors] = useState<Partial<Record<T, string | null>>>({});
 
   const inputRefs = useRef<Partial<Record<T, HTMLInputElement>>>({});
