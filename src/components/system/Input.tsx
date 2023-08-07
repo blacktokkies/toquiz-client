@@ -8,7 +8,7 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string | null;
 }
 
-const Input = forwardRef<HTMLInputElement, Props>(function Input(
+const CreateInput = forwardRef<HTMLInputElement, Props>(function Input(
   { errorMessage, ...rest }: Props,
   ref,
 ) {
@@ -29,4 +29,4 @@ const Input = forwardRef<HTMLInputElement, Props>(function Input(
   );
 });
 
-export default React.memo(Input);
+export const Input = React.memo(CreateInput);

@@ -3,7 +3,7 @@ import type { SignUpBody } from '@/lib/api/auth';
 import React from 'react';
 
 import Button from '@/components/system/Button';
-import LabelInput from '@/components/system/LabelInput';
+import { LabelInput } from '@/components/system/LabelInput';
 import { useForm } from '@/hooks/useForm';
 import { isEmail, isNickname, isPassword } from '@/lib/validator';
 
