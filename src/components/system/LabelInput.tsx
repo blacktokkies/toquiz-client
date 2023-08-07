@@ -5,24 +5,24 @@ import { Emergency } from '@/components/vectors';
 
 interface Props extends InputProps {
   label: string;
-  id?: string;
 }
 
-const LabelInput = forwardRef<HTMLInputElement, Props>(
-  ({ label, required, id, ...rest }: Props, ref) => (
+const LabelInput = forwardRef<HTMLInputElement, Props>(function LabelInput(
+  { id, label, required = false, ...rest }: Props,
+  ref,
+) {
+  return (
     <div className="flex flex-col gap-2">
       <label
         htmlFor={id}
-        className="text-grey-darkest flex items-center gap-[1px] font-medium"
+        className="flex items-center gap-[1px] text-grey-darkest font-medium"
       >
         {label}
         {required && <Emergency className="fill-danger h-2 w-2" />}
       </label>
-      <Input id={id} {...rest} ref={ref} />
+      <Input ref={ref} id={id} {...rest} />
     </div>
-  ),
-);
+  );
+});
 
-LabelInput.displayName = 'LabelInput';
-
-export default LabelInput;
+export default React.memo(LabelInput);
