@@ -13,8 +13,8 @@ interface Props {
 // https://reactrouter.com/en/main/hooks/use-action-data
 // TODO: action, useActionData 사용해서 리다이렉트 처리해보기
 const SignUpForm = ({ action }: Props): JSX.Element => {
-  const { inputProps, errors, handleSubmit } = useForm({
-    form: {
+  const { inputProps, errors, formProps } = useForm({
+    inputConfigs: {
       username: {
         validate: (value) => isEmail(value),
         errorMessage: '이메일 형식의 아이디를 입력하세요',
@@ -25,15 +25,16 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
           '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
       },
     },
-  });
-
-  const submit = handleSubmit((data) => {
-    const { username, password } = data;
-    action({ username, password });
+    formConfig: {
+      onSubmit: (data) => {
+        const { username, password } = data;
+        action({ username, password });
+      },
+    },
   });
 
   return (
-    <form className="flex w-full flex-col gap-8" onSubmit={submit}>
+    <form className="flex w-full flex-col gap-8" {...formProps}>
       <div className="flex flex-col gap-5">
         <LabelInput
           label="아이디"
