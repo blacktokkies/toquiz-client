@@ -60,9 +60,10 @@ export const useForm = <T extends string>({
       const { validate, onChange, errorMessage } = inputConfigs[name];
 
       const handleValidationError = (value: string): string | null => {
-        const isValid = validate?.(value, inputRefs.current);
-        const error = isValid ? null : errorMessage ?? DEFAULT_ERROR_MESSAGE;
-        return error;
+        const isValid = Boolean(
+          !validate || validate(value, inputRefs.current),
+        );
+        return isValid ? null : errorMessage ?? DEFAULT_ERROR_MESSAGE;
       };
 
       const props: InputProps = {
@@ -112,7 +113,9 @@ export const useForm = <T extends string>({
 
       const isValidForm = formDataEntries.reduce((acc, [name, value]) => {
         const { validate, errorMessage } = inputConfigs[name];
-        const isValid = Boolean(validate?.(value, inputRefs.current));
+        const isValid = Boolean(
+          !validate || validate(value, inputRefs.current),
+        );
         const error = isValid ? null : errorMessage ?? DEFAULT_ERROR_MESSAGE;
         setError(name, error);
         return acc && isValid;
