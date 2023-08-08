@@ -43,7 +43,7 @@ describe('회원가입 페이지', () => {
     const submitButton = screen.getByRole('button', { name: '회원가입' });
     await userEvent.click(submitButton);
 
-    expect(screen.getByText(/이미 존재하는 email 입니다/)).toBeInTheDocument();
+    expect(screen.getByText(/이미 존재하는 이메일입니다/)).toBeInTheDocument();
   });
 
   it('중복된 닉네임을 제출하면 에러 메시지를 보여준다', async () => {
@@ -62,8 +62,6 @@ describe('회원가입 페이지', () => {
     const submitButton = screen.getByRole('button', { name: '회원가입' });
     await userEvent.click(submitButton);
 
-    expect(
-      screen.getByText(/이미 존재하는 nickname 입니다/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/이미 존재하는 닉네임입니다/)).toBeInTheDocument();
   });
 });

@@ -61,11 +61,11 @@ function Signup(): JSX.Element {
               const { code } = error.data;
 
               if (code === 'DUPLICATE_EMAIL') {
-                setError('email', `${email}은 이미 존재하는 email 입니다`);
+                setError('email', `${email}은 이미 존재하는 이메일입니다`);
               } else if (code === 'DUPLICATE_NICKNAME') {
                 setError(
                   'nickname',
-                  `${nickname}은 이미 존재하는 nickname 입니다`,
+                  `${nickname}은 이미 존재하는 닉네임입니다`,
                 );
               }
             },
