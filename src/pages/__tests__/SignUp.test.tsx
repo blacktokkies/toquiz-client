@@ -21,13 +21,13 @@ function overrideSignUpResultWith(data: ErrorResponse): void {
 }
 
 describe('회원가입 페이지', () => {
-  it('중복된 이메일을 제출하면 에러 메시지를 보여준다', async () => {
-    vi.mock('@/lib/validator', () => ({
-      isEmail: vi.fn().mockImplementation(() => true),
-      isNickname: vi.fn().mockImplementation(() => true),
-      isPassword: vi.fn().mockImplementation(() => true),
-    }));
+  vi.mock('@/lib/validator', () => ({
+    isEmail: vi.fn().mockImplementation(() => true),
+    isNickname: vi.fn().mockImplementation(() => true),
+    isPassword: vi.fn().mockImplementation(() => true),
+  }));
 
+  it('중복된 이메일을 제출하면 에러 메시지를 보여준다', async () => {
     overrideSignUpResultWith({
       code: 'DUPLICATE_EMAIL',
       statusCode: 400,
@@ -47,12 +47,6 @@ describe('회원가입 페이지', () => {
   });
 
   it('중복된 닉네임을 제출하면 에러 메시지를 보여준다', async () => {
-    vi.mock('@/lib/validator', () => ({
-      isEmail: vi.fn().mockImplementation(() => true),
-      isNickname: vi.fn().mockImplementation(() => true),
-      isPassword: vi.fn().mockImplementation(() => true),
-    }));
-
     overrideSignUpResultWith({
       code: 'DUPLICATE_NICKNAME',
       statusCode: 400,
