@@ -1,7 +1,7 @@
 import { devtools, persist } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 
-export interface User {
+export interface Member {
   id: string;
   email: string;
   nickname: string;
@@ -9,8 +9,8 @@ export interface User {
 }
 
 export interface UserState {
-  user: User | null;
-  setUser: (newUser: User | null) => void;
+  user: Member | null;
+  setUser: (newUser: Member | null) => void;
 }
 
 // https://docs.pmnd.rs/zustand/integrations/immer-middleware
@@ -30,6 +30,6 @@ export const userStore = createStore<UserState>()(
 );
 
 export const getUser = (): UserState['user'] => userStore.getState().user;
-export const setUser = (newUser: User | null): void => {
+export const setUser = (newUser: Member | null): void => {
   userStore.getState().setUser(newUser);
 };
