@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Link, useNavigate, redirect } from 'react-router-dom';
 
-import Button from '@/components/system/Button';
+import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
 import { useSignUpMutation } from '@/hooks/queries/auth';
 import { useForm } from '@/hooks/useForm';
@@ -25,7 +25,7 @@ export const signupLoader: LoaderFunction = async () => {
   return null;
 };
 
-function Signup(): JSX.Element {
+export function SignUp(): JSX.Element {
   const signUpMutation = useSignUpMutation();
   const navigate = useNavigate();
   const { inputProps, errors, formProps, hasError, setError } = useForm({
@@ -142,5 +142,3 @@ function Signup(): JSX.Element {
     </div>
   );
 }
-
-export default Signup;

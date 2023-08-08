@@ -4,7 +4,7 @@ import React from 'react';
 
 import { useSearchParams, useNavigate, Link, redirect } from 'react-router-dom';
 
-import Button from '@/components/system/Button';
+import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
 import { useLoginMutation } from '@/hooks/queries/auth';
 import { useUserStore } from '@/hooks/store/useUserStore';
@@ -25,7 +25,7 @@ export const loginLoader: LoaderFunction = async () => {
   return null;
 };
 
-function Login(): JSX.Element {
+export function Login(): JSX.Element {
   const setUser = useUserStore((state) => state.setUser);
 
   const navigate = useNavigate();
@@ -103,5 +103,3 @@ function Login(): JSX.Element {
     </div>
   );
 }
-
-export default Login;

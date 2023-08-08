@@ -4,7 +4,7 @@ import React from 'react';
 
 import { redirect, Link } from 'react-router-dom';
 
-import InfinitePanelGrid from '@/components/home/InfinitePanelGrid';
+import { InfinitePanelGrid } from '@/components/home/InfinitePanelGrid';
 import { Logo, Account } from '@/components/vectors';
 import { useUserStore } from '@/hooks/store/useUserStore';
 import { isUserLoggedIn } from '@/lib/routeGuard';
@@ -17,7 +17,7 @@ export const homeLoader: LoaderFunction = async () => {
   return null;
 };
 
-const Home = (): JSX.Element => {
+export const Home = (): JSX.Element => {
   const user = useUserStore((state) => state.user);
 
   return (
@@ -82,5 +82,3 @@ const Home = (): JSX.Element => {
     </div>
   );
 };
-
-export default Home;
