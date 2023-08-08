@@ -15,13 +15,13 @@ import { queryKey } from '@/lib/queryKey';
 
 export const useSignUpMutation = (): UseMutationResult<
   SignUpResult,
-  ApiError<SignUpError> | SyntaxError,
+  ApiError<SignUpError | undefined> | SyntaxError,
   SignUpBody
 > => {
   const key = queryKey.auth.signup();
   const mutation = useMutation<
     SignUpResult,
-    ApiError<SignUpError> | SyntaxError,
+    ApiError<SignUpError | undefined> | SyntaxError,
     SignUpBody
   >(key, signUp);
   return mutation;
