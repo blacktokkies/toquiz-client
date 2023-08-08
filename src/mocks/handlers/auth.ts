@@ -83,9 +83,9 @@ export const me = rest.get<never, never, GetMyInfoResponse | ErrorResponse>(
       return res(
         ctx.status(401),
         ctx.json({
+          code: 'unauthorized error',
           statusCode: 401,
           message: 'unauthorized error',
-          error: 'unauthorized error',
         }),
       );
     }
@@ -123,9 +123,9 @@ export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
       return res(
         ctx.status(401),
         ctx.json({
+          code: 'unauthorized error',
           statusCode: 401,
           message: 'unauthorized error',
-          error: 'unauthorized error',
         }),
       );
     }
