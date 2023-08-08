@@ -32,6 +32,7 @@ module.exports = {
   ignorePatterns: ['.eslintrc.cjs', 'public', 'dist', '*.config.*'],
   rules: {
     'arrow-body-style': 'error',
+    'import/no-default-export': 'error',
     'import/newline-after-import': 'error',
     'import/order': [
       'error',
