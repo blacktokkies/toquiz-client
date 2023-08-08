@@ -50,7 +50,7 @@ function Signup(): JSX.Element {
             onSuccess: () => {
               navigate('/login');
             },
-            onError: (error, body, ctx) => {
+            onError: (error, body) => {
               // TODO: SyntaxError 어떻게 핸들링할 지 생각해보기
               if (error instanceof SyntaxError) return;
               // TODO: ApiError에서 응답이 확실하지 않을 때 어떻게 핸들링할 지 생각해보기
@@ -58,7 +58,7 @@ function Signup(): JSX.Element {
               if (error.data === undefined) return;
 
               const { email, nickname } = body;
-              const { code } = error.data;
+              const { code, errors } = error.data;
 
               if (code === 'DUPLICATE_EMAIL') {
                 setError('email', `${email}은 이미 존재하는 이메일입니다`);
@@ -67,6 +67,19 @@ function Signup(): JSX.Element {
                   'nickname',
                   `${nickname}은 이미 존재하는 닉네임입니다`,
                 );
+              } else if (code === 'INVALID_PARAMETER') {
+                errors.forEach(({ field, message }) => {
+                  if (field === 'email')
+                    setError(field, '이메일 형식의 아이디를 입력하세요');
+                  else if (field === 'nickname')
+                    setError(
+                      field,
+                      '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
+                    );
+                  else if (field === 'password') {
+                    setError(field, '2~20자 이하의 문자를 입력하세요');
+                  }
+                });
               }
             },
           },

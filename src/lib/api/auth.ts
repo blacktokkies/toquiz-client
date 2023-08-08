@@ -37,8 +37,18 @@ export interface SignUpResult {
 export type SignUpResponse = SuccessResponse<SignUpResult>;
 
 // TODO: code를 따로 정의한 상수나 type으로 다루도록 수정하기
-export type SignUpError = ErrorResponse & {
+export type SignUpError = DuplicateSignUpError | InvalidParameterSignUpError;
+
+export type DuplicateSignUpError = Omit<ErrorResponse, 'code'> & {
   code: 'DUPLICATE_EMAIL' | 'DUPLICATE_NICKNAME';
+};
+
+export type InvalidParameterSignUpError = Omit<
+  ErrorResponse,
+  'code' | 'errors'
+> & {
+  code: 'INVALID_PARAMETER';
+  errors: Array<{ field: 'email' | 'password' | 'nickname'; message: string }>;
 };
 
 /* ================================ [로그인 API] ====================================== */
