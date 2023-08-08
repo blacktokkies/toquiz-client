@@ -4,7 +4,8 @@ export interface SuccessResponse<T> {
 }
 
 export interface ErrorResponse {
+  code: string;
   statusCode: number;
-  message: string | string[];
-  error: string;
+  message: string;
+  errors?: Array<{ field: string; message: string }>;
 }
