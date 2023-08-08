@@ -1,3 +1,5 @@
+import type { ErrorResponse } from '@/lib/api/response';
+
 import React from 'react';
 
 import { screen } from '@testing-library/react';
@@ -10,17 +12,10 @@ import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import Signup from '@/pages/SignUp';
 
-function overrideSignUpResultWithError(): void {
+function overrideSignUpResultWith(data: ErrorResponse): void {
   server.use(
     rest.post(apiUrl.auth.signup(), async (req, res, ctx) =>
-      res(
-        ctx.status(400),
-        ctx.json({
-          code: 'DUPLICATE_EMAIL',
-          statusCode: 400,
-          message: '이미 존재하는 email 입니다.',
-        }),
-      ),
+      res(ctx.status(data.statusCode), ctx.json(data)),
     ),
   );
 }
@@ -32,7 +27,12 @@ describe('회원가입 페이지', () => {
       isNickname: vi.fn().mockImplementation(() => true),
       isPassword: vi.fn().mockImplementation(() => true),
     }));
-    overrideSignUpResultWithError();
+
+    overrideSignUpResultWith({
+      code: 'DUPLICATE_EMAIL',
+      statusCode: 400,
+      message: '이미 존재하는 email입니다.',
+    });
 
     renderWithQueryClient(
       <MemoryRouter>
@@ -43,6 +43,6 @@ describe('회원가입 페이지', () => {
     const submitButton = screen.getByRole('button', { name: '회원가입' });
     await userEvent.click(submitButton);
 
-    expect(screen.getByText(/이미 존재하는 계정입니다/)).toBeInTheDocument();
+    expect(screen.getByText(/이미 존재하는 email입니다/)).toBeInTheDocument();
   });
 });
