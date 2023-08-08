@@ -2,7 +2,7 @@ import type { ErrorResponse } from '@/lib/api/response';
 
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { MemoryRouter } from 'react-router-dom';
@@ -43,7 +43,11 @@ describe('회원가입 페이지', () => {
     const submitButton = screen.getByRole('button', { name: '회원가입' });
     await userEvent.click(submitButton);
 
-    expect(screen.getByText(/이미 존재하는 이메일입니다/)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(/이미 존재하는 이메일입니다/),
+      ).toBeInTheDocument();
+    });
   });
   it('중복된 닉네임을 제출하면 에러 메시지를 보여준다', async () => {
     overrideSignUpResultWith({
@@ -61,7 +65,11 @@ describe('회원가입 페이지', () => {
     const submitButton = screen.getByRole('button', { name: '회원가입' });
     await userEvent.click(submitButton);
 
-    expect(screen.getByText(/이미 존재하는 닉네임입니다/)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(/이미 존재하는 닉네임입니다/),
+      ).toBeInTheDocument();
+    });
   });
 
   it('유효하지 않은 이메일, 닉네임, 비밀번호를 제출하면 에러 메시지를 보여준다.', async () => {
@@ -95,16 +103,23 @@ describe('회원가입 페이지', () => {
     const submitButton = screen.getByRole('button', { name: '회원가입' });
     await userEvent.click(submitButton);
 
-    expect(
-      screen.getByText(/이메일 형식의 아이디를 입력하세요/),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        /8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요/,
-      ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/2~20자 이하의 문자를 입력하세요/),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(/이메일 형식의 아이디를 입력하세요/),
+      ).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          /8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요/,
+        ),
+      ).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(
+        screen.getByText(/2~20자 이하의 문자를 입력하세요/),
+      ).toBeInTheDocument();
+    });
   });
 });
