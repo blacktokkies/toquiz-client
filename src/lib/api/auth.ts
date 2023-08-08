@@ -1,4 +1,4 @@
-import type { SuccessResponse } from '@/lib/api/response';
+import type { SuccessResponse, ErrorResponse } from '@/lib/api/response';
 
 import { apiClient } from '@/lib/apiClient';
 import { apiUrl } from '@/lib/apiUrl';
@@ -34,6 +34,11 @@ export interface SignUpResult {
 }
 
 export type SignUpResponse = SuccessResponse<SignUpResult>;
+
+// TODO: code를 따로 정의한 상수나 type으로 다루도록 수정하기
+export type SignUpError = ErrorResponse & {
+  code: 'DUPLICATE_EMAIL';
+};
 
 export interface LogInBody {
   email: Member['email'];
