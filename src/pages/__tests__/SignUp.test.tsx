@@ -12,7 +12,7 @@ import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import Signup from '@/pages/SignUp';
 
-function overrideSignUpResultWith(data: ErrorResponse): void {
+function overrideSignUpResultWithError(data: ErrorResponse): void {
   server.use(
     rest.post(apiUrl.auth.signup(), async (req, res, ctx) =>
       res(ctx.status(data.statusCode), ctx.json(data)),
@@ -28,7 +28,7 @@ describe('회원가입 페이지', () => {
   }));
 
   it('중복된 이메일을 제출하면 에러 메시지를 보여준다', async () => {
-    overrideSignUpResultWith({
+    overrideSignUpResultWithError({
       code: 'DUPLICATE_EMAIL',
       statusCode: 400,
       message: '이미 존재하는 email 입니다.',
@@ -50,7 +50,7 @@ describe('회원가입 페이지', () => {
     });
   });
   it('중복된 닉네임을 제출하면 에러 메시지를 보여준다', async () => {
-    overrideSignUpResultWith({
+    overrideSignUpResultWithError({
       code: 'DUPLICATE_NICKNAME',
       statusCode: 400,
       message: '이미 존재하는 nickname 입니다.',
@@ -73,7 +73,7 @@ describe('회원가입 페이지', () => {
   });
 
   it('유효하지 않은 이메일, 닉네임, 비밀번호를 제출하면 에러 메시지를 보여준다.', async () => {
-    overrideSignUpResultWith({
+    overrideSignUpResultWithError({
       code: 'INVALID_PARAMETER',
       statusCode: 400,
       message: 'Invalid parameter included',
