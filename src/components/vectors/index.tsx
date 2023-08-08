@@ -1,4 +1,4 @@
-export { default as Emergency } from './Emergency';
-export { default as Logo } from './Logo';
-export { default as Search } from './Search';
-export { default as Account } from './Account';
+export { Emergency } from './Emergency';
+export { Logo } from './Logo';
+export { Search } from './Search';
+export { Account } from './Account';

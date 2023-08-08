@@ -12,7 +12,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
 }
 
-const Button = forwardRef<HTMLButtonElement, Props>(
+export const Button = forwardRef<HTMLButtonElement, Props>(
   ({ variant = 'filled', className = '', ...rest }, ref) => (
     <button
       ref={ref}
@@ -23,4 +23,3 @@ const Button = forwardRef<HTMLButtonElement, Props>(
   ),
 );
 Button.displayName = 'Button';
-export default Button;

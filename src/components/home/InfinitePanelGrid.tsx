@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 
-import PanelItem from '@/components/home/PanelItem';
+import { PanelItem } from '@/components/home/PanelItem';
 import { IntersectionArea } from '@/components/system/IntersectionArea';
 import { useMyPanelsInfiniteQuery } from '@/hooks/queries/panel';
 
-const InfinitePanelGrid = (): JSX.Element => {
+export const InfinitePanelGrid = (): JSX.Element => {
   const panelsQuery = useMyPanelsInfiniteQuery();
 
   const fetchPanels = useCallback(
@@ -35,5 +35,3 @@ const InfinitePanelGrid = (): JSX.Element => {
     </>
   );
 };
-
-export default InfinitePanelGrid;

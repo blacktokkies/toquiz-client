@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 import * as apis from '@/lib/api/auth';
 import { renderWithQueryClient } from '@/lib/test-utils';
-import Login from '@/pages/Login';
+import { Login } from '@/pages/Login';
 import { getUser } from '@/store/userStore';
 
 describe('로그인 페이지', () => {

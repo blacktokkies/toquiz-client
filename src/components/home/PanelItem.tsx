@@ -6,7 +6,7 @@ interface PanelItemProps {
   panel: Panel;
 }
 
-const PanelItem = ({ panel }: PanelItemProps): JSX.Element => (
+export const PanelItem = ({ panel }: PanelItemProps): JSX.Element => (
   <li
     key={panel.id}
     className="shadow-item hover:shadow-item-hover rounded-md bg-white py-4 px-5"
@@ -25,5 +25,3 @@ const PanelItem = ({ panel }: PanelItemProps): JSX.Element => (
     </div>
   </li>
 );
-
-export default PanelItem;

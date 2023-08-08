@@ -10,7 +10,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { apiUrl } from '@/lib/apiUrl';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
-import Signup from '@/pages/SignUp';
+import { SignUp } from '@/pages/SignUp';
 
 function overrideSignUpResultWithError(data: ErrorResponse): void {
   server.use(
@@ -36,7 +36,7 @@ describe('회원가입 페이지', () => {
 
     renderWithQueryClient(
       <MemoryRouter>
-        <Signup />
+        <SignUp />
       </MemoryRouter>,
     );
 
@@ -58,7 +58,7 @@ describe('회원가입 페이지', () => {
 
     renderWithQueryClient(
       <MemoryRouter>
-        <Signup />
+        <SignUp />
       </MemoryRouter>,
     );
 
@@ -96,7 +96,7 @@ describe('회원가입 페이지', () => {
 
     renderWithQueryClient(
       <MemoryRouter>
-        <Signup />
+        <SignUp />
       </MemoryRouter>,
     );
 

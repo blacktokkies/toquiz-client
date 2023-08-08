@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
-const Index = (): JSX.Element => (
+export const Index = (): JSX.Element => (
   <div>
     <Link to="/login" className="border">
       로그인
@@ -15,5 +15,3 @@ const Index = (): JSX.Element => (
     </Link>
   </div>
 );
-
-export default Index;

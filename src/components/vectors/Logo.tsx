@@ -2,7 +2,7 @@ import type { SVGProps } from 'react';
 
 import React from 'react';
 
-const Logo = (props: SVGProps<SVGSVGElement>): JSX.Element => (
+export const Logo = (props: SVGProps<SVGSVGElement>): JSX.Element => (
   <svg
     width="312"
     height="314"
@@ -34,5 +34,3 @@ const Logo = (props: SVGProps<SVGSVGElement>): JSX.Element => (
     </defs>
   </svg>
 );
-
-export default Logo;
