@@ -20,12 +20,32 @@ function overrideSignUpResultWithError(data: ErrorResponse): void {
   );
 }
 
+vi.mock('@/lib/validator', () => ({
+  isEmail: vi.fn().mockImplementation(() => true),
+  isNickname: vi.fn().mockImplementation(() => true),
+  isPassword: vi.fn().mockImplementation(() => true),
+}));
+
+const navigateMockFn = vi.fn();
+
+vi.mock('react-router-dom', async (importOriginal) => {
+  const router = (await importOriginal()) ?? {};
+  return { ...router, useNavigate: vi.fn(() => navigateMockFn) };
+});
+
 describe('회원가입 페이지', () => {
-  vi.mock('@/lib/validator', () => ({
-    isEmail: vi.fn().mockImplementation(() => true),
-    isNickname: vi.fn().mockImplementation(() => true),
-    isPassword: vi.fn().mockImplementation(() => true),
-  }));
+  it('유효한 필드를 제출하면 로그인 페이지로 이동한다', async () => {
+    renderWithQueryClient(
+      <MemoryRouter>
+        <SignUp />
+      </MemoryRouter>,
+    );
+
+    const submitButton = screen.getByRole('button', { name: '회원가입' });
+    await userEvent.click(submitButton);
+
+    expect(navigateMockFn).toHaveBeenCalledWith('/login');
+  });
 
   it('중복된 이메일을 제출하면 에러 메시지를 보여준다', async () => {
     overrideSignUpResultWithError({
@@ -49,6 +69,7 @@ describe('회원가입 페이지', () => {
       ).toBeInTheDocument();
     });
   });
+
   it('중복된 닉네임을 제출하면 에러 메시지를 보여준다', async () => {
     overrideSignUpResultWithError({
       code: 'DUPLICATE_NICKNAME',
