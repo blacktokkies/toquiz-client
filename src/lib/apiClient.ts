@@ -19,7 +19,7 @@ export class ApiError<T = any> extends Error {
 async function handleResponse<T>(response: Response): Promise<T> {
   const data: Promise<T> = response.json();
   if (response.ok) return data;
-  return Promise.reject(new ApiError(response, data));
+  return Promise.reject(new ApiError(response, await data));
 }
 
 export async function request<T>(
