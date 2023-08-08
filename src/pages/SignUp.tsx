@@ -55,12 +55,18 @@ function Signup(): JSX.Element {
               if (error instanceof SyntaxError) return;
               // TODO: ApiError에서 응답이 확실하지 않을 때 어떻게 핸들링할 지 생각해보기
               // [NOTE]: 현재 toquiz 서버에서 오는 API 응답의 data에는 무조건 code 프로퍼티가 포함되어있음을 기대할 수 있다.
-              if (!error.data) return;
+              if (error.data === undefined) return;
 
-              const { email } = body;
+              const { email, nickname } = body;
+              const { code } = error.data;
 
-              if (error.data.code === 'DUPLICATE_EMAIL') {
-                setError('email', `${email}은 이미 존재하는 email입니다.`);
+              if (code === 'DUPLICATE_EMAIL') {
+                setError('email', `${email}은 이미 존재하는 email 입니다`);
+              } else if (code === 'DUPLICATE_NICKNAME') {
+                setError(
+                  'nickname',
+                  `${nickname}은 이미 존재하는 nickname 입니다`,
+                );
               }
             },
           },
