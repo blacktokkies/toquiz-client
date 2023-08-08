@@ -37,7 +37,7 @@ export type SignUpResponse = SuccessResponse<SignUpResult>;
 
 // TODO: code를 따로 정의한 상수나 type으로 다루도록 수정하기
 export type SignUpError = ErrorResponse & {
-  code: 'DUPLICATE_EMAIL';
+  code: 'DUPLICATE_EMAIL' | 'DUPLICATE_NICKNAME';
 };
 
 export interface LogInBody {

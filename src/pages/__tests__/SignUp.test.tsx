@@ -31,7 +31,7 @@ describe('회원가입 페이지', () => {
     overrideSignUpResultWith({
       code: 'DUPLICATE_EMAIL',
       statusCode: 400,
-      message: '이미 존재하는 email입니다.',
+      message: '이미 존재하는 email 입니다.',
     });
 
     renderWithQueryClient(
@@ -43,6 +43,33 @@ describe('회원가입 페이지', () => {
     const submitButton = screen.getByRole('button', { name: '회원가입' });
     await userEvent.click(submitButton);
 
-    expect(screen.getByText(/이미 존재하는 email입니다/)).toBeInTheDocument();
+    expect(screen.getByText(/이미 존재하는 email 입니다/)).toBeInTheDocument();
+  });
+
+  it('중복된 닉네임을 제출하면 에러 메시지를 보여준다', async () => {
+    vi.mock('@/lib/validator', () => ({
+      isEmail: vi.fn().mockImplementation(() => true),
+      isNickname: vi.fn().mockImplementation(() => true),
+      isPassword: vi.fn().mockImplementation(() => true),
+    }));
+
+    overrideSignUpResultWith({
+      code: 'DUPLICATE_NICKNAME',
+      statusCode: 400,
+      message: '이미 존재하는 nickname 입니다.',
+    });
+
+    renderWithQueryClient(
+      <MemoryRouter>
+        <Signup />
+      </MemoryRouter>,
+    );
+
+    const submitButton = screen.getByRole('button', { name: '회원가입' });
+    await userEvent.click(submitButton);
+
+    expect(
+      screen.getByText(/이미 존재하는 nickname 입니다/),
+    ).toBeInTheDocument();
   });
 });
