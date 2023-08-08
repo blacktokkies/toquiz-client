@@ -21,9 +21,9 @@ function Signup(): JSX.Element {
 
   const navigate = useNavigate();
 
-  const handleSubmit = ({ username, password, nickname }: SignUpBody): void => {
+  const handleSubmit = ({ email, password, nickname }: SignUpBody): void => {
     mutation.mutate(
-      { username, password, nickname },
+      { email, password, nickname },
       {
         onSuccess: () => {
           navigate('/login');

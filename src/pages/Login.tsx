@@ -26,9 +26,9 @@ function Login(): JSX.Element {
   const next = searchParams.get('next') ?? '/home';
 
   const loginMutation = useLoginMutation();
-  const handleSubmit = ({ username, password }: LogInBody): void => {
+  const handleSubmit = ({ email, password }: LogInBody): void => {
     loginMutation.mutate(
-      { username, password },
+      { email, password },
       {
         onSuccess: ({ accessToken, user }) => {
           setAccessToken(accessToken);
