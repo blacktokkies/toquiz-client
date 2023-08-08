@@ -18,9 +18,9 @@ export const useMyPanelsInfiniteQuery = (): UseInfiniteQueryResult<
   const query = useInfiniteQuery<GetMyPanelsResult, ApiError | SyntaxError>(
     key,
     async ({ pageParam = '' }) =>
-      getMyPanels({ nextCursor: pageParam as GetMyPanelsParams['nextCursor'] }),
+      getMyPanels({ cursor: pageParam as GetMyPanelsParams['cursor'] }),
     {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      getNextPageParam: (lastPage) => lastPage.cursor,
     },
   );
 
