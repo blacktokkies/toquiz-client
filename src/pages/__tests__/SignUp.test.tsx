@@ -45,7 +45,6 @@ describe('회원가입 페이지', () => {
 
     expect(screen.getByText(/이미 존재하는 이메일입니다/)).toBeInTheDocument();
   });
-
   it('중복된 닉네임을 제출하면 에러 메시지를 보여준다', async () => {
     overrideSignUpResultWith({
       code: 'DUPLICATE_NICKNAME',
@@ -63,5 +62,49 @@ describe('회원가입 페이지', () => {
     await userEvent.click(submitButton);
 
     expect(screen.getByText(/이미 존재하는 닉네임입니다/)).toBeInTheDocument();
+  });
+
+  it('유효하지 않은 이메일, 닉네임, 비밀번호를 제출하면 에러 메시지를 보여준다.', async () => {
+    overrideSignUpResultWith({
+      code: 'INVALID_PARAMETER',
+      statusCode: 400,
+      message: 'Invalid parameter included',
+      errors: [
+        {
+          field: 'nickname',
+          message: '닉네임은 8 ~ 20자 이어야 합니다.',
+        },
+        {
+          field: 'password',
+          message:
+            '비밀번호는 영문자, 숫자, 특수기호를 반드시 포함해야 합니다.',
+        },
+        {
+          field: 'email',
+          message: '아이디는 이메일 형식으로 입력해주세요.',
+        },
+      ],
+    });
+
+    renderWithQueryClient(
+      <MemoryRouter>
+        <Signup />
+      </MemoryRouter>,
+    );
+
+    const submitButton = screen.getByRole('button', { name: '회원가입' });
+    await userEvent.click(submitButton);
+
+    expect(
+      screen.getByText(/이메일 형식의 아이디를 입력하세요/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요/,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/2~20자 이하의 문자를 입력하세요/),
+    ).toBeInTheDocument();
   });
 });
