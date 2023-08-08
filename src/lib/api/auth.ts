@@ -58,12 +58,9 @@ export interface LogInBody {
 }
 
 export interface LogInResult {
-  user: {
-    id: Member['id'];
-    email: Member['email'];
-    nickname: Member['nickname'];
-    createdAt: Member['createdAt'];
-  };
+  email: Member['email'];
+  nickname: Member['nickname'];
+  createdAt: Member['createdAt'];
   accessToken: string;
 }
 

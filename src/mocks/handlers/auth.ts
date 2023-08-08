@@ -40,12 +40,9 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
       ctx.json({
         statusCode: 200,
         result: {
-          user: {
-            id: email,
-            email,
-            nickname: 'dev nickname',
-            createdAt: new Date(),
-          },
+          email,
+          nickname: 'dev nickname',
+          createdAt: new Date(),
           accessToken: 'dev accessToken',
         },
       }),
