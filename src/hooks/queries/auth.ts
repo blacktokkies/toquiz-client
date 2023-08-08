@@ -3,6 +3,7 @@ import type {
   LogInResult,
   SignUpBody,
   SignUpResult,
+  SignUpError,
 } from '@/lib/api/auth';
 import type { ApiError } from '@/lib/apiClient';
 import type { UseMutationResult } from '@tanstack/react-query';
@@ -14,13 +15,13 @@ import { queryKey } from '@/lib/queryKey';
 
 export const useSignUpMutation = (): UseMutationResult<
   SignUpResult,
-  ApiError | SyntaxError,
+  ApiError<SignUpError> | SyntaxError,
   SignUpBody
 > => {
   const key = queryKey.auth.signup();
   const mutation = useMutation<
     SignUpResult,
-    ApiError | SyntaxError,
+    ApiError<SignUpError> | SyntaxError,
     SignUpBody
   >(key, signUp);
   return mutation;
