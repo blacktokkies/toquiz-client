@@ -2,7 +2,6 @@ import { devtools, persist } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 
 export interface Member {
-  id: string;
   email: string;
   nickname: string;
   createdAt: Date;
