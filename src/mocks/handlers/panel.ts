@@ -8,10 +8,10 @@ import { apiUrl } from '@/lib/apiUrl';
 import { myPanelsData } from '@/mocks/data/panel/myPanelsData';
 
 export interface GetMyPanelsParams {
-  nextCursor: undefined | Panel['id'];
+  cursor: undefined | Panel['id'];
 }
 export interface GetMyPanelsResult {
-  nextCursor: undefined | Panel['id'];
+  cursor: undefined | Panel['id'];
   panels: Panel[];
 }
 
@@ -20,9 +20,9 @@ export type GetMyPanelsResponse = SuccessResponse<GetMyPanelsResult>;
 export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
   `${API_BASE_URL}${apiUrl.panel.getMyPanels()}`,
   async (req, res, ctx) => {
-    const nextCursor = req.url.searchParams.get('nextCursor');
+    const cursor = req.url.searchParams.get('cursor');
 
-    const start = Number(nextCursor);
+    const start = Number(cursor);
     const end = start + 20;
     const newPanelData = myPanelsData.slice(start, end);
 
@@ -35,7 +35,7 @@ export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
       ctx.json({
         statusCode: 200,
         result: {
-          nextCursor: newNextCursor,
+          cursor: newNextCursor,
           panels: newPanelData,
         },
       }),
