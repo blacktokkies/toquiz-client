@@ -23,6 +23,7 @@ export const refresh = async (): Promise<RefreshResult> =>
     .post<RefreshResponse>(apiUrl.auth.refresh())
     .then((data) => data.result);
 
+/* ================================ [회원가입 API] ====================================== */
 export interface SignUpBody {
   email: Member['email'];
   password: Member['password'];
@@ -40,6 +41,7 @@ export type SignUpError = ErrorResponse & {
   code: 'DUPLICATE_EMAIL' | 'DUPLICATE_NICKNAME';
 };
 
+/* ================================ [로그인 API] ====================================== */
 export interface LogInBody {
   email: Member['email'];
   password: Member['password'];
@@ -57,6 +59,7 @@ export interface LogInResult {
 
 export type LogInResponse = SuccessResponse<LogInResult>;
 
+/* ================================ [회원 정보 API] ====================================== */
 export interface GetMyInfoResult {
   id: Member['id'];
   email: Member['email'];
@@ -69,6 +72,8 @@ export interface GetMyInfoResult {
 
 export type GetMyInfoResponse = SuccessResponse<GetMyInfoResult>;
 
+/* ================================ [토큰 리프레쉬 API] ====================================== */
+
 export interface RefreshResult {
   user: {
     id: Member['id'];
@@ -80,6 +85,8 @@ export interface RefreshResult {
 }
 
 export type RefreshResponse = SuccessResponse<RefreshResult>;
+
+/* ================================ [사용자 엔티티] ====================================== */
 
 export interface Member {
   id: string;
