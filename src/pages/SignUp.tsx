@@ -11,6 +11,13 @@ import { useForm } from '@/hooks/useForm';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 import { isEmail, isNickname, isPassword } from '@/lib/validator';
 
+export const SIGN_UP_ERROR_MESSAGE = {
+  email: '이메일 형식의 아이디를 입력하세요',
+  password: '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
+  'confirm-password': '동일한 비밀번호를 입력하세요',
+  nickname: '2~20자 이하의 문자를 입력하세요',
+} as const;
+
 export const signupLoader: LoaderFunction = async () => {
   const isLoggedIn = await isUserLoggedIn();
 
@@ -25,20 +32,19 @@ function Signup(): JSX.Element {
     inputConfigs: {
       email: {
         validate: (value) => isEmail(value),
-        errorMessage: '이메일 형식의 아이디를 입력하세요',
+        errorMessage: SIGN_UP_ERROR_MESSAGE.email,
       },
       password: {
         validate: (value) => isPassword(value),
-        errorMessage:
-          '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
+        errorMessage: SIGN_UP_ERROR_MESSAGE.password,
       },
       'confirm-password': {
         validate: (value, refs) => value === refs.password?.value,
-        errorMessage: '동일한 비밀번호를 입력하세요',
+        errorMessage: SIGN_UP_ERROR_MESSAGE['confirm-password'],
       },
       nickname: {
         validate: (value) => isNickname(value),
-        errorMessage: '2~20자 이하의 문자를 입력하세요',
+        errorMessage: SIGN_UP_ERROR_MESSAGE.nickname,
       },
     },
     formConfig: {
@@ -69,16 +75,7 @@ function Signup(): JSX.Element {
                 );
               } else if (code === 'INVALID_PARAMETER') {
                 errors.forEach(({ field, message }) => {
-                  if (field === 'email')
-                    setError(field, '이메일 형식의 아이디를 입력하세요');
-                  else if (field === 'nickname')
-                    setError(
-                      field,
-                      '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
-                    );
-                  else if (field === 'password') {
-                    setError(field, '2~20자 이하의 문자를 입력하세요');
-                  }
+                  setError(field, SIGN_UP_ERROR_MESSAGE[field]);
                 });
               }
             },
