@@ -12,14 +12,16 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
 }
 
-export const Button = forwardRef<HTMLButtonElement, Props>(
-  ({ variant = 'filled', className = '', ...rest }, ref) => (
+export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
+  { variant = 'filled', className = '', ...rest },
+  ref,
+) {
+  return (
     <button
       ref={ref}
       className={`text-grey-darkest hover:bg-primary-hover min-h-[48px] min-w-[128px] rounded-md py-3 font-bold disabled:opacity-30 ${variantStyle[variant]} ${className}`}
       type="button"
       {...rest}
     />
-  ),
-);
-Button.displayName = 'Button';
+  );
+});
