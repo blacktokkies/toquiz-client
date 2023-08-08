@@ -91,12 +91,13 @@ export function SignUp(): JSX.Element {
       <form className="flex w-full flex-col gap-8" {...formProps}>
         <div className="flex flex-col gap-5">
           <LabelInput
-            label="아이디"
+            label="이메일"
             name="email"
             required
-            placeholder="아이디를 입력하세요"
+            placeholder="이메일을 입력하세요"
             errorMessage={errors.email}
             {...inputProps.email}
+            aria-label="이메일 인풋"
           />
           <LabelInput
             label="비밀번호"
@@ -106,6 +107,7 @@ export function SignUp(): JSX.Element {
             placeholder="비밀번호를 입력하세요"
             errorMessage={errors.password}
             {...inputProps.password}
+            aria-label="비밀번호 인풋"
           />
           <LabelInput
             label="비밀번호 확인"
@@ -115,6 +117,7 @@ export function SignUp(): JSX.Element {
             placeholder="비밀번호를 다시 입력하세요"
             errorMessage={errors['confirm-password']}
             {...inputProps['confirm-password']}
+            aria-label="비밀번호 확인 인풋"
           />
           <LabelInput
             label="닉네임"
@@ -123,6 +126,7 @@ export function SignUp(): JSX.Element {
             placeholder="닉네임을 입력하세요"
             errorMessage={errors.nickname}
             {...inputProps.nickname}
+            aria-label="닉네임 인풋"
           />
         </div>
         <Button
