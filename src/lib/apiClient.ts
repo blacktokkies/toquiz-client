@@ -10,8 +10,8 @@ export const clearAccessToken = (): void => {
   _accessToken = '';
 };
 
-export class ApiError extends Error {
-  constructor(public response: Response, public data: any = undefined) {
+export class ApiError<T = any> extends Error {
+  constructor(public response: Response, public data: T) {
     super(`status ${response.status}: Failed to fetch`);
   }
 }
