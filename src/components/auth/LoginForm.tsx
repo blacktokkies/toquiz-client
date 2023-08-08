@@ -15,7 +15,7 @@ interface Props {
 const SignUpForm = ({ action }: Props): JSX.Element => {
   const { inputProps, errors, formProps } = useForm({
     inputConfigs: {
-      username: {
+      email: {
         validate: (value) => isEmail(value),
         errorMessage: '이메일 형식의 아이디를 입력하세요',
       },
@@ -27,8 +27,8 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
     },
     formConfig: {
       onSubmit: (data) => {
-        const { username, password } = data;
-        action({ username, password });
+        const { email, password } = data;
+        action({ email, password });
       },
     },
   });
@@ -38,11 +38,11 @@ const SignUpForm = ({ action }: Props): JSX.Element => {
       <div className="flex flex-col gap-5">
         <LabelInput
           label="아이디"
-          name="username"
+          name="email"
           required
           placeholder="아이디를 입력하세요"
-          errorMessage={errors.username}
-          {...inputProps.username}
+          errorMessage={errors.email}
+          {...inputProps.email}
         />
         <LabelInput
           label="비밀번호"

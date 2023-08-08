@@ -4,7 +4,7 @@ import { apiClient } from '@/lib/apiClient';
 import { apiUrl } from '@/lib/apiUrl';
 
 export interface SignUpBody {
-  username: User['username'];
+  email: User['email'];
   password: User['password'];
   nickname: User['nickname'];
 }
@@ -21,14 +21,14 @@ export const signUp = async (body: SignUpBody): Promise<SignUpResult> =>
     .then((data) => data.result);
 
 export interface LogInBody {
-  username: User['username'];
+  email: User['email'];
   password: User['password'];
 }
 
 export interface LogInResult {
   user: {
     id: User['id'];
-    username: User['username'];
+    email: User['email'];
     nickname: User['nickname'];
     createdAt: User['createdAt'];
   };
@@ -44,7 +44,7 @@ export const login = async (body: LogInBody): Promise<LogInResult> =>
 
 export interface GetMyInfoResult {
   id: User['id'];
-  username: User['username'];
+  email: User['email'];
   nickname: User['nickname'];
   provider: User['provider'];
   createdAt: User['createdAt'];
@@ -62,7 +62,7 @@ export const me = async (): Promise<GetMyInfoResult> =>
 export interface RefreshResult {
   user: {
     id: User['id'];
-    username: User['username'];
+    email: User['email'];
     nickname: User['nickname'];
     createdAt: User['createdAt'];
   };
@@ -78,7 +78,7 @@ export const refresh = async (): Promise<RefreshResult> =>
 
 export interface User {
   id: string;
-  username: string;
+  email: string;
   password: string;
   nickname: string;
   provider: string;

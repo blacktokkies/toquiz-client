@@ -32,7 +32,7 @@ export const signUp = rest.post<SignUpBody, never, SignUpResponse>(
 export const login = rest.post<LogInBody, never, LogInResponse>(
   `${API_BASE_URL}${apiUrl.auth.login()}`,
   async (req, res, ctx) => {
-    const { username }: LogInBody = await req.json();
+    const { email }: LogInBody = await req.json();
 
     return res(
       ctx.status(200),
@@ -41,8 +41,8 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
         statusCode: 200,
         result: {
           user: {
-            id: username,
-            username,
+            id: email,
+            email,
             nickname: 'dev nickname',
             createdAt: new Date(),
           },
@@ -70,7 +70,7 @@ export const me = rest.get<never, never, GetMyInfoResponse | ErrorResponse>(
           statusCode: 200,
           result: {
             id: 'dev id',
-            username: 'dev username',
+            email: 'dev email',
             nickname: 'dev nickname',
             provider: 'dev provider',
             createdAt: new Date(),
@@ -111,7 +111,7 @@ export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
           result: {
             user: {
               id: 'dev id',
-              username: 'dev username',
+              email: 'dev email',
               nickname: 'dev nickname',
               createdAt: new Date(),
             },
