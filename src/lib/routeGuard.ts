@@ -1,6 +1,6 @@
 import { me, refresh } from '@/lib/api/auth';
 import { ApiError, setAccessToken } from '@/lib/apiClient';
-import { setUser } from '@/store/userStore';
+import { setUserState } from '@/store/userStore';
 
 /**
  * ## 액세스 토큰 검증 및 재발급
@@ -16,7 +16,7 @@ async function checkAndRefreshAccessToken(): Promise<void> {
       try {
         const { accessToken, user } = await refresh();
         setAccessToken(accessToken);
-        setUser(user);
+        setUserState(user);
         await me();
       } catch (innerError) {
         throw e;

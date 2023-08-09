@@ -51,7 +51,7 @@ export function Login(): JSX.Element {
           {
             onSuccess: ({ accessToken, ...rest }) => {
               setAccessToken(accessToken);
-              setUser(rest);
+              setUser({ ...rest });
               navigate(`${next}`);
             },
             onError: (error, body) => {
