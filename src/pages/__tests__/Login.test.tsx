@@ -12,7 +12,7 @@ import { apiUrl } from '@/lib/apiUrl';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import { Login } from '@/pages/Login';
-import { getUserState } from '@/store/userStore';
+import { getUserState } from '@/stores/user-store';
 
 const navigateMockFn = vi.fn();
 
@@ -72,7 +72,9 @@ describe('로그인 페이지', () => {
       password: '비밀번호',
     });
 
-    expect(screen.getByText(/존재하지 않는 계정입니다/));
+    await waitFor(() => {
+      expect(screen.getByText(/존재하지 않는 계정입니다/));
+    });
   });
 
   it('사용자가 제출한 비밀번호가 일치하지 않으면 에러 메시지를 보여준다', async () => {

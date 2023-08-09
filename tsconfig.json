@@ -22,7 +22,7 @@
       "@/lib/*": ["src/lib/*"],
       "@/contexts/*": ["src/contexts/*"],
       "@/pages/*": ["src/pages/*"],
-      "@/store/*": ["src/store/*"],
+      "@/store/*": ["src/stores/*"],
       "@/mocks/*": ["src/mocks/*"],
       "@/*": ["src/*"]
     },
