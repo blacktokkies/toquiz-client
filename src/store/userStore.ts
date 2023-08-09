@@ -1,34 +1,51 @@
-import { devtools, persist } from 'zustand/middleware';
+import { devtools } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 
-export interface Member {
+export interface UserState {
   email: string;
   nickname: string;
   createdAt: string;
 }
 
-export interface UserState {
-  user: Member | null;
-  setUser: (newUser: Member | null) => void;
+export interface UserActions {
+  setUser: (newUser: UserState) => void;
+  updateUser: (user: Partial<UserState>) => void;
+  clearUser: () => void;
 }
 
-// https://docs.pmnd.rs/zustand/integrations/immer-middleware
-// https://github.com/pmndrs/zustand/blob/6be46fd900ef2c05c9db5939af0dc8c6c93a37ed/tests/middlewareTypes.test.tsx#L408-L424
-export const userStore = createStore<UserState>()(
-  devtools(
-    persist(
-      (set, get) => ({
-        user: null,
-        setUser: (newUser) => {
-          set((state) => ({ user: newUser }));
-        },
-      }),
-      { name: 'LOGIN_USER' },
-    ),
-  ),
+const initialUserState: UserState = {
+  email: '',
+  nickname: '',
+  createdAt: '',
+};
+
+export const userStore = createStore<UserState & UserActions>()(
+  devtools((set) => ({
+    ...initialUserState,
+    setUser: (newUser) => {
+      set(() => ({ ...newUser }));
+    },
+    updateUser: (user) => {
+      set(() => ({ ...user }));
+    },
+    clearUser: () => {
+      set(() => ({ ...initialUserState }));
+    },
+  })),
 );
 
-export const getUser = (): UserState['user'] => userStore.getState().user;
-export const setUser = (newUser: Member | null): void => {
-  userStore.getState().setUser(newUser);
+export const getUserState = (): UserState => {
+  const state = userStore.getState();
+  const { email, nickname, createdAt } = state;
+  return { email, nickname, createdAt };
+};
+
+export const setUserState = (newUser: UserState): void => {
+  const state = userStore.getState();
+  state.setUser(newUser);
+};
+
+export const clearUserState = (): void => {
+  const state = userStore.getState();
+  state.clearUser();
 };

@@ -18,7 +18,11 @@ export const homeLoader: LoaderFunction = async () => {
 };
 
 export const Home = (): JSX.Element => {
-  const user = useUserStore((state) => state.user);
+  const user = useUserStore(({ email, nickname, createdAt }) => ({
+    email,
+    nickname,
+    createdAt,
+  }));
 
   return (
     <div className="flex w-full h-full flex-col">
@@ -52,7 +56,7 @@ export const Home = (): JSX.Element => {
               <div role="img" aria-label="내 계정 아이콘">
                 <Account className="w-5 h-5" />
               </div>
-              <span className="text-sm">{user?.nickname}</span>
+              <span className="text-sm">{user.nickname}</span>
             </span>
           </div>
           <div className="flex flex-1 flex-col">

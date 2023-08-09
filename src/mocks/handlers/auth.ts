@@ -42,7 +42,7 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
         result: {
           email,
           nickname: 'dev-nickname',
-          createdAt: new Date().toString(),
+          createdAt: new Date().toDateString(),
           accessToken: 'dev-accessToken',
         },
       }),

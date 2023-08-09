@@ -12,7 +12,7 @@ import { apiUrl } from '@/lib/apiUrl';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import { Login } from '@/pages/Login';
-import { getUser } from '@/store/userStore';
+import { getUserState } from '@/store/userStore';
 
 const navigateMockFn = vi.fn();
 
@@ -42,7 +42,7 @@ describe('로그인 페이지', () => {
       password: '유효한 비밀번호',
     });
     await waitFor(() => {
-      expect(getUser()?.email).toBe('유효한 이메일');
+      expect(getUserState().email).toBe('유효한 이메일');
     });
     await waitFor(() => {
       expect(navigateMockFn).toHaveBeenCalledWith('/home');
