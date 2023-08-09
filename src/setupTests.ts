@@ -12,6 +12,8 @@ const IntersectionObserverMock = vi.fn(() => ({
 }));
 vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
 
+vi.mock('zustand');
+
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'error' });
 });
