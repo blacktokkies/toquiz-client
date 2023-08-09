@@ -9,9 +9,8 @@ export const createMockPanel = (): Panel => ({
   description: faker.lorem.sentence(),
   isArchived: faker.datatype.boolean(),
   scrapNum: faker.datatype.number({ min: 0, max: 100 }),
-  createdAt: new Date(),
-  deletedAt: null,
-  updatedAt: new Date(),
+  createdAt: new Date().toString(),
+  updatedAt: new Date().toString(),
 });
 
 export const createMockPanleList = (size: number): Panel[] =>
