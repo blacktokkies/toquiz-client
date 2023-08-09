@@ -74,7 +74,7 @@ export function SignUp(): JSX.Element {
                   `${nickname}은 이미 존재하는 닉네임입니다`,
                 );
               } else if (code === 'INVALID_PARAMETER') {
-                errors.forEach(({ field, message }) => {
+                new Set(errors.map(({ field }) => field)).forEach((field) => {
                   setError(field, SIGN_UP_ERROR_MESSAGE[field]);
                 });
               }
