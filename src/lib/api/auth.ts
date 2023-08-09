@@ -89,13 +89,11 @@ export type InvalidParameterLoginError = Omit<
 
 /* ================================ [회원 정보 API] ====================================== */
 export interface GetMyInfoResult {
-  id: Member['id'];
   email: Member['email'];
   nickname: Member['nickname'];
   provider: Member['provider'];
   createdAt: Member['createdAt'];
   updatedAt: Member['updatedAt'];
-  deletedAt: Member['deletedAt'];
 }
 
 export type GetMyInfoResponse = SuccessResponse<GetMyInfoResult>;
@@ -104,7 +102,6 @@ export type GetMyInfoResponse = SuccessResponse<GetMyInfoResult>;
 
 export interface RefreshResult {
   user: {
-    id: Member['id'];
     email: Member['email'];
     nickname: Member['nickname'];
     createdAt: Member['createdAt'];
@@ -117,12 +114,11 @@ export type RefreshResponse = SuccessResponse<RefreshResult>;
 /* ================================ [사용자 엔티티] ====================================== */
 
 export interface Member {
-  id: string;
   email: string;
   password: string;
   nickname: string;
   provider: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
 }

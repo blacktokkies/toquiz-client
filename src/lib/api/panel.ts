@@ -24,7 +24,7 @@ export interface Panel {
   description: string;
   isArchived: boolean;
   scrapNum: number;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
 }
