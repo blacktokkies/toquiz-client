@@ -14,11 +14,10 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       tsconfigPaths(),
-      mode !== 'test' &&
-        checker({
-          typescript: true,
-          eslint: { lintCommand: 'eslint "./src/**/*.{ts,tsx}"' },
-        }),
+      checker({
+        typescript: true,
+        eslint: { lintCommand: 'eslint "./src/**/*.{ts,tsx}"' },
+      }),
     ],
     server: {
       proxy: mode === 'proxy' && {
