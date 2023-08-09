@@ -68,7 +68,8 @@ export type LogInResponse = SuccessResponse<LogInResult>;
 
 export type LoginError =
   | NonExistentAccountLoginError
-  | PasswordMismatchLoginError;
+  | PasswordMismatchLoginError
+  | InvalidParameterLoginError;
 
 export type NonExistentAccountLoginError = Omit<ErrorResponse, 'code'> & {
   code: 'NON_EXISTENT_ACCOUNT';
@@ -76,6 +77,14 @@ export type NonExistentAccountLoginError = Omit<ErrorResponse, 'code'> & {
 
 export type PasswordMismatchLoginError = Omit<ErrorResponse, 'code'> & {
   code: 'MISMATCH_PASSWORD';
+};
+
+export type InvalidParameterLoginError = Omit<
+  ErrorResponse,
+  'code' | 'errors'
+> & {
+  code: 'INVALID_PARAMETER';
+  errors: Array<{ field: 'email' | 'password'; message: string }>;
 };
 
 /* ================================ [회원 정보 API] ====================================== */
