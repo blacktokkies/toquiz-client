@@ -6,7 +6,7 @@ import { redirect, Link } from 'react-router-dom';
 
 import { InfinitePanelGrid } from '@/components/home/InfinitePanelGrid';
 import { Logo, Account } from '@/components/vectors';
-import { useUserStore } from '@/hooks/store/useUserStore';
+import { useUserStore } from '@/hooks/stores/useUserStore';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 
 // https://reactrouter.com/en/main/fetch/redirect

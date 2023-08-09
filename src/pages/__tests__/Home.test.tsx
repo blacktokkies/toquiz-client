@@ -8,7 +8,7 @@ import { renderWithQueryClient } from '@/lib/test-utils';
 import { Home } from '@/pages/Home';
 
 describe('홈 페이지', () => {
-  vi.mock('@/hooks/store/useUserStore', () => {
+  vi.mock('@/hooks/stores/useUserStore', () => {
     const useUserStore = vi.fn();
     useUserStore.mockImplementation(() => ({
       nickname: '테스트 닉네임',
