@@ -4,6 +4,7 @@ import type {
   SignUpBody,
   SignUpResult,
   SignUpError,
+  LoginError,
 } from '@/lib/api/auth';
 import type { ApiError } from '@/lib/apiClient';
 import type { UseMutationResult } from '@tanstack/react-query';
@@ -29,7 +30,7 @@ export const useSignUpMutation = (): UseMutationResult<
 
 export const useLoginMutation = (): UseMutationResult<
   LogInResult,
-  ApiError | SyntaxError,
+  ApiError<LoginError | undefined> | SyntaxError,
   LogInBody
 > => {
   const key = queryKey.auth.login();

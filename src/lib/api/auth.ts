@@ -66,6 +66,18 @@ export interface LogInResult {
 
 export type LogInResponse = SuccessResponse<LogInResult>;
 
+export type LoginError =
+  | NonExistentAccountLoginError
+  | InvalidPasswordLoginError;
+
+export type NonExistentAccountLoginError = Omit<ErrorResponse, 'code'> & {
+  code: 'NON_EXISTENT_ACCOUNT';
+};
+
+export type InvalidPasswordLoginError = Omit<ErrorResponse, 'code'> & {
+  code: 'INVALID_PASSWORD';
+};
+
 /* ================================ [회원 정보 API] ====================================== */
 export interface GetMyInfoResult {
   id: Member['id'];

@@ -36,14 +36,14 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
 
     return res(
       ctx.status(200),
-      ctx.cookie('refreshToken', 'dev refreshToken', { httpOnly: true }),
+      ctx.cookie('refreshToken', 'dev-refreshToken', { httpOnly: true }),
       ctx.json({
         statusCode: 200,
         result: {
           email,
-          nickname: 'dev nickname',
+          nickname: 'dev-nickname',
           createdAt: new Date(),
-          accessToken: 'dev accessToken',
+          accessToken: 'dev-accessToken',
         },
       }),
     );

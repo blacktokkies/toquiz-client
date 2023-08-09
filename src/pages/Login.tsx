@@ -33,7 +33,7 @@ export function Login(): JSX.Element {
   const next = searchParams.get('next') ?? '/home';
 
   const loginMutation = useLoginMutation();
-  const { inputProps, errors, formProps, hasError } = useForm({
+  const { inputProps, errors, formProps, hasError, setError } = useForm({
     inputConfigs: {
       email: {
         validate: (value) => isEmail(value),
@@ -55,7 +55,16 @@ export function Login(): JSX.Element {
               navigate(`${next}`);
             },
             onError: (error, body) => {
-              console.log(error);
+              // TODO: SyntaxError 어떻게 핸들링할 지 생각해보기
+              if (error instanceof SyntaxError) return;
+              if (error.data === undefined) return;
+
+              const { email } = body;
+              const { code } = error.data;
+
+              if (code === 'NON_EXISTENT_ACCOUNT') {
+                setError('email', `${email}은 존재하지 않는 계정입니다`);
+              }
             },
           },
         );
