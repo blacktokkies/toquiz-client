@@ -68,14 +68,14 @@ export type LogInResponse = SuccessResponse<LogInResult>;
 
 export type LoginError =
   | NonExistentAccountLoginError
-  | InvalidPasswordLoginError;
+  | PasswordMismatchLoginError;
 
 export type NonExistentAccountLoginError = Omit<ErrorResponse, 'code'> & {
   code: 'NON_EXISTENT_ACCOUNT';
 };
 
-export type InvalidPasswordLoginError = Omit<ErrorResponse, 'code'> & {
-  code: 'INVALID_PASSWORD';
+export type PasswordMismatchLoginError = Omit<ErrorResponse, 'code'> & {
+  code: 'MISMATCH_PASSWORD';
 };
 
 /* ================================ [회원 정보 API] ====================================== */

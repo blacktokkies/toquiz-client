@@ -74,6 +74,32 @@ describe('로그인 페이지', () => {
 
     expect(screen.getByText(/존재하지 않는 계정입니다/));
   });
+
+  it('사용자가 제출한 비밀번호가 일치하지 않으면 에러 메시지를 보여준다', async () => {
+    overrideLoginResultWithError({
+      statusCode: 400,
+      code: 'MISMATCH_PASSWORD',
+      message: '비밀번호가 일치하지 않습니다',
+    });
+
+    const spyOnLogin = vi.spyOn(apis, 'login');
+
+    const { emailInput, passwordInput, submitButton } = setup();
+    fireEvent.change(emailInput, {
+      target: { value: '이메일' },
+    });
+    fireEvent.change(passwordInput, {
+      target: { value: '일치하지 않는 비밀번호' },
+    });
+    await userEvent.click(submitButton);
+
+    expect(spyOnLogin).toHaveBeenCalledWith({
+      email: '이메일',
+      password: '일치하지 않는 비밀번호',
+    });
+
+    expect(screen.getByText(/이메일과 비밀번호가 일치하지 않습니다/));
+  });
 });
 
 function overrideLoginResultWithError(data: ErrorResponse): void {
