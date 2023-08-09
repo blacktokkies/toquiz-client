@@ -42,7 +42,7 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
         result: {
           email,
           nickname: 'dev-nickname',
-          createdAt: new Date(),
+          createdAt: new Date().toString(),
           accessToken: 'dev-accessToken',
         },
       }),
@@ -66,13 +66,11 @@ export const me = rest.get<never, never, GetMyInfoResponse | ErrorResponse>(
         ctx.json({
           statusCode: 200,
           result: {
-            id: 'dev id',
             email: 'dev email',
             nickname: 'dev nickname',
             provider: 'dev provider',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            deletedAt: null,
+            createdAt: new Date().toString(),
+            updatedAt: new Date().toString(),
           },
         }),
       );
@@ -107,10 +105,9 @@ export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
           statusCode: 200,
           result: {
             user: {
-              id: 'dev id',
               email: 'dev email',
               nickname: 'dev nickname',
-              createdAt: new Date(),
+              createdAt: new Date().toString(),
             },
             accessToken: 'dev accessToken',
           },

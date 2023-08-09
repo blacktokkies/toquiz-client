@@ -4,7 +4,7 @@ import { createStore } from 'zustand/vanilla';
 export interface Member {
   email: string;
   nickname: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface UserState {
