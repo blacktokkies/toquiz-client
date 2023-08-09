@@ -1,6 +1,6 @@
 import { me, refresh } from '@/lib/api/auth';
 import { ApiError, setAccessToken } from '@/lib/apiClient';
-import { setUserState } from '@/store/userStore';
+import { setUserState } from '@/stores/user-store';
 
 /**
  * ## 액세스 토큰 검증 및 재발급
