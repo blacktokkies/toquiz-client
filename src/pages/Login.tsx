@@ -7,7 +7,7 @@ import { useSearchParams, useNavigate, Link, redirect } from 'react-router-dom';
 import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
 import { useLoginMutation } from '@/hooks/queries/auth';
-import { useUserStore } from '@/hooks/store/useUserStore';
+import { useUserStore } from '@/hooks/stores/useUserStore';
 import { useForm } from '@/hooks/useForm';
 import { setAccessToken } from '@/lib/apiClient';
 import { isUserLoggedIn } from '@/lib/routeGuard';
