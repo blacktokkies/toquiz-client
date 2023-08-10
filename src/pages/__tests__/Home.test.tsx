@@ -4,7 +4,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { it } from 'vitest';
 
-import { renderWithQueryClient } from '@/lib/test-utils';
+import { renderWithAllProviders } from '@/lib/test-utils';
 import { myPanelList } from '@/mocks/data/panel';
 import { Home } from '@/pages/Home';
 
@@ -18,7 +18,7 @@ describe('홈 페이지', () => {
   }));
 
   it('홈 페이지 헤더를 보여준다', () => {
-    renderWithQueryClient(
+    renderWithAllProviders(
       <MemoryRouter>
         <Home />
       </MemoryRouter>,
@@ -28,7 +28,7 @@ describe('홈 페이지', () => {
   });
 
   it('내 패널 모아보기 헤딩을 보여준다.', () => {
-    renderWithQueryClient(
+    renderWithAllProviders(
       <MemoryRouter>
         <Home />
       </MemoryRouter>,
@@ -38,7 +38,7 @@ describe('홈 페이지', () => {
   });
 
   it('사용자의 닉네임을 보여준다.', () => {
-    renderWithQueryClient(
+    renderWithAllProviders(
       <MemoryRouter>
         <Home />
       </MemoryRouter>,
@@ -48,7 +48,7 @@ describe('홈 페이지', () => {
   });
 
   it('사용자가 작성한 패널의 목록을 보여준다.', async () => {
-    renderWithQueryClient(
+    renderWithAllProviders(
       <MemoryRouter>
         <Home />
       </MemoryRouter>,
