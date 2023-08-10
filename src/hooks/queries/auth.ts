@@ -5,13 +5,15 @@ import type {
   SignUpResult,
   SignUpError,
   LoginError,
+  LogoutResult,
+  LogoutError,
 } from '@/lib/api/auth';
 import type { ApiError } from '@/lib/apiClient';
 import type { UseMutationResult } from '@tanstack/react-query';
 
 import { useMutation } from '@tanstack/react-query';
 
-import { login, signUp } from '@/lib/api/auth';
+import { login, logout, signUp } from '@/lib/api/auth';
 import { queryKey } from '@/lib/queryKey';
 
 export const useSignUpMutation = (): UseMutationResult<
@@ -38,6 +40,21 @@ export const useLoginMutation = (): UseMutationResult<
     key,
     login,
   );
+
+  return mutation;
+};
+
+export const useLogoutMutation = (): UseMutationResult<
+  LogoutResult,
+  ApiError<LogoutError | undefined> | SyntaxError,
+  LogoutResult
+> => {
+  const key = queryKey.auth.logout();
+  const mutation = useMutation<
+    LogoutResult,
+    ApiError<LogoutError | undefined> | SyntaxError,
+    LogoutResult
+  >(key, logout);
 
   return mutation;
 };
