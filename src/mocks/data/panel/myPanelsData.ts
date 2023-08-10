@@ -7,8 +7,6 @@ export const createMockPanel = (): Panel => ({
   userId: 'userId',
   title: faker.music.songName(),
   description: faker.lorem.sentence(),
-  isArchived: faker.datatype.boolean(),
-  scrapNum: faker.datatype.number({ min: 0, max: 100 }),
   createdAt: new Date().toDateString(),
   updatedAt: new Date().toDateString(),
 });
