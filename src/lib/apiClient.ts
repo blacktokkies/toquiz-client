@@ -51,9 +51,10 @@ export const apiClient = {
     url: string,
     queryParams?: QueryParams,
     headers?: HeadersInit,
+    needAuthorization = true,
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
-      Authorization: `Bearer ${_accessToken}`,
+      Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...headers,
     };
     const queryString = new URLSearchParams(queryParams).toString();
@@ -76,9 +77,10 @@ export const apiClient = {
     body?: RequestBody,
     queryParams?: QueryParams,
     headers?: HeadersInit,
+    needAuthorization = true,
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
-      Authorization: `Bearer ${_accessToken}`,
+      Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
@@ -102,9 +104,10 @@ export const apiClient = {
     url: string,
     queryParams?: QueryParams,
     headers?: HeadersInit,
+    needAuthorization = true,
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
-      Authorization: `Bearer ${_accessToken}`,
+      Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...headers,
     };
     const queryString = new URLSearchParams(queryParams).toString();
@@ -127,9 +130,10 @@ export const apiClient = {
     body?: RequestBody,
     queryParams?: QueryParams,
     headers?: HeadersInit,
+    needAuthorization = true,
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
-      Authorization: `Bearer ${_accessToken}`,
+      Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
@@ -155,9 +159,10 @@ export const apiClient = {
     body?: RequestBody,
     queryParams?: QueryParams,
     headers?: HeadersInit,
+    needAuthorization = true,
   ): Promise<ResponseBody> {
     const _headers: HeadersInit = {
-      Authorization: `Bearer ${_accessToken}`,
+      Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
