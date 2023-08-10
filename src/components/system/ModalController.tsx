@@ -32,7 +32,7 @@ export function ModalController({
   backdrop = true,
   vertical = 'middle',
   horizontal = 'center',
-  ariaLabel,
+  ariaLabel = '',
   close,
   children,
 }: Props & Omit<OverlayControllerProps, 'className' | 'style'>): JSX.Element {
