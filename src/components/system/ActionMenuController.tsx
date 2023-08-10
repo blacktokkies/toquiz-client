@@ -21,7 +21,7 @@ export function ActionMenuController({
       {backdrop && <Backdrop />}
       <OverlayController
         ariaLabel={ariaLabel}
-        className="absolute bg-white shadow-md"
+        className="absolute bg-white shadow-md right-0"
         style={style}
         close={close}
       >
