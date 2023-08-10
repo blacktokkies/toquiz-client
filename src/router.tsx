@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createBrowserRouter } from 'react-router-dom';
+import { Outlet, createBrowserRouter } from 'react-router-dom';
 
 import { Error } from '@/pages/Error';
 import { Home, homeLoader } from '@/pages/Home';
@@ -8,6 +8,8 @@ import { Index } from '@/pages/Index';
 import { Login, loginLoader } from '@/pages/Login';
 import { Root } from '@/pages/Root';
 import { SignUp, signupLoader } from '@/pages/SignUp';
+
+import { HomeHeader } from './components/home/HomeHeader';
 
 export const router = createBrowserRouter([
   {
@@ -30,9 +32,19 @@ export const router = createBrowserRouter([
         loader: loginLoader,
       },
       {
-        path: 'home',
-        element: <Home />,
-        loader: homeLoader,
+        element: (
+          <>
+            <HomeHeader />
+            <Outlet />
+          </>
+        ),
+        children: [
+          {
+            path: 'home',
+            element: <Home />,
+            loader: homeLoader,
+          },
+        ],
       },
     ],
   },

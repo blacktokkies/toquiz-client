@@ -2,12 +2,10 @@ import type { LoaderFunction } from 'react-router-dom';
 
 import React from 'react';
 
-import { redirect, Link } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
 
-import { AccountActionMenu } from '@/components/home/AccountActionMenu';
 import { InfinitePanelGrid } from '@/components/home/InfinitePanelGrid';
-import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
-import { Logo, Account } from '@/components/vectors';
+import { Account } from '@/components/vectors';
 import { useUserStore } from '@/hooks/stores/useUserStore';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 
@@ -28,32 +26,6 @@ export const Home = (): JSX.Element => {
 
   return (
     <div className="flex w-full h-full flex-col">
-      <header className="bg-white shadow-md">
-        <div className="container flex justify-between items-center max-w-7xl px-5 h-16">
-          <Link
-            to="/home"
-            className="hover:bg-grey-light rounded-full hover:shadow-lg"
-          >
-            <div role="img" aria-label="toquiz 로고">
-              <Logo className="h-11 w-11" />
-            </div>
-          </Link>
-          <OpenActionMenuArea
-            ariaLabel="내 계정 액션 메뉴"
-            open={({ close }) => <AccountActionMenu close={close} />}
-          >
-            <button
-              type="button"
-              className="hover:bg-grey-light rounded-full p-2"
-              aria-label="내 계정 아이콘"
-            >
-              <div role="img" aria-label="내 계정 아이콘">
-                <Account className="fill-grey-darkest" />
-              </div>
-            </button>
-          </OpenActionMenuArea>
-        </div>
-      </header>
       <div className="flex-1">
         <div className="container flex h-full max-w-7xl flex-col">
           <div className="flex flex-col items-start gap-5 px-5 py-7">
