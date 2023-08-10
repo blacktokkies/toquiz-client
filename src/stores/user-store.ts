@@ -1,5 +1,5 @@
+import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { createStore } from 'zustand/vanilla';
 
 export interface UserState {
   email: string;
@@ -13,14 +13,14 @@ export interface UserActions {
   clearUser: () => void;
 }
 
-const initialUserState: UserState = {
+export const initialUserState: UserState = {
   email: '',
   nickname: '',
   createdAt: '',
 };
 
-export const userStore = createStore<UserState & UserActions>()(
-  devtools((set) => ({
+export const userStore = createStore(
+  devtools<UserState & UserActions>((set) => ({
     ...initialUserState,
     setUser: (newUser) => {
       set(() => ({ ...newUser }));
@@ -48,4 +48,9 @@ export const setUserState = (newUser: UserState): void => {
 export const clearUserState = (): void => {
   const state = userStore.getState();
   state.clearUser();
+};
+
+export const updateUserState = (user: Partial<UserState>): void => {
+  const state = userStore.getState();
+  state.updateUser(user);
 };
