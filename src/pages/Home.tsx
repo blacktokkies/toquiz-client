@@ -5,6 +5,7 @@ import React from 'react';
 import { redirect, Link } from 'react-router-dom';
 
 import { InfinitePanelGrid } from '@/components/home/InfinitePanelGrid';
+import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
 import { Logo, Account } from '@/components/vectors';
 import { useUserStore } from '@/hooks/stores/useUserStore';
 import { isUserLoggedIn } from '@/lib/routeGuard';
@@ -36,14 +37,20 @@ export const Home = (): JSX.Element => {
               <Logo className="h-11 w-11" />
             </div>
           </Link>
-          <button
-            type="button"
-            className="hover:bg-grey-light rounded-full p-2"
+          <OpenActionMenuArea
+            ariaLabel="내 계정 액션 메뉴"
+            open={({ close }) => <div>내 계정 액션 메뉴</div>}
           >
-            <div role="img" aria-label="내 계정 아이콘">
-              <Account />
-            </div>
-          </button>
+            <button
+              type="button"
+              className="hover:bg-grey-light rounded-full p-2"
+              aria-label="내 계정 아이콘"
+            >
+              <div role="img" aria-label="내 계정 아이콘">
+                <Account className="fill-grey-darkest" />
+              </div>
+            </button>
+          </OpenActionMenuArea>
         </div>
       </header>
       <div className="flex-1">
