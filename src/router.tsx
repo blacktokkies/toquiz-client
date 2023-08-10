@@ -44,6 +44,7 @@ export const router = createBrowserRouter([
             element: <Home />,
             loader: homeLoader,
           },
+          { path: 'account', element: <div>내 계정 관리</div> },
         ],
       },
     ],
