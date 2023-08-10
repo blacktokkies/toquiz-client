@@ -2,14 +2,14 @@ import React from 'react';
 
 import { Outlet, createBrowserRouter } from 'react-router-dom';
 
+import { HomeHeader } from '@/components/home/HomeHeader';
+import { Account, accountLoader } from '@/pages/Account';
 import { Error } from '@/pages/Error';
 import { Home, homeLoader } from '@/pages/Home';
 import { Index } from '@/pages/Index';
 import { Login, loginLoader } from '@/pages/Login';
 import { Root } from '@/pages/Root';
 import { SignUp, signupLoader } from '@/pages/SignUp';
-
-import { HomeHeader } from './components/home/HomeHeader';
 
 export const router = createBrowserRouter([
   {
@@ -44,7 +44,7 @@ export const router = createBrowserRouter([
             element: <Home />,
             loader: homeLoader,
           },
-          { path: 'account', element: <div>내 계정 관리</div> },
+          { path: 'account', element: <Account />, loader: accountLoader },
         ],
       },
     ],
