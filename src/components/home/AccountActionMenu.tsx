@@ -28,6 +28,14 @@ export function AccountActionMenu({ close }: Props): JSX.Element {
       >
         내 패널 모아보기
       </button>
+      <button
+        type="button"
+        onClick={() => {
+          navigate('/account');
+        }}
+      >
+        내 계정 관리
+      </button>
     </div>
   );
 }

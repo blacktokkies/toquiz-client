@@ -43,4 +43,18 @@ describe('AccountActionMenu', () => {
     await userEvent.click(panelListButton);
     expect(navigateMockFn).toHaveBeenCalledWith('/home');
   });
+
+  it('내 계정 관리 버튼을 누르면 내 계정 관리 페이지로 이동한다', async () => {
+    render(
+      <MemoryRouter>
+        <AccountActionMenu close={handleClose} />
+      </MemoryRouter>,
+    );
+
+    const accountManageButton = screen.getByRole('button', {
+      name: /내 계정 관리/,
+    });
+    await userEvent.click(accountManageButton);
+    expect(navigateMockFn).toHaveBeenCalledWith('/account');
+  });
 });
