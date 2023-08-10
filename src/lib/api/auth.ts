@@ -27,7 +27,7 @@ export const login = async (body: LogInBody): Promise<LogInResult> =>
 
 export const logout = async (): Promise<LogoutResult> =>
   apiClient
-    .post<LogoutResponse>(apiUrl.auth.login())
+    .post<LogoutResponse>(apiUrl.auth.logout())
     .then((data) => data.result);
 
 export const me = async (): Promise<GetMyInfoResult> =>
@@ -106,8 +106,7 @@ export type InvalidPasswordLoginError = Omit<
 };
 
 /* ================================ [회원 정보 API] ====================================== */
-
-export type LogoutResult = never;
+export type LogoutResult = undefined;
 export type LogoutResponse = SuccessResponse<LogoutResult>;
 export type LogoutError = InvalidAccessTokenLogoutError;
 export type InvalidAccessTokenLogoutError = Omit<

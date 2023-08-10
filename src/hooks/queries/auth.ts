@@ -47,13 +47,12 @@ export const useLoginMutation = (): UseMutationResult<
 export const useLogoutMutation = (): UseMutationResult<
   LogoutResult,
   ApiError<LogoutError | undefined> | SyntaxError,
-  LogoutResult
+  void
 > => {
   const key = queryKey.auth.logout();
   const mutation = useMutation<
     LogoutResult,
-    ApiError<LogoutError | undefined> | SyntaxError,
-    LogoutResult
+    ApiError<LogoutError | undefined> | SyntaxError
   >(key, logout);
 
   return mutation;
