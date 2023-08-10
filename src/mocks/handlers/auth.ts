@@ -4,6 +4,7 @@ import type {
   SignUpBody,
   LogInBody,
   LogInResponse,
+  LogoutResponse,
   RefreshResponse,
   GetMyInfoResponse,
 } from '@/lib/api/auth';
@@ -50,6 +51,19 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
       }),
     );
   },
+);
+
+export const logout = rest.post<never, never, LogoutResponse>(
+  `${API_BASE_URL}${apiUrl.auth.logout()}`,
+  async (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.cookie('refreshToken', '', { expires: new Date() }),
+      ctx.json({
+        statusCode: 200,
+        result: undefined,
+      }),
+    ),
 );
 
 export const me = rest.get<never, never, GetMyInfoResponse | ErrorResponse>(
