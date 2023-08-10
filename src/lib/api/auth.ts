@@ -25,6 +25,11 @@ export const login = async (body: LogInBody): Promise<LogInResult> =>
     )
     .then((data) => data.result);
 
+export const logout = async (): Promise<LogoutResult> =>
+  apiClient
+    .post<LogoutResponse>(apiUrl.auth.login())
+    .then((data) => data.result);
+
 export const me = async (): Promise<GetMyInfoResult> =>
   apiClient
     .get<GetMyInfoResponse>(apiUrl.auth.me())
@@ -99,6 +104,20 @@ export type InvalidPasswordLoginError = Omit<
   code: 'INVALID_PASSWORD';
   statusCode: 400;
 };
+
+/* ================================ [회원 정보 API] ====================================== */
+
+export type LogoutResult = never;
+export type LogoutResponse = SuccessResponse<LogoutResult>;
+export type LogoutError = InvalidAccessTokenLogoutError;
+export type InvalidAccessTokenLogoutError = Omit<
+  ErrorResponse,
+  'code' | 'statusCode'
+> & {
+  code: 'INVALID_ACCESS_TOKEN';
+  statusCode: 401;
+};
+
 /* ================================ [회원 정보 API] ====================================== */
 export interface GetMyInfoResult {
   email: Member['email'];
