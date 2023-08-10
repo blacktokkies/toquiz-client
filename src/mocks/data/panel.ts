@@ -2,11 +2,11 @@ import type { Panel } from '@/lib/api/panel';
 
 import { faker } from '@faker-js/faker';
 
-import { me } from '@/mocks/data/auth';
+import { myAccount } from '@/mocks/data/auth';
 
 export const createMockPanel = (): Panel => ({
   id: faker.datatype.uuid(),
-  author: me.email,
+  author: myAccount.email,
   title: faker.music.songName(),
   description: faker.lorem.sentence(),
   createdAt: new Date().toDateString(),

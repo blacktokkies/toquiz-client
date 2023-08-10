@@ -13,11 +13,13 @@ import { rest } from 'msw';
 
 import { API_BASE_URL } from '@/lib/apiClient';
 import { apiUrl } from '@/lib/apiUrl';
+import { myAccount } from '@/mocks/data/auth';
 
 export const signUp = rest.post<SignUpBody, never, SignUpResponse>(
   `${API_BASE_URL}${apiUrl.auth.signup()}`,
   async (req, res, ctx) => {
     const { nickname }: SignUpBody = await req.json();
+    myAccount.nickname = nickname;
 
     return res(
       ctx.status(200),
@@ -33,6 +35,7 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
   `${API_BASE_URL}${apiUrl.auth.login()}`,
   async (req, res, ctx) => {
     const { email }: LogInBody = await req.json();
+    myAccount.email = email;
 
     return res(
       ctx.status(200),
@@ -40,9 +43,8 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
       ctx.json({
         statusCode: 200,
         result: {
+          ...myAccount,
           email,
-          nickname: 'dev-nickname',
-          createdAt: new Date().toDateString(),
           accessToken: 'dev-accessToken',
         },
       }),
@@ -66,10 +68,8 @@ export const me = rest.get<never, never, GetMyInfoResponse | ErrorResponse>(
         ctx.json({
           statusCode: 200,
           result: {
-            email: 'dev email',
-            nickname: 'dev nickname',
-            provider: 'dev provider',
-            createdAt: new Date().toString(),
+            ...myAccount,
+            provider: 'dev-provider',
             updatedAt: new Date().toString(),
           },
         }),
@@ -100,16 +100,14 @@ export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
     if (isValid)
       return res(
         ctx.status(200),
-        ctx.cookie('refreshToken', 'dev refresh token', { httpOnly: true }),
+        ctx.cookie('refreshToken', 'dev-refresh token', { httpOnly: true }),
         ctx.json({
           statusCode: 200,
           result: {
             user: {
-              email: 'dev email',
-              nickname: 'dev nickname',
-              createdAt: new Date().toString(),
+              ...myAccount,
             },
-            accessToken: 'dev accessToken',
+            accessToken: 'dev-accessToken',
           },
         }),
       );
