@@ -10,3 +10,5 @@ export const isPassword: Validator = (value) =>
   );
 export const isPanelTitle: Validator = (value) =>
   /^.{3,40}$/.test(value.trim());
+export const isPanelDescription: Validator = (value) =>
+  value.trim().length <= 50;

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { LabelInput } from '@/components/system/LabelInput';
 import { useForm } from '@/hooks/useForm';
-import { isPanelTitle } from '@/lib/validator';
+import { isPanelDescription, isPanelTitle } from '@/lib/validator';
 
 interface Props {
   close: () => void;
@@ -13,6 +13,10 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
       title: {
         validate: (value) => isPanelTitle(value),
         errorMessage: '패널 제목은 3 ~ 40자이어야 합니다',
+      },
+      desc: {
+        validate: (value) => isPanelDescription(value),
+        errorMessage: '패널 설명은 50자 이하여야 합니다',
       },
     },
   });
@@ -29,7 +33,14 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
           errorMessage={errors.title}
           {...inputProps.title}
         />
-        <LabelInput label="패널 설명" />
+        <LabelInput
+          label="패널 설명"
+          required
+          placeholder="패널 제목을 입력하세요"
+          aria-label="패널 설명 인풋"
+          errorMessage={errors.desc}
+          {...inputProps.desc}
+        />
         <button
           type="button"
           onClick={() => {

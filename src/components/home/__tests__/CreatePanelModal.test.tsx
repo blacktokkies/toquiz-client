@@ -35,14 +35,32 @@ describe('CretaePanelModal', () => {
   });
 
   it('유효하지 않은 패널 제목 입력하면 에러 메시지를 보여준다', () => {
+    vi.mock('@/lib/validator', () => ({
+      isPanelTitle: () => false,
+    }));
     render(<CreatePanelModal close={handleClose} />);
 
     const titleInput = screen.getByLabelText(/패널 제목 인풋/);
     fireEvent.change(titleInput, {
-      target: { value: '두자' },
+      target: { value: '유효하지 않은 패널 제목' },
     });
     expect(
       screen.getByText(/패널 제목은 3 ~ 40자이어야 합니다/),
+    ).toBeInTheDocument();
+  });
+
+  it('유효하지 않은 패널 설명 입력하면 에러 메시지를 보여준다', () => {
+    vi.mock('@/lib/validator', () => ({
+      isPanelDescription: () => false,
+    }));
+    render(<CreatePanelModal close={handleClose} />);
+
+    const descInput = screen.getByLabelText(/패널 설명 인풋/);
+    fireEvent.change(descInput, {
+      target: { value: '유효하지 않은 패널 설명' },
+    });
+    expect(
+      screen.getByText(/패널 설명은 50자 이하여야 합니다/),
     ).toBeInTheDocument();
   });
 });
