@@ -22,8 +22,8 @@ export function AccountActionMenu({ close }: Props): JSX.Element {
 
   return (
     <div className="flex flex-col divide-y divide-grey-light">
-      <div className="flex flex-col px-5 py-4">
-        <div className="font-medium ">{user.email}</div>
+      <div className="flex flex-col px-5 py-4 whitespace-nowrap">
+        <div className="font-medium">{user.email}</div>
         <div className="text-grey-dark">{user.nickname}</div>
       </div>
       <div className="flex flex-col py-1">
