@@ -103,7 +103,7 @@ export function Login(): JSX.Element {
         </div>
         <Button
           type="submit"
-          className="w-full"
+          className="w-full py-3 font-semibold"
           disabled={hasError || loginMutation.isLoading}
         >
           로그인

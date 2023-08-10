@@ -19,7 +19,7 @@ export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
   return (
     <button
       ref={ref}
-      className={`text-grey-darkest hover:bg-primary-hover min-h-[48px] min-w-[128px] rounded-md py-3 font-bold disabled:opacity-30 ${variantStyle[variant]} ${className}`}
+      className={`px-4 py-2 text-grey-darkest hover:bg-primary-hover rounded-md font-medium disabled:opacity-30 ${variantStyle[variant]} ${className}`}
       type="button"
       {...rest}
     />

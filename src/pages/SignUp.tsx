@@ -131,7 +131,7 @@ export function SignUp(): JSX.Element {
         </div>
         <Button
           type="submit"
-          className="w-full"
+          className="w-full py-3 font-semibold"
           disabled={hasError || signUpMutation.isLoading}
         >
           회원가입
