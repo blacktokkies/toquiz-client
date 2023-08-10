@@ -15,11 +15,9 @@ describe('InfinitePanelGrid', () => {
       expect(screen.queryByText(/loading/)).not.toBeInTheDocument();
     });
 
-    const openButton = screen.getByRole('button');
+    const openButton = screen.getByRole('button', { name: /패널 생성/ });
     await userEvent.click(openButton);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog', { name: '패널 생성 모달' }));
-    });
+    expect(screen.getByRole('dialog', { name: '패널 생성 모달' }));
   });
 });

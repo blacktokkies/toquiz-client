@@ -1,7 +1,10 @@
 import React, { useCallback } from 'react';
 
+import { clsx } from 'clsx';
+
 import { PanelGrid } from '@/components/home/PanelGrid';
 import { IntersectionArea } from '@/components/system/IntersectionArea';
+import { Add } from '@/components/vectors';
 import { useMyPanelsInfiniteQuery } from '@/hooks/queries/panel';
 import { useOverlay } from '@/hooks/useOverlay';
 
@@ -38,8 +41,19 @@ export const InfinitePanelGrid = (): JSX.Element => {
     <div className="flex-1 p-5 bg-off-white">
       <PanelGrid panelPages={panelsQuery.data.pages} />
       <IntersectionArea onIntersection={fetchPanels} />
-      <button type="button" onClick={handleClick}>
-        열기
+      <button
+        className={clsx(
+          'fixed bottom-0 right-0 m-8',
+          'rounded-full bg-primary border-solid border-4 border-white drop-shadow-xl',
+          'hover:bg-primary-hover focus:bg-primary-hover',
+        )}
+        type="button"
+        onClick={handleClick}
+        aria-label="패널 생성 아이콘"
+      >
+        <div role="img" aria-label="패널 생성 아이콘" className="fill-white">
+          <Add />
+        </div>
       </button>
     </div>
   );
