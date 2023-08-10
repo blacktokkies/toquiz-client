@@ -1,14 +1,20 @@
+import type * as Vi from 'vitest';
+
 import React from 'react';
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { CreatePanelModal } from '@/components/home/CreatePanelModal';
+import { isPanelTitle } from '@/lib/validator';
 
-const handleClose = vi.fn();
+vi.mock('@/lib/validator', () => ({
+  isPanelTitle: vi.fn(),
+  isPanelDescription: vi.fn(),
+}));
 
 describe('CretaePanelModal', () => {
-  afterEach(() => vi.resetAllMocks());
+  const handleClose = vi.fn();
 
   it('패널 생성하기 헤딩을 보여준다', () => {
     render(<CreatePanelModal close={handleClose} />);
@@ -29,45 +35,41 @@ describe('CretaePanelModal', () => {
     expect(handleClose).toBeCalled();
   });
 
-  describe('유효하지 않은 필드를 입력하면', () => {
-    vi.mock('@/lib/validator', () => ({
-      isPanelTitle: () => false,
-      isPanelDescription: () => false,
-    }));
+  it('유효하지 않은 패널 제목 입력하면 에러 메시지를 보여준다', () => {
+    (isPanelTitle as Vi.Mock).mockImplementation(() => false);
+    render(<CreatePanelModal close={handleClose} />);
 
-    it('유효하지 않은 패널 제목 입력하면 에러 메시지를 보여준다', () => {
-      render(<CreatePanelModal close={handleClose} />);
-
-      const titleInput = screen.getByLabelText(/패널 제목 인풋/);
-      fireEvent.change(titleInput, {
-        target: { value: '유효하지 않은 패널 제목' },
-      });
-      expect(
-        screen.getByText(/패널 제목은 3 ~ 40자이어야 합니다/),
-      ).toBeInTheDocument();
+    const titleInput = screen.getByLabelText(/패널 제목 인풋/);
+    fireEvent.change(titleInput, {
+      target: { value: '유효하지 않은 패널 제목' },
     });
+    expect(
+      screen.getByText(/패널 제목은 3 ~ 40자이어야 합니다/),
+    ).toBeInTheDocument();
+  });
 
-    it('유효하지 않은 패널 설명을 입력하면 에러 메시지를 보여준다', () => {
-      render(<CreatePanelModal close={handleClose} />);
+  it('유효하지 않은 패널 설명을 입력하면 에러 메시지를 보여준다', () => {
+    (isPanelTitle as Vi.Mock).mockImplementation(() => false);
+    render(<CreatePanelModal close={handleClose} />);
 
-      const titleInput = screen.getByLabelText(/패널 설명 인풋/);
-      fireEvent.change(titleInput, {
-        target: { value: '유효하지 않은 패널 설명' },
-      });
-      expect(
-        screen.getByText(/패널 설명은 50자 이하여야 합니다/),
-      ).toBeInTheDocument();
+    const titleInput = screen.getByLabelText(/패널 설명 인풋/);
+    fireEvent.change(titleInput, {
+      target: { value: '유효하지 않은 패널 설명' },
     });
+    expect(
+      screen.getByText(/패널 설명은 50자 이하여야 합니다/),
+    ).toBeInTheDocument();
+  });
 
-    it('유효하지 않은 필드를 제출하면 에러 메시지를 보여준다', async () => {
-      render(<CreatePanelModal close={handleClose} />);
+  it('유효하지 않은 필드를 제출하면 에러 메시지를 보여준다', async () => {
+    (isPanelTitle as Vi.Mock).mockImplementation(() => false);
+    render(<CreatePanelModal close={handleClose} />);
 
-      const submitButton = screen.getByRole('button', { name: '패널 생성' });
-      await userEvent.click(submitButton);
+    const submitButton = screen.getByRole('button', { name: '패널 생성' });
+    await userEvent.click(submitButton);
 
-      expect(
-        screen.getByText(/패널 제목은 3 ~ 40자이어야 합니다/),
-      ).toBeInTheDocument();
-    });
+    expect(
+      screen.getByText(/패널 제목은 3 ~ 40자이어야 합니다/),
+    ).toBeInTheDocument();
   });
 });
