@@ -14,5 +14,4 @@ export const createMockPanel = (): Panel => ({
 export const createMockPanleList = (size: number): Panel[] =>
   [...Array(size).keys()].map(createMockPanel);
 
-// TODO: myPanelsData로 이름 수정하기
-export const myPanelsData: Panel[] = createMockPanleList(60);
+export const myPanelList: Panel[] = createMockPanleList(60);
