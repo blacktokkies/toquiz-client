@@ -54,7 +54,6 @@ export interface SignUpResult {
 
 export type SignUpResponse = SuccessResponse<SignUpResult>;
 
-// TODO: code를 따로 정의한 상수나 type으로 다루도록 수정하기
 export type SignUpError = DuplicateSignUpError | InvalidParameterSignUpError;
 
 export type DuplicateSignUpError = Omit<ErrorResponse, 'code'> & {
@@ -84,27 +83,22 @@ export interface LogInResult {
 
 export type LogInResponse = SuccessResponse<LogInResult>;
 
-export type LoginError =
-  | NonExistentAccountLoginError
-  | PasswordMismatchLoginError
-  | InvalidParameterLoginError;
+export type LoginError = NotExistMemberLoginError | InvalidPasswordLoginError;
 
-export type NonExistentAccountLoginError = Omit<ErrorResponse, 'code'> & {
-  code: 'NON_EXISTENT_ACCOUNT';
-};
-
-export type PasswordMismatchLoginError = Omit<ErrorResponse, 'code'> & {
-  code: 'MISMATCH_PASSWORD';
-};
-
-export type InvalidParameterLoginError = Omit<
+export type NotExistMemberLoginError = Omit<
   ErrorResponse,
-  'code' | 'errors'
+  'code' | 'statusCode'
 > & {
-  code: 'INVALID_PARAMETER';
-  errors: Array<{ field: 'email' | 'password'; message: string }>;
+  code: 'NOT_EXIST_MEMBER';
 };
 
+export type InvalidPasswordLoginError = Omit<
+  ErrorResponse,
+  'code' | 'statusCode'
+> & {
+  code: 'INVALID_PASSWORD';
+  statusCode: 400;
+};
 /* ================================ [회원 정보 API] ====================================== */
 export interface GetMyInfoResult {
   email: Member['email'];

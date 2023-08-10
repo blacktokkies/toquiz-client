@@ -52,7 +52,7 @@ describe('로그인 페이지', () => {
   it('사용자가 제출한 이메일로 된 계정이 존재하지 않으면 에러 메시지를 보여준다', async () => {
     overrideLoginResultWithError({
       statusCode: 400,
-      code: 'NON_EXISTENT_ACCOUNT',
+      code: 'NOT_EXIST_MEMBER',
       message: '계정이 존재하지 않습니다',
     });
 
@@ -80,7 +80,7 @@ describe('로그인 페이지', () => {
   it('사용자가 제출한 비밀번호가 일치하지 않으면 에러 메시지를 보여준다', async () => {
     overrideLoginResultWithError({
       statusCode: 400,
-      code: 'MISMATCH_PASSWORD',
+      code: 'INVALID_PASSWORD',
       message: '비밀번호가 일치하지 않습니다',
     });
 
@@ -102,47 +102,6 @@ describe('로그인 페이지', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/이메일과 비밀번호가 일치하지 않습니다/));
-    });
-  });
-
-  it('유효하지 않은 이메일이나 비밀번호를 제출하면 에러 메시지를 보여준다', async () => {
-    overrideLoginResultWithError({
-      statusCode: 400,
-      code: 'INVALID_PARAMETER',
-      message: '유효하지 않은 파라미터가 포함되어 있습니다',
-      errors: [
-        {
-          field: 'password',
-          message:
-            '비밀번호는 영문자, 숫자, 특수기호를 반드시 포함해야 합니다.',
-        },
-        {
-          field: 'email',
-          message: '아이디는 이메일 형식으로 입력해주세요.',
-        },
-      ],
-    });
-
-    const spyOnLogin = vi.spyOn(apis, 'login');
-
-    const { emailInput, passwordInput, submitButton } = setup();
-    fireEvent.change(emailInput, {
-      target: { value: '유효하지 않은 이메일' },
-    });
-    fireEvent.change(passwordInput, {
-      target: { value: '유효하지 않은 비밀번호' },
-    });
-    await userEvent.click(submitButton);
-
-    expect(spyOnLogin).toHaveBeenCalledWith({
-      email: '유효하지 않은 이메일',
-      password: '유효하지 않은 비밀번호',
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.getByText(/이메일 형식의 아이디를 입력하세요/),
-      ).toBeInTheDocument();
     });
   });
 });

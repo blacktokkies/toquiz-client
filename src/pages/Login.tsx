@@ -60,16 +60,12 @@ export function Login(): JSX.Element {
               if (error.data === undefined) return;
 
               const { email } = body;
-              const { code, errors } = error.data;
+              const { code } = error.data;
 
-              if (code === 'NON_EXISTENT_ACCOUNT') {
+              if (code === 'NOT_EXIST_MEMBER') {
                 setError('email', `${email}은 존재하지 않는 계정입니다`);
-              } else if (code === 'MISMATCH_PASSWORD') {
+              } else if (code === 'INVALID_PASSWORD') {
                 setError('password', '이메일과 비밀번호가 일치하지 않습니다');
-              } else if (code === 'INVALID_PARAMETER') {
-                new Set(errors.map(({ field }) => field)).forEach((field) => {
-                  setError(field, LOGIN_ERROR_MESSAGE[field]);
-                });
               }
             },
           },
