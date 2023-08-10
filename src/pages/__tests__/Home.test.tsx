@@ -55,7 +55,7 @@ describe('홈 페이지', () => {
     );
 
     await waitFor(() => {
-      // TODO: myPanelsData 사용하려했는데 Cannot read properties of undefined 오류가 자꾸 뜬다
+      // TODO: myPanelList 사용하려했는데 Cannot read properties of undefined 오류가 자꾸 뜬다
       // 현재 Panel mock 데이터는 fakerjs로 생성하여 a가 무조건 포함되는 것을 기대할 수 있으므로
       // 일단 a가 출력되는지 보도록 한다.
       expect(screen.getByText(/a/i)).toBeInTheDocument();

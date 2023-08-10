@@ -5,7 +5,7 @@ import { rest } from 'msw';
 
 import { API_BASE_URL } from '@/lib/apiClient';
 import { apiUrl } from '@/lib/apiUrl';
-import { myPanelsData } from '@/mocks/data/panel/myPanelsData';
+import { myPanelList } from '@/mocks/data/panel';
 
 export interface GetMyPanelsParams {
   cursor: undefined | Panel['id'];
@@ -24,10 +24,10 @@ export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
 
     const start = Number(cursor);
     const end = start + 20;
-    const newPanelData = myPanelsData.slice(start, end);
+    const newPanelData = myPanelList.slice(start, end);
 
     let newNextCursor: undefined | Panel['id'];
-    if (end >= myPanelsData.length) newNextCursor = undefined;
+    if (end >= myPanelList.length) newNextCursor = undefined;
     else newNextCursor = String(end);
 
     return res(
