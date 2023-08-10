@@ -1,4 +1,5 @@
-import type { SuccessResponse } from './response';
+import type { Member } from '@/lib/api/auth';
+import type { SuccessResponse } from '@/lib/api/response';
 import type {
   GetMyPanelsParams,
   GetMyPanelsResponse,
@@ -33,7 +34,7 @@ export interface CreatePanelBody {
 
 export interface CreatePanelResult {
   id: Panel['id'];
-  userId: Panel['userId'];
+  author: Panel['author'];
   title: Panel['title'];
   description: Panel['description'];
   createdAt: Panel['createdAt'];
@@ -45,7 +46,7 @@ export type CreatePanelResponse = SuccessResponse<CreatePanelResult>;
 
 export interface Panel {
   id: string;
-  userId: string;
+  author: Member['email'];
   title: string;
   description?: string;
   createdAt: string;

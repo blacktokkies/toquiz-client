@@ -61,7 +61,7 @@ export const createPanel = rest.post<
       statusCode: 200,
       result: {
         id: faker.datatype.uuid(),
-        userId: 'userId',
+        author: 'author',
         title,
         description,
         createdAt: new Date().toDateString(),
