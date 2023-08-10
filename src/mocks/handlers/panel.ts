@@ -11,7 +11,7 @@ export interface GetMyPanelsParams {
   cursor: undefined | Panel['id'];
 }
 export interface GetMyPanelsResult {
-  cursor: undefined | Panel['id'];
+  cursor?: Panel['id'];
   panels: Panel[];
 }
 
