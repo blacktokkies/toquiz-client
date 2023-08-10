@@ -1,6 +1,7 @@
 const authQueryKey = {
   signup: () => ['signup'] as const,
   login: () => ['login'] as const,
+  logout: () => ['logout'] as const,
 } as const;
 
 const panelQueryKey = {
