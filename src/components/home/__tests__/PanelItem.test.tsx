@@ -2,7 +2,7 @@ import React from 'react';
 
 import { render } from '@testing-library/react';
 
-import { PanelItem } from '@/components/home/PanelItem';
+import { PanelItem, formatDateString } from '@/components/home/PanelItem';
 import { myPanelsData } from '@/mocks/data/panel/myPanelsData';
 
 describe('PanelItem', () => {
@@ -11,12 +11,6 @@ describe('PanelItem', () => {
 
     const { title, createdAt } = myPanelsData[0];
     expect(container).toHaveTextContent(title);
-    expect(container).toHaveTextContent(
-      new Date(createdAt).toLocaleString('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
-    );
+    expect(container).toHaveTextContent(formatDateString(createdAt));
   });
 });
