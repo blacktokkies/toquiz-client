@@ -117,9 +117,7 @@ export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
         ctx.json({
           statusCode: 200,
           result: {
-            user: {
-              ...myAccount,
-            },
+            ...myAccount,
             accessToken: 'dev-accessToken',
           },
         }),
