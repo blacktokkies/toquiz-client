@@ -8,7 +8,7 @@ interface Props {
   close: () => void;
 }
 export function CreatePanelModal({ close }: Props): JSX.Element {
-  const { inputProps, errors } = useForm({
+  const { inputProps, errors, formProps } = useForm({
     inputConfigs: {
       title: {
         validate: (value) => isPanelTitle(value),
@@ -19,12 +19,17 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
         errorMessage: '패널 설명은 50자 이하여야 합니다',
       },
     },
+    formConfig: {
+      onSubmit: () => {
+        close();
+      },
+    },
   });
 
   return (
     <div>
       <h2>패널 생성하기</h2>
-      <form aria-label="패널 생성" onSubmit={close}>
+      <form aria-label="패널 생성" {...formProps}>
         <LabelInput
           label="패널 제목"
           required
@@ -36,7 +41,7 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
         <LabelInput
           label="패널 설명"
           required
-          placeholder="패널 제목을 입력하세요"
+          placeholder="패널 설명을 입력하세요"
           aria-label="패널 설명 인풋"
           errorMessage={errors.desc}
           {...inputProps.desc}
