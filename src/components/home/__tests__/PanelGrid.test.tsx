@@ -18,4 +18,10 @@ describe('PanelGrid', () => {
 
     expect(screen.getByText(panelPages[0].panels[0].title)).toBeInTheDocument();
   });
+
+  it('패널 목록이 없으면 안내 문구를 보여준다', () => {
+    renderWithQueryClient(<PanelGrid panelPages={[]} />);
+
+    expect(screen.getByText(/아직 작성한 패널이 없습니다/)).toBeInTheDocument();
+  });
 });
