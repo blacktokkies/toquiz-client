@@ -5,6 +5,7 @@ import React, { useRef } from 'react';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 export type OverlayControllerProps = {
+  ariaLabel?: string;
   className?: string;
   style?: React.CSSProperties;
   close: () => void;
@@ -14,6 +15,7 @@ export function OverlayController({
   close,
   className = '',
   style = undefined,
+  ariaLabel = '',
   children,
 }: OverlayControllerProps): JSX.Element {
   const overlay = useRef<HTMLDivElement>(null);
@@ -21,7 +23,13 @@ export function OverlayController({
   useOutsideClick(overlay, close);
 
   return (
-    <div ref={overlay} role="dialog" className={className} style={style}>
+    <div
+      ref={overlay}
+      role="dialog"
+      className={className}
+      style={style}
+      aria-label={ariaLabel}
+    >
       {children}
     </div>
   );
