@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { it } from 'vitest';
 
@@ -57,5 +58,20 @@ describe('홈 페이지', () => {
     await waitFor(() => {
       expect(screen.getByText(myPanelList[0].title)).toBeInTheDocument();
     });
+  });
+
+  it('내 계정 아이콘을 누르면 계정 액션 메뉴를 보여준다', async () => {
+    renderWithAllProviders(
+      <MemoryRouter>
+        <Home />
+      </MemoryRouter>,
+    );
+
+    const accountButton = screen.getByRole('button', {
+      name: /내 계정/,
+    });
+    await userEvent.click(accountButton);
+
+    expect(screen.getByRole('dialog', { name: /내 계정 액션 메뉴/ }));
   });
 });

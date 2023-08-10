@@ -11,6 +11,7 @@ export interface Props {
 
 export function ActionMenuController({
   backdrop = false,
+  ariaLabel = undefined,
   style,
   close,
   children,
@@ -19,6 +20,7 @@ export function ActionMenuController({
     <>
       {backdrop && <Backdrop />}
       <OverlayController
+        ariaLabel={ariaLabel}
         className="absolute bg-white shadow-md"
         style={style}
         close={close}

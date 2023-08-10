@@ -7,8 +7,10 @@ import { useInsideClick } from '@/hooks/useInsideClick';
 
 interface Props {
   open: CreateOverlayContent;
+  ariaLabel?: string;
 }
 export function OpenActionMenuArea({
+  ariaLabel = undefined,
   open: ActionMenu,
   children,
 }: Props & React.PropsWithChildren): JSX.Element {
@@ -37,7 +39,7 @@ export function OpenActionMenuArea({
     <div ref={area} className="relative">
       {children}
       {open && (
-        <ActionMenuController close={handleClose}>
+        <ActionMenuController close={handleClose} ariaLabel={ariaLabel}>
           <ActionMenu close={handleClose} />
         </ActionMenuController>
       )}
