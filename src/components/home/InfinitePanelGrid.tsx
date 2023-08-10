@@ -2,13 +2,13 @@ import React, { useCallback } from 'react';
 
 import { clsx } from 'clsx';
 
+import { CreatePanelModal } from '@/components/home/CreatePanelModal';
 import { PanelGrid } from '@/components/home/PanelGrid';
 import { IntersectionArea } from '@/components/system/IntersectionArea';
+import { ModalController } from '@/components/system/ModalController';
 import { Add } from '@/components/vectors';
 import { useMyPanelsInfiniteQuery } from '@/hooks/queries/panel';
 import { useOverlay } from '@/hooks/useOverlay';
-
-import { ModalController } from '../system/ModalController';
 
 export const InfinitePanelGrid = (): JSX.Element => {
   const panelsQuery = useMyPanelsInfiniteQuery();
@@ -29,7 +29,7 @@ export const InfinitePanelGrid = (): JSX.Element => {
   function handleClick(): void {
     overlay.open(({ close }) => (
       <ModalController close={close} ariaLabel="패널 생성 모달">
-        <div>패널 생성 모달</div>
+        <CreatePanelModal close={close} />
       </ModalController>
     ));
   }
