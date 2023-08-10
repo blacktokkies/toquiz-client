@@ -5,12 +5,24 @@ import { apiUrl } from '@/lib/apiUrl';
 
 export const signUp = async (body: SignUpBody): Promise<SignUpResult> =>
   apiClient
-    .post<SignUpResponse, SignUpBody>(apiUrl.auth.signup(), body)
+    .post<SignUpResponse, SignUpBody>(
+      apiUrl.auth.signup(),
+      body,
+      undefined,
+      undefined,
+      false,
+    )
     .then((data) => data.result);
 
 export const login = async (body: LogInBody): Promise<LogInResult> =>
   apiClient
-    .post<LogInResponse, LogInBody>(apiUrl.auth.login(), body)
+    .post<LogInResponse, LogInBody>(
+      apiUrl.auth.login(),
+      body,
+      undefined,
+      undefined,
+      false,
+    )
     .then((data) => data.result);
 
 export const me = async (): Promise<GetMyInfoResult> =>
@@ -20,7 +32,13 @@ export const me = async (): Promise<GetMyInfoResult> =>
 
 export const refresh = async (): Promise<RefreshResult> =>
   apiClient
-    .post<RefreshResponse>(apiUrl.auth.refresh())
+    .post<RefreshResponse>(
+      apiUrl.auth.refresh(),
+      undefined,
+      undefined,
+      undefined,
+      false,
+    )
     .then((data) => data.result);
 
 /* ================================ [회원가입 API] ====================================== */
