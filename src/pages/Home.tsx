@@ -4,6 +4,7 @@ import React from 'react';
 
 import { redirect, Link } from 'react-router-dom';
 
+import { AccountActionMenu } from '@/components/home/AccountActionMenu';
 import { InfinitePanelGrid } from '@/components/home/InfinitePanelGrid';
 import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
 import { Logo, Account } from '@/components/vectors';
@@ -39,7 +40,7 @@ export const Home = (): JSX.Element => {
           </Link>
           <OpenActionMenuArea
             ariaLabel="내 계정 액션 메뉴"
-            open={({ close }) => <div>내 계정 액션 메뉴</div>}
+            open={({ close }) => <AccountActionMenu close={close} />}
           >
             <button
               type="button"
