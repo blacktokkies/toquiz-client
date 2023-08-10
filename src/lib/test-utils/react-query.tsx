@@ -8,7 +8,7 @@ import { render } from '@testing-library/react';
 
 // tanstack.com/query/v4/docs/react/guides/testing#turn-off-retries
 // tanstack.com/query/v4/docs/react/guides/testing#turn-off-network-error-logging
-const createQueryClient = (): QueryClient =>
+export const createQueryClient = (): QueryClient =>
   new QueryClient({
     defaultOptions: {
       queries: {
