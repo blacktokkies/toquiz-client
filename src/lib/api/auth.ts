@@ -131,14 +131,11 @@ export type GetMyInfoResponse = SuccessResponse<GetMyInfoResult>;
 /* ================================ [토큰 리프레쉬 API] ====================================== */
 
 export interface RefreshResult {
-  user: {
     email: Member['email'];
     nickname: Member['nickname'];
     createdAt: Member['createdAt'];
-  };
   accessToken: string;
 }
-
 export type RefreshResponse = SuccessResponse<RefreshResult>;
 
 /* ================================ [사용자 엔티티] ====================================== */
