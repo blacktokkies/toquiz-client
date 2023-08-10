@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { CreatePanelModal } from '@/components/home/CreatePanelModal';
@@ -32,5 +32,17 @@ describe('CretaePanelModal', () => {
     const createButton = screen.getByRole('button', { name: /패널 생성/ });
     await userEvent.click(createButton);
     expect(handleClose).toBeCalled();
+  });
+
+  it('유효하지 않은 패널 제목 입력하면 에러 메시지를 보여준다', () => {
+    render(<CreatePanelModal close={handleClose} />);
+
+    const titleInput = screen.getByLabelText(/패널 제목 인풋/);
+    fireEvent.change(titleInput, {
+      target: { value: '두자' },
+    });
+    expect(
+      screen.getByText(/패널 제목은 3 ~ 40자이어야 합니다/),
+    ).toBeInTheDocument();
   });
 });
