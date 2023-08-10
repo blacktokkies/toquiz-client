@@ -49,6 +49,10 @@ export function AccountActionMenu({ close }: Props): JSX.Element {
               clearUser();
               navigate('/login');
             },
+            onError: () => {
+              // TODO: invalid access token 나는 경우 어떻게 처리할지 생각하기
+              // onSuccess랑 똑같이 하거나 아니면 토스트 메시지, 모달 띄워주기
+            },
           });
         }}
       >
