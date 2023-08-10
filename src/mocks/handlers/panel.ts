@@ -1,6 +1,11 @@
-import type { Panel } from '@/lib/api/panel';
+import type {
+  CreatePanelResponse,
+  CreatePanelBody,
+  Panel,
+} from '@/lib/api/panel';
 import type { SuccessResponse } from '@/lib/api/response';
 
+import { faker } from '@faker-js/faker';
 import { rest } from 'msw';
 
 import { API_BASE_URL } from '@/lib/apiClient';
@@ -42,3 +47,25 @@ export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
     );
   },
 );
+
+export const createPanel = rest.post<
+  CreatePanelBody,
+  never,
+  CreatePanelResponse
+>(`${API_BASE_URL}${apiUrl.panel.create()}`, async (req, res, ctx) => {
+  const { title, description }: CreatePanelBody = await req.json();
+
+  return res(
+    ctx.status(200),
+    ctx.json({
+      statusCode: 200,
+      result: {
+        id: faker.datatype.uuid(),
+        userId: 'userId',
+        title,
+        description,
+        createdAt: new Date().toDateString(),
+      },
+    }),
+  );
+});
