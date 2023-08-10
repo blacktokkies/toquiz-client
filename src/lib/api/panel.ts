@@ -22,8 +22,6 @@ export interface Panel {
   userId: string;
   title: string;
   description: string;
-  isArchived: boolean;
-  scrapNum: number;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
