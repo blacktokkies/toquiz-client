@@ -23,7 +23,7 @@ export const InfinitePanelGrid = (): JSX.Element => {
   if (panelsQuery.isError) return <div>error occurred</div>;
 
   return (
-    <>
+    <div className="flex-1 p-5 pb-16 bg-off-white">
       <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {panelsQuery.data.pages.map((page) =>
           page.panels.map((panel) => (
@@ -32,6 +32,6 @@ export const InfinitePanelGrid = (): JSX.Element => {
         )}
       </ul>
       <IntersectionArea onIntersection={fetchPanels} />
-    </>
+    </div>
   );
 };
