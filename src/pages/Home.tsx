@@ -76,9 +76,7 @@ export const Home = (): JSX.Element => {
                 <span>최신순</span>
                 <span>총 3개</span>
               </div>
-              <div className="flex-1 p-5 pb-16 bg-off-white">
-                <InfinitePanelGrid />
-              </div>
+              <InfinitePanelGrid />
             </div>
           </div>
         </div>
