@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
 
-import { PanelItem } from '@/components/home/PanelItem';
 import { IntersectionArea } from '@/components/system/IntersectionArea';
 import { useMyPanelsInfiniteQuery } from '@/hooks/queries/panel';
+
+import { PanelGrid } from './PanelGrid';
 
 export const InfinitePanelGrid = (): JSX.Element => {
   const panelsQuery = useMyPanelsInfiniteQuery();
@@ -24,13 +25,7 @@ export const InfinitePanelGrid = (): JSX.Element => {
 
   return (
     <div className="flex-1 p-5 bg-off-white">
-      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 pb-16">
-        {panelsQuery.data.pages.map((page) =>
-          page.panels.map((panel) => (
-            <PanelItem key={panel.id} panel={panel} />
-          )),
-        )}
-      </ul>
+      <PanelGrid panelPages={panelsQuery.data.pages} />
       <IntersectionArea onIntersection={fetchPanels} />
     </div>
   );
