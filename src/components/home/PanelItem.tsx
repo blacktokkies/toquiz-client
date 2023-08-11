@@ -18,23 +18,31 @@ export const PanelItem = ({ panel }: Props): JSX.Element => {
       key={id}
       className="shadow-item hover:shadow-item-hover rounded-md bg-white py-4 px-5"
     >
-      <div className="flex flex-col gap-1 tracking-tight">
-        <div className="text-primary-dark truncate text-base font-bold">
-          {title}
-        </div>
-        <span className="text-grey-dark text-sm">
-          {formatDateString(createdAt)}
-        </span>
-        <OpenActionMenuArea
-          ariaLabel="패널 액션 메뉴"
-          open={({ close }) => <>패널 액션 메뉴</>}
-        >
-          <button type="button" aria-label="더보기">
-            <div role="img" aria-label="더보기 아이콘">
-              <More />
+      <div className="flex flex-col gap-3 tracking-tight">
+        <div className="flex justify-between items-start">
+          <div className="flex flex-col gap-1">
+            <div className="text-primary-dark truncate text-base font-bold">
+              {title}
             </div>
-          </button>
-        </OpenActionMenuArea>
+            <span className="text-grey-dark text-sm">
+              {formatDateString(createdAt)}
+            </span>
+          </div>
+          <OpenActionMenuArea
+            ariaLabel="패널 액션 메뉴"
+            open={({ close }) => <>패널 액션 메뉴</>}
+          >
+            <button type="button" aria-label="더보기">
+              <div
+                role="img"
+                aria-label="더보기 아이콘"
+                className="fill-grey-dark"
+              >
+                <More />
+              </div>
+            </button>
+          </OpenActionMenuArea>
+        </div>
         <span className="mt-3 text-grey-dark text-sm truncate hover:whitespace-normal">
           {description}
         </span>
