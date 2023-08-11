@@ -91,6 +91,7 @@ export function SignUp(): JSX.Element {
       <form className="flex w-full flex-col gap-8" {...formProps}>
         <div className="flex flex-col gap-5">
           <LabelInput
+            id="email"
             label="이메일"
             name="email"
             required
@@ -100,6 +101,7 @@ export function SignUp(): JSX.Element {
             aria-label="이메일 인풋"
           />
           <LabelInput
+            id="password"
             label="비밀번호"
             name="password"
             type="password"
@@ -110,6 +112,7 @@ export function SignUp(): JSX.Element {
             aria-label="비밀번호 인풋"
           />
           <LabelInput
+            id="confirm-password"
             label="비밀번호 확인"
             name="confirm-password"
             type="password"
@@ -120,6 +123,7 @@ export function SignUp(): JSX.Element {
             aria-label="비밀번호 확인 인풋"
           />
           <LabelInput
+            id="nickname"
             label="닉네임"
             name="nickname"
             required

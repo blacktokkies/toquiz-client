@@ -80,6 +80,7 @@ export function Login(): JSX.Element {
       <form className="flex w-full flex-col gap-8" {...formProps}>
         <div className="flex flex-col gap-5">
           <LabelInput
+            id="email"
             label="이메일"
             required
             placeholder="이메일을 입력하세요"
@@ -88,6 +89,7 @@ export function Login(): JSX.Element {
             aria-label="이메일 인풋"
           />
           <LabelInput
+            id="password"
             label="비밀번호"
             type="password"
             required

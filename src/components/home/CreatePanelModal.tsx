@@ -47,6 +47,7 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
         {...formProps}
       >
         <LabelInput
+          id="panel-title"
           label="패널 제목"
           required
           placeholder="패널 제목을 입력하세요"
@@ -55,6 +56,7 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
           {...inputProps.title}
         />
         <LabelInput
+          id="panel-description"
           label="패널 설명"
           placeholder="패널 설명을 입력하세요"
           aria-label="패널 설명 인풋"
