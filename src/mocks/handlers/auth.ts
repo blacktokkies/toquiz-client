@@ -12,8 +12,8 @@ import type { ErrorResponse } from '@/lib/api/types';
 
 import { rest } from 'msw';
 
+import { apiUrl } from '@/lib/api/consts';
 import { API_BASE_URL } from '@/lib/apiClient';
-import { apiUrl } from '@/lib/apiUrl';
 import { myAccount } from '@/mocks/data/auth';
 
 export const signUp = rest.post<SignUpBody, never, SignUpResponse>(
