@@ -4,12 +4,13 @@ import type * as Vi from 'vitest';
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { UpdatePanelActionModal } from '@/components/home/UpdatePanelActionModal';
+import { UpdatePanelModal } from '@/components/home/UpdatePanelModal';
+import * as panelApis from '@/lib/api/panel';
 import { renderWithQueryClient } from '@/lib/test-utils';
-import { isPanelTitle } from '@/lib/validator';
+import { isPanelDescription, isPanelTitle } from '@/lib/validator';
 
 vi.mock('@/lib/validator', () => ({
   isPanelTitle: vi.fn(),
@@ -30,7 +31,7 @@ const panel: Panel = {
 describe('UpdatePanelModal', () => {
   it('패널 수정하기 헤딩을 보여준다', () => {
     renderWithQueryClient(
-      <UpdatePanelActionModal close={handleClose} panel={panel} />,
+      <UpdatePanelModal close={handleClose} panel={panel} />,
     );
 
     expect(screen.getByRole('heading')).toHaveTextContent(/패널 수정하기/);
@@ -61,16 +62,40 @@ describe('UpdatePanelModal', () => {
       screen.getByText(/패널 제목은 3 ~ 40자이어야 합니다/),
     ).toBeInTheDocument();
   });
+
+  it('유효한 필드값을 제출하면 패널 수정 API를 호출하고 close 함수를 호출한다', async () => {
+    (isPanelTitle as Vi.Mock).mockImplementation(() => true);
+    (isPanelDescription as Vi.Mock).mockImplementation(() => true);
+    const spyOnUpdatePanel = vi.spyOn(panelApis, 'updatePanel');
+
+    const { titleInput, descInput, submitButton } = setup();
+    fireEvent.change(titleInput, {
+      target: { value: '유효한 패널 제목' },
+    });
+    fireEvent.change(descInput, {
+      target: { value: '유효한 패널 설명' },
+    });
+
+    await userEvent.click(submitButton);
+
+    expect(spyOnUpdatePanel).toHaveBeenCalledWith(panel.id, {
+      title: '유효한 패널 제목',
+      description: '유효한 패널 설명',
+    });
+
+    await waitFor(() => {
+      expect(handleClose).toHaveBeenCalled();
+    });
+  });
 });
 
 function setup(): {
   titleInput: HTMLInputElement;
   descInput: HTMLInputElement;
   closeButton: HTMLButtonElement;
+  submitButton: HTMLButtonElement;
 } {
-  renderWithQueryClient(
-    <UpdatePanelActionModal close={handleClose} panel={panel} />,
-  );
+  renderWithQueryClient(<UpdatePanelModal close={handleClose} panel={panel} />);
 
   const titleInput = screen.getByRole<HTMLInputElement>('textbox', {
     name: /패널 제목/,
@@ -81,6 +106,9 @@ function setup(): {
   const closeButton = screen.getByRole<HTMLButtonElement>('button', {
     name: /취소/,
   });
+  const submitButton = screen.getByRole<HTMLButtonElement>('button', {
+    name: /패널 수정/,
+  });
 
-  return { titleInput, descInput, closeButton };
+  return { titleInput, descInput, closeButton, submitButton };
 }
