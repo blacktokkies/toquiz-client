@@ -39,10 +39,10 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
   });
 
   return (
-    <div className="flex flex-col p-5 gap-4">
-      <h2 className="font-medium text-xl">패널 생성하기</h2>
+    <div className="flex flex-col p-7 gap-4">
+      <h2 className="font-medium text-lg">패널 생성하기</h2>
       <form
-        className="flex flex-col gap-5"
+        className="flex flex-col gap-3"
         aria-label="패널 생성"
         {...formProps}
       >
@@ -61,25 +61,24 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
           errorMessage={errors.description}
           {...inputProps.description}
         />
-        <div className="flex gap-3 justify-end">
-          <Button
-            type="button"
-            className="text-grey-dark bg-white hover:bg-grey-lighter font-normal"
-            onClick={() => {
-              close();
-            }}
-          >
-            취소
-          </Button>
-          <Button
-            type="submit"
-            disabled={hasError || createPanelMutation.isLoading}
-            className="px-4 py-2"
-          >
-            패널 생성
-          </Button>
-        </div>
       </form>
+      <div className="flex gap-3 justify-end">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => {
+            close();
+          }}
+        >
+          취소
+        </Button>
+        <Button
+          type="submit"
+          disabled={hasError || createPanelMutation.isLoading}
+        >
+          패널 생성
+        </Button>
+      </div>
     </div>
   );
 }
