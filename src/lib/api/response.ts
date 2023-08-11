@@ -1,5 +1,6 @@
 export interface SuccessResponse<T> {
   statusCode: number;
+  message?: string;
   result: T;
 }
 
