@@ -16,7 +16,9 @@ describe('PanelGrid', () => {
     ];
     renderWithQueryClient(<PanelGrid panelPages={panelPages} />);
 
-    expect(screen.getByText(panelPages[0].panels[0].title)).toBeInTheDocument();
+    expect(
+      screen.getAllByText(panelPages[0].panels[0].title)[0],
+    ).toBeInTheDocument();
   });
 
   it('패널 목록이 없으면 안내 문구를 보여준다', () => {

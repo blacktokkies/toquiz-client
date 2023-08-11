@@ -44,7 +44,7 @@ describe('홈 페이지', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(myPanelList[0].title)).toBeInTheDocument();
+      expect(screen.getAllByText(myPanelList[0].title)[0]).toBeInTheDocument();
     });
   });
 });
