@@ -1,4 +1,10 @@
-import type { CreatePanelBody, CreatePanelResult } from '@/lib/api/panel';
+import type {
+  CreatePanelBody,
+  CreatePanelResult,
+  Panel,
+  UpdatePanelBody,
+  UpdatePanelResult,
+} from '@/lib/api/panel';
 import type { ApiError } from '@/lib/apiClient';
 import type {
   GetMyPanelsParams,
@@ -11,7 +17,7 @@ import type {
 
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 
-import { createPanel, getMyPanels } from '@/lib/api/panel';
+import { createPanel, getMyPanels, updatePanel } from '@/lib/api/panel';
 import { queryKey } from '@/lib/queryKey';
 
 export const useMyPanelsInfiniteQuery = (): UseInfiniteQueryResult<
@@ -42,5 +48,22 @@ export const useCreatePanelMutation = (): UseMutationResult<
     ApiError | SyntaxError,
     CreatePanelBody
   >(key, createPanel);
+  return mutation;
+};
+
+export const useUpdatePanelMutation = (
+  panelId: Panel['id'],
+): UseMutationResult<
+  UpdatePanelResult,
+  ApiError | SyntaxError,
+  UpdatePanelBody
+> => {
+  const key = queryKey.panel.update();
+  const mutation = useMutation<
+    UpdatePanelResult,
+    ApiError | SyntaxError,
+    UpdatePanelBody
+  >(key, async (body) => updatePanel(panelId, body));
+
   return mutation;
 };
