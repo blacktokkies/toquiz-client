@@ -44,11 +44,11 @@ export function ModalController({
       {backdrop && <Backdrop />}
       <OverlayController
         className={clsx(
-          `fixed ${verticalAlignment} ${horizontalAlginment} w-11/12`,
+          `fixed ${verticalAlignment} ${horizontalAlginment} w-11/12 max-w-xl`,
           {
             '-translate-x-1/2 -translate-y-1/2': horizontal === 'center',
           },
-          'bg-white shadow-md rounded-sm',
+          'bg-white shadow-3xl rounded-lg',
         )}
         close={close}
         ariaLabel={ariaLabel}
