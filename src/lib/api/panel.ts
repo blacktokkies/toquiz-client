@@ -1,5 +1,5 @@
 import type { Member } from '@/lib/api/auth';
-import type { SuccessResponse } from '@/lib/api/response';
+import type { SuccessResponse } from '@/lib/api/types';
 import type {
   GetMyPanelsParams,
   GetMyPanelsResponse,

@@ -8,7 +8,7 @@ import type {
   RefreshResponse,
   GetMyInfoResponse,
 } from '@/lib/api/auth';
-import type { ErrorResponse } from '@/lib/api/response';
+import type { ErrorResponse } from '@/lib/api/types';
 
 import { rest } from 'msw';
 
