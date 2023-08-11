@@ -137,6 +137,17 @@ export interface RefreshResult {
   accessToken: string;
 }
 export type RefreshResponse = SuccessResponse<RefreshResult>;
+export type RefreshError =
+  | NotExistMemberLoginError
+  | InvalidRefreshTokenRefreshError;
+export type NotExistMemberRefreshError = ErrorResponse & {
+  code: 'NOT_EXIST_MEMBER';
+  statusCode: 404;
+};
+export type InvalidRefreshTokenRefreshError = ErrorResponse & {
+  code: 'INVALID_REFRESH_TOKEN';
+  statusCode: 401;
+};
 
 /* ================================ [사용자 엔티티] ====================================== */
 
