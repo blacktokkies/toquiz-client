@@ -8,7 +8,7 @@ import { rest } from 'msw';
 import { MemoryRouter } from 'react-router-dom';
 
 import * as apis from '@/lib/api/auth';
-import { apiUrl } from '@/lib/apiUrl';
+import { apiUrl } from '@/lib/api/consts';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import { Login } from '@/pages/Login';

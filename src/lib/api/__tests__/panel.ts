@@ -1,5 +1,5 @@
+import { apiUrl } from '@/lib/api/consts';
 import { createPanel, type CreatePanelBody } from '@/lib/api/panel';
-import { apiUrl } from '@/lib/apiUrl';
 
 describe('panel api', () => {
   it(`createPanel을 호출하면 패널 생성 API(${apiUrl.panel.create()})로 요청한다`, async () => {

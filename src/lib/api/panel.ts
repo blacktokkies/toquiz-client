@@ -6,8 +6,8 @@ import type {
   GetMyPanelsResult,
 } from '@/mocks/handlers/panel';
 
+import { apiUrl } from '@/lib/api/consts';
 import { apiClient } from '@/lib/apiClient';
-import { apiUrl } from '@/lib/apiUrl';
 
 export const getMyPanels = async (
   params: GetMyPanelsParams,
