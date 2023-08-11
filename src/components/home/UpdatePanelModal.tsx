@@ -14,9 +14,8 @@ type Props = CreateOverlayContentProps & {
 };
 
 export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
-  const { title, description, id } = panel;
-  const updateMutation = useUpdatePanelMutation(id);
-  const { inputProps, errors, formProps, hasError } = useForm({
+  const updateMutation = useUpdatePanelMutation(panel.id);
+  const { inputProps, errors, formProps, hasError, setError } = useForm({
     inputConfigs: {
       title: {
         validate: (value) => isPanelTitle(value),
@@ -29,6 +28,12 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
     },
     formConfig: {
       onSubmit: ({ title, description }) => {
+        if (title === panel.title && description === panel.description) {
+          setError('title', '수정된 패널 제목을 입력해주세요');
+          setError('description', '수정된 패널 설명을 입력해주세요');
+
+          return;
+        }
         updateMutation.mutate(
           { title, description },
           {
@@ -56,7 +61,7 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
           aria-label="패널 제목 인풋"
           errorMessage={errors.title}
           {...inputProps.title}
-          defaultValue={title}
+          defaultValue={panel.title}
         />
         <LabelInput
           id="panel-description"
@@ -65,7 +70,7 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
           aria-label="패널 설명 인풋"
           errorMessage={errors.description}
           {...inputProps.description}
-          defaultValue={description}
+          defaultValue={panel.description}
         />
       </form>
       <div className="flex gap-3 justify-end">
@@ -78,7 +83,11 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
         >
           취소
         </Button>
-        <Button type="submit" disabled={hasError} onClick={formProps.onSubmit}>
+        <Button
+          type="submit"
+          disabled={hasError || updateMutation.isLoading}
+          onClick={formProps.onSubmit}
+        >
           패널 수정
         </Button>
       </div>
