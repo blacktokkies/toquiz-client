@@ -5,6 +5,7 @@ import React from 'react';
 
 import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
+import { useUpdatePanelMutation } from '@/hooks/queries/panel';
 import { useForm } from '@/hooks/useForm';
 import { isPanelDescription, isPanelTitle } from '@/lib/validator';
 
@@ -12,8 +13,9 @@ type Props = CreateOverlayContentProps & {
   panel: Panel;
 };
 
-export function UpdatePanelActionModal({ close, panel }: Props): JSX.Element {
-  const { title, description } = panel;
+export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
+  const { title, description, id } = panel;
+  const updateMutation = useUpdatePanelMutation(id);
   const { inputProps, errors, formProps, hasError } = useForm({
     inputConfigs: {
       title: {
@@ -25,7 +27,18 @@ export function UpdatePanelActionModal({ close, panel }: Props): JSX.Element {
         errorMessage: '패널 설명은 50자 이하여야 합니다',
       },
     },
-    formConfig: {},
+    formConfig: {
+      onSubmit: ({ title, description }) => {
+        updateMutation.mutate(
+          { title, description },
+          {
+            onSuccess: () => {
+              close();
+            },
+          },
+        );
+      },
+    },
   });
 
   return (
