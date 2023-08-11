@@ -5,9 +5,9 @@ import userEvent from '@testing-library/user-event';
 
 import { SheetController } from '@/components/system/SheetController';
 
-describe('SheetController', () => {
-  const handleClose = vi.fn();
+const handleClose = vi.fn();
 
+describe('SheetController', () => {
   it('시트 안쪽을 누르면 close 함수가 호출되지 않는다', async () => {
     render(<SheetController close={handleClose}>시트</SheetController>);
 

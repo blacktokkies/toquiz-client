@@ -5,9 +5,9 @@ import userEvent from '@testing-library/user-event';
 
 import { ActionMenuController } from '@/components/system/ActionMenuController';
 
-describe('ActionMenuController', () => {
-  const handleClose = vi.fn();
+const handleClose = vi.fn();
 
+describe('ActionMenuController', () => {
   it('액션 메뉴 안쪽을 누르면 close 함수가 호출되지 않는다', async () => {
     render(
       <ActionMenuController close={handleClose}>

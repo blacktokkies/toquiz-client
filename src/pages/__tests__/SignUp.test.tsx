@@ -13,22 +13,19 @@ import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import { SignUp } from '@/pages/SignUp';
 
+vi.mock('@/lib/validator', () => ({
+  isEmail: vi.fn(() => true),
+  isNickname: vi.fn(() => true),
+  isPassword: vi.fn(() => true),
+}));
+
 const navigateMockFn = vi.fn();
+vi.mock('react-router-dom', async (importOriginal) => {
+  const router = (await importOriginal()) ?? {};
+  return { ...router, useNavigate: vi.fn(() => navigateMockFn) };
+});
 
 describe('회원가입 페이지', () => {
-  afterEach(() => vi.restoreAllMocks());
-
-  vi.mock('@/lib/validator', () => ({
-    isEmail: vi.fn(() => true),
-    isNickname: vi.fn(() => true),
-    isPassword: vi.fn(() => true),
-  }));
-
-  vi.mock('react-router-dom', async (importOriginal) => {
-    const router = (await importOriginal()) ?? {};
-    return { ...router, useNavigate: vi.fn(() => navigateMockFn) };
-  });
-
   it('유효한 형식의 이메일, 비밀번호, 닉네임을 제출하면 회원가입 API를 호출하고 로그인 페이지로 이동한다', async () => {
     const spyOnSignUp = vi.spyOn(apis, 'signUp');
 

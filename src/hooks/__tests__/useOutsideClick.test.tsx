@@ -5,16 +5,16 @@ import userEvent from '@testing-library/user-event';
 
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 
+const handleOutsideClick = vi.fn();
+
+function TestComponent(): JSX.Element {
+  const target = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(target, handleOutsideClick);
+  return <div ref={target}>타겟</div>;
+}
+
 describe('useOutsideClick', () => {
-  const handleOutsideClick = vi.fn();
-
-  function TestComponent(): JSX.Element {
-    const target = useRef<HTMLDivElement>(null);
-
-    useOutsideClick(target, handleOutsideClick);
-    return <div ref={target}>타겟</div>;
-  }
-
   it('target 내부를 클릭하면 onOutsideClick 함수가 호출되지 않는다', async () => {
     render(<TestComponent />);
 

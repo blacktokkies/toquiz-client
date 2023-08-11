@@ -6,16 +6,9 @@ import { MemoryRouter } from 'react-router-dom';
 import { renderWithAllProviders } from '@/lib/test-utils';
 import { myPanelList } from '@/mocks/data/panel';
 import { Home } from '@/pages/Home';
+import { setUserState } from '@/store/user-store';
 
 describe('홈 페이지', () => {
-  vi.mock('@/hooks/stores/useUserStore', () => ({
-    useUserStore: vi.fn(() => ({
-      nickname: '테스트 닉네임',
-      email: '테스트 이메일',
-      createdAt: new Date().toString(),
-    })),
-  }));
-
   it('내 패널 모아보기 헤딩을 보여준다.', () => {
     renderWithAllProviders(
       <MemoryRouter>
@@ -27,6 +20,11 @@ describe('홈 페이지', () => {
   });
 
   it('사용자의 닉네임을 보여준다.', () => {
+    setUserState({
+      email: '테스트 이메일',
+      nickname: '테스트 닉네임',
+      createdAt: new Date().toString(),
+    });
     renderWithAllProviders(
       <MemoryRouter>
         <Home />

@@ -23,7 +23,3 @@ afterEach(() => {
 afterAll(() => {
   server.close();
 });
-
-afterEach(() => {
-  vi.clearAllMocks();
-});
