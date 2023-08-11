@@ -66,7 +66,7 @@ export function UpdatePanelActionModal({ close, panel }: Props): JSX.Element {
           취소
         </Button>
         <Button type="submit" disabled={hasError} onClick={formProps.onSubmit}>
-          패널 취소
+          패널 수정
         </Button>
       </div>
       <h2 className="font-medium text-lg">패널 수정하기</h2>
