@@ -43,6 +43,7 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
 
   return (
     <div className="flex flex-col p-7 gap-4">
+      <h2 className="font-medium text-lg">패널 수정하기</h2>
       <form
         className="flex flex-col gap-3"
         aria-label="패널 수정"
@@ -86,7 +87,6 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
           패널 수정
         </Button>
       </div>
-      <h2 className="font-medium text-lg">패널 수정하기</h2>
     </div>
   );
 }
