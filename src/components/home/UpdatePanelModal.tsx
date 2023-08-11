@@ -16,7 +16,7 @@ type Props = CreateOverlayContentProps & {
 export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
   const updateMutation = useUpdatePanelMutation(panel.id);
 
-  const { inputProps, errors, formProps, hasError, setError } = useForm({
+  const { inputProps, errors, formProps, hasError } = useForm({
     inputConfigs: {
       title: {
         validate: (value) => isPanelTitle(value),
@@ -29,12 +29,6 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
     },
     formConfig: {
       onSubmit: ({ title, description }) => {
-        if (title === panel.title && description === panel.description) {
-          setError('title', '수정된 패널 제목을 입력해주세요');
-          setError('description', '수정된 패널 설명을 입력해주세요');
-
-          return;
-        }
         updateMutation.mutate(
           { title, description },
           {
