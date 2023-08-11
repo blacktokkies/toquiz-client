@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '@/lib/api/response';
+import type { ErrorResponse } from '@/lib/api/types';
 
 import React from 'react';
 

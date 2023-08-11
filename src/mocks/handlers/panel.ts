@@ -3,7 +3,7 @@ import type {
   CreatePanelBody,
   Panel,
 } from '@/lib/api/panel';
-import type { SuccessResponse } from '@/lib/api/response';
+import type { SuccessResponse } from '@/lib/api/types';
 
 import { faker } from '@faker-js/faker';
 import { rest } from 'msw';

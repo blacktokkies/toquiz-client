@@ -1,4 +1,4 @@
-import type { SuccessResponse, ErrorResponse } from '@/lib/api/response';
+import type { SuccessResponse, ErrorResponse } from '@/lib/api/types';
 
 import { apiClient } from '@/lib/apiClient';
 import { apiUrl } from '@/lib/apiUrl';
