@@ -49,9 +49,9 @@ export function Login(): JSX.Element {
         loginMutation.mutate(
           { email, password },
           {
-            onSuccess: ({ accessToken, ...rest }) => {
+            onSuccess: ({ accessToken, ...user }) => {
               setAccessToken(accessToken);
-              setUser({ ...rest });
+              setUser(user);
               navigate(`${next}`);
             },
             onError: (error, body) => {
@@ -63,6 +63,7 @@ export function Login(): JSX.Element {
               const { code } = error.data;
 
               if (code === 'NOT_EXIST_MEMBER') {
+                console.log('===============================');
                 setError('email', `${email}은 존재하지 않는 계정입니다`);
               } else if (code === 'INVALID_PASSWORD') {
                 setError('password', '이메일과 비밀번호가 일치하지 않습니다');

@@ -5,9 +5,9 @@ import userEvent from '@testing-library/user-event';
 
 import { OverlayController } from '@/components/system/OverlayController';
 
-describe('OverlayController', () => {
-  const handleClose = vi.fn();
+const handleClose = vi.fn();
 
+describe('OverlayController', () => {
   it('오버레이 안쪽을 누르면 close 함수가 호출되지 않는다', async () => {
     render(<OverlayController close={handleClose}>오버레이</OverlayController>);
 

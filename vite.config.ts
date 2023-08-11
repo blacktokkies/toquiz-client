@@ -35,6 +35,9 @@ export default defineConfig(({ mode }) => {
       coverage: {
         reporter: ['text', 'json', 'html'],
       },
+      clearMocks: true,
+      mockReset: true,
+      restoreMocks: true,
     },
   };
 });

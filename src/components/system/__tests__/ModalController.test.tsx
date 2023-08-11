@@ -5,9 +5,9 @@ import userEvent from '@testing-library/user-event';
 
 import { ModalController } from '@/components/system/ModalController';
 
-describe('ModalController', () => {
-  const handleClose = vi.fn();
+const handleClose = vi.fn();
 
+describe('ModalController', () => {
   it('모달 안쪽을 누르면 close 함수가 호출되지 않는다', async () => {
     render(<ModalController close={handleClose}>모달</ModalController>);
 

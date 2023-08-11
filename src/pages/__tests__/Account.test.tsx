@@ -4,8 +4,7 @@ import { screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import { renderWithAllProviders } from '@/lib/test-utils';
-
-import { Account } from '../Account';
+import { Account } from '@/pages/Account';
 
 describe('내 계정 관리 페이지', () => {
   it('내 계정 관리 헤딩을 보여준다.', () => {

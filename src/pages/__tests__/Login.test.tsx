@@ -14,21 +14,18 @@ import { server } from '@/mocks/server';
 import { Login } from '@/pages/Login';
 import { getUserState } from '@/stores/user-store';
 
+vi.mock('@/lib/validator', () => ({
+  isEmail: vi.fn(() => true),
+  isPassword: vi.fn(() => true),
+}));
+
 const navigateMockFn = vi.fn();
+vi.mock('react-router-dom', async (importOriginal) => {
+  const router = (await importOriginal()) ?? {};
+  return { ...router, useNavigate: vi.fn(() => navigateMockFn) };
+});
 
 describe('로그인 페이지', () => {
-  afterEach(() => vi.restoreAllMocks());
-
-  vi.mock('@/lib/validator', () => ({
-    isEmail: vi.fn(() => true),
-    isPassword: vi.fn(() => true),
-  }));
-
-  vi.mock('react-router-dom', async (importOriginal) => {
-    const router = (await importOriginal()) ?? {};
-    return { ...router, useNavigate: vi.fn(() => navigateMockFn) };
-  });
-
   it('유효한 형식의 이메일, 비밀번호를 제출하면 로그인 API를 호출하고 스토어에 저장한 후 홈 페이지로 이동한다', async () => {
     const spyOnLogin = vi.spyOn(apis, 'login');
 
@@ -41,6 +38,7 @@ describe('로그인 페이지', () => {
       email: '유효한 이메일',
       password: '유효한 비밀번호',
     });
+
     await waitFor(() => {
       expect(getUserState().email).toBe('유효한 이메일');
     });
@@ -73,7 +71,7 @@ describe('로그인 페이지', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText(/존재하지 않는 계정입니다/));
+      expect(screen.getByText(/존재하지 않는 계정입니다/)).toBeInTheDocument();
     });
   });
 
