@@ -1,13 +1,20 @@
 import type { Panel } from '@/lib/api/panel';
+import type * as Vi from 'vitest';
 
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { UpdatePanelActionModal } from '@/components/home/UpdatePanelActionModal';
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { isPanelTitle } from '@/lib/validator';
+
+vi.mock('@/lib/validator', () => ({
+  isPanelTitle: vi.fn(),
+  isPanelDescription: vi.fn(),
+}));
 
 const handleClose = vi.fn();
 
@@ -41,6 +48,18 @@ describe('UpdatePanelModal', () => {
     await userEvent.click(closeButton);
 
     expect(handleClose).toBeCalled();
+  });
+
+  it('유효하지 않은 필드값을 입력하면 에러 메시지를 보여준다', () => {
+    (isPanelTitle as Vi.Mock).mockImplementation(() => false);
+    const { titleInput } = setup();
+    fireEvent.change(titleInput, {
+      target: { value: '유효하지 않은 패널 제목' },
+    });
+
+    expect(
+      screen.getByText(/패널 제목은 3 ~ 40자이어야 합니다/),
+    ).toBeInTheDocument();
   });
 });
 
