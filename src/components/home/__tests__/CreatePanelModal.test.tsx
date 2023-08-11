@@ -17,26 +17,6 @@ vi.mock('@/lib/validator', () => ({
 
 const handleClose = vi.fn();
 
-function setup(): {
-  form: HTMLElement;
-  titleInput: HTMLElement;
-  descInput: HTMLElement;
-  closeButton: HTMLElement;
-  submitButton: HTMLElement;
-} {
-  renderWithQueryClient(<CreatePanelModal close={handleClose} />);
-
-  const form = screen.getByRole('form', { name: '패널 생성' });
-  const titleInput = screen.getByLabelText(/패널 제목 인풋/);
-  const descInput = screen.getByLabelText(/패널 설명 인풋/);
-  const closeButton = screen.getByRole('button', { name: /취소/ });
-  const submitButton = screen.getByRole('button', {
-    name: '패널 생성',
-  });
-
-  return { form, titleInput, descInput, closeButton, submitButton };
-}
-
 describe('CretaePanelModal', () => {
   it('패널 생성하기 헤딩을 보여준다', () => {
     setup();
@@ -116,3 +96,23 @@ describe('CretaePanelModal', () => {
     });
   });
 });
+
+function setup(): {
+  form: HTMLElement;
+  titleInput: HTMLElement;
+  descInput: HTMLElement;
+  closeButton: HTMLElement;
+  submitButton: HTMLElement;
+} {
+  renderWithQueryClient(<CreatePanelModal close={handleClose} />);
+
+  const form = screen.getByRole('form', { name: '패널 생성' });
+  const titleInput = screen.getByLabelText(/패널 제목 인풋/);
+  const descInput = screen.getByLabelText(/패널 설명 인풋/);
+  const closeButton = screen.getByRole('button', { name: /취소/ });
+  const submitButton = screen.getByRole('button', {
+    name: '패널 생성',
+  });
+
+  return { form, titleInput, descInput, closeButton, submitButton };
+}
