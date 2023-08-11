@@ -1,16 +1,17 @@
+import type { CreateOverlayContent } from '@/hooks/useOverlay';
 import type { Panel } from '@/lib/api/panel';
 
 import React from 'react';
 
+import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
 import { More } from '@/components/vectors/More';
-
-import { OpenActionMenuArea } from '../system/OpenActionMenuArea';
 
 interface Props {
   panel: Panel;
+  openActionMenu: CreateOverlayContent;
 }
 
-export const PanelItem = ({ panel }: Props): JSX.Element => {
+export const PanelItem = ({ panel, openActionMenu }: Props): JSX.Element => {
   const { id, title, createdAt, description } = panel;
 
   return (
@@ -28,10 +29,7 @@ export const PanelItem = ({ panel }: Props): JSX.Element => {
               {formatDateString(createdAt)}
             </span>
           </div>
-          <OpenActionMenuArea
-            ariaLabel="패널 액션 메뉴"
-            open={({ close }) => <>패널 액션 메뉴</>}
-          >
+          <OpenActionMenuArea ariaLabel="패널 액션 메뉴" open={openActionMenu}>
             <button type="button" aria-label="더보기">
               <div
                 role="img"

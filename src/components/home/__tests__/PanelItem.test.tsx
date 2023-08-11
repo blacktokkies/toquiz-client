@@ -7,7 +7,6 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { PanelItem } from '@/components/home/PanelItem';
-import { myPanelList } from '@/mocks/data/panel';
 
 const panel: Panel = {
   id: faker.datatype.uuid(),
@@ -18,20 +17,22 @@ const panel: Panel = {
   updatedAt: new Date().toDateString(),
 };
 
+const handleOpenActionMenu = vi.fn();
+
 describe('PanelItem', () => {
   it('패널 제목과 설명을 렌더링한다', () => {
-    render(<PanelItem panel={panel} />);
+    render(<PanelItem panel={panel} openActionMenu={handleOpenActionMenu} />);
 
     expect(screen.getByText(/패널 제목/)).toBeInTheDocument();
     expect(screen.getByText(/패널 설명/)).toBeInTheDocument();
   });
 
-  it('더보기 아이콘을 누르면 패널 액션 메뉴를 보여준다', async () => {
-    render(<PanelItem panel={myPanelList[0]} />);
+  it('더보기 아이콘을 누르면 openActionMenu 함수를 호출한다', async () => {
+    render(<PanelItem panel={panel} openActionMenu={handleOpenActionMenu} />);
 
     const moreButton = screen.getByRole('button', { name: /더보기/ });
     await userEvent.click(moreButton);
 
-    expect(screen.getByRole('dialog', { name: '패널 액션 메뉴' }));
+    expect(handleOpenActionMenu).toHaveBeenCalled();
   });
 });

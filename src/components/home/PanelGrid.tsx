@@ -1,16 +1,49 @@
+/* eslint-disable react/display-name */
+import type { CreateOverlayContentProps } from '@/hooks/useOverlay';
+import type { Panel } from '@/lib/api/panel';
 import type { GetMyPanelsResult } from '@/mocks/handlers/panel';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 
+import { PanelActionMenu } from '@/components/home/PanelActionMenu';
 import { PanelItem } from '@/components/home/PanelItem';
-
-import { Logo } from '../vectors';
+import { UpdatePanelModal } from '@/components/home/UpdatePanelModal';
+import { ModalController } from '@/components/system/ModalController';
+import { Logo } from '@/components/vectors';
+import { useOverlay } from '@/hooks/useOverlay';
 
 interface Props {
   panelPages: GetMyPanelsResult[];
 }
 
 export function PanelGrid({ panelPages }: Props): JSX.Element {
+  const overlay = useOverlay();
+
+  const handleUpdatePanel = useCallback(
+    (panel: Panel) => {
+      overlay.open(({ close }) => (
+        <ModalController close={close}>
+          <UpdatePanelModal close={close} panel={panel} />
+        </ModalController>
+      ));
+    },
+    [overlay],
+  );
+
+  const handlePanelActionMenu = useCallback(
+    (panel: Panel) =>
+      ({ close }: CreateOverlayContentProps) =>
+        (
+          <PanelActionMenu
+            close={close}
+            onUpdatePanelButtonClick={() => {
+              handleUpdatePanel(panel);
+            }}
+          />
+        ),
+    [handleUpdatePanel],
+  );
+
   if (panelPages.length === 0)
     return (
       <div className="w-full h-full flex flex-col justify-center items-center">
@@ -27,7 +60,13 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
   return (
     <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 pb-16">
       {panelPages.map((page) =>
-        page.panels.map((panel) => <PanelItem key={panel.id} panel={panel} />),
+        page.panels.map((panel) => (
+          <PanelItem
+            key={panel.id}
+            panel={panel}
+            openActionMenu={handlePanelActionMenu(panel)}
+          />
+        )),
       )}
     </ul>
   );
