@@ -2,24 +2,26 @@ import type { ButtonHTMLAttributes } from 'react';
 
 import React, { forwardRef } from 'react';
 
-const variantStyle = {
-  filled: 'bg-primary',
-  outlined: 'bg-white border border-primary',
+type Variant = 'primary' | 'secondary';
+
+const variantStyles: Record<Variant, string> = {
+  primary: 'bg-primary hover:bg-primary-hover text-grey-darkest font-medium',
+  secondary: 'bg-white hover:bg-grey-lighter text-grey-dark font-normal',
 } as const;
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: keyof typeof variantStyle;
+  variant?: Variant;
   className?: string;
 }
 
 export const Button = forwardRef<HTMLButtonElement, Props>(function Button(
-  { variant = 'filled', className = '', ...rest },
+  { variant = 'primary', className = '', ...rest },
   ref,
 ) {
   return (
     <button
       ref={ref}
-      className={`px-4 py-2 text-grey-darkest hover:bg-primary-hover rounded-md font-medium disabled:opacity-30 ${variantStyle[variant]} ${className}`}
+      className={`px-4 py-2 rounded-md disabled:opacity-30 ${variantStyles[variant]} ${className}`}
       type="button"
       {...rest}
     />
