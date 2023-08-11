@@ -33,6 +33,7 @@ export interface FormProps {
 
 const DEFAULT_ERROR_MESSAGE = '유효한 입력값이 아닙니다.';
 
+// TODO: 초기값을 전달받아 초기값과 사용자 입력값이 동일함을 나타내는 불 변수를 반환한다
 export const useForm = <T extends string>({
   inputConfigs,
   formConfig = null,
