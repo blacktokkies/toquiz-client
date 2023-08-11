@@ -1,3 +1,5 @@
+import type { CreateOverlayContentProps } from '@/hooks/useOverlay';
+
 import React from 'react';
 
 import { Button } from '@/components/system/Button';
@@ -6,9 +8,7 @@ import { useCreatePanelMutation } from '@/hooks/queries/panel';
 import { useForm } from '@/hooks/useForm';
 import { isPanelDescription, isPanelTitle } from '@/lib/validator';
 
-interface Props {
-  close: () => void;
-}
+type Props = CreateOverlayContentProps;
 export function CreatePanelModal({ close }: Props): JSX.Element {
   const createPanelMutation = useCreatePanelMutation();
   const { inputProps, errors, formProps, hasError } = useForm({
