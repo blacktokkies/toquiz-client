@@ -1,9 +1,9 @@
-import type { ChangeEventHandler, FormEvent, FormEventHandler } from 'react';
+import type { ChangeEvent, FormEvent, MouseEvent } from 'react';
 
 import { useCallback, useRef, useState, useMemo } from 'react';
 
 export interface InputConfig<T extends string> {
-  onChange?: ChangeEventHandler;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   validate?: (
     value: string,
     refs: Partial<Record<T, HTMLInputElement>>,
@@ -12,18 +12,23 @@ export interface InputConfig<T extends string> {
 }
 
 export interface FormConfig<T extends string> {
-  onSubmit?: (data: Record<T, string>, e: FormEvent<HTMLFormElement>) => void;
+  onSubmit?: (
+    data: Record<T, string>,
+    e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+  ) => void;
 }
 
 export interface InputProps {
   name: string;
   ref: (ref: HTMLInputElement) => void;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface FormProps {
   ref: (ref: HTMLFormElement) => void;
-  onSubmit?: FormEventHandler;
+  onSubmit?: (
+    e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+  ) => void;
 }
 
 const DEFAULT_ERROR_MESSAGE = '유효한 입력값이 아닙니다.';
@@ -102,10 +107,13 @@ export const useForm = <T extends string>({
 
     const { onSubmit } = formConfig;
 
-    function handleSubmit(e: FormEvent<HTMLFormElement>): void {
+    function handleSubmit(
+      e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+    ): void {
       e.preventDefault();
+      if (formRef.current === null) return;
 
-      const formData = new FormData(e.currentTarget);
+      const formData = new FormData(formRef.current);
       const formDataRecord = Object.fromEntries(formData) as Record<T, string>;
       const formDataEntries = Object.entries(formDataRecord) as Array<
         [T, string]

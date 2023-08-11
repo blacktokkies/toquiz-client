@@ -75,6 +75,7 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
         <Button
           type="submit"
           disabled={hasError || createPanelMutation.isLoading}
+          onClick={formProps.onSubmit}
         >
           패널 생성
         </Button>
