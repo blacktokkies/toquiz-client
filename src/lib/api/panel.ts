@@ -26,6 +26,14 @@ export const createPanel = async (
     .post<CreatePanelResponse, CreatePanelBody>(apiUrl.panel.create(), body)
     .then((data) => data.result);
 
+export const updatePanel = async (
+  id: Panel['id'],
+  body: UpdatePanelBody,
+): Promise<UpdatePanelResult> =>
+  apiClient
+    .patch<UpdatePanelResponse, UpdatePanelBody>(apiUrl.panel.update(id), body)
+    .then((data) => data.result);
+
 /* ================================ [패널 생성 API] ====================================== */
 export interface CreatePanelBody {
   title: string;
@@ -42,6 +50,26 @@ export interface CreatePanelResult {
 
 export type CreatePanelResponse = SuccessResponse<CreatePanelResult>;
 
+/* ================================ [패널 수정 API] ====================================== */
+export interface UpdatePanelBody {
+  title: string;
+  description?: string;
+}
+
+export interface UpdatePanelResult {
+  id: Panel['id'];
+  author: Panel['author'];
+  title: Panel['title'];
+  description: Panel['description'];
+  createdAt: Panel['createdAt'];
+  updatedAt: Panel['createdAt'];
+}
+
+export type UpdatePanelResponse = SuccessResponse<UpdatePanelResult>;
+
+export interface UpdatePanelPathParams {
+  panelId: Panel['id'];
+}
 /* ================================ [패널 엔티티] ====================================== */
 
 export interface Panel {
