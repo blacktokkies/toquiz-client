@@ -16,7 +16,7 @@ const CreateInput = forwardRef<HTMLInputElement, Props>(function Input(
     <>
       <input
         className={clsx(
-          'py-3 px-4 border border-grey-light outline-none bg-off-white',
+          'py-3 px-4 border border-grey-light outline-none rounded-md bg-off-white',
           'text-md text-grey-darkest placeholder:text-grey',
           'hover:border-primary focus:border-primary focus:bg-white',
           'disabled:bg-grey-light disabled:hover:border-grey-light disabled:pointer-events-none',
