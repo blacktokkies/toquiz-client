@@ -15,7 +15,7 @@ const CreateLabelInput = forwardRef<HTMLInputElement, Props>(
       <div className="flex flex-col gap-2">
         <label
           htmlFor={id}
-          className="flex items-center gap-[1px] text-grey-darkest font-medium"
+          className="flex items-center gap-[1px] text-grey-dark font-medium"
         >
           {label}
           {required && (
