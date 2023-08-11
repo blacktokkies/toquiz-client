@@ -2,6 +2,9 @@ import type {
   CreatePanelResponse,
   CreatePanelBody,
   Panel,
+  UpdatePanelBody,
+  UpdatePanelResponse,
+  UpdatePanelPathParams,
 } from '@/lib/api/panel';
 import type { SuccessResponse } from '@/lib/api/types';
 
@@ -11,6 +14,8 @@ import { rest } from 'msw';
 import { apiUrl } from '@/lib/api/consts';
 import { API_BASE_URL } from '@/lib/apiClient';
 import { myPanelList } from '@/mocks/data/panel';
+
+import { myAccount } from '../data/auth';
 
 export interface GetMyPanelsParams {
   cursor: undefined | Panel['id'];
@@ -69,3 +74,30 @@ export const createPanel = rest.post<
     }),
   );
 });
+
+export const updatePanel = rest.patch<
+  UpdatePanelBody,
+  UpdatePanelPathParams,
+  UpdatePanelResponse
+>(
+  `${API_BASE_URL}${apiUrl.panel.update(':panelId')}`,
+  async (req, res, ctx) => {
+    const { title, description }: UpdatePanelBody = await req.json();
+    const { panelId } = req.params;
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        statusCode: 200,
+        result: {
+          id: panelId,
+          author: myAccount.email,
+          title,
+          description,
+          createdAt: new Date().toDateString(),
+          updatedAt: new Date().toDateString(),
+        },
+      }),
+    );
+  },
+);
