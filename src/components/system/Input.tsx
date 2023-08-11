@@ -18,7 +18,7 @@ const CreateInput = forwardRef<HTMLInputElement, Props>(function Input(
         className={clsx(
           'py-3 px-4 border border-grey-light outline-none rounded-md bg-off-white',
           'text-md text-grey-darkest placeholder:text-grey',
-          'hover:border-primary focus:border-primary focus:bg-white',
+          'hover:border-primary hover:bg-white focus:border-primary focus:bg-white',
           'disabled:bg-grey-light disabled:hover:border-grey-light disabled:pointer-events-none',
         )}
         ref={ref}
