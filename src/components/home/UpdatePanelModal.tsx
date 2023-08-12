@@ -32,7 +32,7 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
       onSubmit: ({ title, description }) => {
         if (title === panel.title && description === panel.description) {
           if (messageRef.current)
-            messageRef.current.textContent = '※수정된 값을 입력해주세요!';
+            messageRef.current.textContent = '※수정된 값을 입력해주세요';
           if (inputRefs.current?.title) inputRefs.current.title.focus();
           return;
         }
@@ -77,8 +77,8 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
           defaultValue={panel.description}
         />
       </form>
+      <div ref={messageRef} className="text-primary" />
       <div className="flex gap-3 justify-end items-center">
-        <div ref={messageRef} className="text-primary" />
         <Button
           type="button"
           variant="secondary"
