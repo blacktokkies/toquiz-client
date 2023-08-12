@@ -5,7 +5,7 @@ const auth = {
   update: () => `/api/auth/update`,
   signout: () => `/api/auth/signout`,
   refresh: () => `/api/auth/refresh`,
-  me: () => `/api/auth/me`,
+  me: () => `/api/members/me`,
 } as const;
 
 const panel = {
