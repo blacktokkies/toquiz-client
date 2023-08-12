@@ -12,7 +12,7 @@ const {
 // a variable to hold reset functions for all stores declared in the app
 export const storeResetFns = new Set<() => void>();
 
-// when creating a store, we get its initial state, create a reset function and add it in the set
+// when creating a bound store, we get its initial state, create a reset function and add it in the set
 export const create = (<T>() =>
   (stateCreator: zustand.StateCreator<T>) => {
     const store = actualCreate<T>(stateCreator);
@@ -23,6 +23,7 @@ export const create = (<T>() =>
     return store;
   }) as typeof zustand.create;
 
+// when creating a vanilla store, we get its initial state, create a reset function and add it in the set
 export const createStore = <T>(
   initializer: zustand.StateCreator<T>,
 ): zustand.StoreApi<T> => {
