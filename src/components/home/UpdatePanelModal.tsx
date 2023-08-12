@@ -1,7 +1,7 @@
 import type { CreateOverlayContentProps } from '@/hooks/useOverlay';
 import type { Panel } from '@/lib/api/panel';
 
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
@@ -15,8 +15,9 @@ type Props = CreateOverlayContentProps & {
 
 export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
   const updateMutation = useUpdatePanelMutation(panel.id);
+  const messageRef = useRef<HTMLDivElement | null>(null);
 
-  const { inputProps, errors, formProps, hasError } = useForm({
+  const { inputProps, errors, formProps, hasError, inputRefs } = useForm({
     inputConfigs: {
       title: {
         validate: (value) => isPanelTitle(value),
@@ -29,6 +30,13 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
     },
     formConfig: {
       onSubmit: ({ title, description }) => {
+        if (title === panel.title && description === panel.description) {
+          if (messageRef.current)
+            messageRef.current.textContent = '※수정된 값을 입력해주세요!';
+          if (inputRefs.current?.title) inputRefs.current.title.focus();
+          return;
+        }
+
         updateMutation.mutate(
           { title, description },
           {
@@ -69,7 +77,8 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
           defaultValue={panel.description}
         />
       </form>
-      <div className="flex gap-3 justify-end">
+      <div className="flex gap-3 justify-end items-center">
+        <div ref={messageRef} className="text-primary" />
         <Button
           type="button"
           variant="secondary"
