@@ -18,7 +18,7 @@ export function useOverlay(): {
 
   if (context === null)
     throw new Error(
-      'Error: OverlayContext not found. Make sure you are using the ModalProvider higher up in the component tree.',
+      'Error: OverlayContext not found. Use OverlayProvider higher up in the component tree',
     );
 
   const { mount, unmount } = context;
