@@ -81,20 +81,22 @@ describe('useForm', () => {
     });
   });
 
-  describe('onSubmit은', () => {
-    it('모든 input에 validation 오류가 없으면 onSubmit은 실행된다', () => {
+  describe('사용자가 form을 제출하면', () => {
+    it('모든 input에 validate 함수가 실행되며, 이때 모든 input에 validation 오류가 없으면 onSubmit 함수가 실행된다', () => {
       isValid.mockImplementation(() => true);
       const { form } = setup();
       fireEvent.submit(form);
 
+      expect(isValid).toHaveBeenCalled();
       expect(handleSubmit).toHaveBeenCalled();
     });
 
-    it('input 중 하나라도 validation 오류가 있으면 실행되지 않는다', () => {
+    it('모든 input에 validate 함수가 실행되며, 이때 input 중 하나라도 validation 오류가 있으면 onSubmit 함수는 실행되지 않는다', () => {
       isValid.mockImplementation(() => false);
       const { form } = setup();
       fireEvent.submit(form);
 
+      expect(isValid).toHaveBeenCalled();
       expect(handleSubmit).not.toHaveBeenCalled();
     });
   });
