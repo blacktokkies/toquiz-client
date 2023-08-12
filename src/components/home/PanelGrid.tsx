@@ -19,7 +19,7 @@ interface Props {
 export function PanelGrid({ panelPages }: Props): JSX.Element {
   const overlay = useOverlay();
 
-  const handleUpdatePanel = useCallback(
+  const handleOpenUpdatePanelModal = useCallback(
     (panel: Panel) => {
       overlay.open(({ close }) => (
         <ModalController close={close}>
@@ -30,18 +30,19 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
     [overlay],
   );
 
-  const handlePanelActionMenu = useCallback(
+  const handleOpenPanelActionMenu = useCallback(
     (panel: Panel) =>
       ({ close }: CreateOverlayContentProps) =>
         (
           <PanelActionMenu
             close={close}
             onUpdatePanelButtonClick={() => {
-              handleUpdatePanel(panel);
+              handleOpenUpdatePanelModal(panel);
+              close();
             }}
           />
         ),
-    [handleUpdatePanel],
+    [handleOpenUpdatePanelModal],
   );
 
   if (panelPages.length === 0)
@@ -64,7 +65,7 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
           <PanelItem
             key={panel.id}
             panel={panel}
-            openActionMenu={handlePanelActionMenu(panel)}
+            openActionMenu={handleOpenPanelActionMenu(panel)}
           />
         )),
       )}
