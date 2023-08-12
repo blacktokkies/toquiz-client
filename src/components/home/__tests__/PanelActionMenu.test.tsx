@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { PanelActionMenu } from '@/components/home/PanelActionMenu';
-import { renderWithOverlay } from '@/lib/test-utils';
 
 const handleClose = vi.fn();
 const handleUpdatePanel = vi.fn();
@@ -21,7 +20,7 @@ describe('PanelActionMenu', () => {
 function setup(): {
   updateButton: HTMLElement;
 } {
-  renderWithOverlay(
+  render(
     <PanelActionMenu
       close={handleClose}
       onUpdatePanelButtonClick={handleUpdatePanel}
