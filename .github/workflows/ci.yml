@@ -49,4 +49,4 @@ jobs:
             yarn install
             yarn build
             rm dist/mockServiceWorker.js
-            mv dist/* ~/web/
+            sudo mv dist/* ~/web/
