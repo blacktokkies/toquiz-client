@@ -1,6 +1,8 @@
 import type {
   CreatePanelBody,
   CreatePanelResult,
+  DeletePanelPathParams,
+  DeletePanelResponse,
   Panel,
   UpdatePanelBody,
   UpdatePanelResult,
@@ -17,7 +19,12 @@ import type {
 
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 
-import { createPanel, getMyPanels, updatePanel } from '@/lib/api/panel';
+import {
+  createPanel,
+  getMyPanels,
+  updatePanel,
+  deletePanel,
+} from '@/lib/api/panel';
 import { queryKey } from '@/lib/queryKey';
 
 export const useMyPanelsInfiniteQuery = (): UseInfiniteQueryResult<
@@ -64,6 +71,18 @@ export const useUpdatePanelMutation = (
     ApiError | SyntaxError,
     UpdatePanelBody
   >(key, async (body) => updatePanel(panelId, body));
+
+  return mutation;
+};
+
+export const useDeletePanelMutation = (
+  panelId: DeletePanelPathParams['panelId'],
+): UseMutationResult<DeletePanelResponse, ApiError | SyntaxError, void> => {
+  const key = queryKey.panel.delete();
+  const mutation = useMutation<DeletePanelResponse, ApiError | SyntaxError>(
+    key,
+    async () => deletePanel(panelId),
+  );
 
   return mutation;
 };
