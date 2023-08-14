@@ -16,4 +16,4 @@ export const createMockPanel = (): Panel => ({
 export const createMockPanleList = (size: number): Panel[] =>
   [...Array(size).keys()].map(createMockPanel);
 
-export const myPanelList: Panel[] = createMockPanleList(60);
+export const myPanelList: Panel[] = createMockPanleList(30);
