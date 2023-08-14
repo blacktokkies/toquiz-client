@@ -4,14 +4,12 @@ import React from 'react';
 
 import { clsx } from 'clsx';
 
-import { Backdrop } from '@/components/system/Backdrop';
 import { OverlayController } from '@/components/system/OverlayController';
 
 type VerticalAlignment = 'top' | 'bottom' | 'middle';
 type HorizontalAlignment = 'left' | 'right' | 'center';
 
 interface Props {
-  backdrop?: boolean;
   vertical?: VerticalAlignment;
   horizontal?: HorizontalAlignment;
 }
@@ -29,7 +27,6 @@ const horizontalAlignments: Record<HorizontalAlignment, string> = {
 };
 
 export function ModalController({
-  backdrop = true,
   vertical = 'middle',
   horizontal = 'center',
   ariaLabel = '',
@@ -41,7 +38,7 @@ export function ModalController({
 
   return (
     <>
-      {backdrop && <Backdrop />}
+      <div className="fixed inset-0 bg-backdrop" />
       <OverlayController
         className={clsx(
           `fixed ${verticalAlignment} ${horizontalAlginment} w-11/12 max-w-xl`,
