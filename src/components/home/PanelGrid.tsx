@@ -12,6 +12,8 @@ import { ModalController } from '@/components/system/ModalController';
 import { Logo } from '@/components/vectors';
 import { useOverlay } from '@/hooks/useOverlay';
 
+import { DeletePanelModal } from './DeletePanelModal';
+
 interface Props {
   panelPages: GetMyPanelsResult[];
 }
@@ -33,7 +35,9 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
   const handleOpenDeletePanelModal = useCallback(
     (panel: Panel) => {
       overlay.open(({ close }) => (
-        <ModalController close={close}>패널 삭제 모달</ModalController>
+        <ModalController close={close}>
+          <DeletePanelModal close={close} panel={panel} />
+        </ModalController>
       ));
     },
     [overlay],
