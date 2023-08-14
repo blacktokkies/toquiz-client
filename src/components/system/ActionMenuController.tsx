@@ -2,6 +2,8 @@ import type { HTMLAttributes } from 'react';
 
 import React, { useRef } from 'react';
 
+import { clsx } from 'clsx';
+
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 export interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -20,11 +22,15 @@ export function ActionMenuController({
 
   return (
     <>
-      <div className="fixed inset-0 bg-backdrop" />
+      <div className="z-50 fixed inset-0 bg-backdrop md:inset-full" />
       <div
         ref={ref}
         role="dialog"
-        className="absolute right-0 min-w-[200px] border border-grey-light bg-white shadow-md"
+        className={clsx(
+          'z-50 fixed bottom-0 left-0 w-full',
+          'md:absolute md:bottom-auto md:left-auto md:w-auto md:right-0 md:min-w-[200px]',
+          'border border-grey-light bg-white shadow-md',
+        )}
         style={style}
         {...rest}
       >
