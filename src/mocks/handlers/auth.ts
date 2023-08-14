@@ -58,6 +58,7 @@ export const logout = rest.post<never, never, LogoutResponse>(
   async (req, res, ctx) =>
     res(
       ctx.status(200),
+      ctx.cookie('refreshToken', '', { expires: new Date() }),
       ctx.json({
         statusCode: 200,
         result: undefined,
