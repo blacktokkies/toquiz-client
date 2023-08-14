@@ -4,16 +4,6 @@ import type { SuccessResponse } from '@/lib/api/types';
 import { apiUrl } from '@/lib/api/consts';
 import { apiClient } from '@/lib/apiClient';
 
-export const getMyPanels = async (
-  params: GetMyPanelsParams,
-): Promise<GetMyPanelsResult> =>
-  apiClient
-    .get<GetMyPanelsResponse, GetMyPanelsParams>(
-      apiUrl.panel.getMyPanels(),
-      params,
-    )
-    .then((data) => data.result);
-
 export const createPanel = async (
   body: CreatePanelBody,
 ): Promise<CreatePanelResult> =>
@@ -33,6 +23,17 @@ export const deletePanel = async (
   id: DeletePanelPathParams['panelId'],
 ): Promise<DeletePanelResponse> =>
   apiClient.delete<DeletePanelResponse>(apiUrl.panel.delete(id));
+
+export const getMyPanels = async (
+  params: GetMyPanelsParams,
+): Promise<GetMyPanelsResult> =>
+  apiClient
+    .get<GetMyPanelsResponse, GetMyPanelsParams>(
+      apiUrl.panel.getMyPanels(),
+      params,
+    )
+    .then((data) => data.result);
+
 /* ================================ [패널 생성 API] ====================================== */
 export interface CreatePanelBody {
   title: string;
