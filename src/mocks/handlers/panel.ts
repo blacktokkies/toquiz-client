@@ -5,6 +5,8 @@ import type {
   UpdatePanelBody,
   UpdatePanelResponse,
   UpdatePanelPathParams,
+  DeletePanelPathParams,
+  DeletePanelResponse,
 } from '@/lib/api/panel';
 import type { SuccessResponse } from '@/lib/api/types';
 
@@ -100,4 +102,19 @@ export const updatePanel = rest.patch<
       }),
     );
   },
+);
+
+export const deletePanel = rest.delete<
+  never,
+  DeletePanelPathParams,
+  DeletePanelResponse
+>(`${API_BASE_URL}${apiUrl.panel.delete(':panelId')}`, async (req, res, ctx) =>
+  res(
+    ctx.status(200),
+    ctx.json({
+      statusCode: 200,
+      message: '패널 삭제에 성공하였습니다.',
+      result: undefined,
+    }),
+  ),
 );
