@@ -9,6 +9,7 @@ const panelQueryKey = {
   lists: () => [...panelQueryKey.all, 'list'] as const,
   create: () => ['createPanel'] as const,
   update: () => ['updatePanel'] as const,
+  delete: () => ['deletePanel'] as const,
 } as const;
 
 export const queryKey = {
