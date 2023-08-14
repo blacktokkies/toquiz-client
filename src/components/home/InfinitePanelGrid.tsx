@@ -28,7 +28,7 @@ export const InfinitePanelGrid = (): JSX.Element => {
 
   function handleClick(): void {
     overlay.open(({ close }) => (
-      <ModalController close={close} ariaLabel="패널 생성 모달">
+      <ModalController close={close} aria-label="패널 생성 모달">
         <CreatePanelModal close={close} />
       </ModalController>
     ));

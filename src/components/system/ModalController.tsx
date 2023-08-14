@@ -1,17 +1,18 @@
-import type { OverlayControllerProps } from '@/components/system/OverlayController';
+import type { AllHTMLAttributes } from 'react';
 
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { clsx } from 'clsx';
 
-import { OverlayController } from '@/components/system/OverlayController';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 type VerticalAlignment = 'top' | 'bottom' | 'middle';
 type HorizontalAlignment = 'left' | 'right' | 'center';
 
-interface Props {
+interface Props extends AllHTMLAttributes<HTMLDivElement> {
   vertical?: VerticalAlignment;
   horizontal?: HorizontalAlignment;
+  close: () => void;
 }
 
 const verticalAlignments: Record<VerticalAlignment, string> = {
@@ -29,29 +30,35 @@ const horizontalAlignments: Record<HorizontalAlignment, string> = {
 export function ModalController({
   vertical = 'middle',
   horizontal = 'center',
-  ariaLabel = '',
   close,
+  className,
   children,
-}: Props & Omit<OverlayControllerProps, 'className' | 'style'>): JSX.Element {
+  ...rest
+}: Props): JSX.Element {
   const verticalAlignment = verticalAlignments[vertical];
   const horizontalAlginment = horizontalAlignments[horizontal];
 
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useOutsideClick(ref, close);
   return (
     <>
       <div className="fixed inset-0 bg-backdrop" />
-      <OverlayController
+      <div
+        ref={ref}
+        role="dialog"
         className={clsx(
           `fixed ${verticalAlignment} ${horizontalAlginment} w-11/12 max-w-xl`,
           {
             '-translate-x-1/2 -translate-y-1/2': horizontal === 'center',
           },
           'bg-white shadow-3xl rounded-lg',
+          className,
         )}
-        close={close}
-        ariaLabel={ariaLabel}
+        {...rest}
       >
         {children}
-      </OverlayController>
+      </div>
     </>
   );
 }
