@@ -26,7 +26,7 @@ export const PanelItem = ({ panel, openActionMenu }: Props): JSX.Element => {
             {formatDateString(createdAt)}
           </span>
         </div>
-        <OpenActionMenuArea ariaLabel="패널 액션 메뉴" open={openActionMenu}>
+        <OpenActionMenuArea aria-label="패널 액션 메뉴" open={openActionMenu}>
           <button type="button" aria-label="더보기">
             <div
               role="img"
