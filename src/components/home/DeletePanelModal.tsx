@@ -9,7 +9,7 @@ interface Props {
   panelId: Panel['id'];
 }
 export function DeletePanelModal({ close, panelId }: Props): JSX.Element {
-  const deletePanelMutation = useDeletePanelMutation(panelId);
+  const deletePanelMutation = useDeletePanelMutation();
 
   return (
     <div className="flex flex-col p-7 gap-4">
@@ -20,7 +20,11 @@ export function DeletePanelModal({ close, panelId }: Props): JSX.Element {
       <button
         type="button"
         onClick={() => {
-          deletePanelMutation.mutate();
+          deletePanelMutation.mutate(panelId, {
+            onSuccess: () => {
+              close();
+            },
+          });
         }}
       >
         패널 삭제
