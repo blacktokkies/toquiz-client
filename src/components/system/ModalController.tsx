@@ -1,4 +1,4 @@
-import type { AllHTMLAttributes } from 'react';
+import type { HTMLAttributes } from 'react';
 
 import React, { useRef } from 'react';
 
@@ -9,7 +9,7 @@ import { useOutsideClick } from '@/hooks/useOutsideClick';
 type VerticalAlignment = 'top' | 'bottom' | 'middle';
 type HorizontalAlignment = 'left' | 'right' | 'center';
 
-interface Props extends AllHTMLAttributes<HTMLDivElement> {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   vertical?: VerticalAlignment;
   horizontal?: HorizontalAlignment;
   close: () => void;
