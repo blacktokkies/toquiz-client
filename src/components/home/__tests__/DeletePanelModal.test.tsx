@@ -1,3 +1,5 @@
+import type { Panel } from '@/lib/api/panel';
+
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
@@ -10,7 +12,14 @@ import { renderWithQueryClient } from '@/lib/test-utils';
 import { DeletePanelModal } from '../DeletePanelModal';
 
 const handleClose = vi.fn();
-const panelId = faker.datatype.uuid();
+const panel: Panel = {
+  id: faker.datatype.uuid(),
+  author: 'test@email.com',
+  title: '테스트 패널 제목',
+  description: '테스트 패널 설명',
+  createdAt: new Date().toDateString(),
+  updatedAt: new Date().toDateString(),
+};
 
 describe('DeletePanelModal', () => {
   it('패널 삭제하기 헤딩을 보여준다', () => {
@@ -53,9 +62,7 @@ function setup(): {
   closeButton: HTMLButtonElement;
   deleteButton: HTMLButtonElement;
 } {
-  renderWithQueryClient(
-    <DeletePanelModal close={handleClose} panelId={panelId} />,
-  );
+  renderWithQueryClient(<DeletePanelModal close={handleClose} panel={panel} />);
 
   const closeButton = screen.getByRole<HTMLButtonElement>('button', {
     name: /취소/,
