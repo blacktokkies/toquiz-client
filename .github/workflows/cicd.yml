@@ -42,6 +42,7 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           port: ${{ secrets.AWS_SSH_PORT }}
           script: |
+            rm -r ~/web/*
             cd ~/toquiz-client
             git pull origin dev
             export NVM_DIR=~/.nvm
