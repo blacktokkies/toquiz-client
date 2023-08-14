@@ -2,8 +2,6 @@ const auth = {
   signup: () => `/api/auth/signup`,
   login: () => `/api/auth/login`,
   logout: () => `/api/auth/logout`,
-  update: () => `/api/auth/update`,
-  signout: () => `/api/auth/signout`,
   refresh: () => `/api/auth/refresh`,
   me: () => `/api/members/me`,
 } as const;
