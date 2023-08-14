@@ -84,10 +84,10 @@ export interface DeletePanelPathParams {
 
 /* ================================ [패널 목록 가져오기 API] ====================================== */
 export interface GetMyPanelsParams {
-  cursor: undefined | Panel['id'];
+  page?: number;
 }
 export interface GetMyPanelsResult {
-  cursor?: Panel['id'];
+  nextPage?: number;
   panels: Panel[];
 }
 
