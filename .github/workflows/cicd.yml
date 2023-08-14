@@ -42,11 +42,14 @@ jobs:
           key: ${{ secrets.AWS_SSH_KEY }}
           port: ${{ secrets.AWS_SSH_PORT }}
           script: |
-            rm -r ~/web/*
-            cd ~/toquiz-client
-            git pull origin dev
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh   
+            sudo rm -r ~/web/*
+
+            cd ~/toquiz-client
+            git checkout dev
+            git pull origin dev
+
             yarn install
             yarn build
             rm dist/mockServiceWorker.js
