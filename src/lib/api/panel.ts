@@ -34,6 +34,10 @@ export const updatePanel = async (
     .patch<UpdatePanelResponse, UpdatePanelBody>(apiUrl.panel.update(id), body)
     .then((data) => data.result);
 
+export const deletePanel = async (
+  id: DeletePanelPathParams['panelId'],
+): Promise<DeletePanelResponse> =>
+  apiClient.delete<DeletePanelResponse>(apiUrl.panel.delete(id));
 /* ================================ [패널 생성 API] ====================================== */
 export interface CreatePanelBody {
   title: string;
@@ -68,6 +72,18 @@ export interface UpdatePanelResult {
 export type UpdatePanelResponse = SuccessResponse<UpdatePanelResult>;
 
 export interface UpdatePanelPathParams {
+  panelId: Panel['id'];
+}
+
+/* ================================ [패널 삭제 API] ====================================== */
+export interface DeletePanelBody {
+  title: string;
+  description?: string;
+}
+
+export type DeletePanelResponse = SuccessResponse;
+
+export interface DeletePanelPathParams {
   panelId: Panel['id'];
 }
 /* ================================ [패널 엔티티] ====================================== */
