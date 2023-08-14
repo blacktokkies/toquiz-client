@@ -30,6 +30,15 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
     [overlay],
   );
 
+  const handleOpenDeletePanelModal = useCallback(
+    (panel: Panel) => {
+      overlay.open(({ close }) => (
+        <ModalController close={close}>패널 삭제 모달</ModalController>
+      ));
+    },
+    [overlay],
+  );
+
   const handleOpenPanelActionMenu = useCallback(
     (panel: Panel) =>
       ({ close }: CreateOverlayContentProps) =>
@@ -40,9 +49,13 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
               handleOpenUpdatePanelModal(panel);
               close();
             }}
+            onDeleteButtonClick={() => {
+              handleOpenDeletePanelModal(panel);
+              close();
+            }}
           />
         ),
-    [handleOpenUpdatePanelModal],
+    [handleOpenUpdatePanelModal, handleOpenDeletePanelModal],
   );
 
   if (panelPages.length === 0)
