@@ -13,14 +13,11 @@ async function checkAndRefreshAccessToken(): Promise<void> {
     await me();
   } catch (e) {
     if (e instanceof ApiError && e.response.status === 401) {
-      try {
-        const { accessToken, ...user } = await refresh();
-        setAccessToken(accessToken);
-        setUserState(user);
-        await me();
-      } catch (innerError) {
-        throw e;
-      }
+      const { accessToken, ...user } = await refresh();
+      setAccessToken(accessToken);
+      setUserState(user);
+      await me();
+      return;
     }
     throw e;
   }
