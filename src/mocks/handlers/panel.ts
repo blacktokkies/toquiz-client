@@ -1,7 +1,6 @@
 import type {
   CreatePanelResponse,
   CreatePanelBody,
-  Panel,
   UpdatePanelBody,
   UpdatePanelResponse,
   UpdatePanelPathParams,
@@ -22,23 +21,21 @@ import { myAccount } from '../data/auth';
 export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
   `${API_BASE_URL}${apiUrl.panel.getMyPanels()}`,
   async (req, res, ctx) => {
-    const cursor = req.url.searchParams.get('cursor');
+    const page = req.url.searchParams.get('page');
 
-    const start = Number(cursor);
-    const end = start + 20;
-    const newPanelData = myPanelList.slice(start, end);
+    const start = Number(page);
+    const end = (start + 1) * 10;
+    const panels = myPanelList.slice(start, end);
 
-    let newNextCursor: undefined | Panel['id'];
-    if (end >= myPanelList.length) newNextCursor = undefined;
-    else newNextCursor = String(end);
+    const nextPage = end === myPanelList.length ? undefined : start + 1;
 
     return res(
       ctx.status(200),
       ctx.json({
         statusCode: 200,
         result: {
-          cursor: newNextCursor,
-          panels: newPanelData,
+          nextPage,
+          panels,
         },
       }),
     );

@@ -32,10 +32,10 @@ export const useMyPanelsInfiniteQuery = (): UseInfiniteQueryResult<
   const key = queryKey.panel.lists();
   const query = useInfiniteQuery<GetMyPanelsResult, ApiError | SyntaxError>(
     key,
-    async ({ pageParam = '' }) =>
-      getMyPanels({ cursor: pageParam as GetMyPanelsParams['cursor'] }),
+    async ({ pageParam = 0 }) =>
+      getMyPanels({ page: pageParam as GetMyPanelsParams['page'] }),
     {
-      getNextPageParam: (lastPage) => lastPage.cursor,
+      getNextPageParam: (lastPage) => lastPage.nextPage,
     },
   );
 

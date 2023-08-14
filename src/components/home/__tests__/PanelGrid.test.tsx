@@ -12,7 +12,7 @@ import { createMockPanleList } from '@/mocks/data/panel';
 describe('PanelGrid', () => {
   it('패널 목록을 렌더링한다', () => {
     const panelPages: GetMyPanelsResult[] = [
-      { panels: createMockPanleList(10), cursor: undefined },
+      { panels: createMockPanleList(10) },
     ];
     renderWithQueryClient(
       <OverlayProvider>
