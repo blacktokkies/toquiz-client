@@ -1,10 +1,10 @@
-import type { HtmlHTMLAttributes } from 'react';
+import type { HTMLAttributes } from 'react';
 
 import React, { useRef } from 'react';
 
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 
-export interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
+export interface Props extends HTMLAttributes<HTMLDivElement> {
   close: () => void;
 }
 

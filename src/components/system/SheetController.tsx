@@ -1,13 +1,14 @@
-import type { OverlayControllerProps } from '@/components/system/OverlayController';
+import type { HTMLAttributes } from 'react';
 
-import React from 'react';
+import React, { useRef } from 'react';
 
-import { OverlayController } from '@/components/system/OverlayController';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 
 type SheetType = 'bottom' | 'top' | 'left' | 'right';
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   type?: SheetType;
+  close: () => void;
 }
 
 const sheetStyles: Record<SheetType, string> = {
@@ -21,15 +22,20 @@ export function SheetController({
   type = 'bottom',
   close,
   children,
-}: Props & Omit<OverlayControllerProps, 'className' | 'style'>): JSX.Element {
+  ...rest
+}: Props): JSX.Element {
   const sheetStyle = sheetStyles[type];
+
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useOutsideClick(ref, close);
 
   return (
     <>
       <div className="fixed inset-0 bg-backdrop" />
-      <OverlayController className={`fixed ${sheetStyle}`} close={close}>
+      <div ref={ref} role="dialog" className={`fixed ${sheetStyle}`} {...rest}>
         {children}
-      </OverlayController>
+      </div>
     </>
   );
 }
