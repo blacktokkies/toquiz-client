@@ -12,7 +12,7 @@ export function HomeHeader(): JSX.Element {
       <div className="container flex justify-between items-center max-w-7xl px-5 h-16">
         <Link to="/home" className="rounded-full">
           <div role="img" aria-label="toquiz 로고">
-            <Logo className="h-11 w-11" />a
+            <Logo className="h-11 w-11" />
           </div>
         </Link>
         <OpenActionMenuArea
