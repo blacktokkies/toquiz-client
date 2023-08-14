@@ -3,11 +3,11 @@ import type {
   CreatePanelResult,
   DeletePanelPathParams,
   DeletePanelResponse,
-  Panel,
   UpdatePanelBody,
   UpdatePanelResult,
   GetMyPanelsParams,
   GetMyPanelsResult,
+  UpdatePanelPathParams,
 } from '@/lib/api/panel';
 import type { ApiError } from '@/lib/apiClient';
 import type {
@@ -57,7 +57,7 @@ export const useCreatePanelMutation = (): UseMutationResult<
 };
 
 export const useUpdatePanelMutation = (
-  panelId: Panel['id'],
+  panelId: UpdatePanelPathParams['panelId'],
 ): UseMutationResult<
   UpdatePanelResult,
   ApiError | SyntaxError,
