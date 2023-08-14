@@ -11,7 +11,7 @@ const panel = {
   get: (panelId: string) => `/api/panels/${panelId}`,
   update: (panelId: string) => `/api/panels/${panelId}`,
   delete: (panelId: string) => `/api/panels/${panelId}`,
-  getMyPanels: () => `/api/members/me/panels`,
+  getMyPanels: () => `/api/panels`,
 } as const;
 
 export const apiUrl = {
