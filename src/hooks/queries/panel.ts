@@ -75,14 +75,17 @@ export const useUpdatePanelMutation = (
   return mutation;
 };
 
-export const useDeletePanelMutation = (
-  panelId: DeletePanelPathParams['panelId'],
-): UseMutationResult<DeletePanelResponse, ApiError | SyntaxError, void> => {
+export const useDeletePanelMutation = (): UseMutationResult<
+  DeletePanelResponse,
+  ApiError | SyntaxError,
+  DeletePanelPathParams['panelId']
+> => {
   const key = queryKey.panel.delete();
-  const mutation = useMutation<DeletePanelResponse, ApiError | SyntaxError>(
-    key,
-    async () => deletePanel(panelId),
-  );
+  const mutation = useMutation<
+    DeletePanelResponse,
+    ApiError | SyntaxError,
+    DeletePanelPathParams['panelId']
+  >(key, deletePanel);
 
   return mutation;
 };

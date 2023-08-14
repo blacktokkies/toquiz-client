@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as panelApis from '@/lib/api/panel';
@@ -26,6 +26,18 @@ describe('DeletePanelModal', () => {
       await userEvent.click(deleteButton);
 
       expect(spyOnDeletePanel).toHaveBeenCalled();
+    });
+
+    it('패널 삭제 API가 성공 응답 시 close 함수를 호출한다', async () => {
+      const spyOnDeletePanel = vi.spyOn(panelApis, 'deletePanel');
+      const { deleteButton } = setup();
+      await userEvent.click(deleteButton);
+
+      expect(spyOnDeletePanel).toHaveBeenCalled();
+
+      await waitFor(() => {
+        expect(handleClose).toHaveBeenCalled();
+      });
     });
   });
 
