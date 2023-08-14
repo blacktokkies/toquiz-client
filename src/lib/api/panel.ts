@@ -12,17 +12,20 @@ export const createPanel = async (
     .then((data) => data.result);
 
 export const updatePanel = async (
-  id: Panel['id'],
+  panelId: UpdatePanelPathParams['panelId'],
   body: UpdatePanelBody,
 ): Promise<UpdatePanelResult> =>
   apiClient
-    .patch<UpdatePanelResponse, UpdatePanelBody>(apiUrl.panel.update(id), body)
+    .patch<UpdatePanelResponse, UpdatePanelBody>(
+      apiUrl.panel.update(panelId),
+      body,
+    )
     .then((data) => data.result);
 
 export const deletePanel = async (
-  id: DeletePanelPathParams['panelId'],
+  panelId: DeletePanelPathParams['panelId'],
 ): Promise<DeletePanelResponse> =>
-  apiClient.delete<DeletePanelResponse>(apiUrl.panel.delete(id));
+  apiClient.delete<DeletePanelResponse>(apiUrl.panel.delete(panelId));
 
 export const getMyPanels = async (
   params: GetMyPanelsParams,
