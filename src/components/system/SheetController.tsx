@@ -2,13 +2,11 @@ import type { OverlayControllerProps } from '@/components/system/OverlayControll
 
 import React from 'react';
 
-import { Backdrop } from '@/components/system/Backdrop';
 import { OverlayController } from '@/components/system/OverlayController';
 
 type SheetType = 'bottom' | 'top' | 'left' | 'right';
 
 interface Props {
-  backdrop?: boolean;
   type?: SheetType;
 }
 
@@ -20,7 +18,6 @@ const sheetStyles: Record<SheetType, string> = {
 };
 
 export function SheetController({
-  backdrop = true,
   type = 'bottom',
   close,
   children,
@@ -29,7 +26,7 @@ export function SheetController({
 
   return (
     <>
-      {backdrop && <Backdrop />}
+      <div className="fixed inset-0 bg-backdrop" />
       <OverlayController className={`fixed ${sheetStyle}`} close={close}>
         {children}
       </OverlayController>
