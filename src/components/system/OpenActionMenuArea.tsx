@@ -1,3 +1,4 @@
+import type { Props as ActionMenuControllerPrpos } from '@/components/system/ActionMenuController';
 import type { CreateOverlayContent } from '@/hooks/useOverlay';
 
 import React, { useState, useRef, useCallback } from 'react';
@@ -5,15 +6,14 @@ import React, { useState, useRef, useCallback } from 'react';
 import { ActionMenuController } from '@/components/system/ActionMenuController';
 import { useInsideClick } from '@/hooks/useInsideClick';
 
-interface Props {
+interface Props extends Omit<ActionMenuControllerPrpos, 'close'> {
   open: CreateOverlayContent;
-  ariaLabel?: string;
 }
 export function OpenActionMenuArea({
-  ariaLabel = undefined,
   open: ActionMenu,
   children,
-}: Props & React.PropsWithChildren): JSX.Element {
+  ...rest
+}: Props): JSX.Element {
   const area = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -39,7 +39,7 @@ export function OpenActionMenuArea({
     <div ref={area} className="relative">
       {children}
       {open && (
-        <ActionMenuController close={handleClose} ariaLabel={ariaLabel}>
+        <ActionMenuController close={handleClose} {...rest}>
           <ActionMenu close={handleClose} />
         </ActionMenuController>
       )}

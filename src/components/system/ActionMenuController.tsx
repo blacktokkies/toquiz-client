@@ -1,26 +1,35 @@
-import type { OverlayControllerProps } from '@/components/system/OverlayController';
+import type { HtmlHTMLAttributes } from 'react';
 
-import React from 'react';
+import React, { useRef } from 'react';
 
-import { OverlayController } from '@/components/system/OverlayController';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
+
+export interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
+  close: () => void;
+}
 
 export function ActionMenuController({
-  ariaLabel = undefined,
-  style,
   close,
+  style,
   children,
-}: Omit<OverlayControllerProps, 'className'>): JSX.Element {
+  ...rest
+}: Props): JSX.Element {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useOutsideClick(ref, close);
+
   return (
     <>
       <div className="fixed inset-0 bg-backdrop" />
-      <OverlayController
-        ariaLabel={ariaLabel}
-        className="absolute bg-white shadow-md right-0 min-w-[200px] border border-grey-light"
+      <div
+        ref={ref}
+        role="dialog"
+        className="absolute right-0 min-w-[200px] border border-grey-light bg-white shadow-md"
         style={style}
-        close={close}
+        {...rest}
       >
         {children}
-      </OverlayController>
+      </div>
     </>
   );
 }

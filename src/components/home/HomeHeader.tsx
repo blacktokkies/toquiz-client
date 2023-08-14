@@ -12,11 +12,11 @@ export function HomeHeader(): JSX.Element {
       <div className="container flex justify-between items-center max-w-7xl px-5 h-16">
         <Link to="/home" className="rounded-full">
           <div role="img" aria-label="toquiz 로고">
-            <Logo className="h-11 w-11" />
+            <Logo className="h-11 w-11" />a
           </div>
         </Link>
         <OpenActionMenuArea
-          ariaLabel="내 계정 액션 메뉴"
+          aria-label="내 계정 액션 메뉴"
           open={({ close }) => <AccountActionMenu close={close} />}
         >
           <button
