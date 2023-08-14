@@ -1,4 +1,4 @@
-import type { GetMyPanelsResult } from '@/mocks/handlers/panel';
+import type { GetMyPanelsResult } from '@/lib/api/panel';
 
 import React from 'react';
 

@@ -6,12 +6,10 @@ import type {
   Panel,
   UpdatePanelBody,
   UpdatePanelResult,
-} from '@/lib/api/panel';
-import type { ApiError } from '@/lib/apiClient';
-import type {
   GetMyPanelsParams,
   GetMyPanelsResult,
-} from '@/mocks/handlers/panel';
+} from '@/lib/api/panel';
+import type { ApiError } from '@/lib/apiClient';
 import type {
   UseInfiniteQueryResult,
   UseMutationResult,

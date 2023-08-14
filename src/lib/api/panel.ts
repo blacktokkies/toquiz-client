@@ -1,10 +1,5 @@
 import type { Member } from '@/lib/api/auth';
 import type { SuccessResponse } from '@/lib/api/types';
-import type {
-  GetMyPanelsParams,
-  GetMyPanelsResponse,
-  GetMyPanelsResult,
-} from '@/mocks/handlers/panel';
 
 import { apiUrl } from '@/lib/api/consts';
 import { apiClient } from '@/lib/apiClient';
@@ -86,6 +81,17 @@ export type DeletePanelResponse = SuccessResponse;
 export interface DeletePanelPathParams {
   panelId: Panel['id'];
 }
+
+/* ================================ [패널 목록 가져오기 API] ====================================== */
+export interface GetMyPanelsParams {
+  cursor: undefined | Panel['id'];
+}
+export interface GetMyPanelsResult {
+  cursor?: Panel['id'];
+  panels: Panel[];
+}
+
+export type GetMyPanelsResponse = SuccessResponse<GetMyPanelsResult>;
 /* ================================ [패널 엔티티] ====================================== */
 
 export interface Panel {

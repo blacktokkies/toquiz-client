@@ -1,7 +1,6 @@
 /* eslint-disable react/display-name */
 import type { CreateOverlayContentProps } from '@/hooks/useOverlay';
-import type { Panel } from '@/lib/api/panel';
-import type { GetMyPanelsResult } from '@/mocks/handlers/panel';
+import type { GetMyPanelsResult, Panel } from '@/lib/api/panel';
 
 import React, { useCallback } from 'react';
 

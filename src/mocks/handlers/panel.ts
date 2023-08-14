@@ -7,8 +7,8 @@ import type {
   UpdatePanelPathParams,
   DeletePanelPathParams,
   DeletePanelResponse,
+  GetMyPanelsResponse,
 } from '@/lib/api/panel';
-import type { SuccessResponse } from '@/lib/api/types';
 
 import { faker } from '@faker-js/faker';
 import { rest } from 'msw';
@@ -18,16 +18,6 @@ import { API_BASE_URL } from '@/lib/apiClient';
 import { myPanelList } from '@/mocks/data/panel';
 
 import { myAccount } from '../data/auth';
-
-export interface GetMyPanelsParams {
-  cursor: undefined | Panel['id'];
-}
-export interface GetMyPanelsResult {
-  cursor?: Panel['id'];
-  panels: Panel[];
-}
-
-export type GetMyPanelsResponse = SuccessResponse<GetMyPanelsResult>;
 
 export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
   `${API_BASE_URL}${apiUrl.panel.getMyPanels()}`,
