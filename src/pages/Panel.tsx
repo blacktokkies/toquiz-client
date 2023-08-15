@@ -21,7 +21,9 @@ import { ApiError } from '@/lib/apiClient';
 export const panelLoader: LoaderFunction = async ({ params }) => {
   const panelId = params.id!;
   try {
-    const panel = await getPanel(panelId);
+    const _panelId = Number(panelId);
+    if (Number.isNaN(_panelId)) throw json({ id: panelId }, { status: 404 });
+    const panel = await getPanel(_panelId);
     return panel;
   } catch (error) {
     if (error instanceof ApiError) {

@@ -2,7 +2,6 @@ import type { Panel } from '@/lib/api/panel';
 
 import React from 'react';
 
-import { faker } from '@faker-js/faker';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -13,7 +12,7 @@ import { DeletePanelModal } from '../DeletePanelModal';
 
 const handleClose = vi.fn();
 const panel: Panel = {
-  id: faker.datatype.uuid(),
+  id: 1,
   author: 'test@email.com',
   title: '테스트 패널 제목',
   description: '테스트 패널 설명',

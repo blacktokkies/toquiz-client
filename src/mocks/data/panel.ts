@@ -4,8 +4,9 @@ import { faker } from '@faker-js/faker';
 
 import { myAccount } from '@/mocks/data/auth';
 
+let id = 0;
 export const createMockPanel = (): Panel => ({
-  id: faker.datatype.uuid(),
+  id: id++,
   author: myAccount.email,
   title: faker.music.songName(),
   description: faker.music.genre().slice(0, 50),

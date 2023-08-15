@@ -1,13 +1,12 @@
 import type {
   CreatePanelBody,
   CreatePanelResult,
-  DeletePanelPathParams,
   DeletePanelResponse,
   UpdatePanelBody,
   UpdatePanelResult,
   GetMyPanelsParams,
   GetMyPanelsResult,
-  UpdatePanelPathParams,
+  Panel,
 } from '@/lib/api/panel';
 import type { ApiError } from '@/lib/apiClient';
 import type {
@@ -58,7 +57,7 @@ export const useCreatePanelMutation = (): UseMutationResult<
 };
 
 export const useUpdatePanelMutation = (
-  panelId: UpdatePanelPathParams['panelId'],
+  panelId: Panel['id'],
 ): UseMutationResult<
   UpdatePanelResult,
   ApiError | SyntaxError,
@@ -77,13 +76,13 @@ export const useUpdatePanelMutation = (
 export const useDeletePanelMutation = (): UseMutationResult<
   DeletePanelResponse,
   ApiError | SyntaxError,
-  DeletePanelPathParams['panelId']
+  Panel['id']
 > => {
   const key = queryKey.panel.delete();
   const mutation = useMutation<
     DeletePanelResponse,
     ApiError | SyntaxError,
-    DeletePanelPathParams['panelId']
+    Panel['id']
   >(key, deletePanel);
 
   return mutation;

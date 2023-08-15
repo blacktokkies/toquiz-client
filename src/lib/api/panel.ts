@@ -12,25 +12,25 @@ export const createPanel = async (
     .then((data) => data.result);
 
 export const updatePanel = async (
-  panelId: UpdatePanelPathParams['panelId'],
+  panelId: Panel['id'],
   body: UpdatePanelBody,
 ): Promise<UpdatePanelResult> =>
   apiClient
     .patch<UpdatePanelResponse, UpdatePanelBody>(
-      apiUrl.panel.update(panelId),
+      apiUrl.panel.update(String(panelId)),
       body,
     )
     .then((data) => data.result);
 
 export const deletePanel = async (
-  panelId: DeletePanelPathParams['panelId'],
+  panelId: Panel['id'],
 ): Promise<DeletePanelResponse> =>
-  apiClient.delete<DeletePanelResponse>(apiUrl.panel.delete(panelId));
+  apiClient.delete<DeletePanelResponse>(apiUrl.panel.delete(String(panelId)));
 
 export const getPanel = async (
-  panelId: GetPanelPathParams['panelId'],
+  panelId: Panel['id'],
 ): Promise<GetPanelResponse> =>
-  apiClient.get<GetPanelResponse>(apiUrl.panel.get(panelId));
+  apiClient.get<GetPanelResponse>(apiUrl.panel.get(String(panelId)));
 
 export const getMyPanels = async (
   params: GetMyPanelsParams,
@@ -75,9 +75,7 @@ export interface UpdatePanelResult {
 
 export type UpdatePanelResponse = SuccessResponse<UpdatePanelResult>;
 
-export interface UpdatePanelPathParams {
-  panelId: Panel['id'];
-}
+export type UpdatePanelPathParams = Record<'panelId', string>;
 
 /* ================================ [패널 삭제 API] ====================================== */
 export interface DeletePanelBody {
@@ -87,9 +85,7 @@ export interface DeletePanelBody {
 
 export type DeletePanelResponse = SuccessResponse;
 
-export interface DeletePanelPathParams {
-  panelId: Panel['id'];
-}
+export type DeletePanelPathParams = Record<'panelId', string>;
 
 /* ================================ [패널 가져오기 API] ====================================== */
 export interface GetPanelResult {
@@ -101,9 +97,7 @@ export interface GetPanelResult {
 }
 export type GetPanelResponse = SuccessResponse<GetPanelResult>;
 
-export interface GetPanelPathParams {
-  panelId: Panel['id'];
-}
+export type GetPanelPathParams = Record<'panelId', string>;
 
 /* ================================ [패널 목록 가져오기 API] ====================================== */
 export interface GetMyPanelsParams {
@@ -118,7 +112,7 @@ export type GetMyPanelsResponse = SuccessResponse<GetMyPanelsResult>;
 /* ================================ [패널 엔티티] ====================================== */
 
 export interface Panel {
-  id: string;
+  id: number;
   author: Member['email'];
   title: string;
   description?: string;

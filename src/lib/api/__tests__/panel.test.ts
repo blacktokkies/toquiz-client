@@ -1,10 +1,4 @@
-import type {
-  UpdatePanelBody,
-  CreatePanelBody,
-  UpdatePanelPathParams,
-} from '@/lib/api/panel';
-
-import { faker } from '@faker-js/faker';
+import type { UpdatePanelBody, CreatePanelBody, Panel } from '@/lib/api/panel';
 
 import { apiUrl } from '@/lib/api/apiUrl';
 import {
@@ -29,24 +23,22 @@ describe('panel api', () => {
   it(`updatePanel을 호출하면 패널 생성 API(${apiUrl.panel.update(
     ':panelId',
   )})로 요청한다`, async () => {
-    const params: UpdatePanelPathParams = {
-      panelId: faker.datatype.uuid(),
-    };
+    const panelId: Panel['id'] = 1;
     const body: UpdatePanelBody = {
       title: '새로운 패널 이름',
       description: '새로운 패널 설명',
     };
 
-    const res = await updatePanel(params.panelId, body);
+    const res = await updatePanel(panelId, body);
     expect(res.title).toBe(body.title);
     expect(res.description).toBe(body.description);
-    expect(res.id).toBe(params.panelId);
+    expect(res.id).toBe(panelId);
   });
 
   it(`deletePanel을 호출하면 패널 삭제 API(${apiUrl.panel.delete(
     ':panelId',
   )})로 요청한다`, async () => {
-    const panelId = faker.datatype.uuid();
+    const panelId: Panel['id'] = 1;
 
     const res = await deletePanel(panelId);
     expect(res.message).toBe('패널 삭제에 성공하였습니다.');
@@ -55,7 +47,7 @@ describe('panel api', () => {
   it(`panelPanel을 호출하면 패널 가져오기 API(${apiUrl.panel.get(
     ':panelId',
   )})로 요청한다`, async () => {
-    const panelId = faker.datatype.uuid();
+    const panelId: Panel['id'] = 1;
 
     const res = await getPanel(panelId);
     expect(res.result.id).toBe(panelId);
