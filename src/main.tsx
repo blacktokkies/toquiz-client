@@ -8,7 +8,15 @@ import '@/index.css';
 if (import.meta.env.MODE === 'development') {
   (async () => {
     const { worker } = await import('@/mocks/browser');
-    worker.start();
+    worker.start({
+      onUnhandledRequest(req) {
+        console.warn(
+          'Found an unhandled %s request to %s',
+          req.method,
+          req.url.href,
+        );
+      },
+    });
   })();
 }
 
