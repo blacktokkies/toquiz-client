@@ -58,6 +58,6 @@ describe('panel api', () => {
     const panelId = faker.datatype.uuid();
 
     const res = await getPanel(panelId);
-    expect(res.id).toBe(panelId);
+    expect(res.result.id).toBe(panelId);
   });
 });

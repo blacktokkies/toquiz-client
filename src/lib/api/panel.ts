@@ -29,10 +29,8 @@ export const deletePanel = async (
 
 export const getPanel = async (
   panelId: GetPanelPathParams['panelId'],
-): Promise<GetPanelResult> =>
-  apiClient
-    .get<GetPanelResponse>(apiUrl.panel.get(panelId))
-    .then((data) => data.result);
+): Promise<GetPanelResponse> =>
+  apiClient.get<GetPanelResponse>(apiUrl.panel.get(panelId));
 
 export const getMyPanels = async (
   params: GetMyPanelsParams,
