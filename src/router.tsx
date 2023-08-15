@@ -8,6 +8,7 @@ import { Error } from '@/pages/Error';
 import { Home, homeLoader } from '@/pages/Home';
 import { Index } from '@/pages/Index';
 import { Login, loginLoader } from '@/pages/Login';
+import { Panel, panelLoader, PanelError } from '@/pages/Panel';
 import { Root } from '@/pages/Root';
 import { SignUp, signupLoader } from '@/pages/SignUp';
 
@@ -46,6 +47,12 @@ export const router = createBrowserRouter([
           },
           { path: 'account', element: <Account />, loader: accountLoader },
         ],
+      },
+      {
+        path: 'panel/:id',
+        element: <Panel />,
+        loader: panelLoader,
+        errorElement: <PanelError />,
       },
     ],
   },
