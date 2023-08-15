@@ -29,9 +29,26 @@ jobs:
       - name: Run tests
         run: yarn test
 
+  automerge:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: automerge
+        name: automerge
+        uses: 'pascalgn/automerge-action@v0.15.6'
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          MERGE_LABELS: 'automerge,!inprogress'
+          MERGE_REMOVE_LABELS: 'automerge'
+          MERGE_METHOD: 'rebase'
+          MERGE_FORKS: 'false'
+          MERGE_REQUIRED_APPROVALS: '0'
+          UPDATE_METHOD: 'rebase'
+
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: automerge
 
     steps:
       - name: deploy client
