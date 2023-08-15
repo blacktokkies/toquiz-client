@@ -7,7 +7,12 @@ import type {
 import { faker } from '@faker-js/faker';
 
 import { apiUrl } from '@/lib/api/consts';
-import { createPanel, updatePanel, deletePanel } from '@/lib/api/panel';
+import {
+  createPanel,
+  updatePanel,
+  deletePanel,
+  getPanel,
+} from '@/lib/api/panel';
 
 describe('panel api', () => {
   it(`createPanel을 호출하면 패널 생성 API(${apiUrl.panel.create()})로 요청한다`, async () => {
@@ -45,5 +50,14 @@ describe('panel api', () => {
 
     const res = await deletePanel(panelId);
     expect(res.message).toBe('패널 삭제에 성공하였습니다.');
+  });
+
+  it(`panelPanel을 호출하면 패널 가져오기 API(${apiUrl.panel.get(
+    ':panelId',
+  )})로 요청한다`, async () => {
+    const panelId = faker.datatype.uuid();
+
+    const res = await getPanel(panelId);
+    expect(res.id).toBe(panelId);
   });
 });

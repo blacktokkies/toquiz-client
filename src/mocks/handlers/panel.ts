@@ -7,6 +7,8 @@ import type {
   DeletePanelPathParams,
   DeletePanelResponse,
   GetMyPanelsResponse,
+  GetPanelPathParams,
+  GetPanelResponse,
 } from '@/lib/api/panel';
 
 import { faker } from '@faker-js/faker';
@@ -14,7 +16,7 @@ import { rest } from 'msw';
 
 import { apiUrl } from '@/lib/api/consts';
 import { API_BASE_URL } from '@/lib/apiClient';
-import { myPanelList } from '@/mocks/data/panel';
+import { createMockPanel, myPanelList } from '@/mocks/data/panel';
 
 import { myAccount } from '../data/auth';
 
@@ -104,4 +106,23 @@ export const deletePanel = rest.delete<
       result: undefined,
     }),
   ),
+);
+
+export const getPanel = rest.get<never, GetPanelPathParams, GetPanelResponse>(
+  `${API_BASE_URL}${apiUrl.panel.get(':panelId')}`,
+  async (req, res, ctx) => {
+    const { panelId } = req.params;
+    const panel = myPanelList.find((panel) => panel.id === panelId) ?? {
+      ...createMockPanel(),
+      id: panelId,
+    };
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        statusCode: 200,
+        result: panel,
+      }),
+    );
+  },
 );
