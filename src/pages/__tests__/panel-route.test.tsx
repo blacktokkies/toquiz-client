@@ -3,7 +3,6 @@ import type { RouteObject } from 'react-router-dom';
 
 import React from 'react';
 
-import { faker } from '@faker-js/faker';
 import { render, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
@@ -13,7 +12,7 @@ import * as panelApis from '@/lib/api/panel';
 import { server } from '@/mocks/server';
 import { Panel, panelLoader, PanelError } from '@/pages/Panel';
 
-const panelId = faker.datatype.uuid();
+const panelId: panelApis.Panel['id'] = 1;
 
 describe('/panel/:id route', () => {
   it('로더에서 패널 정보 가져오기 API를 호출한다', () => {
@@ -47,7 +46,7 @@ describe('/panel/:id route', () => {
 
 function overrideGetPanelResponseWithError(data: ErrorResponse): void {
   server.use(
-    rest.get(apiUrl.panel.get(panelId), async (req, res, ctx) =>
+    rest.get(apiUrl.panel.get(String(panelId)), async (req, res, ctx) =>
       res(ctx.status(data.statusCode), ctx.json(data)),
     ),
   );

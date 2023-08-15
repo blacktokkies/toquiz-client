@@ -3,7 +3,6 @@ import type * as Vi from 'vitest';
 
 import React from 'react';
 
-import { faker } from '@faker-js/faker';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -20,7 +19,7 @@ vi.mock('@/lib/validator', () => ({
 const handleClose = vi.fn();
 
 const panel: Panel = {
-  id: faker.datatype.uuid(),
+  id: 1,
   author: 'test@email.com',
   title: '테스트 패널 제목',
   description: '테스트 패널 설명',

@@ -11,7 +11,6 @@ import type {
   GetPanelResponse,
 } from '@/lib/api/panel';
 
-import { faker } from '@faker-js/faker';
 import { rest } from 'msw';
 
 import { apiUrl } from '@/lib/api/apiUrl';
@@ -50,18 +49,17 @@ export const createPanel = rest.post<
   CreatePanelResponse
 >(`${API_BASE_URL}${apiUrl.panel.create()}`, async (req, res, ctx) => {
   const { title, description }: CreatePanelBody = await req.json();
+  const newPanel = {
+    ...createMockPanel(),
+    title,
+    description,
+  };
 
   return res(
     ctx.status(200),
     ctx.json({
       statusCode: 200,
-      result: {
-        id: faker.datatype.uuid(),
-        author: 'author',
-        title,
-        description,
-        createdAt: new Date().toDateString(),
-      },
+      result: newPanel,
     }),
   );
 });
@@ -81,7 +79,7 @@ export const updatePanel = rest.patch<
       ctx.json({
         statusCode: 200,
         result: {
-          id: panelId,
+          id: Number(panelId),
           author: myAccount.email,
           title,
           description,
@@ -112,9 +110,9 @@ export const getPanel = rest.get<never, GetPanelPathParams, GetPanelResponse>(
   `${API_BASE_URL}${apiUrl.panel.get(':panelId')}`,
   async (req, res, ctx) => {
     const { panelId } = req.params;
-    const panel = myPanelList.find((panel) => panel.id === panelId) ?? {
+    const panel = myPanelList.find((panel) => panel.id === Number(panelId)) ?? {
       ...createMockPanel(),
-      id: panelId,
+      id: Number(panelId),
     };
 
     return res(
