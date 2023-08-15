@@ -40,7 +40,7 @@ describe('/panel/:id route', () => {
     setup();
 
     await waitFor(() => {
-      expect(screen.getByText(/패널 에러 페이지/)).toBeInTheDocument();
+      expect(screen.getByText(/존재하지 않는 패널입니다/)).toBeInTheDocument();
     });
   });
 });
