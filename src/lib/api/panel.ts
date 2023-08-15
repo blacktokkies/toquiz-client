@@ -27,6 +27,13 @@ export const deletePanel = async (
 ): Promise<DeletePanelResponse> =>
   apiClient.delete<DeletePanelResponse>(apiUrl.panel.delete(panelId));
 
+export const getPanel = async (
+  panelId: GetPanelPathParams['panelId'],
+): Promise<GetPanelResult> =>
+  apiClient
+    .get<GetPanelResponse>(apiUrl.panel.get(panelId))
+    .then((data) => data.result);
+
 export const getMyPanels = async (
   params: GetMyPanelsParams,
 ): Promise<GetMyPanelsResult> =>
@@ -83,6 +90,20 @@ export interface DeletePanelBody {
 export type DeletePanelResponse = SuccessResponse;
 
 export interface DeletePanelPathParams {
+  panelId: Panel['id'];
+}
+
+/* ================================ [패널 가져오기 API] ====================================== */
+export interface GetPanelResult {
+  id: Panel['id'];
+  title: Panel['title'];
+  description?: Panel['description'];
+  createdAt: Panel['createdAt'];
+  updatedAt: Panel['updatedAt'];
+}
+export type GetPanelResponse = SuccessResponse<GetPanelResult>;
+
+export interface GetPanelPathParams {
   panelId: Panel['id'];
 }
 
