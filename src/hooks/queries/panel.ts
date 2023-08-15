@@ -35,7 +35,8 @@ export const useMyPanelsInfiniteQuery = (): UseInfiniteQueryResult<
     async ({ pageParam = 0 }) =>
       getMyPanels({ page: pageParam as GetMyPanelsParams['page'] }),
     {
-      getNextPageParam: (lastPage) => lastPage.nextPage,
+      getNextPageParam: (lastPage) =>
+        lastPage.nextPage !== -1 ? lastPage.nextPage : undefined,
     },
   );
 

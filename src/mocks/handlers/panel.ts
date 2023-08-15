@@ -27,7 +27,7 @@ export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
     const end = (start + 1) * 10;
     const panels = myPanelList.slice(start, end);
 
-    const nextPage = end === myPanelList.length ? undefined : start + 1;
+    const nextPage = end === myPanelList.length ? -1 : start + 1;
 
     return res(
       ctx.status(200),
