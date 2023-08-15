@@ -14,7 +14,7 @@ import type {
 import { faker } from '@faker-js/faker';
 import { rest } from 'msw';
 
-import { apiUrl } from '@/lib/api/consts';
+import { apiUrl } from '@/lib/api/apiUrl';
 import { API_BASE_URL } from '@/lib/apiClient';
 import { createMockPanel, myPanelList } from '@/mocks/data/panel';
 

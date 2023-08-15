@@ -6,7 +6,7 @@ import type {
 
 import { faker } from '@faker-js/faker';
 
-import { apiUrl } from '@/lib/api/consts';
+import { apiUrl } from '@/lib/api/apiUrl';
 import {
   createPanel,
   updatePanel,
