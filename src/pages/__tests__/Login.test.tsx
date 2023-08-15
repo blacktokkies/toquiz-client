@@ -7,8 +7,8 @@ import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { MemoryRouter } from 'react-router-dom';
 
+import { apiUrl } from '@/lib/api/apiUrl';
 import * as apis from '@/lib/api/auth';
-import { apiUrl } from '@/lib/api/consts';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import { Login } from '@/pages/Login';

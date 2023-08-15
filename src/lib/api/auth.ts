@@ -1,6 +1,6 @@
 import type { SuccessResponse, ErrorResponse } from '@/lib/api/types';
 
-import { apiUrl } from '@/lib/api/consts';
+import { apiUrl } from '@/lib/api/apiUrl';
 import { apiClient } from '@/lib/apiClient';
 
 export const signUp = async (body: SignUpBody): Promise<SignUpResult> =>
