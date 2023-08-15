@@ -44,13 +44,13 @@ module.exports = {
         100: '#f1f5f9',
       },
     },
-  },
-  extend: {
-    boxShadow: {
-      item: 'rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px',
-      'item-hover':
-        'rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px',
-      '3xl': '0px 30px 90px rgba(0, 0, 0, 0.4)',
+    extend: {
+      boxShadow: {
+        item: 'rgba(17, 17, 26, 0.05) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px',
+        'item-hover':
+          'rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px',
+        '3xl': '0px 30px 90px rgba(0, 0, 0, 0.4)',
+      },
     },
   },
   plugins: [],
