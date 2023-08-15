@@ -46,7 +46,7 @@ describe('/panel/:id route', () => {
 
 function overrideGetPanelResponseWithError(data: ErrorResponse): void {
   server.use(
-    rest.get(apiUrl.panel.get(String(panelId)), async (req, res, ctx) =>
+    rest.get(apiUrl.panel.get(':panelId'), async (req, res, ctx) =>
       res(ctx.status(data.statusCode), ctx.json(data)),
     ),
   );
