@@ -10,5 +10,5 @@ export const panelLoader: LoaderFunction = ({ params }) => {
   return null;
 };
 export function Panel(): JSX.Element {
-  return <div>패널</div>;
+  return <div>패널 페이지</div>;
 }
