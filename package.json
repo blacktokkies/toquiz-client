@@ -9,6 +9,7 @@
     "dev": "vite",
     "dev:proxy": "vite --mode proxy",
     "build": "tsc && vite build",
+    "postbuild": "rm dist/mockServiceWorker.js",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,tsx}\" --fix",
     "test": "vitest",
