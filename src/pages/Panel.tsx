@@ -48,8 +48,9 @@ export function PanelError(): JSX.Element {
         <div className="w-full h-full bg-gradient-to-r from-gray-50 to-slate-100">
           <div
             className={clsx(
-              'flex flex-col gap-4 md:gap-7 justify-center items-center pt-40 md:h-full md:pt-0',
-              'xs:flex-row',
+              'flex flex-col gap-4 items-center pt-40 mx-auto px-8',
+              'xs:flex-row xs:justify-center',
+              'md:gap-7',
             )}
           >
             <div className="flex flex-col gap-3">
