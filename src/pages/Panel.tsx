@@ -40,7 +40,11 @@ export const panelLoader: LoaderFunction = async ({ params }) => {
 };
 
 export function Panel(): JSX.Element {
-  return <div>패널 페이지</div>;
+  return (
+    <>
+      <header>헤더</header>
+    </>
+  );
 }
 
 export function PanelError(): JSX.Element {
