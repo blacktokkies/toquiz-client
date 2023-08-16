@@ -33,7 +33,12 @@ export function SheetController({
   return (
     <>
       <div className="fixed inset-0 bg-backdrop" />
-      <div ref={ref} role="dialog" className={`fixed ${sheetStyle}`} {...rest}>
+      <div
+        ref={ref}
+        role="complementary"
+        className={`fixed ${sheetStyle}`}
+        {...rest}
+      >
         {children}
       </div>
     </>
