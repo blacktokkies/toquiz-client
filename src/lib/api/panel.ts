@@ -90,6 +90,7 @@ export type DeletePanelPathParams = Record<'panelId', string>;
 /* ================================ [패널 가져오기 API] ====================================== */
 export interface GetPanelResult {
   id: Panel['id'];
+  author: Panel['author'];
   title: Panel['title'];
   description?: Panel['description'];
   createdAt: Panel['createdAt'];
