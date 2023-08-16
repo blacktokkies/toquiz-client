@@ -3,12 +3,13 @@ import type { RouteObject } from 'react-router-dom';
 
 import React from 'react';
 
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { apiUrl } from '@/lib/api/apiUrl';
 import * as panelApis from '@/lib/api/panel';
+import { renderWithAllProviders } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import { Panel, panelLoader, PanelError } from '@/pages/Panel';
 
@@ -66,5 +67,5 @@ function setup(): void {
     initialEntries: [`/panel/${panelId}`],
   });
 
-  render(<RouterProvider router={router} />);
+  renderWithAllProviders(<RouterProvider router={router} />);
 }
