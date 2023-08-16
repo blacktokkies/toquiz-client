@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-throw-literal */
 
+import type { Panel as PanelData } from '@/lib/api/panel';
 import type { LoaderFunction } from 'react-router-dom';
 
 import React from 'react';
@@ -10,6 +11,7 @@ import {
   json,
   isRouteErrorResponse,
   Link,
+  useLoaderData,
 } from 'react-router-dom';
 
 import { Logo } from '@/components/vectors';
@@ -40,9 +42,13 @@ export const panelLoader: LoaderFunction = async ({ params }) => {
 };
 
 export function Panel(): JSX.Element {
+  const panel = useLoaderData() as PanelData;
+
   return (
     <>
-      <header>헤더</header>
+      <header>
+        <h1>{panel.title}</h1>
+      </header>
     </>
   );
 }
