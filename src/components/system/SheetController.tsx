@@ -22,6 +22,7 @@ export function SheetController({
   type = 'bottom',
   close,
   children,
+  className = '',
   ...rest
 }: Props): JSX.Element {
   const sheetStyle = sheetStyles[type];
@@ -36,7 +37,7 @@ export function SheetController({
       <div
         ref={ref}
         role="complementary"
-        className={`fixed ${sheetStyle}`}
+        className={`fixed bg-white shadow-3xl ${sheetStyle} ${className}`}
         {...rest}
       >
         {children}
