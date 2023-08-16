@@ -39,6 +39,10 @@ export const panelLoader: LoaderFunction = async ({ params }) => {
   }
 };
 
+export function Panel(): JSX.Element {
+  return <div>패널 페이지</div>;
+}
+
 export function PanelError(): JSX.Element {
   const error = useRouteError();
 
@@ -83,8 +87,4 @@ export function PanelError(): JSX.Element {
   }
 
   return <div>알 수 없는 오류가 발생했습니다</div>;
-}
-
-export function Panel(): JSX.Element {
-  return <div>패널 페이지</div>;
 }
