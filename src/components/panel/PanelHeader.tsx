@@ -8,6 +8,8 @@ import { SheetController } from '@/components/system/SheetController';
 import { Account, Menu } from '@/components/vectors';
 import { useOverlay } from '@/hooks/useOverlay';
 
+import { PanelSidebar } from './PanelSidebar';
+
 interface Props {
   panel: Panel;
 }
@@ -16,8 +18,8 @@ export function PanelHeader({ panel }: Props): JSX.Element {
 
   function handleMenuButtonClick(): void {
     overlay.open(({ close }) => (
-      <SheetController aria-label="메뉴" close={close}>
-        메뉴
+      <SheetController aria-label="메뉴" close={close} type="left">
+        <PanelSidebar panel={panel} />
       </SheetController>
     ));
   }
