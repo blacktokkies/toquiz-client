@@ -3,15 +3,22 @@ import type { Panel } from '@/lib/api/panel';
 
 import React from 'react';
 
+import { clsx } from 'clsx';
+
 import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
 import { More } from '@/components/vectors/More';
 
 interface Props {
   panel: Panel;
   openActionMenu: CreateOverlayContent;
+  onPanelTitleClick: () => void;
 }
 
-export const PanelItem = ({ panel, openActionMenu }: Props): JSX.Element => {
+export const PanelItem = ({
+  panel,
+  openActionMenu,
+  onPanelTitleClick,
+}: Props): JSX.Element => {
   const { id, title, createdAt, description } = panel;
 
   return (
@@ -21,7 +28,16 @@ export const PanelItem = ({ panel, openActionMenu }: Props): JSX.Element => {
     >
       <div className="flex justify-between items-start">
         <div className="flex flex-col gap-1">
-          <div className="text-primary-dark text-base font-bold">{title}</div>
+          <button
+            type="button"
+            onClick={onPanelTitleClick}
+            className={clsx(
+              'text-primary-dark text-base font-bold',
+              'focus:underline focus:text-primary hover:underline hover:text-primary',
+            )}
+          >
+            {title}
+          </button>
           <span className="text-grey-dark text-sm">
             {formatDateString(createdAt)}
           </span>
