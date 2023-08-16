@@ -14,10 +14,11 @@ import {
   useLoaderData,
 } from 'react-router-dom';
 
-import { Logo } from '@/components/vectors';
+import { AccountActionMenu } from '@/components/home/AccountActionMenu';
+import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
+import { Logo, Account } from '@/components/vectors';
 import { getPanel } from '@/lib/api/panel';
 import { ApiError } from '@/lib/apiClient';
-
 // [NOTE] 로더 성공 반환값은 any 혹은 null로 고정한다
 // [NOTE] 로더 실패 반환값은 `Response`로 고정한다
 export const panelLoader: LoaderFunction = async ({ params }) => {
@@ -48,6 +49,20 @@ export function Panel(): JSX.Element {
     <>
       <header>
         <h1>{panel.title}</h1>
+        <OpenActionMenuArea
+          aria-label="내 계정 액션 메뉴"
+          open={({ close }) => <AccountActionMenu close={close} />}
+        >
+          <button
+            type="button"
+            className="hover:bg-grey-light rounded-full p-2"
+            aria-label="내 계정 아이콘"
+          >
+            <div role="img" aria-label="내 계정 아이콘">
+              <Account className="fill-grey-darkest" />
+            </div>
+          </button>
+        </OpenActionMenuArea>
       </header>
     </>
   );
