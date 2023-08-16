@@ -4,6 +4,8 @@ import type { GetMyPanelsResult, Panel } from '@/lib/api/panel';
 
 import React, { useCallback } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import { PanelActionMenu } from '@/components/home/PanelActionMenu';
 import { PanelItem } from '@/components/home/PanelItem';
 import { UpdatePanelModal } from '@/components/home/UpdatePanelModal';
@@ -19,6 +21,7 @@ interface Props {
 
 export function PanelGrid({ panelPages }: Props): JSX.Element {
   const overlay = useOverlay();
+  const navigate = useNavigate();
 
   const handleOpenUpdatePanelModal = useCallback(
     (panel: Panel) => {
@@ -61,6 +64,13 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
     [handleOpenUpdatePanelModal, handleOpenDeletePanelModal],
   );
 
+  const handlePanelTitleClick = useCallback(
+    (panel: Panel) => () => {
+      navigate(`/panel/${panel.id}`);
+    },
+    [navigate],
+  );
+
   if (panelPages.length === 0)
     return (
       <div className="w-full h-full flex flex-col justify-center items-center">
@@ -82,6 +92,7 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
             key={panel.id}
             panel={panel}
             openActionMenu={handleOpenPanelActionMenu(panel)}
+            onPanelTitleClick={handlePanelTitleClick(panel)}
           />
         )),
       )}
