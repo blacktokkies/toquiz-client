@@ -21,6 +21,7 @@ export function PanelHeader({ panel }: Props): JSX.Element {
       </SheetController>
     ));
   }
+
   return (
     <header>
       <button
