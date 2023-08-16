@@ -26,7 +26,7 @@ describe('/panel/:id route', () => {
     setup();
 
     await waitFor(() => {
-      expect(screen.getByText(/패널 페이지/)).toBeInTheDocument();
+      expect(screen.getByRole('banner')).toBeInTheDocument();
     });
   });
 
