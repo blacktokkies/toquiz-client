@@ -32,7 +32,7 @@ export const PanelItem = ({
             type="button"
             onClick={onPanelTitleClick}
             className={clsx(
-              'text-primary-dark text-base font-bold',
+              'text-primary-dark text-base font-bold text-start',
               'focus:underline focus:text-primary hover:underline hover:text-primary',
             )}
           >
