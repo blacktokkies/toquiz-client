@@ -11,7 +11,7 @@ import { apiUrl } from '@/lib/api/apiUrl';
 import * as panelApis from '@/lib/api/panel';
 import { renderWithAllProviders } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
-import { Panel, panelLoader, PanelError } from '@/pages/Panel';
+import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 
 const panelId: panelApis.Panel['id'] = 1;
 
@@ -59,7 +59,7 @@ function setup(): void {
       path: '/panel/:id',
       element: <Panel />,
       loader: panelLoader,
-      errorElement: <PanelError />,
+      errorElement: <PanelErrorBoundary />,
     },
   ];
 
