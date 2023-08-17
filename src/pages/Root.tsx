@@ -16,7 +16,7 @@ export function Root(): JSX.Element {
   const isLoading = navigation.state === 'loading';
 
   return (
-    <main className="h-full w-full">
+    <>
       <Outlet />
       {isLoading && (
         <>
@@ -39,7 +39,7 @@ export function Root(): JSX.Element {
           </div>
         </>
       )}
-    </main>
+    </>
   );
 }
 
@@ -49,7 +49,7 @@ export const RootErrorBoundary = (): JSX.Element => {
   if (isRouteErrorResponse(error)) {
     if (error.status === 404) {
       return (
-        <div className="h-full w-full bg-gradient-to-r from-gray-50 to-slate-100">
+        <main className="h-full overflow-auto bg-gradient-to-r from-gray-50 to-slate-100">
           <header className="border-b border-grey-light">
             <div className="container flex justify-between items-center max-w-7xl px-5 h-16">
               <Link to="/" className="rounded-md font-bold">
@@ -77,10 +77,10 @@ export const RootErrorBoundary = (): JSX.Element => {
               </div>
             </div>
           </header>
-          <div className="w-full h-36" />
+          <div className="h-36" />
           <div
             className={clsx(
-              'flex flex-col items-center gap-4 mx-auto px-8 max-w-xl',
+              'container flex flex-col flex-1 items-center gap-4 max-w-xl px-8',
               'xs:flex-row xs:justify-center',
               'md:gap-7',
             )}
@@ -104,13 +104,13 @@ export const RootErrorBoundary = (): JSX.Element => {
               </div>
             </Link>
           </div>
-        </div>
+        </main>
       );
     }
   }
 
   return (
-    <div className="h-full w-full bg-gradient-to-r from-gray-50 to-slate-100">
+    <main className="h-full overflow-auto bg-gradient-to-r from-gray-50 to-slate-100">
       <header className="border-b border-grey-light">
         <div className="container flex justify-between items-center max-w-7xl px-5 h-16">
           <Link to="/" className="rounded-md font-bold">
@@ -138,10 +138,10 @@ export const RootErrorBoundary = (): JSX.Element => {
           </div>
         </div>
       </header>
-      <div className="w-full h-36" />
+      <div className="h-36" />
       <div
         className={clsx(
-          'flex flex-col items-center gap-4 mx-auto px-8 max-w-xl',
+          'container flex flex-col flex-1 items-center gap-4 max-w-xl px-8',
           'xs:flex-row xs:justify-center',
           'md:gap-7',
         )}
@@ -164,6 +164,6 @@ export const RootErrorBoundary = (): JSX.Element => {
           </div>
         </Link>
       </div>
-    </div>
+    </main>
   );
 };

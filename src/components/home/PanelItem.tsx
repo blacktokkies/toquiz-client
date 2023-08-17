@@ -24,7 +24,7 @@ export const PanelItem = ({
   return (
     <li
       key={id}
-      className="flex flex-col gap-6 tracking-tight shadow-item hover:shadow-item-hover rounded-md bg-white py-4 px-5"
+      className="flex flex-col gap-6 tracking-tight rounded-md bg-white py-4 px-5 border border-grey-light"
     >
       <div className="flex justify-between items-start">
         <div className="flex flex-col gap-1">

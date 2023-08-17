@@ -75,44 +75,46 @@ export function Login(): JSX.Element {
   });
 
   return (
-    <div className="flex flex-col justify-center items-center px-9 h-full max-w-xl mx-auto">
-      <div className="mb-14 text-3xl font-bold">toquiz</div>
-      <form className="flex w-full flex-col gap-8" {...formProps}>
-        <div className="flex flex-col gap-5">
-          <LabelInput
-            id="email"
-            label="이메일"
-            required
-            placeholder="이메일을 입력하세요"
-            errorMessage={errors.email}
-            {...inputProps.email}
-            aria-label="이메일 인풋"
-          />
-          <LabelInput
-            id="password"
-            label="비밀번호"
-            type="password"
-            required
-            placeholder="비밀번호를 입력하세요"
-            errorMessage={errors.password}
-            {...inputProps.password}
-            aria-label="비밀번호 인풋"
-          />
+    <main className="h-full overflow-auto py-20">
+      <div className="container flex flex-col justify-center items-center px-9 max-w-xl h-full">
+        <div className="mb-14 text-3xl font-bold">toquiz</div>
+        <form className="flex w-full flex-col gap-8" {...formProps}>
+          <div className="flex flex-col gap-5">
+            <LabelInput
+              id="email"
+              label="이메일"
+              required
+              placeholder="이메일을 입력하세요"
+              errorMessage={errors.email}
+              {...inputProps.email}
+              aria-label="이메일 인풋"
+            />
+            <LabelInput
+              id="password"
+              label="비밀번호"
+              type="password"
+              required
+              placeholder="비밀번호를 입력하세요"
+              errorMessage={errors.password}
+              {...inputProps.password}
+              aria-label="비밀번호 인풋"
+            />
+          </div>
+          <Button
+            type="submit"
+            className="w-full py-3 font-semibold"
+            disabled={hasError || loginMutation.isLoading}
+          >
+            로그인
+          </Button>
+        </form>
+        <div className="mt-2">
+          계정이 없나요?{' '}
+          <Link className="font-bold underline" to="/signup">
+            회원가입
+          </Link>
         </div>
-        <Button
-          type="submit"
-          className="w-full py-3 font-semibold"
-          disabled={hasError || loginMutation.isLoading}
-        >
-          로그인
-        </Button>
-      </form>
-      <div className="mt-2">
-        계정이 없나요?{' '}
-        <Link className="font-bold underline" to="/signup">
-          회원가입
-        </Link>
       </div>
-    </div>
+    </main>
   );
 }

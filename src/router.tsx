@@ -33,10 +33,10 @@ export const router = createBrowserRouter([
       },
       {
         element: (
-          <>
+          <main className="flex flex-col h-full overflow-auto">
             <HomeHeader />
             <Outlet />
-          </>
+          </main>
         ),
         children: [
           {
