@@ -4,15 +4,18 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 
-import { renderWithAllProviders } from '@/lib/test-utils';
+import { OverlayProvider } from '@/contexts/OverlayContext';
+import { renderWithQueryClient } from '@/lib/test-utils';
 
 import { InfinitePanelGrid } from '../InfinitePanelGrid';
 
 describe('InfinitePanelGrid', () => {
   it('패널 생성 버튼을 누르면 패널 생성 모달이 열린다', async () => {
-    renderWithAllProviders(
+    renderWithQueryClient(
       <MemoryRouter>
-        <InfinitePanelGrid />
+        <OverlayProvider>
+          <InfinitePanelGrid />
+        </OverlayProvider>
       </MemoryRouter>,
     );
 

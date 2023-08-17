@@ -3,18 +3,15 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import { renderWithAllProviders } from '@/lib/test-utils';
+import { OverlayProvider } from '@/contexts/OverlayContext';
+import { renderWithQueryClient } from '@/lib/test-utils';
 import { myPanelList } from '@/mocks/data/panel';
 import { Home } from '@/pages/Home';
 import { setUserState } from '@/store/user-store';
 
 describe('홈 페이지', () => {
   it('내 패널 모아보기 헤딩을 보여준다.', () => {
-    renderWithAllProviders(
-      <MemoryRouter>
-        <Home />
-      </MemoryRouter>,
-    );
+    setup();
 
     expect(screen.getByRole('heading')).toHaveTextContent('내 패널 모아보기');
   });
@@ -25,24 +22,26 @@ describe('홈 페이지', () => {
       nickname: '테스트 닉네임',
       createdAt: new Date().toString(),
     });
-    renderWithAllProviders(
-      <MemoryRouter>
-        <Home />
-      </MemoryRouter>,
-    );
+    setup();
 
     expect(screen.getByText(/테스트 닉네임/i)).toBeInTheDocument();
   });
 
   it('사용자가 작성한 패널의 목록을 보여준다.', async () => {
-    renderWithAllProviders(
-      <MemoryRouter>
-        <Home />
-      </MemoryRouter>,
-    );
+    setup();
 
     await waitFor(() => {
       expect(screen.getAllByText(myPanelList[0].title)[0]).toBeInTheDocument();
     });
   });
 });
+
+function setup(): void {
+  renderWithQueryClient(
+    <MemoryRouter>
+      <OverlayProvider>
+        <Home />
+      </OverlayProvider>
+    </MemoryRouter>,
+  );
+}

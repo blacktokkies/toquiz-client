@@ -7,7 +7,8 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 
 import { PanelHeader } from '@/components/panel/PanelHeader';
-import { renderWithAllProviders } from '@/lib/test-utils';
+import { OverlayProvider } from '@/contexts/OverlayContext';
+import { renderWithQueryClient } from '@/lib/test-utils';
 import { createMockPanel } from '@/mocks/data/panel';
 
 const panel: PanelData = createMockPanel();
@@ -41,9 +42,11 @@ function setup(): {
   menuButton: HTMLButtonElement;
   accountButton: HTMLButtonElement;
 } {
-  renderWithAllProviders(
+  renderWithQueryClient(
     <MemoryRouter>
-      <PanelHeader panel={panel} />
+      <OverlayProvider>
+        <PanelHeader panel={panel} />
+      </OverlayProvider>
     </MemoryRouter>,
   );
 
