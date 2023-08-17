@@ -32,6 +32,7 @@ export function AccountActionMenu({ close }: Props): JSX.Element {
           type="button"
           onClick={() => {
             navigate('/home');
+            close();
           }}
         >
           내 패널 모아보기
@@ -41,6 +42,7 @@ export function AccountActionMenu({ close }: Props): JSX.Element {
           type="button"
           onClick={() => {
             navigate('/account');
+            close();
           }}
         >
           내 계정 관리
