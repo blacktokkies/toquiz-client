@@ -17,7 +17,7 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
   const updateMutation = useUpdatePanelMutation(panel.id);
   const messageRef = useRef<HTMLDivElement | null>(null);
 
-  const { inputProps, errors, formProps, hasError, inputRefs } = useForm({
+  const { inputProps, errors, formProps, hasError } = useForm({
     inputConfigs: {
       title: {
         validate: (value) => isPanelTitle(value),
@@ -29,11 +29,11 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
       },
     },
     formConfig: {
-      onSubmit: ({ title, description }) => {
+      onSubmit: ({ title, description }, _, refs) => {
         if (title === panel.title && description === panel.description) {
           if (messageRef.current)
             messageRef.current.textContent = '※수정된 값을 입력해주세요';
-          if (inputRefs.current?.title) inputRefs.current.title.focus();
+          if (refs.title) refs.title.focus();
           return;
         }
 

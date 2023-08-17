@@ -15,6 +15,7 @@ export interface FormConfig<T extends string> {
   onSubmit?: (
     data: Record<T, string>,
     e: FormEvent<HTMLFormElement> | MouseEvent<HTMLButtonElement>,
+    refs: Partial<Record<T, HTMLInputElement>>,
   ) => void;
 }
 
@@ -45,7 +46,6 @@ export const useForm = <T extends string>({
   hasError: boolean;
   setError: (name: T, error: string | null) => void;
   formProps: Partial<FormProps>;
-  inputRefs: React.MutableRefObject<Partial<Record<T, HTMLInputElement>>>;
 } => {
   const formRef = useRef<HTMLFormElement | null>(null);
   const inputRefs = useRef<Partial<Record<T, HTMLInputElement>>>({});
@@ -130,7 +130,7 @@ export const useForm = <T extends string>({
         return acc && isValid;
       }, true);
 
-      if (isValidForm) onSubmit?.(formDataRecord, e);
+      if (isValidForm) onSubmit?.(formDataRecord, e, inputRefs.current);
     }
 
     return {
@@ -141,5 +141,5 @@ export const useForm = <T extends string>({
     };
   }, [formConfig, inputConfigs, setError]);
 
-  return { inputProps, errors, hasError, setError, formProps, inputRefs };
+  return { inputProps, errors, hasError, setError, formProps };
 };
