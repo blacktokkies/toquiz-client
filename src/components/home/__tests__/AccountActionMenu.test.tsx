@@ -20,14 +20,6 @@ vi.mock('react-router-dom', async (importOriginal) => {
 
 describe('AccountActionMenu', () => {
   it('사용자 이메일과 닉네임을 보여준다', () => {
-    act(() => {
-      setUserState({
-        email: '이메일',
-        nickname: '닉네임',
-        createdAt: new Date().toString(),
-      });
-    });
-
     setup();
 
     expect(screen.getByText(/이메일/)).toBeInTheDocument();
@@ -68,6 +60,14 @@ function setup(): {
   accountButton: HTMLElement;
   logoutButton: HTMLElement;
 } {
+  act(() => {
+    setUserState({
+      email: '이메일',
+      nickname: '닉네임',
+      createdAt: new Date().toString(),
+    });
+  });
+
   renderWithQueryClient(
     <MemoryRouter>
       <AccountActionMenu close={handleClose} />
