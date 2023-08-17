@@ -10,17 +10,18 @@ interface Props {
   panel: Panel;
 }
 export function PanelSidebar({ panel }: Props): JSX.Element {
-  const { id, title, author, createdAt } = panel;
+  const { id, title, author, createdAt, description } = panel;
   return (
     <div className="flex flex-col justify-start w-[280px] divide-y divide-grey-light">
       <div className="flex gap-4 p-5">
         <span className="w-1 bg-primary" />
         <div className="flex flex-col justify-start items-start">
-          <h2 className="text-grey-dark font-medium">{title}</h2>
+          <h2 className="font-medium">{title}</h2>
           <div className="text-grey-dark text-sm">{author}</div>
           <div className="text-grey-dark text-sm">
             {formatDateString(createdAt)}
           </div>
+          <div className="text-grey-dark text-sm mt-3">{description}</div>
         </div>
       </div>
       <div className="flex flex-col py-2">
