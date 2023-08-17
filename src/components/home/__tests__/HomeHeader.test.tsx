@@ -5,13 +5,16 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 
 import { HomeHeader } from '@/components/home/HomeHeader';
-import { renderWithAllProviders } from '@/lib/test-utils';
+import { OverlayProvider } from '@/contexts/OverlayContext';
+import { renderWithQueryClient } from '@/lib/test-utils';
 
 describe('HomeHeader', () => {
   it('홈 페이지 헤더를 보여준다', () => {
-    renderWithAllProviders(
+    renderWithQueryClient(
       <MemoryRouter>
-        <HomeHeader />
+        <OverlayProvider>
+          <HomeHeader />
+        </OverlayProvider>
       </MemoryRouter>,
     );
 
@@ -19,9 +22,11 @@ describe('HomeHeader', () => {
   });
 
   it('내 계정 아이콘을 누르면 계정 액션 메뉴를 보여준다', async () => {
-    renderWithAllProviders(
+    renderWithQueryClient(
       <MemoryRouter>
-        <HomeHeader />
+        <OverlayProvider>
+          <HomeHeader />
+        </OverlayProvider>
       </MemoryRouter>,
     );
 

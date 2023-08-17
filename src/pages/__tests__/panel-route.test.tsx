@@ -3,13 +3,13 @@ import type { RouteObject } from 'react-router-dom';
 
 import React from 'react';
 
-import { screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
-import { RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { Outlet, RouterProvider, createMemoryRouter } from 'react-router-dom';
 
+import { OverlayProvider } from '@/contexts/OverlayContext';
 import { apiUrl } from '@/lib/api/apiUrl';
 import * as panelApis from '@/lib/api/panel';
-import { renderWithAllProviders } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 
@@ -56,10 +56,20 @@ function overrideGetPanelResponseWithError(data: ErrorResponse): void {
 function setup(): void {
   const routes: RouteObject[] = [
     {
-      path: '/panel/:id',
-      element: <Panel />,
-      loader: panelLoader,
-      errorElement: <PanelErrorBoundary />,
+      path: '/',
+      element: (
+        <OverlayProvider>
+          <Outlet />
+        </OverlayProvider>
+      ),
+      children: [
+        {
+          path: '/panel/:id',
+          element: <Panel />,
+          loader: panelLoader,
+          errorElement: <PanelErrorBoundary />,
+        },
+      ],
     },
   ];
 
@@ -67,5 +77,5 @@ function setup(): void {
     initialEntries: [`/panel/${panelId}`],
   });
 
-  renderWithAllProviders(<RouterProvider router={router} />);
+  render(<RouterProvider router={router} />);
 }

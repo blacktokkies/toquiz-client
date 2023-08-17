@@ -4,7 +4,8 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import { renderWithAllProviders } from '@/lib/test-utils';
+import { OverlayProvider } from '@/contexts/OverlayContext';
+import { renderWithQueryClient } from '@/lib/test-utils';
 import { createMockPanel } from '@/mocks/data/panel';
 import { Panel } from '@/pages/Panel';
 
@@ -17,7 +18,11 @@ vi.mock('react-router-dom', async (importOriginal) => {
 
 describe('패널 페이지', () => {
   it('헤더를 보여준다', () => {
-    renderWithAllProviders(<Panel />);
+    renderWithQueryClient(
+      <OverlayProvider>
+        <Panel />
+      </OverlayProvider>,
+    );
 
     expect(screen.getByRole('banner')).toBeInTheDocument();
   });
