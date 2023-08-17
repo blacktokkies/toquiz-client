@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Logo } from '@/components/vectors';
 
 export const Index = (): JSX.Element => (
-  <div className="h-full w-full bg-off-white">
+  <div className="h-full w-full bg-gradient-to-r from-gray-50 to-slate-100">
     <header className="border-b border-grey-light">
       <div className="container flex justify-between items-center max-w-7xl px-5 h-16">
         <Link to="/" className="rounded-md font-bold">
@@ -37,7 +37,7 @@ export const Index = (): JSX.Element => (
     <div className="w-full h-36" />
     <div className="flex flex-col items-center max-w-xl px-5 mx-auto gap-6">
       <div role="img" aria-label="toquiz 로고">
-        <Logo className="h-24 w-24 sm:h-40 sm:w-40" />
+        <Logo className="h-28 w-h-28 sm:h-40 sm:w-40" />
       </div>
       <div className="flex flex-col w-full justify-start gap-3">
         <div>
