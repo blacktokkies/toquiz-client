@@ -22,7 +22,7 @@ export function ActionMenuController({
 
   return (
     <>
-      <div className="z-50 fixed inset-0 bg-backdrop md:inset-full" />
+      <div className="z-10 fixed inset-0 bg-backdrop md:inset-full" />
       <div
         ref={ref}
         role="dialog"

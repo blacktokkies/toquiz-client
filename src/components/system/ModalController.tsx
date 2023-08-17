@@ -43,12 +43,12 @@ export function ModalController({
   useOutsideClick(ref, close);
   return (
     <>
-      <div className="fixed inset-0 bg-backdrop" />
+      <div className="fixed z-10 inset-0 bg-backdrop" />
       <div
         ref={ref}
         role="dialog"
         className={clsx(
-          `fixed ${verticalAlignment} ${horizontalAlginment} w-11/12 max-w-xl`,
+          `fixed z-10 ${verticalAlignment} ${horizontalAlginment} w-11/12 max-w-xl`,
           {
             '-translate-x-1/2 -translate-y-1/2': horizontal === 'center',
           },
