@@ -4,19 +4,18 @@ import { Outlet, createBrowserRouter } from 'react-router-dom';
 
 import { HomeHeader } from '@/components/home/HomeHeader';
 import { Account, accountLoader } from '@/pages/Account';
-import { Error } from '@/pages/Error';
 import { Home, homeLoader } from '@/pages/Home';
 import { Index } from '@/pages/Index';
 import { Login, loginLoader } from '@/pages/Login';
 import { Panel, panelLoader, PanelError } from '@/pages/Panel';
-import { Root } from '@/pages/Root';
+import { Root, RootErrorBoundary } from '@/pages/Root';
 import { SignUp, signupLoader } from '@/pages/SignUp';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    errorElement: <Error />,
+    errorElement: <RootErrorBoundary />,
     children: [
       {
         index: true,
