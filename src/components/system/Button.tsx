@@ -2,11 +2,12 @@ import type { ButtonHTMLAttributes } from 'react';
 
 import React, { forwardRef } from 'react';
 
-type Variant = 'primary' | 'secondary';
+type Variant = 'primary' | 'secondary' | 'danger';
 
 const variantStyles: Record<Variant, string> = {
   primary: 'bg-primary hover:bg-primary-hover text-grey-darkest font-medium',
   secondary: 'bg-white hover:bg-grey-lighter text-grey-dark font-normal',
+  danger: 'bg-danger hover:bg-danger-hover text-white font-medium',
 } as const;
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
