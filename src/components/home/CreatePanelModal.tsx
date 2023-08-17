@@ -2,6 +2,8 @@ import type { CreateOverlayContentProps } from '@/hooks/useOverlay';
 
 import React from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
 import { useCreatePanelMutation } from '@/hooks/queries/panel';
@@ -10,6 +12,7 @@ import { isPanelDescription, isPanelTitle } from '@/lib/validator';
 
 type Props = CreateOverlayContentProps;
 export function CreatePanelModal({ close }: Props): JSX.Element {
+  const navigate = useNavigate();
   const createPanelMutation = useCreatePanelMutation();
   const { inputProps, errors, formProps, hasError } = useForm({
     inputConfigs: {
@@ -28,9 +31,8 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
         createPanelMutation.mutate(
           { title, description },
           {
-            onSuccess: () => {
-              close();
-              // TODO: 해당 패널 페이지로 이동한다
+            onSuccess: ({ id }) => {
+              navigate(`/panel/${id}`);
             },
           },
         );
