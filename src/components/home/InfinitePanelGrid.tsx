@@ -38,7 +38,7 @@ export const InfinitePanelGrid = (): JSX.Element => {
   if (panelsQuery.isError) return <div>error occurred</div>;
 
   return (
-    <div className="flex-1 p-5 bg-off-white">
+    <div className="h-full p-5">
       <PanelGrid panelPages={panelsQuery.data.pages} />
       <IntersectionArea onIntersection={fetchPanels} />
       <button

@@ -85,7 +85,7 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
     );
 
   return (
-    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 pb-16">
+    <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
       {panelPages.map((page) =>
         page.panels.map((panel) => (
           <PanelItem

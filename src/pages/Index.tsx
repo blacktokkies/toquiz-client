@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Logo } from '@/components/vectors';
 
 export const Index = (): JSX.Element => (
-  <div className="h-full w-full bg-gradient-to-r from-gray-50 to-slate-100">
+  <main className="h-full overflow-auto bg-off-white">
     <header className="border-b border-grey-light">
       <div className="container flex justify-between items-center max-w-7xl px-5 h-16">
         <Link to="/" className="rounded-md font-bold">
@@ -34,12 +34,12 @@ export const Index = (): JSX.Element => (
         </div>
       </div>
     </header>
-    <div className="w-full h-36" />
-    <div className="flex flex-col items-center max-w-xl px-5 mx-auto gap-6">
+    <div className="h-36" />
+    <div className="container flex flex-col items-center gap-6 max-w-xl px-5">
       <div role="img" aria-label="toquiz 로고">
         <Logo className="h-28 w-h-28 sm:h-40 sm:w-40" />
       </div>
-      <div className="flex flex-col w-full justify-start gap-3">
+      <div className="flex flex-col justify-start gap-3">
         <div>
           <p className="text-5xl font-bold sm:text-7xl">익명으로 질문을</p>
           <p className="text-5xl font-bold sm:text-7xl">받아보세요</p>
@@ -52,7 +52,7 @@ export const Index = (): JSX.Element => (
       <Link
         to="/home"
         className={clsx(
-          'w-full py-3 rounded-md bg-primary text-center font-bold',
+          'w-full py-3 rounded-md bg-primary text-center font-bold border border-grey-lighter',
           'hover:bg-primary-hover focus:bg-primary-hover focus:border focus:border-black',
         )}
       >
@@ -60,5 +60,5 @@ export const Index = (): JSX.Element => (
       </Link>
       토퀴즈는 현재 개발 중인 서비스입니다
     </div>
-  </div>
+  </main>
 );

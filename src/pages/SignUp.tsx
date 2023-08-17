@@ -86,67 +86,69 @@ export function SignUp(): JSX.Element {
   });
 
   return (
-    <div className="flex flex-col justify-center items-center px-9 my-8 h-full max-w-xl mx-auto">
-      <div className="mb-14 text-3xl font-bold">toquiz</div>
-      <form className="flex w-full flex-col gap-8" {...formProps}>
-        <div className="flex flex-col gap-5">
-          <LabelInput
-            id="email"
-            label="이메일"
-            name="email"
-            required
-            placeholder="이메일을 입력하세요"
-            errorMessage={errors.email}
-            {...inputProps.email}
-            aria-label="이메일 인풋"
-          />
-          <LabelInput
-            id="password"
-            label="비밀번호"
-            name="password"
-            type="password"
-            required
-            placeholder="비밀번호를 입력하세요"
-            errorMessage={errors.password}
-            {...inputProps.password}
-            aria-label="비밀번호 인풋"
-          />
-          <LabelInput
-            id="confirm-password"
-            label="비밀번호 확인"
-            name="confirm-password"
-            type="password"
-            required
-            placeholder="비밀번호를 다시 입력하세요"
-            errorMessage={errors['confirm-password']}
-            {...inputProps['confirm-password']}
-            aria-label="비밀번호 확인 인풋"
-          />
-          <LabelInput
-            id="nickname"
-            label="닉네임"
-            name="nickname"
-            required
-            placeholder="닉네임을 입력하세요"
-            errorMessage={errors.nickname}
-            {...inputProps.nickname}
-            aria-label="닉네임 인풋"
-          />
+    <main className="h-full overflow-auto">
+      <div className="container flex flex-col justify-center items-center px-9 max-w-xl h-full">
+        <div className="mb-14 text-3xl font-bold">toquiz</div>
+        <form className="flex w-full flex-col gap-8" {...formProps}>
+          <div className="flex flex-col gap-5">
+            <LabelInput
+              id="email"
+              label="이메일"
+              name="email"
+              required
+              placeholder="이메일을 입력하세요"
+              errorMessage={errors.email}
+              {...inputProps.email}
+              aria-label="이메일 인풋"
+            />
+            <LabelInput
+              id="password"
+              label="비밀번호"
+              name="password"
+              type="password"
+              required
+              placeholder="비밀번호를 입력하세요"
+              errorMessage={errors.password}
+              {...inputProps.password}
+              aria-label="비밀번호 인풋"
+            />
+            <LabelInput
+              id="confirm-password"
+              label="비밀번호 확인"
+              name="confirm-password"
+              type="password"
+              required
+              placeholder="비밀번호를 다시 입력하세요"
+              errorMessage={errors['confirm-password']}
+              {...inputProps['confirm-password']}
+              aria-label="비밀번호 확인 인풋"
+            />
+            <LabelInput
+              id="nickname"
+              label="닉네임"
+              name="nickname"
+              required
+              placeholder="닉네임을 입력하세요"
+              errorMessage={errors.nickname}
+              {...inputProps.nickname}
+              aria-label="닉네임 인풋"
+            />
+          </div>
+          <Button
+            type="submit"
+            className="w-full py-3 font-semibold"
+            disabled={hasError || signUpMutation.isLoading}
+          >
+            회원가입
+          </Button>
+        </form>
+        <div className="mt-2">
+          계정이 있나요?{' '}
+          <Link className="font-bold underline" to="/login">
+            로그인
+          </Link>
         </div>
-        <Button
-          type="submit"
-          className="w-full py-3 font-semibold"
-          disabled={hasError || signUpMutation.isLoading}
-        >
-          회원가입
-        </Button>
-      </form>
-      <div className="mt-2">
-        계정이 있나요?{' '}
-        <Link className="font-bold underline" to="/login">
-          로그인
-        </Link>
       </div>
-    </div>
+    </main>
   );
 }

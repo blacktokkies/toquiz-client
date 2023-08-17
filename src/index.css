@@ -12,7 +12,8 @@
 }
 
 html,
-body {
+body,
+#root {
   height: 100%;
 }
 
@@ -22,10 +23,6 @@ body {
     'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     sans-serif;
   letter-spacing: -0.48px;
-}
-
-#root {
-  height: 100%;
 }
 
 @layer base {
