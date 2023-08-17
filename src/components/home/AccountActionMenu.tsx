@@ -20,11 +20,33 @@ export function AccountActionMenu({ close }: Props): JSX.Element {
   }));
   const clearUser = useUserStore((state) => state.clearUser);
 
+  if (!user.email.length)
+    return (
+      <div className="flex flex-col divide-y divide-grey-light">
+        <div className="flex flex-col px-5 py-4 whitespace-nowrap">
+          <div className="font-medium">익명</div>
+          <div className="text-grey-dark">현재 로그아웃 상태입니다</div>
+        </div>
+        <div className="flex flex-col py-1">
+          <button
+            className="px-5 py-2 hover:bg-grey-lighter text-left"
+            type="button"
+            onClick={() => {
+              navigate('/login');
+              close();
+            }}
+          >
+            로그인
+          </button>
+        </div>
+      </div>
+    );
+
   return (
     <div className="flex flex-col divide-y divide-grey-light">
       <div className="flex flex-col px-5 py-4 whitespace-nowrap">
-        <div className="font-medium">{user.email}</div>
-        <div className="text-grey-dark">{user.nickname}</div>
+        <div className="font-medium">{user.nickname}</div>
+        <div className="text-grey-dark">{user.email}</div>
       </div>
       <div className="flex flex-col py-1">
         <button
@@ -56,6 +78,7 @@ export function AccountActionMenu({ close }: Props): JSX.Element {
                 clearAccessToken();
                 clearUser();
                 navigate('/login');
+                close();
               },
               onError: () => {
                 // TODO: invalid access token 나는 경우 어떻게 처리할지 생각하기
