@@ -51,7 +51,7 @@ export function Panel(): JSX.Element {
   );
 }
 
-export function PanelError(): JSX.Element {
+export function PanelErrorBoundary(): JSX.Element {
   const error = useRouteError();
 
   if (isRouteErrorResponse(error)) {

@@ -7,7 +7,7 @@ import { Account, accountLoader } from '@/pages/Account';
 import { Home, homeLoader } from '@/pages/Home';
 import { Index } from '@/pages/Index';
 import { Login, loginLoader } from '@/pages/Login';
-import { Panel, panelLoader, PanelError } from '@/pages/Panel';
+import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 import { Root, RootErrorBoundary } from '@/pages/Root';
 import { SignUp, signupLoader } from '@/pages/SignUp';
 
@@ -51,7 +51,7 @@ export const router = createBrowserRouter([
         path: 'panel/:id',
         element: <Panel />,
         loader: panelLoader,
-        errorElement: <PanelError />,
+        errorElement: <PanelErrorBoundary />,
       },
     ],
   },
