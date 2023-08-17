@@ -10,6 +10,7 @@ import {
 } from 'react-router-dom';
 
 import { Logo } from '@/components/vectors';
+import { OverlayProvider } from '@/contexts/OverlayContext';
 
 export function Root(): JSX.Element {
   const navigation = useNavigation();
@@ -17,7 +18,9 @@ export function Root(): JSX.Element {
 
   return (
     <>
-      <Outlet />
+      <OverlayProvider>
+        <Outlet />
+      </OverlayProvider>
       {isLoading && (
         <>
           {/* 가장 최상위 레이어로 보여야하므로 z-index 가장 높게 준다 */}
