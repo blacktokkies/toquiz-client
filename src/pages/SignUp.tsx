@@ -86,7 +86,7 @@ export function SignUp(): JSX.Element {
   });
 
   return (
-    <div className="mx-auto flex h-full max-w-xl flex-col items-center justify-center px-9">
+    <div className="flex flex-col justify-center items-center px-9 my-8 h-full max-w-xl mx-auto">
       <div className="mb-14 text-3xl font-bold">toquiz</div>
       <form className="flex w-full flex-col gap-8" {...formProps}>
         <div className="flex flex-col gap-5">

@@ -63,7 +63,6 @@ export function Login(): JSX.Element {
               const { code } = error.data;
 
               if (code === 'NOT_EXIST_MEMBER') {
-                console.log('===============================');
                 setError('email', `${email}은 존재하지 않는 계정입니다`);
               } else if (code === 'INVALID_PASSWORD') {
                 setError('password', '이메일과 비밀번호가 일치하지 않습니다');
@@ -76,7 +75,7 @@ export function Login(): JSX.Element {
   });
 
   return (
-    <div className="mx-auto flex h-full max-w-xl flex-col items-center justify-center px-9">
+    <div className="flex flex-col justify-center items-center px-9 h-full max-w-xl mx-auto">
       <div className="mb-14 text-3xl font-bold">toquiz</div>
       <form className="flex w-full flex-col gap-8" {...formProps}>
         <div className="flex flex-col gap-5">
