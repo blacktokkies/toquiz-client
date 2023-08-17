@@ -24,7 +24,7 @@ export function DeletePanelModal({ close, panel }: Props): JSX.Element {
           취소
         </Button>
         <Button
-          className="bg-danger text-white hover:bg-danger-hover font-normal"
+          variant="danger"
           type="button"
           onClick={() => {
             deletePanelMutation.mutate(id, {
