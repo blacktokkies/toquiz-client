@@ -33,11 +33,11 @@ export function SheetController({
 
   return (
     <>
-      <div className="fixed inset-0 bg-backdrop" />
+      <div className="fixed z-10 inset-0 bg-backdrop" />
       <div
         ref={ref}
         role="complementary"
-        className={`fixed bg-white shadow-3xl ${sheetStyle} ${className}`}
+        className={`fixed z-10 bg-white shadow-3xl ${sheetStyle} ${className}`}
         {...rest}
       >
         {children}
