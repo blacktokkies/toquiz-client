@@ -27,7 +27,7 @@ export function ActionMenuController({
         ref={ref}
         role="dialog"
         className={clsx(
-          'z-50 fixed bottom-0 left-0 w-full',
+          'z-10 fixed bottom-0 left-0 w-full',
           'md:absolute md:bottom-auto md:left-auto md:w-auto md:right-0 md:min-w-[200px]',
           'border border-grey-light bg-white shadow-md',
         )}
