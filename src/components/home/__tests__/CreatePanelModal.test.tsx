@@ -17,6 +17,12 @@ vi.mock('@/lib/validator', () => ({
 
 const handleClose = vi.fn();
 
+const navigateMockFn = vi.fn();
+vi.mock('react-router-dom', async (importOriginal) => {
+  const router = (await importOriginal()) ?? {};
+  return { ...router, useNavigate: vi.fn(() => navigateMockFn) };
+});
+
 describe('CretaePanelModal', () => {
   it('패널 생성하기 헤딩을 보여준다', () => {
     setup();
@@ -71,7 +77,7 @@ describe('CretaePanelModal', () => {
     ).toBeInTheDocument();
   });
 
-  it('유효한 필드를 제출하면 패널 생성 API를 호출하고 성공하면 close 함수를 호출한다', async () => {
+  it('유효한 필드를 제출하면 패널 생성 API를 호출하고 성공하면 패널 페이지로 이동한다', async () => {
     (isPanelTitle as Vi.Mock).mockImplementation(() => true);
     (isPanelDescription as Vi.Mock).mockImplementation(() => true);
     const spyOnCreatePanel = vi.spyOn(panelApis, 'createPanel');
@@ -92,7 +98,7 @@ describe('CretaePanelModal', () => {
     });
 
     await waitFor(() => {
-      expect(handleClose).toHaveBeenCalled();
+      expect(navigateMockFn).toHaveBeenCalled();
     });
   });
 });
