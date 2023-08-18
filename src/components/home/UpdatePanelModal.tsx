@@ -76,26 +76,26 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
           {...inputProps.description}
           defaultValue={panel.description}
         />
+        <div className="flex gap-3 justify-end items-center">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => {
+              close();
+            }}
+          >
+            취소
+          </Button>
+          <Button
+            type="submit"
+            disabled={hasError || updateMutation.isLoading}
+            onClick={formProps.onSubmit}
+          >
+            패널 수정
+          </Button>
+        </div>
       </form>
       <div ref={messageRef} className="text-primary" />
-      <div className="flex gap-3 justify-end items-center">
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => {
-            close();
-          }}
-        >
-          취소
-        </Button>
-        <Button
-          type="submit"
-          disabled={hasError || updateMutation.isLoading}
-          onClick={formProps.onSubmit}
-        >
-          패널 수정
-        </Button>
-      </div>
     </div>
   );
 }
