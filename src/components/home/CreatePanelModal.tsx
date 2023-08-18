@@ -65,25 +65,25 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
           errorMessage={errors.description}
           {...inputProps.description}
         />
+        <div className="flex gap-3 justify-end items-center">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => {
+              close();
+            }}
+          >
+            취소
+          </Button>
+          <Button
+            type="submit"
+            disabled={hasError || createPanelMutation.isLoading}
+            onClick={formProps.onSubmit}
+          >
+            패널 생성
+          </Button>
+        </div>
       </form>
-      <div className="flex gap-3 justify-end">
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => {
-            close();
-          }}
-        >
-          취소
-        </Button>
-        <Button
-          type="submit"
-          disabled={hasError || createPanelMutation.isLoading}
-          onClick={formProps.onSubmit}
-        >
-          패널 생성
-        </Button>
-      </div>
     </div>
   );
 }
