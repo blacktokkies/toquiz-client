@@ -1,13 +1,16 @@
-import type { Props as ActionMenuControllerPrpos } from '@/components/system/ActionMenuController';
-import type { CreateOverlayContent } from '@/hooks/useOverlay';
+import type { HTMLAttributes } from 'react';
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 
-import { ActionMenuController } from '@/components/system/ActionMenuController';
-import { useInsideClick } from '@/hooks/useInsideClick';
+import { clsx } from 'clsx';
 
-interface Props extends Omit<ActionMenuControllerPrpos, 'close'> {
-  open: CreateOverlayContent;
+export interface CreateActionMenuProps {
+  close: () => void;
+}
+export type CreateActionMenu = (props: CreateActionMenuProps) => JSX.Element;
+
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  open: CreateActionMenu;
 }
 export function OpenActionMenuArea({
   open: ActionMenu,
@@ -15,33 +18,53 @@ export function OpenActionMenuArea({
   ...rest
 }: Props): JSX.Element {
   const area = useRef<HTMLDivElement | null>(null);
+  const menu = useRef<HTMLDivElement | null>(null);
   const [open, setOpen] = useState(false);
 
-  const handleActionMenuOpen = useCallback(
-    (event: MouseEvent) => {
+  const handleActionMenuClose = useCallback(() => {
+    setOpen(false);
+  }, []);
+
+  useEffect(() => {
+    function handleAreaClick(event: MouseEvent): void {
+      // 클릭 대상이 액션 메뉴라면 아무것도 하지 않는다
       if (
         !(event.target instanceof Node) ||
-        (open && area.current?.lastChild?.contains(event.target))
+        menu.current?.contains(event.target)
       )
         return;
-      setOpen(!open);
-    },
-    [open],
-  );
 
-  useInsideClick(area, handleActionMenuOpen);
+      // 클릭 대상이 영역 내부라면 액션 메뉴를 토글한다
+      if (area.current?.contains(event.target)) setOpen((open) => !open);
+      //  클릭 대상이 영역 내부가 아니라면 액션 메뉴를 닫는다
+      else setOpen(false);
+    }
 
-  const handleClose = useCallback(() => {
-    setOpen(false);
+    window.addEventListener('mousedown', handleAreaClick);
+
+    return () => {
+      window.removeEventListener('mousedown', handleAreaClick);
+    };
   }, []);
 
   return (
     <div ref={area} className="relative">
       {children}
       {open && (
-        <ActionMenuController close={handleClose} {...rest}>
-          <ActionMenu close={handleClose} />
-        </ActionMenuController>
+        <div ref={(node) => (menu.current = node)}>
+          <div className="z-10 fixed inset-0 bg-backdrop md:inset-full" />
+          <div
+            role="dialog"
+            className={clsx(
+              'z-10 fixed bottom-0 left-0 w-full',
+              'md:absolute md:bottom-auto md:left-auto md:w-auto md:right-0 md:min-w-[200px]',
+              'border border-grey-light bg-white shadow-md',
+            )}
+            {...rest}
+          >
+            <ActionMenu close={handleActionMenuClose} />
+          </div>
+        </div>
       )}
     </div>
   );
