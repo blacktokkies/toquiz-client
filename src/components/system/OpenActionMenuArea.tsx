@@ -36,7 +36,7 @@ export function OpenActionMenuArea({
 
       // 클릭 대상이 영역 내부라면 액션 메뉴를 토글한다
       if (area.current?.contains(event.target)) setOpen((open) => !open);
-      //  클릭 대상이 영역 내부가 아니라면 액션 메뉴를 닫는다
+      // 클릭 대상이 영역 내부가 아니라면 액션 메뉴를 닫는다
       else setOpen(false);
     }
 
@@ -51,9 +51,12 @@ export function OpenActionMenuArea({
     <div ref={area} className="relative">
       {children}
       {open && (
-        <div ref={(node) => (menu.current = node)}>
+        <>
           <div className="z-10 fixed inset-0 bg-backdrop md:inset-full" />
           <div
+            ref={(node) => {
+              menu.current = node;
+            }}
             role="dialog"
             className={clsx(
               'z-10 fixed bottom-0 left-0 w-full',
@@ -64,7 +67,7 @@ export function OpenActionMenuArea({
           >
             <ActionMenu close={handleActionMenuClose} />
           </div>
-        </div>
+        </>
       )}
     </div>
   );
