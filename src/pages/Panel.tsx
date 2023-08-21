@@ -14,9 +14,9 @@ import {
   useLoaderData,
 } from 'react-router-dom';
 
+import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import { PanelHeader } from '@/components/panel/PanelHeader';
 import { Logo } from '@/components/vectors';
-import { useQuestionsInfiniteQuery } from '@/hooks/queries/question';
 import { getPanel } from '@/lib/api/panel';
 import { ApiError } from '@/lib/apiClient';
 // [NOTE] 로더 성공 반환값은 any 혹은 null로 고정한다
@@ -44,24 +44,11 @@ export const panelLoader: LoaderFunction = async ({ params }) => {
 
 export function Panel(): JSX.Element {
   const panel = useLoaderData() as PanelData;
-  const questionsQuery = useQuestionsInfiniteQuery(panel.id);
-
-  // TODO: fallback UI 제공
-  if (questionsQuery.isLoading) return <div>loading</div>;
-  if (questionsQuery.isError) return <div>error</div>;
-
-  const questionPages = questionsQuery.data.pages;
 
   return (
     <>
       <PanelHeader panel={panel} />
-      <ul>
-        {questionPages.map((questionPage) =>
-          questionPage.questions.map((question) => (
-            <li key={question.id}>{question.content}</li>
-          )),
-        )}
-      </ul>
+      <InfiniteQuestionList panelId={panel.id} />
     </>
   );
 }
