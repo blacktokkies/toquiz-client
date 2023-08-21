@@ -3,13 +3,14 @@ import type { RouteObject } from 'react-router-dom';
 
 import React from 'react';
 
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { Outlet, RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { apiUrl } from '@/lib/api/apiUrl';
 import * as panelApis from '@/lib/api/panel';
+import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 
@@ -77,5 +78,5 @@ function setup(): void {
     initialEntries: [`/panel/${panelId}`],
   });
 
-  render(<RouterProvider router={router} />);
+  renderWithQueryClient(<RouterProvider router={router} />);
 }
