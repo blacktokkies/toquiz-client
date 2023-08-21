@@ -44,7 +44,7 @@ describe('panel api', () => {
     expect(res.message).toBe('패널 삭제에 성공하였습니다.');
   });
 
-  it(`panelPanel을 호출하면 패널 가져오기 API(${apiUrl.panel.get(
+  it(`getPanel을 호출하면 패널 가져오기 API(${apiUrl.panel.get(
     ':panelId',
   )})로 요청한다`, async () => {
     const panelId: Panel['id'] = 1;
