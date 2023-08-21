@@ -2,6 +2,7 @@ import type { LoaderFunction } from 'react-router-dom';
 
 import React from 'react';
 
+import { clsx } from 'clsx';
 import { Link, useNavigate, redirect } from 'react-router-dom';
 
 import { Button } from '@/components/system/Button';
@@ -87,7 +88,12 @@ export function SignUp(): JSX.Element {
 
   return (
     <main className="h-full overflow-auto">
-      <div className="container flex flex-col justify-center items-center px-9 max-w-xl h-full">
+      <div
+        className={clsx(
+          'container flex flex-col items-center px-9 py-16 max-w-xl min-h-screen',
+          'sm:justify-center',
+        )}
+      >
         <div className="mb-14 text-3xl font-bold">toquiz</div>
         <form className="flex w-full flex-col gap-8" {...formProps}>
           <div className="flex flex-col gap-5">
