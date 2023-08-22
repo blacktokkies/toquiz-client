@@ -14,7 +14,7 @@ import { queryKey } from '@/lib/queryKey';
 export const useQuestionsInfiniteQuery = (
   panelId: Panel['id'],
 ): UseInfiniteQueryResult<GetQuestionsResult, ApiError | SyntaxError> => {
-  const key = queryKey.panel.lists();
+  const key = queryKey.question.list(panelId);
   const query = useInfiniteQuery<GetQuestionsResult, ApiError | SyntaxError>(
     key,
     async ({ pageParam = 0 }) =>
