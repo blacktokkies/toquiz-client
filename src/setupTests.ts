@@ -5,13 +5,6 @@ import { server } from '@/mocks/server';
 
 globalThis.fetch = fetch;
 
-const IntersectionObserverMock = vi.fn(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
-vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
-
 vi.mock('zustand');
 
 beforeAll(() => {
@@ -22,4 +15,46 @@ afterEach(() => {
 });
 afterAll(() => {
   server.close();
+});
+
+/* ===================== [ IntersectionObserver 모킹 ] ===================== */
+interface IntersectionObserverEntryMock {
+  target: Element;
+  isIntersecting: boolean;
+}
+const storeRemoveFns = new Set<() => void>();
+const IntersectionObserverMock = vi.fn(
+  (callback: (entries: IntersectionObserverEntryMock[]) => void) => {
+    let entries: IntersectionObserverEntryMock[] = [];
+    function handleScroll(): void {
+      entries.forEach((entry) => {
+        entry.isIntersecting = true;
+      });
+      callback(entries);
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    storeRemoveFns.add(() => {
+      window.removeEventListener('scroll', handleScroll);
+    });
+
+    return {
+      observe: vi.fn((target: Element) => {
+        entries = [...entries, { target, isIntersecting: false }];
+      }),
+      unobserve: vi.fn((target: Element) => {
+        entries = entries.filter((entry) => entry.target !== target);
+      }),
+      disconnect: vi.fn(() => {
+        entries = [];
+      }),
+    };
+  },
+);
+vi.stubGlobal('IntersectionObserver', IntersectionObserverMock);
+
+afterEach(() => {
+  storeRemoveFns.forEach((removeFn) => {
+    removeFn();
+  });
 });
