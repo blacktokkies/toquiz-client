@@ -34,6 +34,7 @@ export const InfinitePanelGrid = (): JSX.Element => {
     ));
   }
 
+  // TODO: fallback UI 작성하기
   if (panelsQuery.isLoading) return <div>loading...</div>;
   if (panelsQuery.isError) return <div>error occurred</div>;
 
