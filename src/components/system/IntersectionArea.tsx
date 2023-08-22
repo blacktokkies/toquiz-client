@@ -15,8 +15,8 @@ export function IntersectionArea({
   useEffect(() => {
     if (targetRef.current === null) return;
 
-    const observer = new IntersectionObserver(([entry]) => {
-      onIntersection(entry.isIntersecting);
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.length) onIntersection(entries[0].isIntersecting);
     });
 
     observer.observe(targetRef.current);
