@@ -2,7 +2,7 @@ import type { Panel } from '@/lib/api/panel';
 
 import React from 'react';
 
-import { screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import * as questionApis from '@/lib/api/question';
@@ -23,5 +23,18 @@ describe('InfiniteQuestionList', () => {
         screen.getAllByText(mockQuestionList[0].content)[0],
       ).toBeInTheDocument();
     });
+  });
+
+  it('사용자가 스크롤하면 getQuestions를 호출한다', async () => {
+    const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
+    renderWithQueryClient(<InfiniteQuestionList panelId={panelId} />);
+
+    expect(spyOnGetQuestions).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(screen.queryByText(/loading/)).not.toBeInTheDocument();
+    });
+    fireEvent.scroll(window);
+
+    expect(spyOnGetQuestions).toHaveBeenCalledTimes(2);
   });
 });
