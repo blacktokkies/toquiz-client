@@ -16,6 +16,18 @@ export const getQuestions = async (
     false,
   );
 
+export const createQuestion = async (
+  panelId: Panel['id'],
+  body: CreateQuestionBody,
+): Promise<CreateQuestionResponse> =>
+  apiClient.post<CreateQuestionResponse>(
+    apiUrl.question.create(String(panelId)),
+    body,
+    undefined,
+    undefined,
+    false,
+  );
+
 /* ================================ [ 질문 목록 가져오기 API ] ====================================== */
 export type GetQuestionsPathParams = Record<'panelId', string>;
 export interface GetQuestionsParams {
@@ -27,6 +39,14 @@ export interface GetQuestionsResult {
   nextPage: number;
 }
 export type GetQuestionsResponse = SuccessResponse<GetQuestionsResult>;
+
+/* ================================ [ 질문 생성 가져오기 API ] ====================================== */
+export type CreateQuestionPathParams = Record<'panelId', string>;
+export interface CreateQuestionBody {
+  content: Question['content'];
+}
+export type CreateQuestionResult = Question;
+export type CreateQuestionResponse = SuccessResponse<CreateQuestionResult>;
 
 /* ================================ [질문 엔티티] ====================================== */
 export interface Question {
