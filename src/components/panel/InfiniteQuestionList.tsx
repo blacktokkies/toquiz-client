@@ -12,6 +12,7 @@ import {
 
 import { Account } from '@/components/vectors';
 import { useQuestionsInfiniteQuery } from '@/hooks/queries/question';
+import { useCurrentDate } from '@/hooks/useCurrentDate';
 
 import { IntersectionArea } from '../system/IntersectionArea';
 
@@ -20,6 +21,7 @@ interface Props {
 }
 export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
   const questionsQuery = useQuestionsInfiniteQuery(panelId);
+  const now = useCurrentDate();
 
   const fetchQuestions = useCallback(
     (isIntersecting: boolean) => {
@@ -37,7 +39,7 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
   if (questionsQuery.isError) return <div>error</div>;
 
   const questionPages = questionsQuery.data.pages;
-  const now = new Date();
+
   return (
     <div>
       <ul className="flex flex-col gap-3">
