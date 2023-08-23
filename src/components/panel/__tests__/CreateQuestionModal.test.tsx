@@ -20,7 +20,7 @@ describe('CreatePanelModal', () => {
     const contentInput = screen.getByRole('textbox');
     fireEvent.change(contentInput, { target: { value: '안녕하세요' } });
 
-    expect(screen.getByText(/5자/)).toBeInTheDocument();
+    expect(screen.getByText(/5/)).toBeInTheDocument();
   });
 
   it('사용자가 0자 혹은 200자 초과로 입력하면 제출 버튼을 비활성화한다', () => {

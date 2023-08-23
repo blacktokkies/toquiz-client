@@ -14,6 +14,7 @@ import {
   useLoaderData,
 } from 'react-router-dom';
 
+import { CreateQuestionModal } from '@/components/panel/CreateQuestionModal';
 import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import { PanelHeader } from '@/components/panel/PanelHeader';
 import { ModalController } from '@/components/system/ModalController';
@@ -51,7 +52,7 @@ export function Panel(): JSX.Element {
   function handleOpenModal(): void {
     overlay.open(({ close }) => (
       <ModalController close={close} aria-label="질문 생성 모달">
-        질문 생성 모달
+        <CreateQuestionModal close={close} panelId={panel.id} />
       </ModalController>
     ));
   }
