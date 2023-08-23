@@ -12,6 +12,12 @@ export function CreateQuestionModal(): JSX.Element {
           setContent(e.target.value);
         }}
       />
+      <button
+        type="submit"
+        disabled={content.length === 0 || content.length > 200}
+      >
+        질문 생성
+      </button>
     </div>
   );
 }
