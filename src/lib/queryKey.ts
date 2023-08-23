@@ -19,6 +19,7 @@ const questionQuerykey = {
   lists: () => [...questionQuerykey.all, 'list'] as const,
   list: (panelId: Panel['id']) =>
     [...questionQuerykey.lists(), panelId] as const,
+  create: () => ['createQuestion'] as const,
 };
 
 export const queryKey = {
