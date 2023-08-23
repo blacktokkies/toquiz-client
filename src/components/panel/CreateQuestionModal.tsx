@@ -1,7 +1,21 @@
+import type { Panel } from '@/lib/api/panel';
+
 import React, { useState } from 'react';
 
-export function CreateQuestionModal(): JSX.Element {
+import { useCreateQuestionMutation } from '@/hooks/queries/question';
+
+interface Props {
+  panelId: Panel['id'];
+}
+export function CreateQuestionModal({ panelId }: Props): JSX.Element {
   const [content, setContent] = useState('');
+  const createQuestionMutation = useCreateQuestionMutation(panelId);
+
+  function handleSubmit(): void {
+    createQuestionMutation.mutate({
+      content,
+    });
+  }
 
   return (
     <div>
@@ -15,6 +29,7 @@ export function CreateQuestionModal(): JSX.Element {
       <button
         type="submit"
         disabled={content.length === 0 || content.length > 200}
+        onClick={handleSubmit}
       >
         질문 생성
       </button>
