@@ -5,3 +5,4 @@ export { Account } from './Account';
 export { Add } from './Add';
 export { Menu } from './Menu';
 export { Clipboard } from './Clipboard';
+export { Send } from './Send';
