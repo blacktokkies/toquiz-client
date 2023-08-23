@@ -46,10 +46,12 @@ export function Panel(): JSX.Element {
   const panel = useLoaderData() as PanelData;
 
   return (
-    <>
+    <main>
       <PanelHeader panel={panel} />
-      <InfiniteQuestionList panelId={panel.id} />
-    </>
+      <div className="container flex flex-col h-full max-w-2xl px-5 py-7">
+        <InfiniteQuestionList panelId={panel.id} />
+      </div>
+    </main>
   );
 }
 
