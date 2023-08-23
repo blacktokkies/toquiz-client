@@ -17,6 +17,7 @@ const panel = {
 const question = {
   getQuestions: (panelId: string) =>
     `/api/panels/${panelId}/questions` as const,
+  create: (panelId: string) => `/api/panels/${panelId}/question`,
 } as const;
 
 export const apiUrl = {

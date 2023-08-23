@@ -1,4 +1,7 @@
 import type {
+  CreateQuestionBody,
+  CreateQuestionPathParams,
+  CreateQuestionResponse,
   GetQuestionsPathParams,
   GetQuestionsResponse,
 } from '@/lib/api/question';
@@ -8,7 +11,7 @@ import { rest } from 'msw';
 import { apiUrl } from '@/lib/api/apiUrl';
 import { API_BASE_URL } from '@/lib/apiClient';
 
-import { mockQuestionList } from '../data/question';
+import { createMockQuestion, mockQuestionList } from '../data/question';
 
 export const getQuestions = rest.get<
   never,
@@ -33,6 +36,26 @@ export const getQuestions = rest.get<
           nextPage,
           questions,
         },
+      }),
+    );
+  },
+);
+
+export const createQuestion = rest.post<
+  CreateQuestionBody,
+  CreateQuestionPathParams,
+  CreateQuestionResponse
+>(
+  `${API_BASE_URL}${apiUrl.question.create(':panelId')}`,
+  async (req, res, ctx) => {
+    const { content }: CreateQuestionBody = await req.json();
+    const question = { ...createMockQuestion(), content };
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        statusCode: 200,
+        result: question,
       }),
     );
   },
