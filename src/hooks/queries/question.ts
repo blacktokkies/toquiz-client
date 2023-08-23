@@ -1,14 +1,19 @@
 import type { Panel } from '@/lib/api/panel';
 import type {
+  CreateQuestionBody,
+  CreateQuestionResult,
   GetQuestionsParams,
   GetQuestionsResult,
 } from '@/lib/api/question';
 import type { ApiError } from '@/lib/apiClient';
-import type { UseInfiniteQueryResult } from '@tanstack/react-query';
+import type {
+  UseInfiniteQueryResult,
+  UseMutationResult,
+} from '@tanstack/react-query';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 
-import { getQuestions } from '@/lib/api/question';
+import { createQuestion, getQuestions } from '@/lib/api/question';
 import { queryKey } from '@/lib/queryKey';
 
 export const useQuestionsInfiniteQuery = (
@@ -30,4 +35,23 @@ export const useQuestionsInfiniteQuery = (
   );
 
   return query;
+};
+
+export const useCreateQuestionMutation = (
+  panelId: Panel['id'],
+): UseMutationResult<
+  CreateQuestionResult,
+  ApiError | SyntaxError,
+  CreateQuestionBody
+> => {
+  const key = queryKey.question.create();
+  const mutation = useMutation<
+    CreateQuestionResult,
+    ApiError | SyntaxError,
+    CreateQuestionBody
+  >(key, async (body) =>
+    createQuestion(panelId, body).then((res) => res.result),
+  );
+
+  return mutation;
 };
