@@ -6,15 +6,23 @@ import { useCreateQuestionMutation } from '@/hooks/queries/question';
 
 interface Props {
   panelId: Panel['id'];
+  close: () => void;
 }
-export function CreateQuestionModal({ panelId }: Props): JSX.Element {
+export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
   const [content, setContent] = useState('');
   const createQuestionMutation = useCreateQuestionMutation(panelId);
 
   function handleSubmit(): void {
-    createQuestionMutation.mutate({
-      content,
-    });
+    createQuestionMutation.mutate(
+      {
+        content,
+      },
+      {
+        onSuccess: () => {
+          close();
+        },
+      },
+    );
   }
 
   return (
