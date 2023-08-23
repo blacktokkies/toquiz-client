@@ -37,6 +37,9 @@ export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
           setContent(e.target.value);
         }}
       />
+      <button type="button" onClick={close}>
+        취소
+      </button>
       <button
         type="submit"
         disabled={
