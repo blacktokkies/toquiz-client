@@ -12,6 +12,8 @@ export const getQuestions = async (
   apiClient.get<GetQuestionsResponse>(
     apiUrl.question.getQuestions(String(panelId)),
     params,
+    undefined,
+    false,
   );
 
 /* ================================ [ 질문 목록 가져오기 API ] ====================================== */
