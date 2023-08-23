@@ -28,7 +28,11 @@ export function CreateQuestionModal({ panelId }: Props): JSX.Element {
       />
       <button
         type="submit"
-        disabled={content.length === 0 || content.length > 200}
+        disabled={
+          content.length === 0 ||
+          content.length > 200 ||
+          createQuestionMutation.isLoading
+        }
         onClick={handleSubmit}
       >
         질문 생성
