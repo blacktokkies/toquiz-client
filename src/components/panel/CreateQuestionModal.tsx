@@ -21,6 +21,9 @@ export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
         onSuccess: () => {
           close();
         },
+        onError: () => {
+          // 패널 존재하지 않는 경우 패널이 존재하지 않습니다 오류 보여주기
+        },
       },
     );
   }
