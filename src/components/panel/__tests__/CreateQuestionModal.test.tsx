@@ -84,4 +84,15 @@ describe('CreatePanelModal', () => {
       expect(handleClose).toHaveBeenCalled();
     });
   });
+
+  it('취소 버튼을 누르면 close 함수를 호출한다', async () => {
+    renderWithQueryClient(
+      <CreateQuestionModal panelId={panelId} close={handleClose} />,
+    );
+
+    const closeButton = screen.getByRole('button', { name: '취소' });
+    await userEvent.click(closeButton);
+
+    expect(handleClose).toHaveBeenCalled();
+  });
 });
