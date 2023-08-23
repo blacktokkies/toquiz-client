@@ -16,7 +16,9 @@ import {
 
 import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import { PanelHeader } from '@/components/panel/PanelHeader';
-import { Logo } from '@/components/vectors';
+import { ModalController } from '@/components/system/ModalController';
+import { Send, Logo } from '@/components/vectors';
+import { useOverlay } from '@/hooks/useOverlay';
 import { getPanel } from '@/lib/api/panel';
 import { ApiError } from '@/lib/apiClient';
 // [NOTE] 로더 성공 반환값은 any 혹은 null로 고정한다
@@ -44,13 +46,33 @@ export const panelLoader: LoaderFunction = async ({ params }) => {
 
 export function Panel(): JSX.Element {
   const panel = useLoaderData() as PanelData;
+  const overlay = useOverlay();
 
+  function handleOpenModal(): void {
+    overlay.open(({ close }) => (
+      <ModalController close={close} aria-label="질문 생성 모달">
+        질문 생성 모달
+      </ModalController>
+    ));
+  }
   return (
     <main>
       <PanelHeader panel={panel} />
       <div className="container flex flex-col h-full max-w-2xl px-5 py-7">
         <InfiniteQuestionList panelId={panel.id} />
       </div>
+      <button
+        className={clsx(
+          'fixed bottom-0 right-0 m-7 p-3',
+          'rounded-full bg-primary shadow-3xl',
+          'hover:bg-primary-hover',
+        )}
+        type="button"
+        onClick={handleOpenModal}
+      >
+        <Send className="w-9 h-9 fill-white" />
+        <span className="sr-only">질문 생성 모달 열기</span>
+      </button>
     </main>
   );
 }

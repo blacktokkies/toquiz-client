@@ -3,6 +3,7 @@ import type { Panel as PanelData } from '@/lib/api/panel';
 import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { renderWithQueryClient } from '@/lib/test-utils';
@@ -40,5 +41,20 @@ describe('패널 페이지', () => {
         screen.getAllByText(mockQuestionList[0].content)[0],
       ).toBeInTheDocument();
     });
+  });
+
+  it('질문 생성 모달 열기 버튼을 누르면 질문 생성 모달을 보여준다', async () => {
+    renderWithQueryClient(
+      <OverlayProvider>
+        <Panel />
+      </OverlayProvider>,
+    );
+
+    const openButton = screen.getByRole('button', {
+      name: /질문 생성 모달 열기/,
+    });
+    await userEvent.click(openButton);
+
+    expect(screen.getByRole('dialog', { name: /질문 생성 모달/ }));
   });
 });
