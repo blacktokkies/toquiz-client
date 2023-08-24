@@ -1,17 +1,18 @@
-import type { Panel, MyActiveInfo } from '@/lib/api/panel';
+import type { GetMyActiveInfoResult } from '@/lib/api/active-Info';
+import type { Panel } from '@/lib/api/panel';
 import type { ApiError } from '@/lib/apiClient';
 import type { NonNullableKeys } from '@/lib/types';
 import type { FetchQueryOptions } from '@tanstack/react-query';
 import type { Syntax } from 'postcss';
 
-import { getMyActiveInfo } from '@/lib/api/panel';
+import { getMyActiveInfo } from '@/lib/api/active-Info';
 import { queryKey } from '@/lib/queryKey';
 
 type _ActiveInfoDetailQueryOptions = Pick<
   FetchQueryOptions<
-    MyActiveInfo,
+    GetMyActiveInfoResult,
     ApiError | Syntax,
-    MyActiveInfo,
+    GetMyActiveInfoResult,
     ReturnType<typeof queryKey.activeInfo.detail>
   >,
   'queryFn' | 'queryKey' | 'staleTime'

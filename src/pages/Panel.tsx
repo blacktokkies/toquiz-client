@@ -20,7 +20,7 @@ import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import { PanelHeader } from '@/components/panel/PanelHeader';
 import { ModalController } from '@/components/system/ModalController';
 import { Send, Logo } from '@/components/vectors';
-import { activeInfoDetailQuery } from '@/hooks/queries/activeInfo';
+import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
 import { useOverlay } from '@/hooks/useOverlay';
 import { getPanel } from '@/lib/api/panel';
 import { ApiError } from '@/lib/apiClient';
