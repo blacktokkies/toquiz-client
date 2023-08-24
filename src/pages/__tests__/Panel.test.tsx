@@ -53,7 +53,7 @@ describe('패널 페이지', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(questions[0].content)).toBeInTheDocument();
+      expect(screen.getAllByText(questions[0].content)[0]).toBeInTheDocument();
     });
   });
 
