@@ -10,6 +10,9 @@ export const getMyActiveInfo = async (
 ): Promise<GetMyActiveInfoResponse> =>
   apiClient.get<GetMyActiveInfoResponse>(
     apiUrl.panel.getMyActiveInfo(String(panelId)),
+    undefined,
+    undefined,
+    false,
   );
 
 /* ================================ [내 활동 정보 가져오기 API] ====================================== */
