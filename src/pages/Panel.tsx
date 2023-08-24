@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-throw-literal */
 
 import type { Panel as PanelData } from '@/lib/api/panel';
+import type { QueryClient } from '@tanstack/react-query';
 import type { LoaderFunctionArgs } from 'react-router-dom';
 
 import React from 'react';
@@ -22,31 +23,38 @@ import { Send, Logo } from '@/components/vectors';
 import { useOverlay } from '@/hooks/useOverlay';
 import { getMyActiveInfo, getPanel } from '@/lib/api/panel';
 import { ApiError } from '@/lib/apiClient';
+import { queryKey } from '@/lib/queryKey';
 
 // [NOTE] 로더 성공 반환값은 any 혹은 null로 고정한다
 // [NOTE] 로더 실패 반환값은 `Response`로 고정한다
-export const panelLoader = async ({
-  params,
-}: LoaderFunctionArgs): Promise<PanelData> => {
-  const panelId = params.id!;
-  try {
-    const _panelId = Number(panelId);
-    if (Number.isNaN(_panelId)) throw json({ id: panelId }, { status: 404 });
-    const { result: panel } = await getPanel(_panelId);
-    await getMyActiveInfo(_panelId);
-    return panel;
-  } catch (error) {
-    if (error instanceof ApiError) {
-      throw json(
-        { ...error.data, id: panelId },
+export const panelLoader =
+  (queryClient: QueryClient) =>
+  async ({ params }: LoaderFunctionArgs): Promise<PanelData> => {
+    const panelId = params.id!;
+    try {
+      const _panelId = Number(panelId);
+      if (Number.isNaN(_panelId)) throw json({ id: panelId }, { status: 404 });
+      const { result: panel } = await getPanel(_panelId);
+      await queryClient.prefetchQuery(
+        queryKey.activeInfo.detail(_panelId),
+        async () => getMyActiveInfo(_panelId).then((res) => res.result),
         {
-          status: error.response.status,
+          staleTime: Infinity,
         },
       );
+      return panel;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw json(
+          { ...error.data, id: panelId },
+          {
+            status: error.response.status,
+          },
+        );
+      }
+      throw error;
     }
-    throw error;
-  }
-};
+  };
 
 export function Panel(): JSX.Element {
   const panel = useLoaderData() as PanelData;

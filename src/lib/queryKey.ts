@@ -14,6 +14,12 @@ const panelQueryKey = {
   delete: () => ['deletePanel'] as const,
 } as const;
 
+const activeInfoQueryKeys = {
+  all: ['activeInfos'] as const,
+  details: () => [...activeInfoQueryKeys.all, 'details'],
+  detail: (panelId: Panel['id']) => [...activeInfoQueryKeys.details(), panelId],
+};
+
 const questionQuerykey = {
   all: ['questions'] as const,
   lists: () => [...questionQuerykey.all, 'list'] as const,
@@ -26,4 +32,5 @@ export const queryKey = {
   auth: authQueryKey,
   panel: panelQueryKey,
   question: questionQuerykey,
+  activeInfo: activeInfoQueryKeys,
 };
