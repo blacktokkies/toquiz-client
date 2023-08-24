@@ -8,7 +8,7 @@ import { Home, homeLoader } from '@/pages/Home';
 import { Index } from '@/pages/Index';
 import { Login, loginLoader } from '@/pages/Login';
 import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
-import { Root, RootErrorBoundary } from '@/pages/Root';
+import { Root, RootErrorBoundary, rootLoader } from '@/pages/Root';
 import { SignUp, signupLoader } from '@/pages/SignUp';
 
 export const router = createBrowserRouter([
@@ -16,6 +16,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: <Root />,
     errorElement: <RootErrorBoundary />,
+    loader: rootLoader,
     children: [
       {
         index: true,

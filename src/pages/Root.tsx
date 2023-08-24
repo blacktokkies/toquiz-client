@@ -1,3 +1,5 @@
+import type { LoaderFunction } from 'react-router-dom';
+
 import React from 'react';
 
 import { clsx } from 'clsx';
@@ -11,6 +13,15 @@ import {
 
 import { Logo } from '@/components/vectors';
 import { OverlayProvider } from '@/contexts/OverlayContext';
+import { tryRefreshToken } from '@/lib/routeGuard';
+
+export const rootLoader: LoaderFunction = async () => {
+  try {
+    await tryRefreshToken();
+  } catch (_) {}
+
+  return null;
+};
 
 export function Root(): JSX.Element {
   const navigation = useNavigation();

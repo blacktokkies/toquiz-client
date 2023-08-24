@@ -38,3 +38,15 @@ export async function isUserLoggedIn(): Promise<boolean> {
   }
   return true;
 }
+
+/**
+ * ## 토큰 재발급 시도
+ * 액세스 토큰이 인메모리에 저장되므로 처음으로 애플리케이션이 실행될 때에는
+ * 액세스 토큰이 없는 것이 보장된다.
+ * 따라서 단순히 리프레쉬 토큰을 사용하여 액세스 토큰 발급을 시도할 때 사용할 수 있다.
+ */
+export async function tryRefreshToken(): Promise<void> {
+  const { accessToken, ...user } = await refresh();
+  setAccessToken(accessToken);
+  setUserState(user);
+}
