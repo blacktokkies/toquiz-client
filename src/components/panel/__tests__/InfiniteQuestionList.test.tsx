@@ -3,6 +3,7 @@ import type { Panel } from '@/lib/api/panel';
 import React from 'react';
 
 import { fireEvent, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import * as questionApis from '@/lib/api/question';
@@ -43,5 +44,22 @@ describe('InfiniteQuestionList', () => {
     fireEvent.scroll(window);
 
     expect(spyOnGetQuestions).toHaveBeenCalledTimes(2);
+  });
+
+  it('최신순 버튼을 누르면 최신순으로 질문 목록 API를 호출한다', async () => {
+    const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
+    renderWithQueryClient(<InfiniteQuestionList panelId={panelId} />);
+
+    await waitFor(() => {
+      expect(screen.queryByText(/loading/)).not.toBeInTheDocument();
+    });
+
+    const recentButton = screen.getByRole('button', { name: '최신순' });
+    await userEvent.click(recentButton);
+
+    expect(spyOnGetQuestions).toHaveBeenCalledWith(panelId, {
+      page: 0,
+      sort: 'createdDate,DESC',
+    });
   });
 });
