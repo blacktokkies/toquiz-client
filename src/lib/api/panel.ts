@@ -1,3 +1,4 @@
+import type { Question } from './question';
 import type { Member } from '@/lib/api/auth';
 import type { SuccessResponse } from '@/lib/api/types';
 
@@ -41,6 +42,20 @@ export const getMyPanels = async (
       params,
     )
     .then((data) => data.result);
+
+export type GetMyActiveInfoPathParams = Record<'panelId', string>;
+export interface MyActiveInfo {
+  createdIds: Array<Question['id']>;
+  likedIds: Array<Question['id']>;
+}
+export type GetMyActiveInfoResult = MyActiveInfo;
+export type GetMyActiveInfoResponse = SuccessResponse<GetMyActiveInfoResult>;
+export const getMyActiveInfo = async (
+  panelId: Panel['id'],
+): Promise<GetMyActiveInfoResponse> =>
+  apiClient.get<GetMyActiveInfoResponse>(
+    apiUrl.panel.getMyActiveInfo(String(panelId)),
+  );
 
 /* ================================ [패널 생성 API] ====================================== */
 export interface CreatePanelBody {

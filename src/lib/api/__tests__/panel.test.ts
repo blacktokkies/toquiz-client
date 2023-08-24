@@ -6,7 +6,9 @@ import {
   updatePanel,
   deletePanel,
   getPanel,
+  getMyActiveInfo,
 } from '@/lib/api/panel';
+import { myActiveInfoMock } from '@/mocks/data/panel';
 
 describe('panel api', () => {
   it(`createPanel을 호출하면 패널 생성 API(${apiUrl.panel.create()})로 요청한다`, async () => {
@@ -51,5 +53,13 @@ describe('panel api', () => {
 
     const res = await getPanel(panelId);
     expect(res.result.id).toBe(panelId);
+  });
+
+  it(`getMyActiveInfo를 호출하면 내 활동 정보 가져오기 API(${apiUrl.panel.getMyActiveInfo(
+    ':panelId',
+  )})`, async () => {
+    const panelId: Panel['id'] = 1;
+    const res = await getMyActiveInfo(panelId);
+    expect(res.result).toEqual(myActiveInfoMock);
   });
 });
