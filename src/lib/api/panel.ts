@@ -64,14 +64,7 @@ export interface UpdatePanelBody {
   description?: string;
 }
 
-export interface UpdatePanelResult {
-  id: Panel['id'];
-  author: Panel['author'];
-  title: Panel['title'];
-  description: Panel['description'];
-  createdAt: Panel['createdAt'];
-  updatedAt: Panel['createdAt'];
-}
+export type UpdatePanelResult = Panel;
 
 export type UpdatePanelResponse = SuccessResponse<UpdatePanelResult>;
 
@@ -119,5 +112,4 @@ export interface Panel {
   description?: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt?: string;
 }
