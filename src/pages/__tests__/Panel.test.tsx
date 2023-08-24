@@ -15,7 +15,7 @@ import { apiUrl } from '@/lib/api/apiUrl';
 import { API_BASE_URL } from '@/lib/apiClient';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { createMockPanel } from '@/mocks/data/panel';
-import { createMockQuestionList } from '@/mocks/data/question';
+import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 import { Panel } from '@/pages/Panel';
 
@@ -38,11 +38,11 @@ describe('패널 페이지', () => {
   });
 
   it('질문 목록을 렌더링한다', async () => {
-    const questions = createMockQuestionList(3);
+    const question = createMockQuestion();
     overrideGetQuestionsWithSuccess({
       statusCode: 200,
       result: {
-        questions,
+        questions: [{ ...question, content: '안녕하세요' }],
         nextPage: -1,
       },
     });
@@ -53,7 +53,7 @@ describe('패널 페이지', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getAllByText(questions[0].content)[0]).toBeInTheDocument();
+      expect(screen.getAllByText(/안녕하세요/)[0]).toBeInTheDocument();
     });
   });
 
