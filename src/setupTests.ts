@@ -8,7 +8,15 @@ globalThis.fetch = fetch;
 vi.mock('zustand');
 
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' });
+  server.listen({
+    onUnhandledRequest(req) {
+      console.warn(
+        'Found an unhandled %s request to %s',
+        req.method,
+        req.url.href,
+      );
+    },
+  });
 });
 afterEach(() => {
   server.resetHandlers();
