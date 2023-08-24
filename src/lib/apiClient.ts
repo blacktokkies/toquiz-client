@@ -1,4 +1,5 @@
 import isNode from 'detect-node';
+import qs from 'qs';
 
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment */
 let _accessToken = '';
@@ -57,10 +58,13 @@ export const apiClient = {
       Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...headers,
     };
-    const queryString = new URLSearchParams(queryParams).toString();
+    const queryString = qs.stringify(queryParams, {
+      skipNulls: true,
+      addQueryPrefix: true,
+    });
     const data = request<ResponseBody>(
       'GET',
-      `${API_BASE_URL}${url}?${queryString}`,
+      `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
       },
@@ -85,10 +89,13 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const queryString = new URLSearchParams(queryParams).toString();
+    const queryString = qs.stringify(queryParams, {
+      skipNulls: true,
+      addQueryPrefix: true,
+    });
     const data = request<ResponseBody>(
       'POST',
-      `${API_BASE_URL}${url}?${queryString}`,
+      `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
         body: _body,
@@ -110,10 +117,13 @@ export const apiClient = {
       Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...headers,
     };
-    const queryString = new URLSearchParams(queryParams).toString();
+    const queryString = qs.stringify(queryParams, {
+      skipNulls: true,
+      addQueryPrefix: true,
+    });
     const data = request<ResponseBody>(
       'DELETE',
-      `${API_BASE_URL}${url}?${queryString}`,
+      `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
       },
@@ -138,10 +148,13 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const queryString = new URLSearchParams(queryParams).toString();
+    const queryString = qs.stringify(queryParams, {
+      skipNulls: true,
+      addQueryPrefix: true,
+    });
     const data = request<ResponseBody>(
       'PATCH',
-      `${API_BASE_URL}${url}?${queryString}`,
+      `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
         body: _body,
@@ -167,10 +180,13 @@ export const apiClient = {
       ...headers,
     };
     const _body = body && JSON.stringify(body);
-    const queryString = new URLSearchParams(queryParams).toString();
+    const queryString = qs.stringify(queryParams, {
+      skipNulls: true,
+      addQueryPrefix: true,
+    });
     const data = request<ResponseBody>(
       'PUT',
-      `${API_BASE_URL}${url}?${queryString}`,
+      `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
         body: _body,
