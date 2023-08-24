@@ -12,6 +12,8 @@ const panel = {
   update: (panelId: string) => `/api/panels/${panelId}`,
   delete: (panelId: string) => `/api/panels/${panelId}`,
   getMyPanels: () => `/api/panels`,
+  getMyActiveInfo: (panelId: string) =>
+    `/api/panels/${panelId}/active-info` as const,
 } as const;
 
 const question = {
