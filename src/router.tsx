@@ -1,3 +1,5 @@
+import type { QueryClient } from '@tanstack/react-query';
+
 import React from 'react';
 
 import { Outlet, createBrowserRouter } from 'react-router-dom';
@@ -11,7 +13,10 @@ import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 import { Root, RootErrorBoundary, rootLoader } from '@/pages/Root';
 import { SignUp, signupLoader } from '@/pages/SignUp';
 
-export const router = createBrowserRouter([
+export const createRouterWithQueryClient = (
+  queryClient: QueryClient,
+): ReturnType<typeof createBrowserRouter> =>
+  createBrowserRouter([
   {
     path: '/',
     element: <Root />,

@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider } from 'react-router-dom';
 
-import { router } from '@/router';
+import { createRouterWithQueryClient } from '@/router';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,6 +13,8 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+const router = createRouterWithQueryClient(queryClient);
 
 export function App(): JSX.Element {
   return (
