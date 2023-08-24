@@ -22,7 +22,7 @@ interface Props {
 }
 type Sort = GetQuestionsParams['sort'];
 export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
-  const [sort, setSort] = useState<Sort>();
+  const [sort, setSort] = useState<Sort>(undefined);
   const questionsQuery = useQuestionsInfiniteQuery(panelId, sort);
   const now = useCurrentDate();
 
@@ -45,6 +45,14 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
 
   return (
     <div>
+      <button
+        type="button"
+        onClick={() => {
+          setSort(undefined);
+        }}
+      >
+        좋아요순
+      </button>
       <button
         type="button"
         onClick={() => {
