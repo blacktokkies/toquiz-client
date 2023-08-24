@@ -41,7 +41,7 @@ describe('/panel/:id route', () => {
     });
   });
 
-  it('패널 정보 가져오기 API가 성공 응답을 반환하면 패널 페이지를 보여준다', async () => {
+  it('로더가 성공 응답을 반환하면 패널 페이지를 보여준다', async () => {
     setup();
 
     await waitFor(() => {
@@ -49,7 +49,7 @@ describe('/panel/:id route', () => {
     });
   });
 
-  it('패널 정보 가져오기 API가 실패 응답을 반환하면 Fallback UI를 보여준다', async () => {
+  it('로더가 실패 응답을 반환하면 Fallback UI를 보여준다', async () => {
     overrideGetPanelResponseWithError({
       code: 'NOT_EXIST_PANEL',
       statusCode: 404,
