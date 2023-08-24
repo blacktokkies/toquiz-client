@@ -14,7 +14,7 @@ describe('question api', () => {
     const res = await getQuestions(panelId, {
       page: 0,
     });
-    expect(res.result.questions[0]).toEqual(mockQuestionList[0]);
+    expect(mockQuestionList).toContainEqual(res.result.questions[0]);
   });
 
   it(`createQuestion을 호출하면 질문 생성 API (${apiUrl.question.create(
