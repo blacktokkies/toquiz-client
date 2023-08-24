@@ -1,6 +1,7 @@
 import type { Panel } from '@/lib/api/panel';
+import type { GetQuestionsParams } from '@/lib/api/question';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import {
   differenceInMinutes,
@@ -19,8 +20,10 @@ import { IntersectionArea } from '../system/IntersectionArea';
 interface Props {
   panelId: Panel['id'];
 }
+type Sort = GetQuestionsParams['sort'];
 export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
-  const questionsQuery = useQuestionsInfiniteQuery(panelId);
+  const [sort, setSort] = useState<Sort>();
+  const questionsQuery = useQuestionsInfiniteQuery(panelId, sort);
   const now = useCurrentDate();
 
   const fetchQuestions = useCallback(
@@ -42,6 +45,14 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
 
   return (
     <div>
+      <button
+        type="button"
+        onClick={() => {
+          setSort('createdDate,DESC');
+        }}
+      >
+        최신순
+      </button>
       <ul className="flex flex-col gap-3">
         {questionPages.map((questionPage) =>
           questionPage.questions.map((question) => (
