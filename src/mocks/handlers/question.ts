@@ -21,10 +21,16 @@ export const getQuestions = rest.get<
   `${API_BASE_URL}${apiUrl.question.getQuestions(':panelId')}`,
   async (req, res, ctx) => {
     const page = req.url.searchParams.get('page');
-
+    const sort = req.url.searchParams.get('sort');
     const start = Number(page);
     const end = (start + 1) * 30;
-    const questions = mockQuestionList.slice(start, end);
+    const questions =
+      sort === null
+        ? mockQuestionList
+            .slice()
+            .sort((a, b) => b.likeNum - a.likeNum)
+            .slice(start, end)
+        : mockQuestionList.slice(start, end);
 
     const nextPage = end >= mockQuestionList.length ? -1 : start + 1;
 

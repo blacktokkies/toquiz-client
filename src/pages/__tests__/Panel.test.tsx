@@ -1,14 +1,22 @@
 import type { Panel as PanelData } from '@/lib/api/panel';
+import type {
+  GetQuestionsPathParams,
+  GetQuestionsResponse,
+} from '@/lib/api/question';
 
 import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { rest } from 'msw';
 
 import { OverlayProvider } from '@/contexts/OverlayContext';
+import { apiUrl } from '@/lib/api/apiUrl';
+import { API_BASE_URL } from '@/lib/apiClient';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { createMockPanel } from '@/mocks/data/panel';
-import { mockQuestionList } from '@/mocks/data/question';
+import { createMockQuestionList } from '@/mocks/data/question';
+import { server } from '@/mocks/server';
 import { Panel } from '@/pages/Panel';
 
 const panel: PanelData = createMockPanel();
@@ -30,6 +38,14 @@ describe('패널 페이지', () => {
   });
 
   it('질문 목록을 렌더링한다', async () => {
+    const questions = createMockQuestionList(3);
+    overrideGetQuestionsWithSuccess({
+      statusCode: 200,
+      result: {
+        questions,
+        nextPage: -1,
+      },
+    });
     renderWithQueryClient(
       <OverlayProvider>
         <Panel />
@@ -37,9 +53,7 @@ describe('패널 페이지', () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getAllByText(mockQuestionList[0].content)[0],
-      ).toBeInTheDocument();
+      expect(screen.getByText(questions[0].content)).toBeInTheDocument();
     });
   });
 
@@ -58,3 +72,14 @@ describe('패널 페이지', () => {
     expect(screen.getByRole('dialog', { name: /질문 생성 모달/ }));
   });
 });
+
+export function overrideGetQuestionsWithSuccess(
+  data: GetQuestionsResponse,
+): void {
+  server.use(
+    rest.get<never, GetQuestionsPathParams, GetQuestionsResponse>(
+      `${API_BASE_URL}${apiUrl.question.getQuestions(':panelId')}`,
+      async (req, res, ctx) => res(ctx.status(data.statusCode), ctx.json(data)),
+    ),
+  );
+}
