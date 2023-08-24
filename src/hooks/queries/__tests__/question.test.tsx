@@ -19,10 +19,12 @@ import { server } from '@/mocks/server';
 
 describe('question API queries', () => {
   describe('useQuestionsInfiniteQuery', () => {
+    const panelId: Panel['id'] = -1;
+
     it('getQuestions가 nextPage를 -1로 반환하면 hasNextPage는 false이다', async () => {
       overrideGetQuestionsWith200({ questions: [], nextPage: -1 });
 
-      const { result } = renderHook(() => useQuestionsInfiniteQuery(0), {
+      const { result } = renderHook(() => useQuestionsInfiniteQuery(panelId), {
         wrapper: createQueryClientWrapper(),
       });
 
@@ -36,7 +38,7 @@ describe('question API queries', () => {
     it('getQuestions가 nextPage를 -1 이외의 값을 반환하면 hasNextPage는 true이다', async () => {
       overrideGetQuestionsWith200({ questions: [], nextPage: 1 });
 
-      const { result } = renderHook(() => useQuestionsInfiniteQuery(0), {
+      const { result } = renderHook(() => useQuestionsInfiniteQuery(panelId), {
         wrapper: createQueryClientWrapper(),
       });
 
@@ -45,6 +47,17 @@ describe('question API queries', () => {
       });
 
       expect(result.current.hasNextPage).toBe(true);
+    });
+
+    it('매개변수 sort에 createdDate,DESC을 전달하면 getQuestions가 createdDate,DESC로 호출된다', () => {
+      const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
+      renderHook(() => useQuestionsInfiniteQuery(panelId, 'createdDate,DESC'), {
+        wrapper: createQueryClientWrapper(),
+      });
+      expect(spyOnGetQuestions).toBeCalledWith(panelId, {
+        page: 0,
+        sort: 'createdDate,DESC',
+      });
     });
   });
 
