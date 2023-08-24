@@ -17,48 +17,48 @@ export const createRouterWithQueryClient = (
   queryClient: QueryClient,
 ): ReturnType<typeof createBrowserRouter> =>
   createBrowserRouter([
-  {
-    path: '/',
-    element: <Root />,
-    errorElement: <RootErrorBoundary />,
-    loader: rootLoader,
-    children: [
-      {
-        index: true,
-        element: <Index />,
-      },
-      {
-        path: 'signup',
-        element: <SignUp />,
-        loader: signupLoader,
-      },
-      {
-        path: 'login',
-        element: <Login />,
-        loader: loginLoader,
-      },
-      {
-        element: (
-          <main className="flex flex-col h-full overflow-auto">
-            <HomeHeader />
-            <Outlet />
-          </main>
-        ),
-        children: [
-          {
-            path: 'home',
-            element: <Home />,
-            loader: homeLoader,
-          },
-          { path: 'account', element: <Account />, loader: accountLoader },
-        ],
-      },
-      {
-        path: 'panel/:id',
-        element: <Panel />,
-        loader: panelLoader,
-        errorElement: <PanelErrorBoundary />,
-      },
-    ],
-  },
-]);
+    {
+      path: '/',
+      element: <Root />,
+      errorElement: <RootErrorBoundary />,
+      loader: rootLoader,
+      children: [
+        {
+          index: true,
+          element: <Index />,
+        },
+        {
+          path: 'signup',
+          element: <SignUp />,
+          loader: signupLoader,
+        },
+        {
+          path: 'login',
+          element: <Login />,
+          loader: loginLoader,
+        },
+        {
+          element: (
+            <main className="flex flex-col h-full overflow-auto">
+              <HomeHeader />
+              <Outlet />
+            </main>
+          ),
+          children: [
+            {
+              path: 'home',
+              element: <Home />,
+              loader: homeLoader,
+            },
+            { path: 'account', element: <Account />, loader: accountLoader },
+          ],
+        },
+        {
+          path: 'panel/:id',
+          element: <Panel />,
+          loader: panelLoader(queryClient),
+          errorElement: <PanelErrorBoundary />,
+        },
+      ],
+    },
+  ]);

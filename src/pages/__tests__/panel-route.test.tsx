@@ -3,14 +3,17 @@ import type { RouteObject } from 'react-router-dom';
 
 import React from 'react';
 
-import { screen, waitFor } from '@testing-library/react';
+import { QueryClientProvider, type QueryClient } from '@tanstack/react-query';
+import { render, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 import { Outlet, RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { apiUrl } from '@/lib/api/apiUrl';
 import * as panelApis from '@/lib/api/panel';
-import { renderWithQueryClient } from '@/lib/test-utils';
+import { queryKey } from '@/lib/queryKey';
+import { createQueryClient } from '@/lib/test-utils';
+import { myActiveInfoMock } from '@/mocks/data/panel';
 import { server } from '@/mocks/server';
 import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 
@@ -25,6 +28,16 @@ describe('/panel/:id route', () => {
     expect(spyOnGetPanel).toBeCalledWith(panelId);
     await waitFor(() => {
       expect(spyOnGetMyActiveInfo).toBeCalledWith(panelId);
+    });
+  });
+
+  it('내 활동 정보 가져오기 API가 성공 응답을 반환하면 캐시에 저장된다', async () => {
+    const { queryClient } = setup();
+
+    await waitFor(() => {
+      expect(
+        queryClient.getQueryData(queryKey.activeInfo.detail(panelId)),
+      ).toEqual(myActiveInfoMock);
     });
   });
 
@@ -58,7 +71,10 @@ function overrideGetPanelResponseWithError(data: ErrorResponse): void {
   );
 }
 
-function setup(): void {
+function setup(): {
+  queryClient: QueryClient;
+} {
+  const queryClient = createQueryClient();
   const routes: RouteObject[] = [
     {
       path: '/',
@@ -71,7 +87,7 @@ function setup(): void {
         {
           path: '/panel/:id',
           element: <Panel />,
-          loader: panelLoader,
+          loader: panelLoader(queryClient),
           errorElement: <PanelErrorBoundary />,
         },
       ],
@@ -82,5 +98,11 @@ function setup(): void {
     initialEntries: [`/panel/${panelId}`],
   });
 
-  renderWithQueryClient(<RouterProvider router={router} />);
+  render(<RouterProvider router={router} />, {
+    wrapper: ({ children }) => (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    ),
+  });
+
+  return { queryClient };
 }
