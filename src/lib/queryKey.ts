@@ -1,4 +1,5 @@
 import type { Panel } from './api/panel';
+import type { GetQuestionsParams } from './api/question';
 
 const authQueryKey = {
   signup: () => ['signup'] as const,
@@ -23,8 +24,8 @@ const activeInfoQueryKeys = {
 const questionQuerykey = {
   all: ['questions'] as const,
   lists: () => [...questionQuerykey.all, 'list'] as const,
-  list: (panelId: Panel['id']) =>
-    [...questionQuerykey.lists(), panelId] as const,
+  list: (panelId: Panel['id'], sort: GetQuestionsParams['sort'] = undefined) =>
+    [...questionQuerykey.lists(), panelId, { sort }] as const,
   create: () => ['createQuestion'] as const,
 };
 

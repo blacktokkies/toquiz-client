@@ -18,14 +18,16 @@ import { queryKey } from '@/lib/queryKey';
 
 export const useQuestionsInfiniteQuery = (
   panelId: Panel['id'],
+  sort: GetQuestionsParams['sort'] = undefined,
 ): UseInfiniteQueryResult<GetQuestionsResult, ApiError | SyntaxError> => {
-  const key = queryKey.question.list(panelId);
+  const key = queryKey.question.list(panelId, sort);
   const query = useInfiniteQuery<GetQuestionsResult, ApiError | SyntaxError>(
     key,
     async ({ pageParam = 0 }) =>
       (
         await getQuestions(panelId, {
           page: pageParam as GetQuestionsParams['page'],
+          sort,
         })
       ).result,
     {
