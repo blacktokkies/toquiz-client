@@ -17,11 +17,15 @@ import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 const panelId: panelApis.Panel['id'] = 1;
 
 describe('/panel/:id route', () => {
-  it('로더에서 패널 정보 가져오기 API를 호출한다', () => {
+  it('로더에서 패널 정보 가져오기 API와 내 활동 정보 가져오기 API를 호출한다', async () => {
     const spyOnGetPanel = vi.spyOn(panelApis, 'getPanel');
+    const spyOnGetMyActiveInfo = vi.spyOn(panelApis, 'getMyActiveInfo');
     setup();
 
     expect(spyOnGetPanel).toBeCalledWith(panelId);
+    await waitFor(() => {
+      expect(spyOnGetMyActiveInfo).toBeCalledWith(panelId);
+    });
   });
 
   it('패널 정보 가져오기 API가 성공 응답을 반환하면 패널 페이지를 보여준다', async () => {

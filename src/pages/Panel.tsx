@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-throw-literal */
 
 import type { Panel as PanelData } from '@/lib/api/panel';
-import type { LoaderFunction } from 'react-router-dom';
+import type { LoaderFunctionArgs } from 'react-router-dom';
 
 import React from 'react';
 
@@ -20,20 +20,23 @@ import { PanelHeader } from '@/components/panel/PanelHeader';
 import { ModalController } from '@/components/system/ModalController';
 import { Send, Logo } from '@/components/vectors';
 import { useOverlay } from '@/hooks/useOverlay';
-import { getPanel } from '@/lib/api/panel';
+import { getMyActiveInfo, getPanel } from '@/lib/api/panel';
 import { ApiError } from '@/lib/apiClient';
+
 // [NOTE] 로더 성공 반환값은 any 혹은 null로 고정한다
 // [NOTE] 로더 실패 반환값은 `Response`로 고정한다
-export const panelLoader: LoaderFunction = async ({ params }) => {
+export const panelLoader = async ({
+  params,
+}: LoaderFunctionArgs): Promise<PanelData> => {
   const panelId = params.id!;
   try {
     const _panelId = Number(panelId);
     if (Number.isNaN(_panelId)) throw json({ id: panelId }, { status: 404 });
     const { result: panel } = await getPanel(_panelId);
+    await getMyActiveInfo(_panelId);
     return panel;
   } catch (error) {
     if (error instanceof ApiError) {
-      /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument */
       throw json(
         { ...error.data, id: panelId },
         {
