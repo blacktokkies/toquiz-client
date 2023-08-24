@@ -9,11 +9,12 @@ import { rest } from 'msw';
 import { Outlet, RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { OverlayProvider } from '@/contexts/OverlayContext';
-import { activeInfoDetailQuery } from '@/hooks/queries/activeInfo';
+import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
+import * as activeInfoApis from '@/lib/api/active-Info';
 import { apiUrl } from '@/lib/api/apiUrl';
 import * as panelApis from '@/lib/api/panel';
 import { createQueryClient } from '@/lib/test-utils';
-import { myActiveInfoMock } from '@/mocks/data/panel';
+import { myActiveInfoMock } from '@/mocks/data/active-info';
 import { server } from '@/mocks/server';
 import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 
@@ -22,7 +23,7 @@ const panelId: panelApis.Panel['id'] = 1;
 describe('/panel/:id route', () => {
   it('로더에서 패널 정보 가져오기 API와 내 활동 정보 가져오기 API를 호출한다', async () => {
     const spyOnGetPanel = vi.spyOn(panelApis, 'getPanel');
-    const spyOnGetMyActiveInfo = vi.spyOn(panelApis, 'getMyActiveInfo');
+    const spyOnGetMyActiveInfo = vi.spyOn(activeInfoApis, 'getMyActiveInfo');
     setup();
 
     expect(spyOnGetPanel).toBeCalledWith(panelId);
