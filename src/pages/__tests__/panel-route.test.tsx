@@ -9,9 +9,9 @@ import { rest } from 'msw';
 import { Outlet, RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { OverlayProvider } from '@/contexts/OverlayContext';
+import { activeInfoDetailQuery } from '@/hooks/queries/activeInfo';
 import { apiUrl } from '@/lib/api/apiUrl';
 import * as panelApis from '@/lib/api/panel';
-import { queryKey } from '@/lib/queryKey';
 import { createQueryClient } from '@/lib/test-utils';
 import { myActiveInfoMock } from '@/mocks/data/panel';
 import { server } from '@/mocks/server';
@@ -36,7 +36,7 @@ describe('/panel/:id route', () => {
 
     await waitFor(() => {
       expect(
-        queryClient.getQueryData(queryKey.activeInfo.detail(panelId)),
+        queryClient.getQueryData(activeInfoDetailQuery(panelId).queryKey),
       ).toEqual(myActiveInfoMock);
     });
   });
