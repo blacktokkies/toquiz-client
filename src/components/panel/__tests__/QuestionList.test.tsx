@@ -6,6 +6,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { myActiveInfoMock } from '@/mocks/data/active-info';
 import { createMockQuestionList } from '@/mocks/data/question';
 
 import { QuestionList } from '../QuestionList';
@@ -25,6 +26,7 @@ describe('QuestionList', () => {
       <QuestionList
         onLikeButtonClick={handleLikeButtonClickFn}
         questionPages={questionPages}
+        likeIds={myActiveInfoMock.likedIds}
       />,
     );
 
