@@ -93,6 +93,7 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
       <QuestionList
         questionPages={questionPages}
         onLikeButtonClick={handleLikeButtonClick}
+        likeIds={activeInfoQueryData.likedIds}
       />
       <IntersectionArea onIntersection={fetchQuestions} />
     </div>

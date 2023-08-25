@@ -14,6 +14,7 @@ import { OverlayProvider } from '@/contexts/OverlayContext';
 import { apiUrl } from '@/lib/api/apiUrl';
 import { API_BASE_URL } from '@/lib/apiClient';
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { myActiveInfoMock } from '@/mocks/data/active-info';
 import { createMockPanel } from '@/mocks/data/panel';
 import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
@@ -24,6 +25,14 @@ const panel: PanelData = createMockPanel();
 vi.mock('react-router-dom', async (importOriginal) => {
   const router = (await importOriginal()) ?? {};
   return { ...router, useLoaderData: vi.fn(() => panel) };
+});
+
+vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
+  const queries = (await importOriginal()) ?? {};
+  return {
+    ...queries,
+    useActiveInfoDeatilQueryData: vi.fn(() => myActiveInfoMock),
+  };
 });
 
 describe('패널 페이지', () => {
