@@ -9,7 +9,9 @@ import type {
   Question,
 } from '@/lib/api/question';
 import type { ApiError } from '@/lib/apiClient';
+import type { NonNullableKeys } from '@/lib/types';
 import type {
+  MutationOptions,
   UseInfiniteQueryResult,
   UseMutationResult,
 } from '@tanstack/react-query';
@@ -61,18 +63,34 @@ export const useCreateQuestionMutation = (
   return mutation;
 };
 
-export const useLikeQuestionMutation = (): UseMutationResult<
-  LikeQuestionResult,
-  ApiError | SyntaxError,
-  Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>
-> => {
-  const key = queryKey.question.like();
-  const mutation = useMutation<
+/* ================================ [ 질문 좋아요 뮤테이션 ] ====================================== */
+export type LikeQuestionMutation = NonNullableKeys<
+  Pick<
+    MutationOptions<
+      LikeQuestionResult,
+      ApiError | SyntaxError,
+      Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>,
+      ReturnType<typeof queryKey.question.like>
+    >,
+    'mutationFn' | 'mutationKey'
+  >
+>;
+export const likeQuestionMutation = (): LikeQuestionMutation => ({
+  mutationKey: queryKey.question.like(),
+  mutationFn: async ({ id, active }) =>
+    likeQuestion(id, { active }).then((res) => res.result),
+});
+
+export const useLikeQuestionMutation = (
+  options: MutationOptions<
     LikeQuestionResult,
     ApiError | SyntaxError,
-    Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>
-  >(key, async ({ id, active }) =>
-    likeQuestion(id, { active }).then((res) => res.result),
-  );
-  return mutation;
-};
+    Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>,
+    unknown
+  > = {},
+): UseMutationResult<
+  LikeQuestionResult,
+  ApiError | SyntaxError,
+  Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>,
+  unknown
+> => useMutation({ ...likeQuestionMutation(), ...options });
