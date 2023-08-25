@@ -49,6 +49,7 @@ export function QuestionList({
                   </div>
                 </div>
                 <button
+                  aria-label={`좋아요 버튼, 좋아요 ${question.likeNum}개`}
                   aria-pressed={isActived}
                   className={clsx(
                     'flex itesm-center gap-2 py-1 px-2 rounded-2xl border-2 text-sm',
@@ -60,7 +61,7 @@ export function QuestionList({
                   onClick={onLikeButtonClick(question)}
                 >
                   <Like className="w-5 h-5" />
-                  <span className="sr-only">좋아요 버튼</span>
+
                   {question.likeNum}
                 </button>
               </div>
