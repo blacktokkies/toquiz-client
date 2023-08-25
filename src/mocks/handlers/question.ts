@@ -4,6 +4,8 @@ import type {
   CreateQuestionResponse,
   GetQuestionsPathParams,
   GetQuestionsResponse,
+  LikeQuestionPathParams,
+  LikeQuestionResponse,
 } from '@/lib/api/question';
 
 import { rest } from 'msw';
@@ -62,6 +64,36 @@ export const createQuestion = rest.post<
       ctx.json({
         statusCode: 200,
         result: question,
+      }),
+    );
+  },
+);
+
+export const likeQuestion = rest.post<
+  never,
+  LikeQuestionPathParams,
+  LikeQuestionResponse
+>(
+  `${API_BASE_URL}${apiUrl.question.like(':questionId')}`,
+  async (req, res, ctx) => {
+    const questionId = Number(req.params.questionId);
+    const active = Boolean(req.url.searchParams.get('active'));
+
+    const question = mockQuestionList.find(
+      (q) => q.id === Number(questionId),
+    ) ?? { ...createMockQuestion(), id: questionId };
+    if (active) question.likeNum += 1;
+    else question.likeNum -= 1;
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        statusCode: 200,
+        result: {
+          id: question.id,
+          isActived: active,
+          likeNum: question.likeNum,
+        },
       }),
     );
   },

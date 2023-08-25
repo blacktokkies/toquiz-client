@@ -28,6 +28,27 @@ export const createQuestion = async (
     false,
   );
 
+export interface LikeQuestionParams {
+  active: boolean;
+}
+export type LikeQuestionPathParams = Record<'questionId', string>;
+export interface LikeQuestionResult {
+  id: Question['id'];
+  likeNum: Question['likeNum'];
+  isActived: boolean;
+}
+export type LikeQuestionResponse = SuccessResponse<LikeQuestionResult>;
+export const likeQuestion = async (
+  questionId: Question['id'],
+  params: LikeQuestionParams,
+): Promise<LikeQuestionResponse> =>
+  apiClient.post<LikeQuestionResponse>(
+    apiUrl.question.like(String(questionId)),
+    undefined,
+    params,
+    undefined,
+    false,
+  );
 /* ================================ [ 질문 목록 가져오기 API ] ====================================== */
 export type GetQuestionsPathParams = Record<'panelId', string>;
 export interface GetQuestionsParams {
