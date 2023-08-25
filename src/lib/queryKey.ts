@@ -27,6 +27,7 @@ const questionQuerykey = {
   list: (panelId: Panel['id'], sort: GetQuestionsParams['sort'] = undefined) =>
     [...questionQuerykey.lists(), panelId, { sort }] as const,
   create: () => ['createQuestion'] as const,
+  like: () => ['likeQuestion'] as const,
 };
 
 export const queryKey = {

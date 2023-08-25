@@ -10,6 +10,7 @@ import { rest } from 'msw';
 
 import {
   useCreateQuestionMutation,
+  useLikeQuestionMutation,
   useQuestionsInfiniteQuery,
 } from '@/hooks/queries/question';
 import { apiUrl } from '@/lib/api/apiUrl';
@@ -78,6 +79,26 @@ describe('question API queries', () => {
 
       await waitFor(() => {
         expect(spyOnCreateQuestion).toHaveBeenCalledWith(panelId, body);
+      });
+    });
+  });
+
+  describe('likeQuestionMutation', () => {
+    it('mutate를 호출하면 likeQuestion 함수를 호출한다', async () => {
+      const questionId: questionApis.Question['id'] = 0;
+      const active: questionApis.LikeQuestionParams['active'] = true;
+
+      const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
+      const { result } = renderHook(() => useLikeQuestionMutation(), {
+        wrapper: createQueryClientWrapper(),
+      });
+
+      act(() => {
+        result.current.mutate({ id: questionId, active });
+      });
+
+      await waitFor(() => {
+        expect(spyOnLikeQuestion).toHaveBeenCalledWith(questionId, { active });
       });
     });
   });
