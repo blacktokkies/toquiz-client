@@ -26,64 +26,70 @@ vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
 });
 
 describe('InfiniteQuestionList', () => {
-  it('질문 목록 가져오기 API를 호출하고 성공 시 질문 목록을 렌더링한다', async () => {
-    const questions = createMockQuestionList(3);
-    overrideGetQuestionsWithSuccess({
-      statusCode: 200,
-      result: {
-        questions,
-        nextPage: -1,
-      },
+  describe('질문 목록 렌더링', () => {
+    it('질문 목록 가져오기 API를 호출하고 성공 시 질문 목록을 렌더링한다', async () => {
+      const questions = createMockQuestionList(3);
+      overrideGetQuestionsWithSuccess({
+        statusCode: 200,
+        result: {
+          questions,
+          nextPage: -1,
+        },
+      });
+      const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
+      renderWithQueryClient(<InfiniteQuestionList panelId={panelId} />);
+
+      expect(spyOnGetQuestions).toHaveBeenCalled();
+
+      await waitFor(() => {
+        expect(
+          screen.getAllByText(questions[0].content)[0],
+        ).toBeInTheDocument();
+      });
     });
-    const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
-    renderWithQueryClient(<InfiniteQuestionList panelId={panelId} />);
 
-    expect(spyOnGetQuestions).toHaveBeenCalled();
+    it('사용자가 스크롤하면 getQuestions를 호출한다', async () => {
+      const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
+      renderWithQueryClient(<InfiniteQuestionList panelId={panelId} />);
 
-    await waitFor(() => {
-      expect(screen.getAllByText(questions[0].content)[0]).toBeInTheDocument();
+      expect(spyOnGetQuestions).toHaveBeenCalledTimes(1);
+      await waitFor(() => {
+        expect(screen.queryByText(/loading/)).not.toBeInTheDocument();
+      });
+      fireEvent.scroll(window);
+
+      expect(spyOnGetQuestions).toHaveBeenCalledTimes(2);
     });
   });
 
-  it('사용자가 스크롤하면 getQuestions를 호출한다', async () => {
-    const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
-    renderWithQueryClient(<InfiniteQuestionList panelId={panelId} />);
+  describe('질문 목록 정렬', () => {
+    it('최신순 버튼을 누르면 최신순으로 질문 목록을 보여준다', async () => {
+      const queryClient = createQueryClient();
+      render(<InfiniteQuestionList panelId={panelId} />, {
+        wrapper: ({ children }) => (
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        ),
+      });
 
-    expect(spyOnGetQuestions).toHaveBeenCalledTimes(1);
-    await waitFor(() => {
-      expect(screen.queryByText(/loading/)).not.toBeInTheDocument();
-    });
-    fireEvent.scroll(window);
+      await waitFor(() => {
+        expect(screen.queryByText(/loading/)).not.toBeInTheDocument();
+      });
 
-    expect(spyOnGetQuestions).toHaveBeenCalledTimes(2);
-  });
+      const recentButton = screen.getByRole('button', { name: '최신순' });
+      await userEvent.click(recentButton);
 
-  it('최신순 버튼을 누르면 최신순으로 질문 목록을 보여준다', async () => {
-    const queryClient = createQueryClient();
-    render(<InfiniteQuestionList panelId={panelId} />, {
-      wrapper: ({ children }) => (
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      ),
-    });
+      await waitFor(() => {
+        const queryData = queryClient.getQueryData<
+          InfiniteData<questionApis.GetQuestionsResult>
+        >(queryKey.question.list(panelId, 'createdDate,DESC'));
 
-    await waitFor(() => {
-      expect(screen.queryByText(/loading/)).not.toBeInTheDocument();
-    });
-
-    const recentButton = screen.getByRole('button', { name: '최신순' });
-    await userEvent.click(recentButton);
-
-    await waitFor(() => {
-      const queryData = queryClient.getQueryData<
-        InfiniteData<questionApis.GetQuestionsResult>
-      >(queryKey.question.list(panelId, 'createdDate,DESC'));
-
-      expect(
-        /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain */
-        screen.getByText(queryData?.pages[0].questions[0].content!),
-      ).toBeInTheDocument();
+        expect(
+          /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain */
+          screen.getByText(queryData?.pages[0].questions[0].content!),
+        ).toBeInTheDocument();
+      });
     });
   });
 
@@ -118,15 +124,17 @@ describe('InfiniteQuestionList', () => {
     });
   });
 
-  it('좋아요 버튼을 누를 때마다 좋아요 API 요청한다', async () => {
-    const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
-    renderWithQueryClient(<InfiniteQuestionList panelId={panelId} />);
+  describe('좋아요 버튼', () => {
+    it('좋아요 버튼을 누를 때마다 좋아요 API 요청한다', async () => {
+      const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
+      renderWithQueryClient(<InfiniteQuestionList panelId={panelId} />);
 
-    await waitFor(() => {
-      expect(screen.queryByText(/loading/)).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByText(/loading/)).not.toBeInTheDocument();
+      });
+      const likeButton = screen.getAllByRole('button', { name: /좋아요 버튼/ });
+      await userEvent.click(likeButton[0]);
+      expect(spyOnLikeQuestion).toHaveBeenCalled();
     });
-    const likeButton = screen.getAllByRole('button', { name: /좋아요 버튼/ });
-    await userEvent.click(likeButton[0]);
-    expect(spyOnLikeQuestion).toHaveBeenCalled();
   });
 });
