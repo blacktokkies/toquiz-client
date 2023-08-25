@@ -1,5 +1,5 @@
 import type { Panel } from '@/lib/api/panel';
-import type { GetQuestionsParams } from '@/lib/api/question';
+import type { GetQuestionsParams, Question } from '@/lib/api/question';
 
 import React, { useCallback, useState } from 'react';
 
@@ -12,15 +12,15 @@ import {
   differenceInMonths,
 } from 'date-fns';
 
-import { Account } from '@/components/vectors';
 import { useActiveInfoDeatilQueryData } from '@/hooks/queries/active-info';
 import {
   useLikeQuestionMutation,
   useQuestionsInfiniteQuery,
 } from '@/hooks/queries/question';
-import { useCurrentDate } from '@/hooks/useCurrentDate';
 
 import { IntersectionArea } from '../system/IntersectionArea';
+
+import { QuestionList } from './QuestionList';
 
 interface Props {
   panelId: Panel['id'];
@@ -33,8 +33,6 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
   /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
   const activeInfoQueryData = useActiveInfoDeatilQueryData(panelId)!;
 
-  const now = useCurrentDate();
-
   const fetchQuestions = useCallback(
     (isIntersecting: boolean) => {
       if (
@@ -46,6 +44,13 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
     },
     [questionsQuery],
   );
+
+  const handleLikeButtonClick = (question: Question) => () => {
+    likeQuestionMutation.mutate({
+      id: question.id,
+      active: !activeInfoQueryData.likedIds.includes(question.id),
+    });
+  };
   // TODO: fallback UI 제공
   if (questionsQuery.isLoading) return <div>loading</div>;
   if (questionsQuery.isError) return <div>error</div>;
@@ -85,40 +90,10 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
           최신순
         </button>
       </div>
-      <ul className="flex flex-col gap-3">
-        {questionPages.map((questionPage) =>
-          questionPage.questions.map((question) => (
-            <li
-              key={question.id}
-              className="flex flex-col gap-3 p-5 w-full border border-grey-light rounded-md"
-            >
-              <div className="flex justify-start items-center gap-1 overflow-hidden">
-                <div role="img" aria-label="내 계정 아이콘">
-                  <Account className="fill-grey-darkest" />
-                </div>
-                <div className="font-bold whitespace-nowrap">익명</div>
-                <div className="text-grey-dark">
-                  {formatTimeDifference(now, new Date(question.createdAt))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    likeQuestionMutation.mutate({
-                      id: question.id,
-                      active: !activeInfoQueryData.likedIds.includes(
-                        question.id,
-                      ),
-                    });
-                  }}
-                >
-                  <span className="sr-only">좋아요 버튼</span>
-                </button>
-              </div>
-              <div>{question.content}</div>
-            </li>
-          )),
-        )}
-      </ul>
+      <QuestionList
+        questionPages={questionPages}
+        onLikeButtonClick={handleLikeButtonClick}
+      />
       <IntersectionArea onIntersection={fetchQuestions} />
     </div>
   );
