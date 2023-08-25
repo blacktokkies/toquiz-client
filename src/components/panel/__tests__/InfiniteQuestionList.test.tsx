@@ -11,10 +11,19 @@ import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import * as questionApis from '@/lib/api/question';
 import { queryKey } from '@/lib/queryKey';
 import { createQueryClient, renderWithQueryClient } from '@/lib/test-utils';
+import { myActiveInfoMock } from '@/mocks/data/active-info';
 import { createMockQuestionList } from '@/mocks/data/question';
 import { overrideGetQuestionsWithSuccess } from '@/pages/__tests__/Panel.test';
 
 const panelId: Panel['id'] = 0;
+
+vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
+  const queries = (await importOriginal()) ?? {};
+  return {
+    ...queries,
+    useActiveInfoDeatilQueryData: vi.fn(() => myActiveInfoMock),
+  };
+});
 
 describe('InfiniteQuestionList', () => {
   it('질문 목록 가져오기 API를 호출하고 성공 시 질문 목록을 렌더링한다', async () => {
@@ -107,5 +116,17 @@ describe('InfiniteQuestionList', () => {
         screen.getByText(queryData?.pages[0].questions[0].content!),
       ).toBeInTheDocument();
     });
+  });
+
+  it('좋아요 버튼을 누를 때마다 좋아요 API 요청한다', async () => {
+    const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
+    renderWithQueryClient(<InfiniteQuestionList panelId={panelId} />);
+
+    await waitFor(() => {
+      expect(screen.queryByText(/loading/)).not.toBeInTheDocument();
+    });
+    const likeButton = screen.getAllByRole('button', { name: /좋아요 버튼/ });
+    await userEvent.click(likeButton[0]);
+    expect(spyOnLikeQuestion).toHaveBeenCalled();
   });
 });

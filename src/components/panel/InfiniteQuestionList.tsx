@@ -13,7 +13,11 @@ import {
 } from 'date-fns';
 
 import { Account } from '@/components/vectors';
-import { useQuestionsInfiniteQuery } from '@/hooks/queries/question';
+import { useActiveInfoDeatilQueryData } from '@/hooks/queries/active-info';
+import {
+  useLikeQuestionMutation,
+  useQuestionsInfiniteQuery,
+} from '@/hooks/queries/question';
 import { useCurrentDate } from '@/hooks/useCurrentDate';
 
 import { IntersectionArea } from '../system/IntersectionArea';
@@ -25,6 +29,10 @@ type Sort = GetQuestionsParams['sort'];
 export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
   const [sort, setSort] = useState<Sort>(undefined);
   const questionsQuery = useQuestionsInfiniteQuery(panelId, sort);
+  const likeQuestionMutation = useLikeQuestionMutation();
+  /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+  const activeInfoQueryData = useActiveInfoDeatilQueryData(panelId)!;
+
   const now = useCurrentDate();
 
   const fetchQuestions = useCallback(
@@ -92,6 +100,19 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
                 <div className="text-grey-dark">
                   {formatTimeDifference(now, new Date(question.createdAt))}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    likeQuestionMutation.mutate({
+                      id: question.id,
+                      active: !activeInfoQueryData.likedIds.includes(
+                        question.id,
+                      ),
+                    });
+                  }}
+                >
+                  <span className="sr-only">좋아요 버튼</span>
+                </button>
               </div>
               <div>{question.content}</div>
             </li>
