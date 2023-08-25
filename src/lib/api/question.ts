@@ -28,16 +28,6 @@ export const createQuestion = async (
     false,
   );
 
-export interface LikeQuestionParams {
-  active: boolean;
-}
-export type LikeQuestionPathParams = Record<'questionId', string>;
-export interface LikeQuestionResult {
-  id: Question['id'];
-  likeNum: Question['likeNum'];
-  isActived: boolean;
-}
-export type LikeQuestionResponse = SuccessResponse<LikeQuestionResult>;
 export const likeQuestion = async (
   questionId: Question['id'],
   params: LikeQuestionParams,
@@ -68,6 +58,18 @@ export interface CreateQuestionBody {
 }
 export type CreateQuestionResult = Question;
 export type CreateQuestionResponse = SuccessResponse<CreateQuestionResult>;
+
+/* ================================ [ 질문 좋아요 API ] ====================================== */
+export interface LikeQuestionParams {
+  active: boolean;
+}
+export type LikeQuestionPathParams = Record<'questionId', string>;
+export interface LikeQuestionResult {
+  id: Question['id'];
+  likeNum: Question['likeNum'];
+  isActived: boolean;
+}
+export type LikeQuestionResponse = SuccessResponse<LikeQuestionResult>;
 
 /* ================================ [질문 엔티티] ====================================== */
 export interface Question {
