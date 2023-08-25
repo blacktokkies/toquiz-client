@@ -4,6 +4,9 @@ import type {
   CreateQuestionResult,
   GetQuestionsParams,
   GetQuestionsResult,
+  LikeQuestionParams,
+  LikeQuestionResult,
+  Question,
 } from '@/lib/api/question';
 import type { ApiError } from '@/lib/apiClient';
 import type {
@@ -13,7 +16,7 @@ import type {
 
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 
-import { createQuestion, getQuestions } from '@/lib/api/question';
+import { createQuestion, getQuestions, likeQuestion } from '@/lib/api/question';
 import { queryKey } from '@/lib/queryKey';
 
 export const useQuestionsInfiniteQuery = (
@@ -55,5 +58,21 @@ export const useCreateQuestionMutation = (
     createQuestion(panelId, body).then((res) => res.result),
   );
 
+  return mutation;
+};
+
+export const useLikeQuestionMutation = (): UseMutationResult<
+  LikeQuestionResult,
+  ApiError | SyntaxError,
+  Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>
+> => {
+  const key = queryKey.question.like();
+  const mutation = useMutation<
+    LikeQuestionResult,
+    ApiError | SyntaxError,
+    Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>
+  >(key, async ({ id, active }) =>
+    likeQuestion(id, { active }).then((res) => res.result),
+  );
   return mutation;
 };
