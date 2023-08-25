@@ -35,7 +35,9 @@ export function createQueryClientWrapper(): QueryClientWrapper {
   );
 }
 
-export function renderWithQueryClient(ui: React.ReactElement): RenderResult {
+export function renderWithQueryClient(
+  ui: React.ReactElement,
+): RenderResult & { queryClient: QueryClient } {
   const queryClient = createQueryClient();
   const { rerender, ...renderResult } = render(
     <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
@@ -49,5 +51,6 @@ export function renderWithQueryClient(ui: React.ReactElement): RenderResult {
         </QueryClientProvider>,
       );
     },
+    queryClient,
   };
 }
