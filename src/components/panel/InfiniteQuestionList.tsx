@@ -3,6 +3,7 @@ import type { GetQuestionsParams } from '@/lib/api/question';
 
 import React, { useCallback, useState } from 'react';
 
+import { clsx } from 'clsx';
 import {
   differenceInMinutes,
   differenceInHours,
@@ -44,23 +45,38 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
   const questionPages = questionsQuery.data.pages;
 
   return (
-    <div>
-      <button
-        type="button"
-        onClick={() => {
-          setSort(undefined);
-        }}
-      >
-        좋아요순
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          setSort('createdDate,DESC');
-        }}
-      >
-        최신순
-      </button>
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-1 items-center">
+        <button
+          className={clsx(
+            'p-2 rounded-md text-grey-dark text-sm hover:bg-grey-lighter active:opacity-80',
+            {
+              'text-grey-darkest font-medium': sort === undefined,
+            },
+          )}
+          type="button"
+          onClick={() => {
+            setSort(undefined);
+          }}
+        >
+          좋아요순
+        </button>
+        <div className="w-[1px] bg-grey-dark h-4" />
+        <button
+          className={clsx(
+            'p-2 rounded-md text-grey-dark text-sm hover:bg-grey-lighter active:opacity-80',
+            {
+              'text-grey-darkest font-medium': sort !== undefined,
+            },
+          )}
+          type="button"
+          onClick={() => {
+            setSort('createdDate,DESC');
+          }}
+        >
+          최신순
+        </button>
+      </div>
       <ul className="flex flex-col gap-3">
         {questionPages.map((questionPage) =>
           questionPage.questions.map((question) => (
