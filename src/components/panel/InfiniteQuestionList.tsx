@@ -30,6 +30,18 @@ type Sort = GetQuestionsParams['sort'];
 export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
   const [sort, setSort] = useState<Sort>(undefined);
   const questionsQuery = useQuestionsInfiniteQuery(panelId, sort);
+  const fetchQuestions = useCallback(
+    (isIntersecting: boolean) => {
+      if (
+        isIntersecting &&
+        !questionsQuery.isFetchingNextPage &&
+        questionsQuery.hasNextPage
+      )
+        questionsQuery.fetchNextPage();
+    },
+    [questionsQuery],
+  );
+
   const queryClient = useQueryClient();
   const likeQuestionMutation = useLikeQuestionMutation({
     onMutate: async ({ active, id }) => {
@@ -79,27 +91,17 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
     },
   });
 
+  // [NOTE] 패널 페이지 로더에서 staleTime이 Infinity인 active info를 prefetch하므로
+  // active info query의 데이터가 fresh하다는 것이 보장된다
   /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
   const activeInfoQuery = useQuery(activeInfoDetailQuery(panelId)).data!;
-
-  const fetchQuestions = useCallback(
-    (isIntersecting: boolean) => {
-      if (
-        isIntersecting &&
-        !questionsQuery.isFetchingNextPage &&
-        questionsQuery.hasNextPage
-      )
-        questionsQuery.fetchNextPage();
-    },
-    [questionsQuery],
-  );
-
   const handleLikeButtonClick = (question: Question) => () => {
     likeQuestionMutation.mutate({
       id: question.id,
       active: !activeInfoQuery.likedIds.includes(question.id),
     });
   };
+
   // TODO: fallback UI 제공
   if (questionsQuery.isLoading) return <div>loading</div>;
   if (questionsQuery.isError) return <div>error</div>;
