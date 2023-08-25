@@ -11,6 +11,7 @@ import React, { useCallback, useState } from 'react';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
+import { produce } from 'immer';
 
 import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
 import {
@@ -45,53 +46,53 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
   const queryClient = useQueryClient();
   const likeQuestionMutation = useLikeQuestionMutation({
     onMutate: async ({ active, id }) => {
-      const val = active ? 1 : -1;
       await queryClient.cancelQueries(queryKey.question.lists());
+
       const prevQuestion = queryClient.getQueryData<InfiniteData<QuestionPage>>(
         queryKey.question.list(panelId, sort),
       );
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
         queryKey.question.list(panelId, sort),
-        (old) => {
-          if (old === undefined) return;
-          return {
-            ...old,
-            pages: old.pages.map((page) => ({
-              ...page,
-              questions: page.questions.map((question) =>
-                question.id === id
-                  ? { ...question, likeNum: question.likeNum + val }
-                  : question,
-              ),
-            })),
-          };
-        },
+        (old) =>
+          produce(old, (draft) => {
+            if (!draft) return;
+
+            draft.pages.forEach((page) => {
+              page.questions.forEach((question) => {
+                if (question.id === id) {
+                  if (active) question.likeNum += 1;
+                  else question.likeNum -= 1;
+                }
+              });
+            });
+          }),
       );
-      const prevActiveInfo = queryClient.getQueryData(
+
+      const prevActiveInfo = queryClient.getQueryData<MyActiveInfo>(
         activeInfoDetailQuery(panelId).queryKey,
       );
       queryClient.setQueryData<MyActiveInfo>(
         activeInfoDetailQuery(panelId).queryKey,
-        (old) => {
-          if (old === undefined) return undefined;
-          return {
-            ...old,
-            likedIds: active
-              ? [...old.likedIds, id]
-              : old.likedIds.filter((likeId) => likeId !== id),
-          };
-        },
+        (old) =>
+          produce(old, (draft) => {
+            if (!draft) return;
+
+            if (active) {
+              draft.likedIds.push(id);
+            } else {
+              draft.likedIds = draft.likedIds.filter((likeId) => likeId !== id);
+            }
+          }),
       );
 
       return { prevActiveInfo, prevQuestion };
     },
-    onSettled: (res) => {
-      if (res === undefined) return;
+    onSettled: () => {
       queryClient.invalidateQueries(queryKey.question.lists());
     },
   });
 
-  // [NOTE] 패널 페이지 로더에서 staleTime이 Infinity인 active info를 prefetch하므로
+  // [NOTE] 패널 페이지 로더에서 active info query를 staleTime이 Infinity으로 prefetch하므로
   // active info query의 데이터가 fresh하다는 것이 보장된다
   /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
   const activeInfoQuery = useQuery(activeInfoDetailQuery(panelId)).data!;
