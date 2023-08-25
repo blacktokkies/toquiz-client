@@ -2,7 +2,7 @@ import type { Panel } from '@/lib/api/panel';
 import type { Question } from '@/lib/api/question';
 
 import { apiUrl } from '@/lib/api/apiUrl';
-import { createQuestion, getQuestions } from '@/lib/api/question';
+import { createQuestion, getQuestions, likeQuestion } from '@/lib/api/question';
 import { mockQuestionList } from '@/mocks/data/question';
 
 describe('question api', () => {
@@ -25,5 +25,16 @@ describe('question api', () => {
 
     const res = await createQuestion(panelId, { content });
     expect(res.result.content).toBe(content);
+  });
+
+  it(`likeQuestion을 호출하면 질문 좋아요 API(${apiUrl.question.like(
+    ':questionId',
+  )})로 요청한다)`, async () => {
+    const questionId: Question['id'] = 0;
+    const active = true;
+
+    const res = await likeQuestion(questionId, { active });
+    expect(res.result.id).toBe(questionId);
+    expect(res.result.isActived).toBe(active);
   });
 });

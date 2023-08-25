@@ -20,6 +20,7 @@ const question = {
   getQuestions: (panelId: string) =>
     `/api/panels/${panelId}/questions` as const,
   create: (panelId: string) => `/api/panels/${panelId}/question`,
+  like: (questionId: string) => `/api/questions/${questionId}/like` as const,
 } as const;
 
 export const apiUrl = {
