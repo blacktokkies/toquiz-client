@@ -77,7 +77,7 @@ export const likeQuestion = rest.post<
   `${API_BASE_URL}${apiUrl.question.like(':questionId')}`,
   async (req, res, ctx) => {
     const questionId = Number(req.params.questionId);
-    const active = Boolean(req.url.searchParams.get('active'));
+    const active = req.url.searchParams.get('active') === 'true';
 
     const question = mockQuestionList.find(
       (q) => q.id === Number(questionId),
