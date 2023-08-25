@@ -45,7 +45,7 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
 
   const queryClient = useQueryClient();
   const likeQuestionMutation = useLikeQuestionMutation({
-    onMutate: async ({ active, id }) => {
+    onMutate: async ({ id, active }) => {
       await queryClient.cancelQueries(queryKey.question.lists());
 
       const prevQuestion = queryClient.getQueryData<InfiniteData<QuestionPage>>(
@@ -53,19 +53,7 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
       );
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
         queryKey.question.list(panelId, sort),
-        (old) =>
-          produce(old, (draft) => {
-            if (!draft) return;
-
-            draft.pages.forEach((page) => {
-              page.questions.forEach((question) => {
-                if (question.id === id) {
-                  if (active) question.likeNum += 1;
-                  else question.likeNum -= 1;
-                }
-              });
-            });
-          }),
+        updateQuestions(id, active),
       );
 
       const prevActiveInfo = queryClient.getQueryData<MyActiveInfo>(
@@ -73,16 +61,7 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
       );
       queryClient.setQueryData<MyActiveInfo>(
         activeInfoDetailQuery(panelId).queryKey,
-        (old) =>
-          produce(old, (draft) => {
-            if (!draft) return;
-
-            if (active) {
-              draft.likedIds.push(id);
-            } else {
-              draft.likedIds = draft.likedIds.filter((likeId) => likeId !== id);
-            }
-          }),
+        updateActiveInfo(id, active),
       );
 
       return { prevActiveInfo, prevQuestion };
@@ -92,7 +71,7 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
     },
   });
 
-  // [NOTE] 패널 페이지 로더에서 active info query를 staleTime이 Infinity으로 prefetch하므로
+  // [NOTE] 패널 페이지 로더에서 active info query를 `staleTime: Infinity`로 prefetch하므로
   // active info query의 데이터가 fresh하다는 것이 보장된다
   /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
   const activeInfoQuery = useQuery(activeInfoDetailQuery(panelId)).data!;
@@ -151,3 +130,32 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
     </div>
   );
 }
+
+const updateQuestions =
+  (id: Question['id'], active: boolean) =>
+  (prevQuestion: InfiniteData<QuestionPage> | undefined) =>
+    produce(prevQuestion, (draft) => {
+      if (!draft) return;
+
+      draft.pages.forEach((page) => {
+        page.questions.forEach((question) => {
+          if (question.id === id) {
+            if (active) question.likeNum += 1;
+            else question.likeNum -= 1;
+          }
+        });
+      });
+    });
+
+const updateActiveInfo =
+  (id: Question['id'], active: boolean) =>
+  (prevActiveInfo: MyActiveInfo | undefined) =>
+    produce(prevActiveInfo, (draft) => {
+      if (!draft) return;
+
+      if (active) {
+        draft.likedIds.push(id);
+      } else {
+        draft.likedIds = draft.likedIds.filter((likeId) => likeId !== id);
+      }
+    });
