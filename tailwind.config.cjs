@@ -27,6 +27,7 @@ module.exports = {
         hover: '#C52B2B',
       },
       green: {
+        lighter: '#EBFEF2',
         light: '#E2FEED',
         DEFAULT: '#198E48',
       },
