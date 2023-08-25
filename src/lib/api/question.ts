@@ -45,10 +45,11 @@ export interface GetQuestionsParams {
   page: number;
   sort?: 'createdDate,DESC';
 }
-export interface GetQuestionsResult {
+export interface QuestionPage {
   questions: Question[];
   nextPage: number;
 }
+export type GetQuestionsResult = QuestionPage;
 export type GetQuestionsResponse = SuccessResponse<GetQuestionsResult>;
 
 /* ================================ [ 질문 생성 가져오기 API ] ====================================== */
