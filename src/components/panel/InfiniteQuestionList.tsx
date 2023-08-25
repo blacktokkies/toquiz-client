@@ -11,13 +11,6 @@ import React, { useCallback, useState } from 'react';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
-import {
-  differenceInMinutes,
-  differenceInHours,
-  differenceInDays,
-  differenceInWeeks,
-  differenceInMonths,
-} from 'date-fns';
 
 import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
 import {
@@ -154,28 +147,4 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
       <IntersectionArea onIntersection={fetchQuestions} />
     </div>
   );
-}
-
-/**
- * 날짜 차이를 계산한다
- * @param now 현재
- * @param target 과거
- * @returns 차이가 1분 이내이면 방금, 1시간 이내이면 n분 전, 하루 이내이면 n시간 전, 일주일 이내이면 n일 전, 한 달 이내이면 n주 전, 이후로는 n달 전
- */
-export function formatTimeDifference(now: Date, target: Date): string {
-  const minutesDiff = differenceInMinutes(now, target);
-
-  if (minutesDiff === 0) return '방금';
-  if (minutesDiff < 60) return `${minutesDiff}분 전`;
-
-  const hoursDiff = differenceInHours(now, target);
-  if (hoursDiff < 24) return `${hoursDiff}시간 전`;
-
-  const daysDiff = differenceInDays(now, target);
-  if (daysDiff < 7) return `${daysDiff}일 전`;
-
-  const weeksDiff = differenceInWeeks(now, target);
-  const monthsDiff = differenceInMonths(now, target);
-  if (monthsDiff < 2) return `${weeksDiff}주 전`;
-  return `${monthsDiff}달 전`;
 }
