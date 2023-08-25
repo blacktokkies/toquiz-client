@@ -11,19 +11,10 @@ import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import * as questionApis from '@/lib/api/question';
 import { queryKey } from '@/lib/queryKey';
 import { createQueryClient, renderWithQueryClient } from '@/lib/test-utils';
-import { myActiveInfoMock } from '@/mocks/data/active-info';
 import { createMockQuestionList } from '@/mocks/data/question';
 import { overrideGetQuestionsWithSuccess } from '@/pages/__tests__/Panel.test';
 
 const panelId: Panel['id'] = 0;
-
-vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
-  const queries = (await importOriginal()) ?? {};
-  return {
-    ...queries,
-    useActiveInfoDeatilQueryData: vi.fn(() => myActiveInfoMock),
-  };
-});
 
 describe('InfiniteQuestionList', () => {
   describe('질문 목록 렌더링', () => {
@@ -135,6 +126,21 @@ describe('InfiniteQuestionList', () => {
       const likeButton = screen.getAllByRole('button', { name: /좋아요 버튼/ });
       await userEvent.click(likeButton[0]);
       expect(spyOnLikeQuestion).toHaveBeenCalled();
+    });
+
+    it('좋아요 버튼을 누를 때마다 좋아요 API 응답을 기다리지 않고 화면에 토글 결과를 보여준다', async () => {
+      const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
+      renderWithQueryClient(<InfiniteQuestionList panelId={panelId} />);
+
+      const likeButton = (
+        await screen.findAllByRole('button', {
+          name: /좋아요 버튼/,
+        })
+      )[0];
+      const prevLikeNum = Number(likeButton.textContent);
+      await userEvent.click(likeButton);
+      expect(spyOnLikeQuestion).toHaveBeenCalled();
+      expect(likeButton).toHaveTextContent(String(prevLikeNum + 1));
     });
   });
 });
