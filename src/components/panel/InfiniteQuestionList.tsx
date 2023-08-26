@@ -75,17 +75,22 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
       if (!(err instanceof ApiError)) return;
       if (err.data === undefined) return;
 
-      const { statusCode } = err.data;
+      const { statusCode, code } = err.data;
 
       if (statusCode === 400) {
-        queryClient.setQueryData<InfiniteData<QuestionPage>>(
-          queryKey.question.list(panelId, sort),
-          context?.prevQuestions,
-        );
-        queryClient.setQueryData<MyActiveInfo>(
-          queryKey.activeInfo.detail(panelId),
-          context?.prevActiveInfo,
-        );
+        if (
+          code === 'INVALID_ACTIVE_LIKE_QUESTION' ||
+          code === 'INVALID_INACTIVE_LIKE_QUESTION'
+        ) {
+          queryClient.setQueryData<InfiniteData<QuestionPage>>(
+            queryKey.question.list(panelId, sort),
+            context?.prevQuestions,
+          );
+          queryClient.setQueryData<MyActiveInfo>(
+            queryKey.activeInfo.detail(panelId),
+            context?.prevActiveInfo,
+          );
+        }
       }
     },
     onSettled: () => {
