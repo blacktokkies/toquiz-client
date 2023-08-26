@@ -5,8 +5,8 @@ import type {
   UpdatePanelBody,
   UpdatePanelResult,
   GetMyPanelsParams,
-  GetMyPanelsResult,
   Panel,
+  MyPanelPage,
 } from '@/lib/api/panel';
 import type { ApiError } from '@/lib/apiClient';
 import type {
@@ -25,11 +25,11 @@ import {
 import { queryKey } from '@/lib/queryKey';
 
 export const useMyPanelsInfiniteQuery = (): UseInfiniteQueryResult<
-  GetMyPanelsResult,
+  MyPanelPage,
   ApiError | SyntaxError
 > => {
   const key = queryKey.panel.lists();
-  const query = useInfiniteQuery<GetMyPanelsResult, ApiError | SyntaxError>(
+  const query = useInfiniteQuery<MyPanelPage, ApiError | SyntaxError>(
     key,
     async ({ pageParam = 0 }) =>
       getMyPanels({ page: pageParam as GetMyPanelsParams['page'] }),
@@ -57,7 +57,7 @@ export const useCreatePanelMutation = (): UseMutationResult<
 };
 
 export const useUpdatePanelMutation = (
-  panelId: Panel['id'],
+  panelId: Panel['sid'],
 ): UseMutationResult<
   UpdatePanelResult,
   ApiError | SyntaxError,
@@ -76,13 +76,13 @@ export const useUpdatePanelMutation = (
 export const useDeletePanelMutation = (): UseMutationResult<
   DeletePanelResponse,
   ApiError | SyntaxError,
-  Panel['id']
+  Panel['sid']
 > => {
   const key = queryKey.panel.delete();
   const mutation = useMutation<
     DeletePanelResponse,
     ApiError | SyntaxError,
-    Panel['id']
+    Panel['sid']
   >(key, deletePanel);
 
   return mutation;

@@ -9,7 +9,7 @@ import { Button } from '@/components/system/Button';
 import { useCreateQuestionMutation } from '@/hooks/queries/question';
 
 interface Props {
-  panelId: Panel['id'];
+  panelId: Panel['sid'];
   close: () => void;
 }
 export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {

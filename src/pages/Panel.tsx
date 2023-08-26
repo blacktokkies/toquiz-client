@@ -32,10 +32,8 @@ export const panelLoader =
   async ({ params }: LoaderFunctionArgs): Promise<PanelData> => {
     const panelId = params.id!;
     try {
-      const _panelId = Number(panelId);
-      if (Number.isNaN(_panelId)) throw json({ id: panelId }, { status: 404 });
-      const { result: panel } = await getPanel(_panelId);
-      await queryClient.prefetchQuery(activeInfoDetailQuery(_panelId));
+      const { result: panel } = await getPanel(panelId);
+      await queryClient.prefetchQuery(activeInfoDetailQuery(panelId));
       return panel;
     } catch (error) {
       if (error instanceof ApiError) {
@@ -59,7 +57,7 @@ export function Panel(): JSX.Element {
   function handleOpenModal(): void {
     overlay.open(({ close }) => (
       <ModalController close={close} aria-label="질문 생성 모달">
-        <CreateQuestionModal close={close} panelId={panel.id} />
+        <CreateQuestionModal close={close} panelId={panel.sid} />
       </ModalController>
     ));
   }
@@ -67,7 +65,7 @@ export function Panel(): JSX.Element {
     <main>
       <PanelHeader panel={panel} />
       <div className="container flex flex-col h-full max-w-2xl px-5 py-7">
-        <InfiniteQuestionList panelId={panel.id} />
+        <InfiniteQuestionList panelId={panel.sid} />
       </div>
       <button
         className={clsx(

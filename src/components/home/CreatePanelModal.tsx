@@ -31,8 +31,8 @@ export function CreatePanelModal({ close }: Props): JSX.Element {
         createPanelMutation.mutate(
           { title, description },
           {
-            onSuccess: ({ id }) => {
-              navigate(`/panel/${id}`);
+            onSuccess: ({ sid }) => {
+              navigate(`/panel/${sid}`);
             },
           },
         );

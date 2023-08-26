@@ -18,13 +18,16 @@ const panelQueryKey = {
 const activeInfoQueryKeys = {
   all: ['activeInfos'] as const,
   details: () => [...activeInfoQueryKeys.all, 'details'],
-  detail: (panelId: Panel['id']) => [...activeInfoQueryKeys.details(), panelId],
+  detail: (panelId: Panel['sid']) => [
+    ...activeInfoQueryKeys.details(),
+    panelId,
+  ],
 };
 
 const questionQuerykey = {
   all: ['questions'] as const,
   lists: () => [...questionQuerykey.all, 'list'] as const,
-  list: (panelId: Panel['id'], sort: GetQuestionsParams['sort'] = undefined) =>
+  list: (panelId: Panel['sid'], sort: GetQuestionsParams['sort'] = undefined) =>
     [...questionQuerykey.lists(), panelId, { sort }] as const,
   create: () => ['createQuestion'] as const,
   like: () => ['likeQuestion'] as const,

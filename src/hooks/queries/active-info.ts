@@ -22,7 +22,7 @@ export type ActiveInfoDetailQueryOptions =
   NonNullableKeys<_ActiveInfoDetailQueryOptions>;
 
 export const activeInfoDetailQuery = (
-  panelId: Panel['id'],
+  panelId: Panel['sid'],
 ): ActiveInfoDetailQueryOptions => ({
   queryKey: queryKey.activeInfo.detail(panelId),
   queryFn: async () => getMyActiveInfo(panelId).then((res) => res.result),

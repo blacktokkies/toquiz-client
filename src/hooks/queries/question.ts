@@ -23,7 +23,7 @@ import { createQuestion, getQuestions, likeQuestion } from '@/lib/api/question';
 import { queryKey } from '@/lib/queryKey';
 
 export const useQuestionsInfiniteQuery = (
-  panelId: Panel['id'],
+  panelId: Panel['sid'],
   sort: GetQuestionsParams['sort'] = undefined,
 ): UseInfiniteQueryResult<GetQuestionsResult, ApiError | SyntaxError> => {
   const key = queryKey.question.list(panelId, sort);
@@ -46,7 +46,7 @@ export const useQuestionsInfiniteQuery = (
 };
 
 export const useCreateQuestionMutation = (
-  panelId: Panel['id'],
+  panelId: Panel['sid'],
 ): UseMutationResult<
   CreateQuestionResult,
   ApiError | SyntaxError,

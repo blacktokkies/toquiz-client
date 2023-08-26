@@ -2,6 +2,7 @@ import type { Panel } from '@/lib/api/panel';
 
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -9,7 +10,7 @@ import { CreateQuestionModal } from '@/components/panel/CreateQuestionModal';
 import * as questionApis from '@/lib/api/question';
 import { renderWithQueryClient } from '@/lib/test-utils';
 
-const panelId: Panel['id'] = -1;
+const panelId: Panel['sid'] = faker.datatype.uuid();
 const handleClose = vi.fn();
 describe('CreatePanelModal', () => {
   it('사용자가 입력하는 글자수를 보여준다', () => {

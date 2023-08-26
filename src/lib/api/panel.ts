@@ -1,4 +1,3 @@
-import type { Member } from '@/lib/api/auth';
 import type { SuccessResponse } from '@/lib/api/types';
 
 import { apiUrl } from '@/lib/api/apiUrl';
@@ -12,26 +11,26 @@ export const createPanel = async (
     .then((data) => data.result);
 
 export const updatePanel = async (
-  panelId: Panel['id'],
+  panelId: Panel['sid'],
   body: UpdatePanelBody,
 ): Promise<UpdatePanelResult> =>
   apiClient
     .patch<UpdatePanelResponse, UpdatePanelBody>(
-      apiUrl.panel.update(String(panelId)),
+      apiUrl.panel.update(panelId),
       body,
     )
     .then((data) => data.result);
 
 export const deletePanel = async (
-  panelId: Panel['id'],
+  panelId: Panel['sid'],
 ): Promise<DeletePanelResponse> =>
-  apiClient.delete<DeletePanelResponse>(apiUrl.panel.delete(String(panelId)));
+  apiClient.delete<DeletePanelResponse>(apiUrl.panel.delete(panelId));
 
 export const getPanel = async (
-  panelId: Panel['id'],
+  panelId: Panel['sid'],
 ): Promise<GetPanelResponse> =>
   apiClient.get<GetPanelResponse>(
-    apiUrl.panel.get(String(panelId)),
+    apiUrl.panel.get(panelId),
     undefined,
     undefined,
     false,
@@ -47,74 +46,49 @@ export const getMyPanels = async (
     )
     .then((data) => data.result);
 
-/* ================================ [패널 생성 API] ====================================== */
+/* ================================ [ 패널 생성 API ] ====================================== */
 export interface CreatePanelBody {
-  title: string;
-  description?: string;
-}
-
-export interface CreatePanelResult {
-  id: Panel['id'];
-  author: Panel['author'];
   title: Panel['title'];
-  description: Panel['description'];
-  createdAt: Panel['createdAt'];
+  description?: Panel['description'];
 }
-
+export type CreatePanelResult = Panel;
 export type CreatePanelResponse = SuccessResponse<CreatePanelResult>;
 
-/* ================================ [패널 수정 API] ====================================== */
+/* ================================ [ 패널 수정 API ] ====================================== */
 export interface UpdatePanelBody {
   title: string;
   description?: string;
 }
-
 export type UpdatePanelResult = Panel;
-
 export type UpdatePanelResponse = SuccessResponse<UpdatePanelResult>;
-
 export type UpdatePanelPathParams = Record<'panelId', string>;
 
-/* ================================ [패널 삭제 API] ====================================== */
-export interface DeletePanelBody {
-  title: string;
-  description?: string;
-}
-
+/* ================================ [ 패널 삭제 API ] ====================================== */
 export type DeletePanelResponse = SuccessResponse;
-
 export type DeletePanelPathParams = Record<'panelId', string>;
 
-/* ================================ [패널 가져오기 API] ====================================== */
-export interface GetPanelResult {
-  id: Panel['id'];
-  author: Panel['author'];
-  title: Panel['title'];
-  description?: Panel['description'];
-  createdAt: Panel['createdAt'];
-  updatedAt: Panel['updatedAt'];
-}
+/* ================================ [ 패널 가져오기 API ] ====================================== */
+export type GetPanelResult = Panel;
 export type GetPanelResponse = SuccessResponse<GetPanelResult>;
-
 export type GetPanelPathParams = Record<'panelId', string>;
 
-/* ================================ [패널 목록 가져오기 API] ====================================== */
+/* ================================ [ 패널 목록 가져오기 API ] ====================================== */
 export interface GetMyPanelsParams {
-  page?: number;
+  page: number;
 }
-export interface GetMyPanelsResult {
-  nextPage?: number;
+export interface MyPanelPage {
+  nextPage: number;
   panels: Panel[];
 }
-
+export type GetMyPanelsResult = MyPanelPage;
 export type GetMyPanelsResponse = SuccessResponse<GetMyPanelsResult>;
-/* ================================ [패널 엔티티] ====================================== */
 
+/* ================================ [ 패널 엔티티 ] ====================================== */
 export interface Panel {
-  id: number;
-  author: Member['email'];
+  sid: string;
   title: string;
   description?: string;
+  authorId: number;
   createdAt: string;
   updatedAt: string;
 }

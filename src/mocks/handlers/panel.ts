@@ -17,8 +17,6 @@ import { apiUrl } from '@/lib/api/apiUrl';
 import { API_BASE_URL } from '@/lib/apiClient';
 import { createMockPanel, myPanelList } from '@/mocks/data/panel';
 
-import { myAccount } from '../data/auth';
-
 export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
   `${API_BASE_URL}${apiUrl.panel.getMyPanels()}`,
   async (req, res, ctx) => {
@@ -79,8 +77,8 @@ export const updatePanel = rest.patch<
       ctx.json({
         statusCode: 200,
         result: {
-          id: Number(panelId),
-          author: myAccount.email,
+          sid: panelId,
+          authorId: 0,
           title,
           description,
           createdAt: new Date().toDateString(),
@@ -110,9 +108,9 @@ export const getPanel = rest.get<never, GetPanelPathParams, GetPanelResponse>(
   `${API_BASE_URL}${apiUrl.panel.get(':panelId')}`,
   async (req, res, ctx) => {
     const { panelId } = req.params;
-    const panel = myPanelList.find((panel) => panel.id === Number(panelId)) ?? {
+    const panel = myPanelList.find((panel) => panel.sid === panelId) ?? {
       ...createMockPanel(),
-      id: Number(panelId),
+      sid: panelId,
     };
 
     return res(

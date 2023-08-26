@@ -6,10 +6,10 @@ import { apiUrl } from '@/lib/api/apiUrl';
 import { apiClient } from '@/lib/apiClient';
 
 export const getMyActiveInfo = async (
-  panelId: Panel['id'],
+  panelId: Panel['sid'],
 ): Promise<GetMyActiveInfoResponse> =>
   apiClient.get<GetMyActiveInfoResponse>(
-    apiUrl.panel.getMyActiveInfo(String(panelId)),
+    apiUrl.panel.getMyActiveInfo(panelId),
     undefined,
     undefined,
     false,

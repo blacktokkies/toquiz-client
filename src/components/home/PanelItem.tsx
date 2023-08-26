@@ -20,11 +20,11 @@ export const PanelItem = ({
   openActionMenu,
   onPanelTitleClick,
 }: Props): JSX.Element => {
-  const { id, title, createdAt, description } = panel;
+  const { sid, title, createdAt, description } = panel;
 
   return (
     <li
-      key={id}
+      key={sid}
       className="flex flex-col gap-6 tracking-tight rounded-md bg-white py-4 px-5 border border-grey-light"
     >
       <div className="flex justify-between items-start">

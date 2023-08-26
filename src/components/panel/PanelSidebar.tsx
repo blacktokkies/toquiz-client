@@ -9,14 +9,13 @@ interface Props {
   panel: Panel;
 }
 export function PanelSidebar({ panel }: Props): JSX.Element {
-  const { id, title, author, createdAt, description } = panel;
+  const { sid, title, createdAt, description } = panel;
   return (
     <div className="flex flex-col justify-start w-[280px] divide-y divide-grey-light">
       <div className="flex gap-4 p-5">
         <span className="w-1 bg-primary" />
         <div className="flex flex-col justify-start items-start">
           <h2 className="font-medium">{title}</h2>
-          <div className="text-grey-dark text-sm">{author}</div>
           <div className="text-grey-dark text-sm">
             {formatToKRLocaleString(createdAt)}
           </div>
@@ -29,7 +28,7 @@ export function PanelSidebar({ panel }: Props): JSX.Element {
           type="button"
           onClick={() => {
             window.navigator.clipboard.writeText(
-              `${window.location.origin}/panel/${id}`,
+              `${window.location.origin}/panel/${sid}`,
             );
           }}
         >

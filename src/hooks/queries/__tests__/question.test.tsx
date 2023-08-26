@@ -5,6 +5,7 @@ import type {
   GetQuestionsResult,
 } from '@/lib/api/question';
 
+import { faker } from '@faker-js/faker';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
 
@@ -20,7 +21,7 @@ import { server } from '@/mocks/server';
 
 describe('question API queries', () => {
   describe('useQuestionsInfiniteQuery', () => {
-    const panelId: Panel['id'] = -1;
+    const panelId: Panel['sid'] = faker.datatype.uuid();
 
     it('getQuestions가 nextPage를 -1로 반환하면 hasNextPage는 false이다', async () => {
       overrideGetQuestionsWith200({ questions: [], nextPage: -1 });
@@ -64,7 +65,7 @@ describe('question API queries', () => {
 
   describe('createQuestionMutation', () => {
     it('mutate를 호출하면 createQuestion 함수를 호출한다', async () => {
-      const panelId: Panel['id'] = -1;
+      const panelId: Panel['sid'] = faker.datatype.uuid();
       const body: questionApis.CreateQuestionBody = {
         content: '안녕하세요',
       };
