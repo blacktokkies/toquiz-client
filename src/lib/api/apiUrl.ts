@@ -1,3 +1,5 @@
+import type { Panel } from '@/lib/api/panel';
+
 const auth = {
   signup: () => `/api/auth/signup`,
   login: () => `/api/auth/login`,
@@ -8,18 +10,18 @@ const auth = {
 
 const panel = {
   create: () => `/api/panel`,
-  get: (panelId: string) => `/api/panels/${panelId}`,
-  update: (panelId: string) => `/api/panels/${panelId}`,
-  delete: (panelId: string) => `/api/panels/${panelId}`,
+  get: (panelId: Panel['sid']) => `/api/panels/${panelId}`,
+  update: (panelId: Panel['sid']) => `/api/panels/${panelId}`,
+  delete: (panelId: Panel['sid']) => `/api/panels/${panelId}`,
   getMyPanels: () => `/api/panels`,
-  getMyActiveInfo: (panelId: string) =>
+  getMyActiveInfo: (panelId: Panel['sid']) =>
     `/api/panels/${panelId}/active-info` as const,
 } as const;
 
 const question = {
-  getQuestions: (panelId: string) =>
+  getQuestions: (panelId: Panel['sid']) =>
     `/api/panels/${panelId}/questions` as const,
-  create: (panelId: string) => `/api/panels/${panelId}/question`,
+  create: (panelId: Panel['sid']) => `/api/panels/${panelId}/question`,
   like: (questionId: string) => `/api/questions/${questionId}/like` as const,
 } as const;
 

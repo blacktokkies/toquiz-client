@@ -1,5 +1,3 @@
-import type { GetMyPanelsResult } from '@/lib/api/panel';
-
 import React from 'react';
 
 import { screen } from '@testing-library/react';
@@ -7,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 
 import { PanelGrid } from '@/components/home/PanelGrid';
 import { renderWithQueryClient } from '@/lib/test-utils';
-import { createMockPanel, createMockPanleList } from '@/mocks/data/panel';
+import { createMockPanleList } from '@/mocks/data/panel';
 
 const navigateMockFn = vi.fn();
 vi.mock('react-router-dom', () => ({
@@ -18,13 +16,12 @@ vi.mock('@/hooks/useOverlay', () => ({ useOverlay: vi.fn() }));
 
 describe('PanelGrid', () => {
   it('패널 목록을 렌더링한다', () => {
-    const panelPages: GetMyPanelsResult[] = [
-      { panels: createMockPanleList(10) },
-    ];
+    const panelPage = { panels: createMockPanleList(10), nextPage: -1 };
+    const panelPages = [panelPage];
     renderWithQueryClient(<PanelGrid panelPages={panelPages} />);
 
     expect(
-      screen.getAllByText(panelPages[0].panels[0].title)[0],
+      screen.getAllByText(panelPage.panels[0].title)[0],
     ).toBeInTheDocument();
   });
 
@@ -35,13 +32,14 @@ describe('PanelGrid', () => {
   });
 
   it('패널 제목을 누르면 해당 아이디의 패널 페이지로 이동한다', async () => {
-    const panel = createMockPanel();
-    const panelPages: GetMyPanelsResult[] = [{ panels: [panel] }];
+    const panelPage = { panels: createMockPanleList(10), nextPage: -1 };
+    const panelPages = [panelPage];
     renderWithQueryClient(<PanelGrid panelPages={panelPages} />);
 
+    const panel = panelPage.panels[0];
     const title = screen.getByText(panel.title);
     await userEvent.click(title);
 
-    expect(navigateMockFn).toHaveBeenCalledWith(`/panel/${panel.id}`);
+    expect(navigateMockFn).toHaveBeenCalledWith(`/panel/${panel.sid}`);
   });
 });

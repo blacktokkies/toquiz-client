@@ -6,22 +6,22 @@ import { apiClient } from '../apiClient';
 import { apiUrl } from './apiUrl';
 
 export const getQuestions = async (
-  panelId: Panel['id'],
+  panelId: Panel['sid'],
   params: GetQuestionsParams,
 ): Promise<GetQuestionsResponse> =>
   apiClient.get<GetQuestionsResponse>(
-    apiUrl.question.getQuestions(String(panelId)),
+    apiUrl.question.getQuestions(panelId),
     params,
     undefined,
     false,
   );
 
 export const createQuestion = async (
-  panelId: Panel['id'],
+  panelId: Panel['sid'],
   body: CreateQuestionBody,
 ): Promise<CreateQuestionResponse> =>
   apiClient.post<CreateQuestionResponse>(
-    apiUrl.question.create(String(panelId)),
+    apiUrl.question.create(panelId),
     body,
     undefined,
     undefined,

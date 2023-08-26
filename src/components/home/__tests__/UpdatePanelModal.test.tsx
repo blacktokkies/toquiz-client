@@ -3,6 +3,7 @@ import type * as Vi from 'vitest';
 
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -19,10 +20,10 @@ vi.mock('@/lib/validator', () => ({
 const handleClose = vi.fn();
 
 const panel: Panel = {
-  id: 1,
-  author: 'test@email.com',
+  sid: faker.datatype.uuid(),
   title: '테스트 패널 제목',
   description: '테스트 패널 설명',
+  authorId: 0,
   createdAt: new Date().toDateString(),
   updatedAt: new Date().toDateString(),
 };
@@ -77,7 +78,7 @@ describe('UpdatePanelModal', () => {
 
     await userEvent.click(submitButton);
 
-    expect(spyOnUpdatePanel).toHaveBeenCalledWith(panel.id, {
+    expect(spyOnUpdatePanel).toHaveBeenCalledWith(panel.sid, {
       title: '유효한 패널 제목',
       description: '유효한 패널 설명',
     });

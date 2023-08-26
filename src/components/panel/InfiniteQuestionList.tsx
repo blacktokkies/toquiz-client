@@ -26,7 +26,7 @@ import { IntersectionArea } from '../system/IntersectionArea';
 import { QuestionList } from './QuestionList';
 
 interface Props {
-  panelId: Panel['id'];
+  panelId: Panel['sid'];
 }
 type Sort = GetQuestionsParams['sort'];
 export function InfiniteQuestionList({ panelId }: Props): JSX.Element {

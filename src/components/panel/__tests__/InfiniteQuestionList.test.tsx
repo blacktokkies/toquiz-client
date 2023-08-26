@@ -4,6 +4,7 @@ import type { QueryClient } from '@tanstack/react-query';
 
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
@@ -16,7 +17,7 @@ import { delay } from '@/lib/test-utils/delay';
 import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
-const panelId: Panel['id'] = 0;
+const panelId: Panel['sid'] = faker.datatype.uuid();
 
 describe('InfiniteQuestionList', () => {
   describe('질문 목록 렌더링', () => {

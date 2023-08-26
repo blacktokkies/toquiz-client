@@ -14,7 +14,7 @@ type Props = CreateOverlayContentProps & {
 };
 
 export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
-  const updateMutation = useUpdatePanelMutation(panel.id);
+  const updateMutation = useUpdatePanelMutation(panel.sid);
   const messageRef = useRef<HTMLDivElement | null>(null);
 
   const { inputProps, errors, formProps, hasError } = useForm({

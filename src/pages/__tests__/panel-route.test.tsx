@@ -1,8 +1,10 @@
+import type { Panel as PanelData } from '@/lib/api/panel';
 import type { ErrorResponse } from '@/lib/api/types';
 import type { RouteObject } from 'react-router-dom';
 
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import { QueryClientProvider, type QueryClient } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
@@ -18,7 +20,7 @@ import { myActiveInfoMock } from '@/mocks/data/active-info';
 import { server } from '@/mocks/server';
 import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 
-const panelId: panelApis.Panel['id'] = 1;
+const panelId: PanelData['sid'] = faker.datatype.uuid();
 
 describe('/panel/:id route', () => {
   it('로더에서 패널 정보 가져오기 API와 내 활동 정보 가져오기 API를 호출한다', async () => {

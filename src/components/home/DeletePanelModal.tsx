@@ -10,7 +10,7 @@ interface Props {
   panel: Panel;
 }
 export function DeletePanelModal({ close, panel }: Props): JSX.Element {
-  const { id, title } = panel;
+  const { sid, title } = panel;
   const deletePanelMutation = useDeletePanelMutation();
 
   return (
@@ -27,7 +27,7 @@ export function DeletePanelModal({ close, panel }: Props): JSX.Element {
           variant="danger"
           type="button"
           onClick={() => {
-            deletePanelMutation.mutate(id, {
+            deletePanelMutation.mutate(sid, {
               onSuccess: () => {
                 close();
               },

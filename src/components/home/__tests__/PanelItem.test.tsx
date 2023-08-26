@@ -2,16 +2,17 @@ import type { Panel } from '@/lib/api/panel';
 
 import React from 'react';
 
+import { faker } from '@faker-js/faker';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { PanelItem } from '@/components/home/PanelItem';
 
 const panel: Panel = {
-  id: 1,
-  author: 'test@email.com',
+  sid: faker.datatype.uuid(),
   title: '테스트 패널 제목',
   description: '테스트 패널 설명',
+  authorId: 0,
   createdAt: new Date().toDateString(),
   updatedAt: new Date().toDateString(),
 };

@@ -17,7 +17,6 @@ describe('PanelSidebar', () => {
     render(<PanelSidebar panel={panel} />);
 
     expect(screen.getByText(panel.title)).toBeInTheDocument();
-    expect(screen.getByText(panel.author)).toBeInTheDocument();
     expect(
       screen.getByText(formatToKRLocaleString(panel.createdAt)),
     ).toBeInTheDocument();
@@ -37,7 +36,7 @@ describe('PanelSidebar', () => {
 
     await userEvent.click(copyUrlButton);
     expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith(
-      `${window.location.origin}/panel/${panel.id}`,
+      `${window.location.origin}/panel/${panel.sid}`,
     );
   });
 });

@@ -66,7 +66,7 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
 
   const handlePanelTitleClick = useCallback(
     (panel: Panel) => () => {
-      navigate(`/panel/${panel.id}`);
+      navigate(`/panel/${panel.sid}`);
     },
     [navigate],
   );
@@ -89,7 +89,7 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
       {panelPages.map((page) =>
         page.panels.map((panel) => (
           <PanelItem
-            key={panel.id}
+            key={panel.sid}
             panel={panel}
             openActionMenu={handleOpenPanelActionMenu(panel)}
             onPanelTitleClick={handlePanelTitleClick(panel)}
