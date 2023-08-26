@@ -65,7 +65,7 @@ export function Login(): JSX.Element {
 
               if (code === 'NOT_EXIST_MEMBER') {
                 setError('email', `${email}은 존재하지 않는 계정입니다`);
-              } else if (code === 'INVALID_PASSWORD') {
+              } else if (code === 'NOT_MATCH_PASSWORD') {
                 setError('password', '이메일과 비밀번호가 일치하지 않습니다');
               }
             },

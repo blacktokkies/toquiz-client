@@ -1,8 +1,13 @@
-export interface SuccessResponse<T = undefined> {
-  statusCode: number;
-  message?: string;
-  result: T;
-}
+export type SuccessResponse<T = undefined> = T extends undefined
+  ? {
+      statusCode: number;
+      message?: string;
+    }
+  : {
+      statusCode: number;
+      message?: string;
+      result: T;
+    };
 
 export interface ErrorResponse {
   code: string;
