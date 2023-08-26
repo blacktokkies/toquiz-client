@@ -18,6 +18,7 @@ import {
   useLikeQuestionMutation,
   useQuestionsInfiniteQuery,
 } from '@/hooks/queries/question';
+import { ApiError } from '@/lib/apiClient';
 import { queryKey } from '@/lib/queryKey';
 
 import { IntersectionArea } from '../system/IntersectionArea';
@@ -44,13 +45,16 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
   );
 
   const queryClient = useQueryClient();
-  const likeQuestionMutation = useLikeQuestionMutation({
+  const likeQuestionMutation = useLikeQuestionMutation<{
+    prevQuestions: InfiniteData<QuestionPage> | undefined;
+    prevActiveInfo: MyActiveInfo | undefined;
+  }>({
     onMutate: async ({ id, active }) => {
       await queryClient.cancelQueries(queryKey.question.lists());
 
-      const prevQuestion = queryClient.getQueryData<InfiniteData<QuestionPage>>(
-        queryKey.question.list(panelId, sort),
-      );
+      const prevQuestions = queryClient.getQueryData<
+        InfiniteData<QuestionPage>
+      >(queryKey.question.list(panelId, sort));
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
         queryKey.question.list(panelId, sort),
         updateQuestions(id, active),
@@ -64,7 +68,25 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
         updateActiveInfo(id, active),
       );
 
-      return { prevActiveInfo, prevQuestion };
+      return { prevActiveInfo, prevQuestions };
+    },
+    onError: (err, variables, context) => {
+      if (err instanceof SyntaxError) return;
+      if (!(err instanceof ApiError)) return;
+      if (err.data === undefined) return;
+
+      const { statusCode } = err.data;
+
+      if (statusCode === 400) {
+        queryClient.setQueryData<InfiniteData<QuestionPage>>(
+          queryKey.question.list(panelId, sort),
+          context?.prevQuestions,
+        );
+        queryClient.setQueryData<MyActiveInfo>(
+          queryKey.activeInfo.detail(panelId),
+          context?.prevActiveInfo,
+        );
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries(queryKey.question.lists());
@@ -133,8 +155,8 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
 
 const updateQuestions =
   (id: Question['id'], active: boolean) =>
-  (prevQuestion: InfiniteData<QuestionPage> | undefined) =>
-    produce(prevQuestion, (draft) => {
+  (prevQuestions: InfiniteData<QuestionPage> | undefined) =>
+    produce(prevQuestions, (draft) => {
       if (!draft) return;
 
       draft.pages.forEach((page) => {
