@@ -53,9 +53,7 @@ describe('InfiniteQuestionList', () => {
       const { queryClient, waitForFinish } = setup();
       await waitForFinish();
 
-      const recentButton = screen.getByRole('button', {
-        name: '최신순',
-      });
+      const recentButton = screen.getByRole('button', { name: '최신순' });
       await userEvent.click(recentButton);
 
       await waitFor(() => {
