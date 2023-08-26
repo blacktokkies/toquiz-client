@@ -71,7 +71,12 @@ export interface LikeQuestionResult {
   isActived: boolean;
 }
 export type LikeQuestionResponse = SuccessResponse<LikeQuestionResult>;
+export type LikeQuestionError = InvalidLikeQuestionError;
 
+export interface InvalidLikeQuestionError {
+  code: 'INVALID_ACTIVE_LIKE_QUESTION' | 'INVALID_INACTIVE_LIKE_QUESTION';
+  statusCode: 400;
+}
 /* ================================ [질문 엔티티] ====================================== */
 export interface Question {
   id: number;
