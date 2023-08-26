@@ -26,7 +26,7 @@ export const signUp = rest.post<SignUpBody, never, SignUpResponse>(
       ctx.status(200),
       ctx.json({
         statusCode: 200,
-        result: { message: `${nickname}이 회원가입에 성공했다` },
+        message: '회원가입에 성공하였습니다.',
       }),
     );
   },
@@ -61,7 +61,7 @@ export const logout = rest.post<never, never, LogoutResponse>(
       ctx.cookie('refreshToken', '', { expires: new Date() }),
       ctx.json({
         statusCode: 200,
-        result: undefined,
+        message: '로그아웃에 성공하였습니다.',
       }),
     ),
 );
@@ -92,9 +92,9 @@ export const me = rest.get<never, never, GetMyInfoResponse | ErrorResponse>(
       return res(
         ctx.status(401),
         ctx.json({
-          code: 'unauthorized error',
+          code: 'INVALID_ACCESS_TOKEN',
           statusCode: 401,
-          message: 'unauthorized error',
+          message: '액세스 토큰이 유효하지 않습니다.',
         }),
       );
     }
@@ -127,9 +127,9 @@ export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
       return res(
         ctx.status(401),
         ctx.json({
-          code: 'unauthorized error',
+          code: 'INVALID_REFRESH_TOKEN',
           statusCode: 401,
-          message: 'unauthorized error',
+          message: '리프레시 토큰이 유효하지 않습니다.',
         }),
       );
     }

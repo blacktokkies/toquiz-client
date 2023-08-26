@@ -1,4 +1,4 @@
-import type { ErrorResponse } from '@/lib/api/types';
+import type { LoginError } from '@/lib/api/auth';
 
 import React from 'react';
 
@@ -8,7 +8,7 @@ import { rest } from 'msw';
 import { MemoryRouter } from 'react-router-dom';
 
 import { apiUrl } from '@/lib/api/apiUrl';
-import * as apis from '@/lib/api/auth';
+import * as authApis from '@/lib/api/auth';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
 import { Login } from '@/pages/Login';
@@ -27,7 +27,7 @@ vi.mock('react-router-dom', async (importOriginal) => {
 
 describe('로그인 페이지', () => {
   it('유효한 형식의 이메일, 비밀번호를 제출하면 로그인 API를 호출하고 스토어에 저장한 후 홈 페이지로 이동한다', async () => {
-    const spyOnLogin = vi.spyOn(apis, 'login');
+    const spyOnLogin = vi.spyOn(authApis, 'login');
 
     const { emailInput, passwordInput, submitButton } = setup();
     fireEvent.change(emailInput, { target: { value: '유효한 이메일' } });
@@ -48,13 +48,13 @@ describe('로그인 페이지', () => {
   });
 
   it('사용자가 제출한 이메일로 된 계정이 존재하지 않으면 에러 메시지를 보여준다', async () => {
-    overrideLoginResultWithError({
-      statusCode: 400,
+    overrideLogintWithError({
       code: 'NOT_EXIST_MEMBER',
-      message: '계정이 존재하지 않습니다',
+      statusCode: 404,
+      message: '아이디가 존재하지 않습니다.',
     });
 
-    const spyOnLogin = vi.spyOn(apis, 'login');
+    const spyOnLogin = vi.spyOn(authApis, 'login');
 
     const { emailInput, passwordInput, submitButton } = setup();
     fireEvent.change(emailInput, {
@@ -76,13 +76,13 @@ describe('로그인 페이지', () => {
   });
 
   it('사용자가 제출한 비밀번호가 일치하지 않으면 에러 메시지를 보여준다', async () => {
-    overrideLoginResultWithError({
+    overrideLogintWithError({
+      code: 'NOT_MATCH_PASSWORD',
       statusCode: 400,
-      code: 'INVALID_PASSWORD',
-      message: '비밀번호가 일치하지 않습니다',
+      message: '비밀번호가 일치하지 않습니다.',
     });
 
-    const spyOnLogin = vi.spyOn(apis, 'login');
+    const spyOnLogin = vi.spyOn(authApis, 'login');
 
     const { emailInput, passwordInput, submitButton } = setup();
     fireEvent.change(emailInput, {
@@ -104,7 +104,7 @@ describe('로그인 페이지', () => {
   });
 });
 
-function overrideLoginResultWithError(data: ErrorResponse): void {
+function overrideLogintWithError(data: LoginError): void {
   server.use(
     rest.post(apiUrl.auth.login(), async (req, res, ctx) =>
       res(ctx.status(data.statusCode), ctx.json(data)),
