@@ -9,7 +9,7 @@ export const getMyActiveInfo = async (
   panelId: Panel['sid'],
 ): Promise<GetMyActiveInfoResponse> =>
   apiClient.get<GetMyActiveInfoResponse>(
-    apiUrl.panel.getMyActiveInfo(panelId),
+    apiUrl.activeInfo.get(panelId),
     undefined,
     undefined,
     false,

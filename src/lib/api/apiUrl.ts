@@ -14,8 +14,6 @@ const panel = {
   update: (panelId: Panel['sid']) => `/api/panels/${panelId}`,
   delete: (panelId: Panel['sid']) => `/api/panels/${panelId}`,
   getMyPanels: () => `/api/panels`,
-  getMyActiveInfo: (panelId: Panel['sid']) =>
-    `/api/panels/${panelId}/active-info` as const,
 } as const;
 
 const question = {
@@ -25,8 +23,13 @@ const question = {
   like: (questionId: string) => `/api/questions/${questionId}/like` as const,
 } as const;
 
+const activeInfo = {
+  get: (panelId: Panel['sid']) => `/api/panels/${panelId}/active-info` as const,
+};
+
 export const apiUrl = {
   auth,
   panel,
   question,
+  activeInfo,
 } as const;
