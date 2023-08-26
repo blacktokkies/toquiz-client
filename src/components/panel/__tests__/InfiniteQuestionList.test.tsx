@@ -117,32 +117,34 @@ describe('InfiniteQuestionList', () => {
       expect(likeButton).toHaveTextContent(String(prevLikeNum + 1));
     });
 
-    it('좋아요 API가 400 응답하면 보여준 토글 결과를 원래대로 되돌린다', async () => {
-      const question = createMockQuestion();
-      overrideGetQuestionsWithSuccess({
-        statusCode: 200,
-        result: { questions: [question], nextPage: -1 },
-      });
-      overrideLikeQuestionWithError({
-        code: 'INVALID_ACTIVE_LIKE_QUESTION',
-        statusCode: 400,
-        message: '유효하지 않은 좋아요 활성화 요청입니다.',
-      });
-      const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
-      const { waitForFinish } = setup();
-      await waitForFinish();
+    describe('좋아요 API가 에러를 응답하면 복구한다', () => {
+      it('[400] 유효하지 않은 좋아요 활성화/비활성화 이면 기존 좋아요 개수로 보여준다', async () => {
+        const question = createMockQuestion();
+        overrideGetQuestionsWithSuccess({
+          statusCode: 200,
+          result: { questions: [question], nextPage: -1 },
+        });
+        overrideLikeQuestionWithError({
+          code: 'INVALID_ACTIVE_LIKE_QUESTION',
+          statusCode: 400,
+          message: '유효하지 않은 좋아요 활성화 요청입니다.',
+        });
+        const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
+        const { waitForFinish } = setup();
+        await waitForFinish();
 
-      const likeButton = screen.getAllByRole('button', {
-        name: /좋아요 버튼/,
-      })[0];
-      const prevLikeNum = Number(likeButton.textContent);
-      await userEvent.click(likeButton);
+        const likeButton = screen.getAllByRole('button', {
+          name: /좋아요 버튼/,
+        })[0];
+        const prevLikeNum = Number(likeButton.textContent);
+        await userEvent.click(likeButton);
 
-      expect(spyOnLikeQuestion).toHaveBeenCalled();
-      expect(likeButton).toHaveTextContent(String(prevLikeNum + 1));
-      await delay(300);
-      await waitFor(() => {
-        expect(likeButton).toHaveTextContent(String(prevLikeNum));
+        expect(spyOnLikeQuestion).toHaveBeenCalled();
+        expect(likeButton).toHaveTextContent(String(prevLikeNum + 1));
+        await delay(300);
+        await waitFor(() => {
+          expect(likeButton).toHaveTextContent(String(prevLikeNum));
+        });
       });
     });
   });
