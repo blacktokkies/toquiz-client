@@ -96,8 +96,8 @@ describe('InfiniteQuestionList', () => {
       const { waitForFinish } = setup();
       await waitForFinish();
 
-      const likeButton = screen.getAllByRole('button', { name: /좋아요 버튼/ });
-      await userEvent.click(likeButton[0]);
+      const likeButton = screen.getAllByRole('button', { name: /좋아요 / })[0];
+      await userEvent.click(likeButton);
 
       expect(spyOnLikeQuestion).toHaveBeenCalled();
     });
@@ -107,9 +107,7 @@ describe('InfiniteQuestionList', () => {
       const { waitForFinish } = setup();
       await waitForFinish();
 
-      const likeButton = screen.getAllByRole('button', {
-        name: /좋아요 버튼/,
-      })[0];
+      const likeButton = screen.getAllByRole('button', { name: /좋아요 / })[0];
       const prevLikeNum = Number(likeButton.textContent);
       await userEvent.click(likeButton);
 
@@ -119,11 +117,7 @@ describe('InfiniteQuestionList', () => {
 
     describe('좋아요 API가 에러를 응답하면 복구한다', () => {
       it('[400] 유효하지 않은 좋아요 활성화/비활성화 이면 기존 좋아요 개수로 보여준다', async () => {
-        const question = createMockQuestion();
-        overrideGetQuestionsWithSuccess({
-          statusCode: 200,
-          result: { questions: [question], nextPage: -1 },
-        });
+        overrideGetQuestionsWithSingleQuestion();
         overrideLikeQuestionWithError({
           code: 'INVALID_ACTIVE_LIKE_QUESTION',
           statusCode: 400,
@@ -133,9 +127,7 @@ describe('InfiniteQuestionList', () => {
         const { waitForFinish } = setup();
         await waitForFinish();
 
-        const likeButton = screen.getAllByRole('button', {
-          name: /좋아요 버튼/,
-        })[0];
+        const likeButton = screen.getByRole('button', { name: /좋아요 / });
         const prevLikeNum = Number(likeButton.textContent);
         await userEvent.click(likeButton);
 
@@ -150,11 +142,7 @@ describe('InfiniteQuestionList', () => {
 
     // TODO: 질문 목록에서 삭제하기 전에 토스트 띄워주면 좋을 거 같다
     it('[404] 질문이 존재하지 않습니다 이면 질문을 질문 목록에서 삭제한다', async () => {
-      const questions = [createMockQuestion()];
-      overrideGetQuestionsWithSuccess({
-        statusCode: 200,
-        result: { questions, nextPage: -1 },
-      });
+      const { questions } = overrideGetQuestionsWithSingleQuestion();
       server.use(
         rest.post(apiUrl.question.like(':questionId'), async (_, res, ctx) => {
           questions.splice(0, 1);
@@ -172,9 +160,7 @@ describe('InfiniteQuestionList', () => {
       const { waitForFinish, queryClient } = setup();
       await waitForFinish();
 
-      const likeButton = screen.getAllByRole('button', {
-        name: /좋아요 버튼/,
-      })[0];
+      const likeButton = screen.getByRole('button', { name: /좋아요 / });
       await userEvent.click(likeButton);
 
       expect(spyOnLikeQuestion).toHaveBeenCalled();
@@ -211,4 +197,23 @@ export function overrideLikeQuestionWithError(data: ErrorResponse): void {
       res(ctx.delay(1000), ctx.status(data.statusCode), ctx.json(data)),
     ),
   );
+}
+
+function overrideGetQuestionsWithSingleQuestion(): {
+  questions: questionApis.Question[];
+} {
+  const questions = [createMockQuestion()];
+  server.use(
+    rest.get(apiUrl.question.getQuestions(':panelId'), async (req, res, ctx) =>
+      res(
+        ctx.status(200),
+        ctx.json({
+          statusCode: 200,
+          result: { questions, nextPage: -1 },
+        }),
+      ),
+    ),
+  );
+
+  return { questions };
 }
