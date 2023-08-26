@@ -4,23 +4,15 @@ import { apiUrl } from '@/lib/api/apiUrl';
 import { apiClient } from '@/lib/apiClient';
 
 export const signUp = async (body: SignUpBody): Promise<SignUpResponse> =>
-  apiClient.post<SignUpResponse, SignUpBody>(
-    apiUrl.auth.signup(),
-    body,
-    undefined,
-    undefined,
-    false,
-  );
+  apiClient.post<SignUpResponse, SignUpBody>(apiUrl.auth.signup(), body, {
+    needAuthorization: false,
+  });
 
 export const login = async (body: LogInBody): Promise<LogInResult> =>
   apiClient
-    .post<LogInResponse, LogInBody>(
-      apiUrl.auth.login(),
-      body,
-      undefined,
-      undefined,
-      false,
-    )
+    .post<LogInResponse, LogInBody>(apiUrl.auth.login(), body, {
+      needAuthorization: false,
+    })
     .then((data) => data.result);
 
 export const logout = async (): Promise<LogoutResponse> =>
@@ -33,13 +25,9 @@ export const me = async (): Promise<GetMyInfoResult> =>
 
 export const refresh = async (): Promise<RefreshResult> =>
   apiClient
-    .post<RefreshResponse>(
-      apiUrl.auth.refresh(),
-      undefined,
-      undefined,
-      undefined,
-      false,
-    )
+    .post<RefreshResponse>(apiUrl.auth.refresh(), undefined, {
+      needAuthorization: false,
+    })
     .then((data) => data.result);
 
 /* ================================ [ 회원가입 API ] ====================================== */

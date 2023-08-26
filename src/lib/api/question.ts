@@ -9,12 +9,10 @@ export const getQuestions = async (
   panelId: Panel['sid'],
   params: GetQuestionsParams,
 ): Promise<GetQuestionsResponse> =>
-  apiClient.get<GetQuestionsResponse>(
-    apiUrl.question.getQuestions(panelId),
+  apiClient.get<GetQuestionsResponse>(apiUrl.question.getQuestions(panelId), {
     params,
-    undefined,
-    false,
-  );
+    needAuthorization: false,
+  });
 
 export const createQuestion = async (
   panelId: Panel['sid'],
@@ -23,9 +21,9 @@ export const createQuestion = async (
   apiClient.post<CreateQuestionResponse>(
     apiUrl.question.create(panelId),
     body,
-    undefined,
-    undefined,
-    false,
+    {
+      needAuthorization: false,
+    },
   );
 
 export const likeQuestion = async (
@@ -35,9 +33,10 @@ export const likeQuestion = async (
   apiClient.post<LikeQuestionResponse>(
     apiUrl.question.like(String(questionId)),
     undefined,
-    params,
-    undefined,
-    false,
+    {
+      params,
+      needAuthorization: false,
+    },
   );
 /* ================================ [ 질문 목록 가져오기 API ] ====================================== */
 export type GetQuestionsPathParams = Record<'panelId', string>;

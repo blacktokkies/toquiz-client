@@ -8,12 +8,9 @@ import { apiClient } from '@/lib/apiClient';
 export const getMyActiveInfo = async (
   panelId: Panel['sid'],
 ): Promise<GetMyActiveInfoResponse> =>
-  apiClient.get<GetMyActiveInfoResponse>(
-    apiUrl.activeInfo.get(panelId),
-    undefined,
-    undefined,
-    false,
-  );
+  apiClient.get<GetMyActiveInfoResponse>(apiUrl.activeInfo.get(panelId), {
+    needAuthorization: false,
+  });
 
 /* ================================ [내 활동 정보 가져오기 API] ====================================== */
 export type GetMyActiveInfoPathParams = Record<'panelId', string>;

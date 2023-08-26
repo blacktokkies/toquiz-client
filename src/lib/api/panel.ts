@@ -29,21 +29,17 @@ export const deletePanel = async (
 export const getPanel = async (
   panelId: Panel['sid'],
 ): Promise<GetPanelResponse> =>
-  apiClient.get<GetPanelResponse>(
-    apiUrl.panel.get(panelId),
-    undefined,
-    undefined,
-    false,
-  );
+  apiClient.get<GetPanelResponse>(apiUrl.panel.get(panelId), {
+    needAuthorization: false,
+  });
 
 export const getMyPanels = async (
   params: GetMyPanelsParams,
 ): Promise<GetMyPanelsResult> =>
   apiClient
-    .get<GetMyPanelsResponse, GetMyPanelsParams>(
-      apiUrl.panel.getMyPanels(),
+    .get<GetMyPanelsResponse, GetMyPanelsParams>(apiUrl.panel.getMyPanels(), {
       params,
-    )
+    })
     .then((data) => data.result);
 
 /* ================================ [ 패널 생성 API ] ====================================== */
