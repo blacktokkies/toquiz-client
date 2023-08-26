@@ -13,6 +13,7 @@ import { apiUrl } from '@/lib/api/apiUrl';
 import * as questionApis from '@/lib/api/question';
 import { queryKey } from '@/lib/queryKey';
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { delay } from '@/lib/test-utils/delay';
 import {
   createMockQuestion,
   createMockQuestionList,
@@ -159,7 +160,7 @@ describe('InfiniteQuestionList', () => {
 
       expect(spyOnLikeQuestion).toHaveBeenCalled();
       expect(likeButton).toHaveTextContent(String(prevLikeNum + 1));
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      await delay(300);
       await waitFor(() => {
         expect(likeButton).toHaveTextContent(String(prevLikeNum));
       });
