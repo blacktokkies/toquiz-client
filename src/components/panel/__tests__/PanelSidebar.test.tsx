@@ -6,8 +6,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { formatDateString } from '@/components/home/PanelItem';
 import { PanelSidebar } from '@/components/panel/PanelSidebar';
+import { formatToKRLocaleString } from '@/lib/format-date';
 import { createMockPanel } from '@/mocks/data/panel';
 
 const panel: Panel = createMockPanel();
@@ -19,7 +19,7 @@ describe('PanelSidebar', () => {
     expect(screen.getByText(panel.title)).toBeInTheDocument();
     expect(screen.getByText(panel.author)).toBeInTheDocument();
     expect(
-      screen.getByText(formatDateString(panel.createdAt)),
+      screen.getByText(formatToKRLocaleString(panel.createdAt)),
     ).toBeInTheDocument();
   });
 

@@ -7,6 +7,7 @@ import { clsx } from 'clsx';
 
 import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
 import { More } from '@/components/vectors/More';
+import { formatToKRLocaleString } from '@/lib/format-date';
 
 interface Props {
   panel: Panel;
@@ -39,7 +40,7 @@ export const PanelItem = ({
             {title}
           </button>
           <span className="text-grey-dark text-sm">
-            {formatDateString(createdAt)}
+            {formatToKRLocaleString(createdAt)}
           </span>
         </div>
         <OpenActionMenuArea aria-label="패널 액션 메뉴" open={openActionMenu}>
@@ -60,10 +61,3 @@ export const PanelItem = ({
     </li>
   );
 };
-
-export const formatDateString = (date: string): string =>
-  new Date(date).toLocaleString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });

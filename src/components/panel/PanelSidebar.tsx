@@ -3,8 +3,7 @@ import type { Panel } from '@/lib/api/panel';
 import React from 'react';
 
 import { Clipboard } from '@/components/vectors';
-
-import { formatDateString } from '../home/PanelItem';
+import { formatToKRLocaleString } from '@/lib/format-date';
 
 interface Props {
   panel: Panel;
@@ -19,7 +18,7 @@ export function PanelSidebar({ panel }: Props): JSX.Element {
           <h2 className="font-medium">{title}</h2>
           <div className="text-grey-dark text-sm">{author}</div>
           <div className="text-grey-dark text-sm">
-            {formatDateString(createdAt)}
+            {formatToKRLocaleString(createdAt)}
           </div>
           <div className="text-grey-dark text-sm mt-3">{description}</div>
         </div>
