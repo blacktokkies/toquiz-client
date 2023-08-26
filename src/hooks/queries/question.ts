@@ -4,6 +4,7 @@ import type {
   CreateQuestionResult,
   GetQuestionsParams,
   GetQuestionsResult,
+  LikeQuestionError,
   LikeQuestionParams,
   LikeQuestionResult,
   Question,
@@ -81,16 +82,22 @@ export const likeQuestionMutation = (): LikeQuestionMutation => ({
     likeQuestion(id, { active }).then((res) => res.result),
 });
 
-export const useLikeQuestionMutation = (
+export const useLikeQuestionMutation = <TContext = unknown>(
   options: MutationOptions<
     LikeQuestionResult,
-    ApiError | SyntaxError,
+    ApiError<LikeQuestionError> | SyntaxError,
     Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>,
-    unknown
+    TContext
   > = {},
 ): UseMutationResult<
   LikeQuestionResult,
-  ApiError | SyntaxError,
+  ApiError<LikeQuestionError> | SyntaxError,
   Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>,
-  unknown
-> => useMutation({ ...likeQuestionMutation(), ...options });
+  TContext
+> =>
+  useMutation<
+    LikeQuestionResult,
+    ApiError<LikeQuestionError> | SyntaxError,
+    Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>,
+    TContext
+  >({ ...likeQuestionMutation(), ...options });
