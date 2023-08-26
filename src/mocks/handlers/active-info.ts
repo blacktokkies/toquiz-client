@@ -14,7 +14,7 @@ export const getMyActiveInfo = rest.get<
   GetMyActiveInfoPathParams,
   GetMyActiveInfoResponse
 >(
-  `${API_BASE_URL}${apiUrl.panel.getMyActiveInfo(':panelId')}`,
+  `${API_BASE_URL}${apiUrl.activeInfo.get(':panelId')}`,
   async (req, res, ctx) => {
     let activeInfoToken = req.cookies.active_info_id;
 
