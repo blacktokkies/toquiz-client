@@ -14,10 +14,7 @@ import * as questionApis from '@/lib/api/question';
 import { queryKey } from '@/lib/queryKey';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { delay } from '@/lib/test-utils/delay';
-import {
-  createMockQuestion,
-  createMockQuestionList,
-} from '@/mocks/data/question';
+import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 import { overrideGetQuestionsWithSuccess } from '@/pages/__tests__/Panel.test';
 
@@ -26,28 +23,23 @@ const panelId: Panel['id'] = 0;
 describe('InfiniteQuestionList', () => {
   describe('질문 목록 렌더링', () => {
     it('질문 목록 가져오기 API를 호출하고 성공 시 질문 목록을 렌더링한다', async () => {
-      const questions = createMockQuestionList(3);
+      const question = { ...createMockQuestion(), content: '안녕하세요' };
       overrideGetQuestionsWithSuccess({
         statusCode: 200,
-        result: { questions, nextPage: -1 },
+        result: { questions: [question], nextPage: -1 },
       });
       const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
       setup();
 
       expect(spyOnGetQuestions).toHaveBeenCalled();
-
       await waitFor(() => {
-        expect(
-          screen.getAllByText(questions[0].content)[0],
-        ).toBeInTheDocument();
+        expect(screen.getByText(/안녕하세요/)).toBeInTheDocument();
       });
     });
 
     it('사용자가 스크롤하면 getQuestions를 호출한다', async () => {
-      const { queryClient } = setup();
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
+      const { waitForFinish } = setup();
+      await waitForFinish();
 
       const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
       fireEvent.scroll(window);
@@ -58,10 +50,8 @@ describe('InfiniteQuestionList', () => {
 
   describe('질문 목록 정렬', () => {
     it('최신순 버튼을 누르면 최신순으로 질문 목록을 보여준다', async () => {
-      const { queryClient } = setup();
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
+      const { queryClient, waitForFinish } = setup();
+      await waitForFinish();
 
       const recentButton = screen.getByRole('button', {
         name: '최신순',
@@ -82,10 +72,8 @@ describe('InfiniteQuestionList', () => {
   });
 
   it('최신순 버튼 눌렀다가 좋아요순 버튼 누르면 좋아요순으로 질문 목록을 보여준다', async () => {
-    const { queryClient } = setup();
-    await waitFor(() => {
-      expect(queryClient.isFetching()).toBe(0);
-    });
+    const { queryClient, waitForFinish } = setup();
+    await waitForFinish();
 
     const recentButton = screen.getByRole('button', { name: '최신순' });
     await userEvent.click(recentButton);
@@ -107,10 +95,8 @@ describe('InfiniteQuestionList', () => {
   describe('좋아요 버튼', () => {
     it('좋아요 버튼을 누를 때마다 좋아요 API 요청한다', async () => {
       const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
-      const { queryClient } = setup();
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
+      const { waitForFinish } = setup();
+      await waitForFinish();
 
       const likeButton = screen.getAllByRole('button', { name: /좋아요 버튼/ });
       await userEvent.click(likeButton[0]);
@@ -120,10 +106,8 @@ describe('InfiniteQuestionList', () => {
 
     it('좋아요 버튼을 누를 때마다 좋아요 API 응답을 기다리지 않고 화면에 토글 결과를 보여준다', async () => {
       const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
-      const { queryClient } = setup();
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
+      const { waitForFinish } = setup();
+      await waitForFinish();
 
       const likeButton = screen.getAllByRole('button', {
         name: /좋아요 버튼/,
@@ -147,10 +131,8 @@ describe('InfiniteQuestionList', () => {
         message: '유효하지 않은 좋아요 활성화 요청입니다.',
       });
       const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
-      const { queryClient } = setup();
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
+      const { waitForFinish } = setup();
+      await waitForFinish();
 
       const likeButton = screen.getAllByRole('button', {
         name: /좋아요 버튼/,
@@ -170,12 +152,18 @@ describe('InfiniteQuestionList', () => {
 
 function setup(): {
   queryClient: QueryClient;
+  waitForFinish: () => Promise<void>;
 } {
   const { queryClient } = renderWithQueryClient(
     <InfiniteQuestionList panelId={panelId} />,
   );
 
-  return { queryClient };
+  const waitForFinish = async (): Promise<void> =>
+    waitFor(() => {
+      expect(queryClient.isFetching()).toBe(0);
+    });
+
+  return { queryClient, waitForFinish };
 }
 
 export function overrideLikeQuestionWithError(data: ErrorResponse): void {
