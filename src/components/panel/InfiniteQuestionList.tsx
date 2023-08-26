@@ -91,6 +91,22 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
             context?.prevActiveInfo,
           );
         }
+      } else if (statusCode === 404) {
+        if (code === 'NOT_EXIST_QUESTION') {
+          queryClient.setQueryData<InfiniteData<QuestionPage>>(
+            queryKey.question.list(panelId, sort),
+            (old) =>
+              produce(old, (draft) => {
+                if (draft === undefined) return;
+
+                draft.pages.forEach((page) => {
+                  page.questions = page.questions.filter(
+                    (question) => question.id !== variables.id,
+                  );
+                });
+              }),
+          );
+        }
       }
     },
     onSettled: () => {

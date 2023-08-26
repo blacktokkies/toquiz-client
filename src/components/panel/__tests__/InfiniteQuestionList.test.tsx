@@ -147,6 +147,44 @@ describe('InfiniteQuestionList', () => {
         });
       });
     });
+
+    // TODO: 질문 목록에서 삭제하기 전에 토스트 띄워주면 좋을 거 같다
+    it('[404] 질문이 존재하지 않습니다 이면 질문을 질문 목록에서 삭제한다', async () => {
+      const questions = [createMockQuestion()];
+      overrideGetQuestionsWithSuccess({
+        statusCode: 200,
+        result: { questions, nextPage: -1 },
+      });
+      server.use(
+        rest.post(apiUrl.question.like(':questionId'), async (_, res, ctx) => {
+          questions.splice(0, 1);
+          return res(
+            ctx.status(404),
+            ctx.json({
+              code: 'NOT_EXIST_QUESTION',
+              statusCode: 404,
+              message: '해당 질문이 존재하지 않습니다.',
+            }),
+          );
+        }),
+      );
+      const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
+      const { waitForFinish, queryClient } = setup();
+      await waitForFinish();
+
+      const likeButton = screen.getAllByRole('button', {
+        name: /좋아요 버튼/,
+      })[0];
+      await userEvent.click(likeButton);
+
+      expect(spyOnLikeQuestion).toHaveBeenCalled();
+      await waitFor(() => {
+        expect(queryClient.isMutating()).toBe(0);
+      });
+      await waitFor(() => {
+        expect(likeButton).not.toBeInTheDocument();
+      });
+    });
   });
 });
 
