@@ -32,6 +32,8 @@ export async function request<T>(
   return handleResponse(response);
 }
 
+/* ================================ [ api-client ] ====================================== */
+
 /**
  * ### Ajax 요청할 BASE_URL
  * 환경 변수 `VITE_API_BASE_URL`의 값을 기본으로 한다.
@@ -50,15 +52,18 @@ export const apiClient = {
     QueryParams extends DefaultQueryParams = DefaultQueryParams,
   >(
     url: string,
-    queryParams?: QueryParams,
-    headers?: HeadersInit,
-    needAuthorization = true,
+    options: {
+      params?: QueryParams;
+      headers?: HeadersInit;
+      needAuthorization?: boolean;
+    } = { needAuthorization: true },
   ): Promise<ResponseBody> {
+    const { params, headers, needAuthorization } = options;
     const _headers: HeadersInit = {
       Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...headers,
     };
-    const queryString = qs.stringify(queryParams, {
+    const queryString = qs.stringify(params, {
       skipNulls: true,
       addQueryPrefix: true,
     });
@@ -79,17 +84,21 @@ export const apiClient = {
   >(
     url: string,
     body?: RequestBody,
-    queryParams?: QueryParams,
-    headers?: HeadersInit,
-    needAuthorization = true,
+    options: {
+      params?: QueryParams;
+      headers?: HeadersInit;
+      needAuthorization?: boolean;
+    } = {
+      needAuthorization: true,
+    },
   ): Promise<ResponseBody> {
+    const { params, headers, needAuthorization } = options;
     const _headers: HeadersInit = {
       Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
-    const _body = body && JSON.stringify(body);
-    const queryString = qs.stringify(queryParams, {
+    const queryString = qs.stringify(params, {
       skipNulls: true,
       addQueryPrefix: true,
     });
@@ -98,7 +107,7 @@ export const apiClient = {
       `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
-        body: _body,
+        ...(body ? { body: JSON.stringify(body) } : {}),
       },
     );
     return data;
@@ -110,9 +119,12 @@ export const apiClient = {
   >(
     url: string,
     queryParams?: QueryParams,
-    headers?: HeadersInit,
-    needAuthorization = true,
+    options: {
+      headers?: HeadersInit;
+      needAuthorization?: boolean;
+    } = { needAuthorization: true },
   ): Promise<ResponseBody> {
+    const { headers, needAuthorization } = options;
     const _headers: HeadersInit = {
       Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...headers,
@@ -138,17 +150,21 @@ export const apiClient = {
   >(
     url: string,
     body?: RequestBody,
-    queryParams?: QueryParams,
-    headers?: HeadersInit,
-    needAuthorization = true,
+    options: {
+      params?: QueryParams;
+      headers?: HeadersInit;
+      needAuthorization?: boolean;
+    } = {
+      needAuthorization: true,
+    },
   ): Promise<ResponseBody> {
+    const { params, headers, needAuthorization } = options;
     const _headers: HeadersInit = {
       Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
-    const _body = body && JSON.stringify(body);
-    const queryString = qs.stringify(queryParams, {
+    const queryString = qs.stringify(params, {
       skipNulls: true,
       addQueryPrefix: true,
     });
@@ -157,7 +173,7 @@ export const apiClient = {
       `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
-        body: _body,
+        ...(body ? { body: JSON.stringify(body) } : {}),
       },
     );
     return data;
@@ -170,17 +186,21 @@ export const apiClient = {
   >(
     url: string,
     body?: RequestBody,
-    queryParams?: QueryParams,
-    headers?: HeadersInit,
-    needAuthorization = true,
+    options: {
+      params?: QueryParams;
+      headers?: HeadersInit;
+      needAuthorization?: boolean;
+    } = {
+      needAuthorization: true,
+    },
   ): Promise<ResponseBody> {
+    const { params, headers, needAuthorization } = options;
     const _headers: HeadersInit = {
       Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...(body ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
     };
-    const _body = body && JSON.stringify(body);
-    const queryString = qs.stringify(queryParams, {
+    const queryString = qs.stringify(params, {
       skipNulls: true,
       addQueryPrefix: true,
     });
@@ -189,7 +209,7 @@ export const apiClient = {
       `${API_BASE_URL}${url}${queryString}`,
       {
         headers: _headers,
-        body: _body,
+        ...(body ? { body: JSON.stringify(body) } : {}),
       },
     );
     return data;
