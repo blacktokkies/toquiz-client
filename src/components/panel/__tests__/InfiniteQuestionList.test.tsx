@@ -1,16 +1,23 @@
 import type { Panel } from '@/lib/api/panel';
+import type { ErrorResponse } from '@/lib/api/types';
 import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 
 import React from 'react';
 
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { rest } from 'msw';
 
 import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
+import { apiUrl } from '@/lib/api/apiUrl';
 import * as questionApis from '@/lib/api/question';
 import { queryKey } from '@/lib/queryKey';
 import { renderWithQueryClient } from '@/lib/test-utils';
-import { createMockQuestionList } from '@/mocks/data/question';
+import {
+  createMockQuestion,
+  createMockQuestionList,
+} from '@/mocks/data/question';
+import { server } from '@/mocks/server';
 import { overrideGetQuestionsWithSuccess } from '@/pages/__tests__/Panel.test';
 
 const panelId: Panel['id'] = 0;
@@ -126,6 +133,37 @@ describe('InfiniteQuestionList', () => {
       expect(spyOnLikeQuestion).toHaveBeenCalled();
       expect(likeButton).toHaveTextContent(String(prevLikeNum + 1));
     });
+
+    it('좋아요 API가 400 응답하면 보여준 토글 결과를 원래대로 되돌린다', async () => {
+      const question = createMockQuestion();
+      overrideGetQuestionsWithSuccess({
+        statusCode: 200,
+        result: { questions: [question], nextPage: -1 },
+      });
+      overrideLikeQuestionWithError({
+        code: 'INVALID_ACTIVE_LIKE_QUESTION',
+        statusCode: 400,
+        message: '유효하지 않은 좋아요 활성화 요청입니다.',
+      });
+      const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
+      const { queryClient } = setup();
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
+
+      const likeButton = screen.getAllByRole('button', {
+        name: /좋아요 버튼/,
+      })[0];
+      const prevLikeNum = Number(likeButton.textContent);
+      await userEvent.click(likeButton);
+
+      expect(spyOnLikeQuestion).toHaveBeenCalled();
+      expect(likeButton).toHaveTextContent(String(prevLikeNum + 1));
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      await waitFor(() => {
+        expect(likeButton).toHaveTextContent(String(prevLikeNum));
+      });
+    });
   });
 });
 
@@ -137,4 +175,13 @@ function setup(): {
   );
 
   return { queryClient };
+}
+
+export function overrideLikeQuestionWithError(data: ErrorResponse): void {
+  server.use(
+    rest.post(apiUrl.question.like(':questionId'), async (_, res, ctx) =>
+      /* 낙관적 업데이트 확인 위해 임의의 딜레이 설정 */
+      res(ctx.delay(1000), ctx.status(data.statusCode), ctx.json(data)),
+    ),
+  );
 }
