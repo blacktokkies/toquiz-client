@@ -1,5 +1,5 @@
 import type { Panel } from './api/panel';
-import type { GetQuestionsParams } from './api/question';
+import type { GetQuestionsParams, Question } from './api/question';
 
 const authQueryKey = {
   signup: () => ['signup'] as const,
@@ -33,9 +33,17 @@ const questionQuerykey = {
   like: () => ['likeQuestion'] as const,
 };
 
+const answerQueryKeys = {
+  all: ['answers'] as const,
+  lists: () => [...answerQueryKeys.all, 'list'] as const,
+  list: (questionId: Question['id']) =>
+    [...answerQueryKeys.lists(), questionId] as const,
+};
+
 export const queryKey = {
   auth: authQueryKey,
   panel: panelQueryKey,
   question: questionQuerykey,
+  answer: answerQueryKeys,
   activeInfo: activeInfoQueryKeys,
 };
