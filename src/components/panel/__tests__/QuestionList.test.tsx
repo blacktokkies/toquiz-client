@@ -8,7 +8,13 @@ import userEvent from '@testing-library/user-event';
 import { QuestionList } from '@/components/panel/QuestionList';
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { createMockPanel } from '@/mocks/data/panel';
 import { createMockQuestion } from '@/mocks/data/question';
+
+vi.mock('react-router-dom', async (importOriginal) => {
+  const router = (await importOriginal()) ?? {};
+  return { ...router, useRouteLoaderData: vi.fn(() => createMockPanel()) };
+});
 
 const handleLikeButtonClick = vi.fn();
 const handleLikeButtonClickFn = vi.fn(() => handleLikeButtonClick);
