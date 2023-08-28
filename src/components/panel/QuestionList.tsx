@@ -26,21 +26,29 @@ export function QuestionList({
   const likeSet = new Set(likeIds);
   const overlay = useOverlay();
 
-  function openModal(): void {
-    overlay.open(({ close }) => <QAModal close={close} />);
-  }
-  function handleQuestionItemClick(event: MouseEvent<HTMLDivElement>): void {
-    openModal();
+  function openModal(question: Question): void {
+    overlay.open(({ close }) => (
+      <QAModal
+        close={close}
+        question={question}
+        isActived={likeSet.has(question.id)}
+        onLikeButtonClick={onLikeButtonClick(question)}
+      />
+    ));
   }
 
-  function handleQuestionItemKeydown(
-    event: KeyboardEvent<HTMLDivElement>,
-  ): void {
-    if (event.key === 'Enter' || event.keyCode === 13) {
-      event.preventDefault();
-      openModal();
-    }
-  }
+  const handleQuestionItemClick =
+    (question: Question) => (event: MouseEvent<HTMLDivElement>) => {
+      openModal(question);
+    };
+
+  const handleQuestionItemKeydown =
+    (question: Question) => (event: KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === 'Enter' || event.keyCode === 13) {
+        event.preventDefault();
+        openModal(question);
+      }
+    };
 
   return (
     <ul className="flex flex-col gap-3">
@@ -53,8 +61,8 @@ export function QuestionList({
                 role="button"
                 aria-label="질문과 답변 모달 열기"
                 className="flex flex-col gap-3 p-5 w-full border border-grey-light rounded-md"
-                onClick={handleQuestionItemClick}
-                onKeyDown={handleQuestionItemKeydown}
+                onClick={handleQuestionItemClick(question)}
+                onKeyDown={handleQuestionItemKeydown(question)}
                 tabIndex={0}
               >
                 <div className="flex items-center justify-between">
