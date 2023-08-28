@@ -22,7 +22,10 @@ const question = {
   create: (panelId: Panel['sid']) => `/api/panels/${panelId}/question`,
   like: (questionId: string) => `/api/questions/${questionId}/like` as const,
 } as const;
-
+const answer = {
+  getAnswers: (questionId: string) =>
+    `/api/questions/${questionId}/answers` as const,
+};
 const activeInfo = {
   get: (panelId: Panel['sid']) => `/api/panels/${panelId}/active-info` as const,
 };
@@ -32,4 +35,5 @@ export const apiUrl = {
   panel,
   question,
   activeInfo,
+  answer,
 } as const;
