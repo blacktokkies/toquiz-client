@@ -6,6 +6,7 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { OverlayProvider } from '@/contexts/OverlayContext';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import {
   createMockQuestion,
@@ -27,11 +28,14 @@ describe('QuestionList', () => {
     ];
 
     renderWithQueryClient(
-      <QuestionList
-        onLikeButtonClick={handleLikeButtonClickFn}
-        questionPages={questionPages}
-        likeIds={[]}
-      />,
+      <OverlayProvider>
+        <QuestionList
+          onLikeButtonClick={handleLikeButtonClickFn}
+          questionPages={questionPages}
+          likeIds={[]}
+        />
+        ,
+      </OverlayProvider>,
     );
 
     const likeButton = screen.getAllByRole('button', { name: /좋아요 버튼/ });
@@ -51,11 +55,14 @@ describe('QuestionList', () => {
       ];
 
       renderWithQueryClient(
-        <QuestionList
-          onLikeButtonClick={handleLikeButtonClickFn}
-          questionPages={questionPages}
-          likeIds={likeIds}
-        />,
+        <OverlayProvider>
+          <QuestionList
+            onLikeButtonClick={handleLikeButtonClickFn}
+            questionPages={questionPages}
+            likeIds={likeIds}
+          />
+          ,
+        </OverlayProvider>,
       );
 
       const likeButton = screen.getByRole('button', { name: /좋아요 버튼/ });
@@ -73,11 +80,14 @@ describe('QuestionList', () => {
       ];
 
       renderWithQueryClient(
-        <QuestionList
-          onLikeButtonClick={handleLikeButtonClickFn}
-          questionPages={questionPages}
-          likeIds={likeIds}
-        />,
+        <OverlayProvider>
+          <QuestionList
+            onLikeButtonClick={handleLikeButtonClickFn}
+            questionPages={questionPages}
+            likeIds={likeIds}
+          />
+          ,
+        </OverlayProvider>,
       );
 
       const likeButton = screen.getByRole('button', {
@@ -85,5 +95,34 @@ describe('QuestionList', () => {
       });
       expect(likeButton).toHaveAttribute('aria-pressed', 'false');
     });
+  });
+
+  it('질문을 누르면 모달을 보여준다', async () => {
+    const question = createMockQuestion();
+    const likeIds: MyActiveInfo['likedIds'] = [];
+    const questionPages: QuestionPage[] = [
+      {
+        questions: [question],
+        nextPage: -1,
+      },
+    ];
+
+    renderWithQueryClient(
+      <OverlayProvider>
+        <QuestionList
+          onLikeButtonClick={handleLikeButtonClickFn}
+          questionPages={questionPages}
+          likeIds={likeIds}
+        />
+        ,
+      </OverlayProvider>,
+    );
+
+    const item = screen.getByRole('button', { name: /질문과 답변 모달 열기/ });
+    await userEvent.click(item);
+
+    expect(
+      screen.getByRole('dialog', { name: /질문과 답변 모달/ }),
+    ).toBeInTheDocument();
   });
 });
