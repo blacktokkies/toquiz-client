@@ -5,24 +5,31 @@ import React from 'react';
 import { clsx } from 'clsx';
 
 import { ArrowBack, Account, Like } from '@/components/vectors';
+import { useAnswersQuery } from '@/hooks/queries/answer';
 import { useCurrentDate } from '@/hooks/useCurrentDate';
 import { formatDistance } from '@/lib/format-date';
 
 interface Props {
   close: () => void;
-  question: Question;
+  questionId: Question['id'];
   onLikeButtonClick: () => void;
   isActived: boolean;
 }
 
 export function QAModal({
   close,
-  question,
+  questionId,
   onLikeButtonClick,
   isActived,
 }: Props): JSX.Element {
   const now = useCurrentDate();
+  const answersQuery = useAnswersQuery(questionId);
 
+  // TODO: Fallback UI 제공하기
+  if (answersQuery.isLoading) return <div>loading</div>;
+  if (answersQuery.isError) return <div>error</div>;
+
+  const { answers, ...question } = answersQuery.data;
   return (
     <div
       role="dialog"
@@ -69,6 +76,11 @@ export function QAModal({
         </div>
         <div>{question.content}</div>
       </div>
+      <ul>
+        {answers.map((answer) => (
+          <li key={answer.id}>{answer.content}</li>
+        ))}
+      </ul>
     </div>
   );
 }
