@@ -56,9 +56,10 @@ export const apiClient = {
       params?: QueryParams;
       headers?: HeadersInit;
       needAuthorization?: boolean;
-    } = { needAuthorization: true },
+    } = {},
   ): Promise<ResponseBody> {
-    const { params, headers, needAuthorization } = options;
+    const _options = { needAuthorization: true, ...options };
+    const { params, headers, needAuthorization } = _options;
     const _headers: HeadersInit = {
       Authorization: `${needAuthorization ? `Bearer ${_accessToken}` : ''}`,
       ...headers,
