@@ -53,6 +53,17 @@ describe('QuestionList', () => {
       screen.getByRole('dialog', { name: /질문과 답변 모달/ }),
     ).toBeInTheDocument();
   });
+
+  it('모달에서 <- 아이콘 누르면 모달이 닫힌다', async () => {
+    const { questionItem } = setup();
+    await userEvent.click(questionItem);
+
+    const dialog = screen.getByRole('dialog', { name: /질문과 답변 모달/ });
+    const goBackButton = screen.getByRole('button', { name: /뒤로 가기/ });
+    await userEvent.click(goBackButton);
+
+    expect(dialog).not.toBeInTheDocument();
+  });
 });
 
 function setup(): {

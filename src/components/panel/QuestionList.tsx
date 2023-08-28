@@ -33,7 +33,7 @@ export function QuestionList({
         className="fixed inset-0 bg-white"
       >
         <header className="flex justify-start items-center bg-primary-dark shadow-md px-3 h-16">
-          <button type="button" className="rounded-full p-1">
+          <button type="button" className="rounded-full p-1" onClick={close}>
             <ArrowBack className="fill-white" />
             <span className="sr-only">뒤로 가기</span>
           </button>
