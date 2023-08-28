@@ -17,6 +17,8 @@ import { delay } from '@/lib/test-utils/delay';
 import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
+vi.mock('@/hooks/useOverlay', () => ({ useOverlay: vi.fn() }));
+
 const panelId: Panel['sid'] = faker.datatype.uuid();
 
 describe('InfiniteQuestionList', () => {
