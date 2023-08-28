@@ -6,7 +6,7 @@ import React from 'react';
 
 import { clsx } from 'clsx';
 
-import { Account, Like } from '@/components/vectors';
+import { ArrowBack, Like, Account } from '@/components/vectors';
 import { useCurrentDate } from '@/hooks/useCurrentDate';
 import { useOverlay } from '@/hooks/useOverlay';
 import { formatDistance } from '@/lib/format-date';
@@ -32,7 +32,12 @@ export function QuestionList({
         aria-label="질문과 답변 모달"
         className="fixed inset-0 bg-white"
       >
-        질문과 답변 모달
+        <header className="flex justify-start items-center bg-primary-dark shadow-md px-3 h-16">
+          <button type="button" className="rounded-full p-1">
+            <ArrowBack className="fill-white" />
+            <span className="sr-only">뒤로 가기</span>
+          </button>
+        </header>
       </div>
     ));
   }
@@ -90,7 +95,6 @@ export function QuestionList({
                     }}
                   >
                     <Like className="w-5 h-5" />
-
                     {question.likeNum}
                   </button>
                 </div>
