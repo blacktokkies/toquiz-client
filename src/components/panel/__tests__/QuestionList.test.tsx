@@ -5,11 +5,10 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { QuestionList } from '@/components/panel/QuestionList';
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { createMockQuestion } from '@/mocks/data/question';
-
-import { QuestionList } from '../QuestionList';
 
 const handleLikeButtonClick = vi.fn();
 const handleLikeButtonClickFn = vi.fn(() => handleLikeButtonClick);
