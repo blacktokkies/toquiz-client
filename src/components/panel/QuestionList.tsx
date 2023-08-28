@@ -79,7 +79,9 @@ export function QuestionList({
                       {formatDistance(now, new Date(question.createdAt))}
                     </div>
                     {question.answerNum ? (
-                      <span>답변 {question.answerNum}개</span>
+                      <span className="ml-1 px-3 rounded-2xl bg-primary text-white text-sm">
+                        답변 {question.answerNum}개
+                      </span>
                     ) : null}
                   </div>
                   <button
