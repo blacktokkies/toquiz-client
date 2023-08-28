@@ -55,6 +55,7 @@ export const createRouterWithQueryClient = (
         },
         {
           path: 'panel/:id',
+          id: 'panel',
           element: <Panel />,
           loader: panelLoader(queryClient),
           errorElement: <PanelErrorBoundary />,

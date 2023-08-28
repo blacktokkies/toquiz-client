@@ -1,8 +1,10 @@
+import type { Panel } from '@/lib/api/panel';
 import type { Question } from '@/lib/api/question';
 
 import React from 'react';
 
 import { clsx } from 'clsx';
+import { useRouteLoaderData } from 'react-router-dom';
 
 import { ArrowBack, Account, Like } from '@/components/vectors';
 import { useAnswersQuery } from '@/hooks/queries/answer';
@@ -22,6 +24,9 @@ export function QAModal({
   onLikeButtonClick,
   isActived,
 }: Props): JSX.Element {
+  // [NOTE] 질문과 답변 모달은 패널 페이지에서만 사용되므로
+  // 패널 페이지 로더가 반환하는 데이터가 null이 아님이 보장된다
+  const panel = useRouteLoaderData('panel') as Panel;
   const now = useCurrentDate();
   const answersQuery = useAnswersQuery(questionId);
 
@@ -34,13 +39,14 @@ export function QAModal({
     <div
       role="dialog"
       aria-label="질문과 답변 모달"
-      className="fixed inset-0 bg-white"
+      className="fixed inset-0 flex flex-col overflow-auto justify-start bg-white"
     >
-      <header className="flex justify-start items-center bg-primary-dark shadow-md px-3 h-16">
+      <header className="flex justify-start items-center gap-2 bg-primary-dark shadow-md px-3 min-h-[64px]">
         <button type="button" className="rounded-full p-1" onClick={close}>
           <ArrowBack className="fill-white" />
           <span className="sr-only">뒤로 가기</span>
         </button>
+        <span className="text-white">{panel.title}</span>
       </header>
       <div className="flex flex-col gap-3 p-5 w-full border-y border-grey-light">
         <div className="flex items-center justify-between">
@@ -76,11 +82,32 @@ export function QAModal({
         </div>
         <div>{question.content}</div>
       </div>
-      <ul>
-        {answers.map((answer) => (
-          <li key={answer.id}>{answer.content}</li>
-        ))}
-      </ul>
+      <div className="flex-1 py-6">
+        <ul>
+          {answers.map((answer) => (
+            <li
+              key={answer.id}
+              className="flex flex-col gap-3 p-5 w-full border-y border-grey-light"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex justify-start items-center gap-1 overflow-hidden">
+                  <div role="img" aria-hidden>
+                    <Account className="fill-grey-darkest" />
+                  </div>
+                  <div className="font-bold whitespace-nowrap">
+                    {/* TODO: 답변 작성자 닉네임으로 바꿔야한다 */}
+                    {panel.authorId}
+                  </div>
+                  <div className="text-grey-dark">
+                    {formatDistance(now, new Date(answer.createdAt))}
+                  </div>
+                </div>
+              </div>
+              <div>{answer.content}</div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
