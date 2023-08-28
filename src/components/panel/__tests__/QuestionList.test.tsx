@@ -25,6 +25,14 @@ const questionPages: QuestionPage[] = [
 ];
 
 describe('QuestionList', () => {
+  it('질문마다 답변 개수를 보여준다', () => {
+    setup();
+
+    expect(
+      screen.getByText(`답변 ${question.answerNum}개`),
+    ).toBeInTheDocument();
+  });
+
   it('좋아요 버튼을 누를 때마다 onLikeButtonClick이 반환하는 함수를 호출한다', async () => {
     const { likeButton } = setup();
 

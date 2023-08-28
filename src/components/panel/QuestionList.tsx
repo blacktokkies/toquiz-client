@@ -78,6 +78,7 @@ export function QuestionList({
                     <div className="text-grey-dark">
                       {formatDistance(now, new Date(question.createdAt))}
                     </div>
+                    <span>답변 {question.answerNum}개</span>
                   </div>
                   <button
                     aria-label={`좋아요 버튼, 좋아요 ${question.likeNum}개`}
