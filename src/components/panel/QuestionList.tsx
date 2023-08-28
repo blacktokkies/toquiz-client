@@ -6,7 +6,8 @@ import React from 'react';
 
 import { clsx } from 'clsx';
 
-import { ArrowBack, Like, Account } from '@/components/vectors';
+import { QAModal } from '@/components/panel/QAModal';
+import { Like, Account } from '@/components/vectors';
 import { useCurrentDate } from '@/hooks/useCurrentDate';
 import { useOverlay } from '@/hooks/useOverlay';
 import { formatDistance } from '@/lib/format-date';
@@ -26,20 +27,7 @@ export function QuestionList({
   const overlay = useOverlay();
 
   function openModal(): void {
-    overlay.open(({ close }) => (
-      <div
-        role="dialog"
-        aria-label="질문과 답변 모달"
-        className="fixed inset-0 bg-white"
-      >
-        <header className="flex justify-start items-center bg-primary-dark shadow-md px-3 h-16">
-          <button type="button" className="rounded-full p-1" onClick={close}>
-            <ArrowBack className="fill-white" />
-            <span className="sr-only">뒤로 가기</span>
-          </button>
-        </header>
-      </div>
-    ));
+    overlay.open(({ close }) => <QAModal close={close} />);
   }
   function handleQuestionItemClick(event: MouseEvent<HTMLDivElement>): void {
     openModal();
