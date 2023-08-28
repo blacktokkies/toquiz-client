@@ -57,7 +57,7 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
       >(queryKey.question.list(panelId, sort));
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
         queryKey.question.list(panelId, sort),
-        updateQuestions(id, active),
+        updateQuestion(id, active),
       );
 
       const prevActiveInfo = queryClient.getQueryData<MyActiveInfo>(
@@ -65,7 +65,7 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
       );
       queryClient.setQueryData<MyActiveInfo>(
         activeInfoDetailQuery(panelId).queryKey,
-        updateActiveInfo(id, active),
+        updateLikedList(id, active),
       );
 
       return { prevActiveInfo, prevQuestions };
@@ -95,16 +95,11 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
         if (code === 'NOT_EXIST_QUESTION') {
           queryClient.setQueryData<InfiniteData<QuestionPage>>(
             queryKey.question.list(panelId, sort),
-            (old) =>
-              produce(old, (draft) => {
-                if (draft === undefined) return;
-
-                draft.pages.forEach((page) => {
-                  page.questions = page.questions.filter(
-                    (question) => question.id !== variables.id,
-                  );
-                });
-              }),
+            removeQuestion(variables.id),
+          );
+          queryClient.setQueryData<MyActiveInfo>(
+            queryKey.activeInfo.detail(panelId),
+            removeQuestionFromLikedList(variables.id),
           );
         }
       }
@@ -174,15 +169,16 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
   );
 }
 
-const updateQuestions =
-  (id: Question['id'], active: boolean) =>
+// TODO: mutate할 때 page id 받아서 for문 없애기
+const updateQuestion =
+  (questionId: Question['id'], active: boolean) =>
   (prevQuestions: InfiniteData<QuestionPage> | undefined) =>
     produce(prevQuestions, (draft) => {
       if (!draft) return;
 
       draft.pages.forEach((page) => {
         page.questions.forEach((question) => {
-          if (question.id === id) {
+          if (question.id === questionId) {
             if (active) question.likeNum += 1;
             else question.likeNum -= 1;
           }
@@ -190,15 +186,38 @@ const updateQuestions =
       });
     });
 
-const updateActiveInfo =
-  (id: Question['id'], active: boolean) =>
+const removeQuestion =
+  (questionId: Question['id']) =>
+  (prevQuestions: InfiniteData<QuestionPage> | undefined) =>
+    produce(prevQuestions, (draft) => {
+      if (!draft) return;
+
+      draft.pages.forEach((page) => {
+        page.questions = page.questions.filter(
+          (question) => question.id !== questionId,
+        );
+      });
+    });
+
+const updateLikedList =
+  (questionId: Question['id'], active: boolean) =>
   (prevActiveInfo: MyActiveInfo | undefined) =>
     produce(prevActiveInfo, (draft) => {
       if (!draft) return;
 
       if (active) {
-        draft.likedIds.push(id);
+        draft.likedIds.push(questionId);
       } else {
-        draft.likedIds = draft.likedIds.filter((likeId) => likeId !== id);
+        draft.likedIds = draft.likedIds.filter(
+          (likeId) => likeId !== questionId,
+        );
       }
+    });
+
+const removeQuestionFromLikedList =
+  (questionId: Question['id']) => (prevActiveInfo: MyActiveInfo | undefined) =>
+    produce(prevActiveInfo, (draft) => {
+      if (!draft) return;
+
+      draft.likedIds = draft.likedIds.filter((likeId) => likeId !== questionId);
     });
