@@ -33,7 +33,7 @@ export const getAnswers = rest.get<
         result: {
           ...question,
           id: Number(question.id),
-          answers: createMockAnswerList(3),
+          answers: createMockAnswerList(question.answerNum),
         },
       }),
     );
