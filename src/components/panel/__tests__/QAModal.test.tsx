@@ -9,7 +9,13 @@ import { rest } from 'msw';
 import { QAModal } from '@/components/panel/QAModal';
 import * as answerApis from '@/lib/api/answer';
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { createMockPanel } from '@/mocks/data/panel';
 import { server } from '@/mocks/server';
+
+vi.mock('react-router-dom', async (importOriginal) => {
+  const router = (await importOriginal()) ?? {};
+  return { ...router, useRouteLoaderData: vi.fn(() => createMockPanel()) };
+});
 
 const handleClose = vi.fn();
 const isActived = true;
