@@ -30,7 +30,7 @@ export function QuestionList({
     overlay.open(({ close }) => (
       <QAModal
         close={close}
-        question={question}
+        questionId={question.id}
         isActived={likeSet.has(question.id)}
         onLikeButtonClick={onLikeButtonClick(question)}
       />
