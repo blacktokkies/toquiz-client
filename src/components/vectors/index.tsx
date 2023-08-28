@@ -7,3 +7,4 @@ export { Menu } from './Menu';
 export { Clipboard } from './Clipboard';
 export { Send } from './Send';
 export { Like } from './Like';
+export { ArrowBack } from './ArrowBack';
