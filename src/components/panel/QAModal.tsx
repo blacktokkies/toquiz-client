@@ -35,7 +35,7 @@ export function QAModal({
           <span className="sr-only">뒤로 가기</span>
         </button>
       </header>
-      <div className="flex flex-col gap-3 p-5 w-full border border-grey-light rounded-md">
+      <div className="flex flex-col gap-3 p-5 w-full border-y border-grey-light">
         <div className="flex items-center justify-between">
           <div className="flex justify-start items-center gap-1 overflow-hidden">
             <div role="img" aria-hidden>
