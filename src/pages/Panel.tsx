@@ -62,9 +62,9 @@ export function Panel(): JSX.Element {
     ));
   }
   return (
-    <main>
+    <main className="flex flex-col h-full overflow-auto">
       <PanelHeader panel={panel} />
-      <div className="container flex flex-col h-full max-w-2xl px-5 py-7">
+      <div className="flex-1 container flex flex-col max-w-2xl px-5 py-7">
         <InfiniteQuestionList panelId={panel.sid} />
       </div>
       <button
@@ -127,7 +127,7 @@ export function PanelErrorBoundary(): JSX.Element {
   }
 
   return (
-    <main className="h-full overflow-auto bg-gradient-to-r from-gray-50 to-slate-100">
+    <main className="h-full bg-gradient-to-r from-gray-50 to-slate-100">
       <header className="border-b border-grey-light">
         <div className="container flex justify-between items-center max-w-7xl px-5 h-16">
           <Link to="/" className="rounded-md font-bold">
