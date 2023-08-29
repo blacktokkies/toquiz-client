@@ -1,10 +1,13 @@
+import type { GetAnswersResult } from '@/lib/api/answer';
 import type { Panel } from '@/lib/api/panel';
 import type { Question } from '@/lib/api/question';
 import type { ChangeEvent } from 'react';
 
 import React, { useRef, useState, useCallback } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
+import { produce } from 'immer';
 import { flushSync } from 'react-dom';
 import { useRouteLoaderData } from 'react-router-dom';
 
@@ -18,6 +21,7 @@ import { useUserStore } from '@/hooks/stores/useUserStore';
 import { useCurrentDate } from '@/hooks/useCurrentDate';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { formatDistance } from '@/lib/format-date';
+import { queryKey } from '@/lib/queryKey';
 
 interface Props {
   close: () => void;
@@ -26,6 +30,7 @@ interface Props {
   isActived: boolean;
 }
 
+let id = 0;
 export function QAModal({
   close,
   questionId,
@@ -69,7 +74,39 @@ export function QAModal({
     }
   }
 
-  const createAnswerMutation = useCreateAnswerMutation(questionId);
+  const queryClient = useQueryClient();
+  const createAnswerMutation = useCreateAnswerMutation<{
+    prevAnswers: GetAnswersResult | undefined;
+  }>(questionId, {
+    onMutate: async (content) => {
+      await queryClient.cancelQueries(queryKey.question.lists());
+      await queryClient.cancelQueries(queryKey.answer.list(questionId));
+
+      const prevAnswers = queryClient.getQueryData<GetAnswersResult>(
+        queryKey.answer.list(questionId),
+      );
+      queryClient.setQueryData<GetAnswersResult>(
+        queryKey.answer.list(questionId),
+        (old) =>
+          produce(old, (draft) => {
+            if (!draft) return;
+
+            draft.answerNum += 1;
+            draft.answers.push({
+              id: id--,
+              content,
+              createdAt: new Date().toString(),
+              updatedAt: new Date().toString(),
+            });
+          }),
+      );
+
+      return { prevAnswers };
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(queryKey.answer.list(questionId));
+    },
+  });
 
   // TODO: Fallback UI 제공하기
   if (answersQuery.isLoading) return <div>loading</div>;
