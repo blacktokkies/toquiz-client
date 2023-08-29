@@ -143,5 +143,30 @@ describe('QAModal', () => {
         screen.queryByRole('form', { name: /답변 생성 폼/ }),
       ).not.toBeInTheDocument();
     });
+
+    it('닫힌 폼을 누르면 확장되며, 폼 바깥을 누르면 닫힌다', async () => {
+      const panel = createMockPanel();
+      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
+      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
+
+      const { queryClient } = renderWithQueryClient(
+        <QAModal
+          close={handleClose}
+          questionId={questionId}
+          isActived={isActived}
+          onLikeButtonClick={handleLikeButtonClick}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
+      const formContainer = screen.getByTestId(/answer-form-container/);
+      expect(formContainer).toHaveAttribute('aria-expanded', 'false');
+      await userEvent.click(formContainer);
+      expect(formContainer).toHaveAttribute('aria-expanded', 'true');
+      await userEvent.click(document.body);
+      expect(formContainer).toHaveAttribute('aria-expanded', 'false');
+    });
   });
 });
