@@ -117,8 +117,10 @@ describe('QAModal', () => {
         expect(queryClient.isFetching()).toBe(0);
       });
 
-      const form = screen.getByRole('form', { name: /답변 생성 폼/ });
-      expect(form).toBeInTheDocument();
+      const expandFormButton = screen.getByRole('button', {
+        name: /답변 생성 폼/,
+      });
+      expect(expandFormButton).toBeInTheDocument();
     });
 
     it('패널 생성자가 아니면 답변 생성 폼을 보여주지 않는다', async () => {
@@ -140,7 +142,9 @@ describe('QAModal', () => {
       });
 
       expect(
-        screen.queryByRole('form', { name: /답변 생성 폼/ }),
+        screen.queryByRole('button', {
+          name: /답변 생성 폼/,
+        }),
       ).not.toBeInTheDocument();
     });
 
