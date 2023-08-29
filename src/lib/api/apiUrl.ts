@@ -25,6 +25,8 @@ const question = {
 const answer = {
   getAnswers: (questionId: string) =>
     `/api/questions/${questionId}/answers` as const,
+  create: (questionId: string) =>
+    `/api/questions/${questionId}/answer` as const,
 };
 const activeInfo = {
   get: (panelId: Panel['sid']) => `/api/panels/${panelId}/active-info` as const,
