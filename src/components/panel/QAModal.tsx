@@ -193,7 +193,7 @@ export function QAModal({
                   setExpanded(false);
                 }}
               >
-                질문 생성
+                답변 생성
               </Button>
             </div>
           )}
