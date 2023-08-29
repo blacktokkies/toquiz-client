@@ -126,6 +126,12 @@ export function QAModal({
           >
             취소
           </button>
+          <button
+            type="submit"
+            disabled={content.length <= 0 || content.length > 200}
+          >
+            답변 생성
+          </button>
         </div>
       )}
       <div className="flex-1 py-6">
