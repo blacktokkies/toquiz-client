@@ -10,7 +10,10 @@ import { useRouteLoaderData } from 'react-router-dom';
 
 import { Button } from '@/components/system/Button';
 import { ArrowBack, Account, Like } from '@/components/vectors';
-import { useAnswersQuery } from '@/hooks/queries/answer';
+import {
+  useAnswersQuery,
+  useCreateAnswerMutation,
+} from '@/hooks/queries/answer';
 import { useUserStore } from '@/hooks/stores/useUserStore';
 import { useCurrentDate } from '@/hooks/useCurrentDate';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
@@ -65,6 +68,8 @@ export function QAModal({
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }
+
+  const createAnswerMutation = useCreateAnswerMutation(questionId);
 
   // TODO: Fallback UI 제공하기
   if (answersQuery.isLoading) return <div>loading</div>;
@@ -154,6 +159,7 @@ export function QAModal({
                 {content.length}
               </span>
               /200자
+              <span className="sr-only">{content.length}자를 입력했습니다</span>
             </span>
           )}
           <form aria-label="답변 생성 폼" aria-hidden={!expanded}>
@@ -188,8 +194,12 @@ export function QAModal({
                 disabled={content.length === 0 || content.length > 200}
                 onClick={(event) => {
                   event.stopPropagation();
-                  setContent('');
-                  setExpanded(false);
+                  createAnswerMutation.mutate(content, {
+                    onSuccess: () => {
+                      setContent('');
+                      setExpanded(false);
+                    },
+                  });
                 }}
               >
                 답변 생성
