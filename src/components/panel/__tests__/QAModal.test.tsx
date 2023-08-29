@@ -251,5 +251,28 @@ describe('QAModal', () => {
       fireEvent.change(answerInput, { target: { value: '' } });
       expect(submitButton.disabled).toBe(true);
     });
+
+    it('사용자가 입력하는 글자수를 보여준다', async () => {
+      const panel = createMockPanel();
+      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
+      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
+
+      const { queryClient } = renderWithQueryClient(
+        <QAModal
+          close={handleClose}
+          questionId={questionId}
+          isActived={isActived}
+          onLikeButtonClick={handleLikeButtonClick}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
+      const answerInput = screen.getByRole('textbox');
+      fireEvent.change(answerInput, { target: { value: '안녕하세요' } });
+
+      expect(screen.getByText(/5/)).toBeInTheDocument();
+    });
   });
 });
