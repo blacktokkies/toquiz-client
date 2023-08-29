@@ -96,7 +96,7 @@ export function QAModal({
         <div
           role="button"
           tabIndex={0}
-          data-testid="answer-form-container"
+          aria-label="답변 생성 폼 열기"
           aria-expanded={expanded}
           onClick={() => {
             setExpanded(true);
@@ -109,6 +109,15 @@ export function QAModal({
           }}
         >
           <form aria-label="답변 생성 폼" />
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              setExpanded(false);
+            }}
+          >
+            취소
+          </button>
         </div>
       )}
       <div className="flex-1 py-6">

@@ -98,7 +98,7 @@ describe('QAModal', () => {
     expect(screen.getByText('답변이다')).toBeInTheDocument();
   });
 
-  describe('답변 생성 인풋', () => {
+  describe('답변 생성 폼', () => {
     it('패널 생성자라면 답변 생성 폼을 보여준다', async () => {
       const panel = createMockPanel();
       (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
@@ -161,11 +161,40 @@ describe('QAModal', () => {
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
       });
-      const formContainer = screen.getByTestId(/answer-form-container/);
+      const formContainer = screen.getByRole('button', {
+        name: /답변 생성 폼 열기/,
+      });
       expect(formContainer).toHaveAttribute('aria-expanded', 'false');
       await userEvent.click(formContainer);
       expect(formContainer).toHaveAttribute('aria-expanded', 'true');
       await userEvent.click(document.body);
+      expect(formContainer).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('취소 버튼 누르면 폼을 닫는다', async () => {
+      const panel = createMockPanel();
+      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
+      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
+
+      const { queryClient } = renderWithQueryClient(
+        <QAModal
+          close={handleClose}
+          questionId={questionId}
+          isActived={isActived}
+          onLikeButtonClick={handleLikeButtonClick}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
+      const formContainer = screen.getByRole('button', {
+        name: /답변 생성 폼 열기/,
+      });
+      await userEvent.click(formContainer);
+      const closeButton = screen.getByRole('button', { name: /취소/ });
+      await userEvent.click(closeButton);
+
       expect(formContainer).toHaveAttribute('aria-expanded', 'false');
     });
   });
