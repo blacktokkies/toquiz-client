@@ -1,11 +1,14 @@
 import type { Panel } from '@/lib/api/panel';
 import type { Question } from '@/lib/api/question';
+import type { ChangeEvent } from 'react';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 
 import { clsx } from 'clsx';
+import { flushSync } from 'react-dom';
 import { useRouteLoaderData } from 'react-router-dom';
 
+import { Button } from '@/components/system/Button';
 import { ArrowBack, Account, Like } from '@/components/vectors';
 import { useAnswersQuery } from '@/hooks/queries/answer';
 import { useUserStore } from '@/hooks/stores/useUserStore';
@@ -41,6 +44,29 @@ export function QAModal({
     if (content.length <= 0) setExpanded(false);
   }
   useOutsideClick(formContainer, handleFormOutsideClick);
+
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const textareaRefCallback = useCallback(
+    (node: HTMLTextAreaElement | null) => {
+      if (node) {
+        textareaRef.current = node;
+        if (expanded) textareaRef.current.focus();
+      }
+    },
+    [expanded],
+  );
+
+  function handleChange(e: ChangeEvent<HTMLTextAreaElement>): void {
+    flushSync(() => {
+      setContent(e.target.value);
+    });
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }
+
   // TODO: Fallback UI 제공하기
   if (answersQuery.isLoading) return <div>loading</div>;
   if (answersQuery.isError) return <div>error</div>;
@@ -50,7 +76,7 @@ export function QAModal({
     <div
       role="dialog"
       aria-label="질문과 답변 모달"
-      className="fixed inset-0 flex flex-col overflow-auto justify-start bg-white"
+      className="fixed inset-0 flex flex-col gap-6 overflow-auto justify-start bg-white"
     >
       <header className="flex justify-start items-center gap-2 bg-primary-dark shadow-md px-3 min-h-[64px]">
         <button type="button" className="rounded-full p-1" onClick={close}>
@@ -95,6 +121,11 @@ export function QAModal({
       </div>
       {userId === author.id && (
         <div
+          className={clsx(
+            'flex flex-col mx-2 py-3 border shadow-md',
+            'py-3 px-4 border border-grey-light outline-none rounded-md',
+            'hover:shadow-xl focus:border-2 focus:border-primary',
+          )}
           role="button"
           tabIndex={0}
           aria-label="답변 생성 폼 열기"
@@ -103,43 +134,72 @@ export function QAModal({
             setExpanded(true);
           }}
           onKeyDown={(event) => {
-            if (event.key === 'Enter' || event.keyCode === 13) {
+            if (
+              event.key === 'Enter' ||
+              event.keyCode === 13 ||
+              event.key === 'Space' ||
+              event.keyCode === 32
+            ) {
               event.preventDefault();
               setExpanded(true);
             }
           }}
         >
-          {content.length}/200자
-          <form aria-label="답변 생성 폼">
+          {expanded && (
+            <span className="ml-auto text-grey-dark">
+              <span
+                className={
+                  content.length > 200 ? 'text-danger' : 'text-inherit'
+                }
+              >
+                {content.length}
+              </span>
+              /200자
+            </span>
+          )}
+          <form aria-label="답변 생성 폼" aria-hidden={!expanded}>
             <textarea
+              tabIndex={expanded ? 0 : -1}
+              ref={textareaRefCallback}
+              rows={1}
+              className={clsx(
+                'w-full rounded-md outline-none resize-none overflow-hidden p-1',
+                'text-md text-grey-darkest placeholder:text-grey',
+              )}
+              placeholder="답변을 입력하세요"
               value={content}
-              onChange={(e) => {
-                setContent(e.target.value);
-              }}
+              onChange={handleChange}
             />
           </form>
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              setExpanded(false);
-            }}
-          >
-            취소
-          </button>
-          <button
-            type="submit"
-            disabled={content.length <= 0 || content.length > 200}
-            onClick={(event) => {
-              event.stopPropagation();
-              setExpanded(false);
-            }}
-          >
-            답변 생성
-          </button>
+          {expanded && (
+            <div className="flex gap-4 justify-end items-center">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setContent('');
+                  setExpanded(false);
+                }}
+              >
+                취소
+              </Button>
+              <Button
+                type="submit"
+                disabled={content.length === 0 || content.length > 200}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setContent('');
+                  setExpanded(false);
+                }}
+              >
+                질문 생성
+              </Button>
+            </div>
+          )}
         </div>
       )}
-      <div className="flex-1 py-6">
+      <div className="flex-1">
         <ul>
           {answers.map((answer) => (
             <li
