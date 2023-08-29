@@ -195,10 +195,11 @@ describe('QAModal', () => {
       const answerInput = screen.getByRole('textbox');
       fireEvent.change(answerInput, { target: { value: '안녕하세요' } });
 
-      expect(screen.getByText(/5/)).toBeInTheDocument();
+      expect(screen.getByText(/5자/)).toBeInTheDocument();
     });
 
-    it('답변 제출하면 폼을 닫는다', async () => {
+    it('답변 제출하면 답변 생성 API를 호출하고 성공 시 폼을 닫는다', async () => {
+      const spyOnCreateAnswer = vi.spyOn(answerApis, 'createAnswer');
       const panel = createMockPanel();
       (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
       (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
@@ -216,7 +217,10 @@ describe('QAModal', () => {
       });
       await userEvent.click(submitButton);
 
-      expect(formContainer).toHaveAttribute('aria-expanded', 'false');
+      expect(spyOnCreateAnswer).toHaveBeenCalled();
+      await waitFor(() => {
+        expect(formContainer).toHaveAttribute('aria-expanded', 'false');
+      });
     });
   });
 });
