@@ -1,3 +1,11 @@
+import type {
+  Answer,
+  CreateAnswerBody,
+  CreateAnswerPathParams,
+  CreateAnswerResponse,
+  GetAnswersPathParams,
+  GetAnswersResponse,
+} from '@/lib/api/answer';
 import type { Question } from '@/lib/api/question';
 import type * as Vi from 'vitest';
 
@@ -11,9 +19,12 @@ import { useRouteLoaderData } from 'react-router-dom';
 import { QAModal } from '@/components/panel/QAModal';
 import { useUserStore } from '@/hooks/stores/useUserStore';
 import * as answerApis from '@/lib/api/answer';
+import { apiUrl } from '@/lib/api/apiUrl';
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { createMockAnswer } from '@/mocks/data/answer';
 import { createMockUser } from '@/mocks/data/auth';
 import { createMockPanel } from '@/mocks/data/panel';
+import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
 vi.mock('react-router-dom', async (importOriginal) => {
@@ -196,6 +207,70 @@ describe('QAModal', () => {
       fireEvent.change(answerInput, { target: { value: '안녕하세요' } });
 
       expect(screen.getByText(/5자/)).toBeInTheDocument();
+    });
+
+    it('답변 제출하면 일단 화면에 보여준다', async () => {
+      const answers: Answer[] = [];
+      server.use(
+        rest.get<never, GetAnswersPathParams, GetAnswersResponse>(
+          apiUrl.answer.getAnswers(':questionId'),
+          async (req, res, ctx) =>
+            res(
+              ctx.status(200),
+              ctx.json({
+                statusCode: 200,
+                result: {
+                  ...createMockQuestion(),
+                  id: questionId,
+                  answers,
+                },
+              }),
+            ),
+        ),
+      );
+
+      server.use(
+        rest.post<
+          CreateAnswerBody,
+          CreateAnswerPathParams,
+          CreateAnswerResponse
+        >(apiUrl.answer.create(':panelId'), async (req, res, ctx) => {
+          const { content }: CreateAnswerBody = await req.json();
+          const answer = {
+            ...createMockAnswer(),
+            content,
+          };
+          answers.push(answer);
+
+          return res(
+            ctx.status(200),
+            ctx.json({
+              statusCode: 200,
+              result: answer,
+            }),
+          );
+        }),
+      );
+      const spyOnCreateAnswer = vi.spyOn(answerApis, 'createAnswer');
+      const panel = createMockPanel();
+      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
+      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
+
+      const { waitForFetching } = setup();
+      await waitForFetching();
+      const formContainer = screen.getByRole('button', {
+        name: /답변 생성 폼 열기/,
+      });
+      await userEvent.click(formContainer);
+      const answerInput = screen.getByRole('textbox');
+      fireEvent.change(answerInput, { target: { value: '안녕하세요' } });
+      const submitButton = screen.getByRole('button', {
+        name: '답변 생성',
+      });
+      await userEvent.click(submitButton);
+
+      expect(spyOnCreateAnswer).toHaveBeenCalled();
+      expect(screen.getAllByText(/안녕하세요/)[1]).toBeInTheDocument();
     });
 
     it('답변 제출하면 답변 생성 API를 호출하고 성공 시 폼을 닫는다', async () => {
