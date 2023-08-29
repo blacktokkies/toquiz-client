@@ -243,6 +243,11 @@ describe('QAModal', () => {
         expect(queryClient.isFetching()).toBe(0);
       });
 
+      const formContainer = screen.getByRole('button', {
+        name: /답변 생성 폼 열기/,
+      });
+      await userEvent.click(formContainer);
+
       const answerInput = screen.getByRole('textbox');
       const submitButton = screen.getByRole<HTMLButtonElement>('button', {
         name: '답변 생성',
@@ -269,10 +274,45 @@ describe('QAModal', () => {
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
       });
+
+      const formContainer = screen.getByRole('button', {
+        name: /답변 생성 폼 열기/,
+      });
+      await userEvent.click(formContainer);
       const answerInput = screen.getByRole('textbox');
       fireEvent.change(answerInput, { target: { value: '안녕하세요' } });
 
       expect(screen.getByText(/5/)).toBeInTheDocument();
+    });
+
+    it('답변 제출하면 폼을 닫는다', async () => {
+      const panel = createMockPanel();
+      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
+      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
+
+      const { queryClient } = renderWithQueryClient(
+        <QAModal
+          close={handleClose}
+          questionId={questionId}
+          isActived={isActived}
+          onLikeButtonClick={handleLikeButtonClick}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
+      const formContainer = screen.getByRole('button', {
+        name: /답변 생성 폼 열기/,
+      });
+      await userEvent.click(formContainer);
+      const answerInput = screen.getByRole('textbox');
+      fireEvent.change(answerInput, { target: { value: '안녕하세요' } });
+      const submitButton = screen.getByRole('button', {
+        name: '답변 생성',
+      });
+      await userEvent.click(submitButton);
+      expect(formContainer).toHaveAttribute('aria-expanded', 'false');
     });
   });
 });
