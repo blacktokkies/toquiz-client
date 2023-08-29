@@ -32,20 +32,12 @@ const handleLikeButtonClick = vi.fn();
 const questionId: Question['id'] = -1;
 describe('QAModal', () => {
   it('<- 아이콘을 누르면 close 함수가 호출된다', async () => {
-    const { queryClient } = renderWithQueryClient(
-      <QAModal
-        close={handleClose}
-        questionId={questionId}
-        isActived={isActived}
-        onLikeButtonClick={handleLikeButtonClick}
-      />,
-    );
+    const { waitForFetching } = setup();
+    await waitForFetching();
 
-    await waitFor(() => {
-      expect(queryClient.isFetching()).toBe(0);
-    });
     const goBackButton = screen.getByRole('button', { name: /뒤로 가기/ });
     await userEvent.click(goBackButton);
+
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -80,20 +72,10 @@ describe('QAModal', () => {
       ),
     );
 
-    const { queryClient } = renderWithQueryClient(
-      <QAModal
-        close={handleClose}
-        questionId={questionId}
-        isActived={isActived}
-        onLikeButtonClick={handleLikeButtonClick}
-      />,
-    );
-
+    const { waitForFetching } = setup();
     expect(spyOnGetAnswers).toHaveBeenCalled();
+    await waitForFetching();
 
-    await waitFor(() => {
-      expect(queryClient.isFetching()).toBe(0);
-    });
     expect(screen.getByText('질문이다')).toBeInTheDocument();
     expect(screen.getByText('답변이다')).toBeInTheDocument();
   });
@@ -103,23 +85,13 @@ describe('QAModal', () => {
       const panel = createMockPanel();
       (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
       (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
-
-      const { queryClient } = renderWithQueryClient(
-        <QAModal
-          close={handleClose}
-          questionId={questionId}
-          isActived={isActived}
-          onLikeButtonClick={handleLikeButtonClick}
-        />,
-      );
-
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
+      const { waitForFetching } = setup();
+      await waitForFetching();
 
       const expandFormButton = screen.getByRole('button', {
         name: /답변 생성 폼/,
       });
+
       expect(expandFormButton).toBeInTheDocument();
     });
 
@@ -127,23 +99,12 @@ describe('QAModal', () => {
       const panel = createMockPanel();
       (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
       (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id + 1);
-
-      const { queryClient } = renderWithQueryClient(
-        <QAModal
-          close={handleClose}
-          questionId={questionId}
-          isActived={isActived}
-          onLikeButtonClick={handleLikeButtonClick}
-        />,
-      );
-
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
+      const { waitForFetching } = setup();
+      await waitForFetching();
 
       expect(
         screen.queryByRole('button', {
-          name: /답변 생성 폼/,
+          name: /답변 생성 폼 열기/,
         }),
       ).not.toBeInTheDocument();
     });
@@ -152,19 +113,9 @@ describe('QAModal', () => {
       const panel = createMockPanel();
       (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
       (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
+      const { waitForFetching } = setup();
+      await waitForFetching();
 
-      const { queryClient } = renderWithQueryClient(
-        <QAModal
-          close={handleClose}
-          questionId={questionId}
-          isActived={isActived}
-          onLikeButtonClick={handleLikeButtonClick}
-        />,
-      );
-
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
       const formContainer = screen.getByRole('button', {
         name: /답변 생성 폼 열기/,
       });
@@ -179,19 +130,9 @@ describe('QAModal', () => {
       const panel = createMockPanel();
       (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
       (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
+      const { waitForFetching } = setup();
+      await waitForFetching();
 
-      const { queryClient } = renderWithQueryClient(
-        <QAModal
-          close={handleClose}
-          questionId={questionId}
-          isActived={isActived}
-          onLikeButtonClick={handleLikeButtonClick}
-        />,
-      );
-
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
       const formContainer = screen.getByRole('button', {
         name: /답변 생성 폼 열기/,
       });
@@ -199,6 +140,7 @@ describe('QAModal', () => {
       const answerInput = screen.getByRole('textbox');
       fireEvent.change(answerInput, { target: { value: '안녕' } });
       await userEvent.click(document.body);
+
       expect(formContainer).toHaveAttribute('aria-expanded', 'true');
     });
 
@@ -206,19 +148,9 @@ describe('QAModal', () => {
       const panel = createMockPanel();
       (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
       (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
+      const { waitForFetching } = setup();
+      await waitForFetching();
 
-      const { queryClient } = renderWithQueryClient(
-        <QAModal
-          close={handleClose}
-          questionId={questionId}
-          isActived={isActived}
-          onLikeButtonClick={handleLikeButtonClick}
-        />,
-      );
-
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
       const formContainer = screen.getByRole('button', {
         name: /답변 생성 폼 열기/,
       });
@@ -233,31 +165,19 @@ describe('QAModal', () => {
       const panel = createMockPanel();
       (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
       (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
-
-      const { queryClient } = renderWithQueryClient(
-        <QAModal
-          close={handleClose}
-          questionId={questionId}
-          isActived={isActived}
-          onLikeButtonClick={handleLikeButtonClick}
-        />,
-      );
-
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
+      const { waitForFetching } = setup();
+      await waitForFetching();
 
       const formContainer = screen.getByRole('button', {
         name: /답변 생성 폼 열기/,
       });
       await userEvent.click(formContainer);
-
       const answerInput = screen.getByRole('textbox');
       const submitButton = screen.getByRole<HTMLButtonElement>('button', {
         name: '답변 생성',
       });
-
       fireEvent.change(answerInput, { target: { value: '' } });
+
       expect(submitButton.disabled).toBe(true);
     });
 
@@ -265,19 +185,8 @@ describe('QAModal', () => {
       const panel = createMockPanel();
       (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
       (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
-
-      const { queryClient } = renderWithQueryClient(
-        <QAModal
-          close={handleClose}
-          questionId={questionId}
-          isActived={isActived}
-          onLikeButtonClick={handleLikeButtonClick}
-        />,
-      );
-
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
+      const { waitForFetching } = setup();
+      await waitForFetching();
 
       const formContainer = screen.getByRole('button', {
         name: /답변 생성 폼 열기/,
@@ -294,18 +203,8 @@ describe('QAModal', () => {
       (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
       (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
 
-      const { queryClient } = renderWithQueryClient(
-        <QAModal
-          close={handleClose}
-          questionId={questionId}
-          isActived={isActived}
-          onLikeButtonClick={handleLikeButtonClick}
-        />,
-      );
-
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
+      const { waitForFetching } = setup();
+      await waitForFetching();
       const formContainer = screen.getByRole('button', {
         name: /답변 생성 폼 열기/,
       });
@@ -316,7 +215,27 @@ describe('QAModal', () => {
         name: '답변 생성',
       });
       await userEvent.click(submitButton);
+
       expect(formContainer).toHaveAttribute('aria-expanded', 'false');
     });
   });
 });
+
+function setup(): {
+  waitForFetching: () => Promise<void>;
+} {
+  const { queryClient } = renderWithQueryClient(
+    <QAModal
+      close={handleClose}
+      questionId={questionId}
+      isActived={isActived}
+      onLikeButtonClick={handleLikeButtonClick}
+    />,
+  );
+
+  const waitForFetching = async (): Promise<void> =>
+    waitFor(() => {
+      expect(queryClient.isFetching()).toBe(0);
+    });
+  return { waitForFetching };
+}
