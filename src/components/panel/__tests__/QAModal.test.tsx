@@ -3,7 +3,7 @@ import type * as Vi from 'vitest';
 
 import React from 'react';
 
-import { screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { useRouteLoaderData } from 'react-router-dom';
@@ -169,6 +169,33 @@ describe('QAModal', () => {
       expect(formContainer).toHaveAttribute('aria-expanded', 'true');
       await userEvent.click(document.body);
       expect(formContainer).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('사용자가 한 글자 이상 입력했다면 폼 바깥을 눌러도 닫지 않는다', async () => {
+      const panel = createMockPanel();
+      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
+      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
+
+      const { queryClient } = renderWithQueryClient(
+        <QAModal
+          close={handleClose}
+          questionId={questionId}
+          isActived={isActived}
+          onLikeButtonClick={handleLikeButtonClick}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
+      const formContainer = screen.getByRole('button', {
+        name: /답변 생성 폼 열기/,
+      });
+      await userEvent.click(formContainer);
+      const answerInput = screen.getByRole('textbox');
+      fireEvent.change(answerInput, { target: { value: '안녕' } });
+      await userEvent.click(document.body);
+      expect(formContainer).toHaveAttribute('aria-expanded', 'true');
     });
 
     it('취소 버튼 누르면 폼을 닫는다', async () => {

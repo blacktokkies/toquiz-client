@@ -33,11 +33,12 @@ export function QAModal({
   const now = useCurrentDate();
   const answersQuery = useAnswersQuery(questionId);
 
+  const [content, setContent] = useState('');
   const [expanded, setExpanded] = useState(false);
 
   const formContainer = useRef<HTMLDivElement | null>(null);
   function handleFormOutsideClick(): void {
-    setExpanded(false);
+    if (content.length <= 0) setExpanded(false);
   }
   useOutsideClick(formContainer, handleFormOutsideClick);
   // TODO: Fallback UI 제공하기
@@ -108,7 +109,14 @@ export function QAModal({
             }
           }}
         >
-          <form aria-label="답변 생성 폼" />
+          <form aria-label="답변 생성 폼">
+            <textarea
+              value={content}
+              onChange={(e) => {
+                setContent(e.target.value);
+              }}
+            />
+          </form>
           <button
             type="button"
             onClick={(event) => {
