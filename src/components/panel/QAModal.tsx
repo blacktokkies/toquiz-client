@@ -130,6 +130,10 @@ export function QAModal({
           <button
             type="submit"
             disabled={content.length <= 0 || content.length > 200}
+            onClick={(event) => {
+              event.stopPropagation();
+              setExpanded(false);
+            }}
           >
             답변 생성
           </button>
