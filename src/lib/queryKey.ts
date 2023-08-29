@@ -38,6 +38,7 @@ const answerQueryKeys = {
   lists: () => [...answerQueryKeys.all, 'list'] as const,
   list: (questionId: Question['id']) =>
     [...answerQueryKeys.lists(), questionId] as const,
+  create: () => ['createAnswer'] as const,
 };
 
 export const queryKey = {
