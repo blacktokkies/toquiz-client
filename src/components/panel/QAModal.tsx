@@ -109,6 +109,7 @@ export function QAModal({
             }
           }}
         >
+          {content.length}/200자
           <form aria-label="답변 생성 폼">
             <textarea
               value={content}
