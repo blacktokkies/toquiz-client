@@ -224,5 +224,32 @@ describe('QAModal', () => {
 
       expect(formContainer).toHaveAttribute('aria-expanded', 'false');
     });
+
+    it('사용자가 0자 혹은 200자 초과로 입력하면 제출 버튼을 비활성화한다', async () => {
+      const panel = createMockPanel();
+      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
+      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
+
+      const { queryClient } = renderWithQueryClient(
+        <QAModal
+          close={handleClose}
+          questionId={questionId}
+          isActived={isActived}
+          onLikeButtonClick={handleLikeButtonClick}
+        />,
+      );
+
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
+
+      const answerInput = screen.getByRole('textbox');
+      const submitButton = screen.getByRole<HTMLButtonElement>('button', {
+        name: '답변 생성',
+      });
+
+      fireEvent.change(answerInput, { target: { value: '' } });
+      expect(submitButton.disabled).toBe(true);
+    });
   });
 });
