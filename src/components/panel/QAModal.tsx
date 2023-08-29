@@ -1,7 +1,7 @@
 import type { Panel } from '@/lib/api/panel';
 import type { Question } from '@/lib/api/question';
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 import { clsx } from 'clsx';
 import { useRouteLoaderData } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { ArrowBack, Account, Like } from '@/components/vectors';
 import { useAnswersQuery } from '@/hooks/queries/answer';
 import { useUserStore } from '@/hooks/stores/useUserStore';
 import { useCurrentDate } from '@/hooks/useCurrentDate';
+import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { formatDistance } from '@/lib/format-date';
 
 interface Props {
@@ -32,6 +33,13 @@ export function QAModal({
   const now = useCurrentDate();
   const answersQuery = useAnswersQuery(questionId);
 
+  const [expanded, setExpanded] = useState(false);
+
+  const formContainer = useRef<HTMLDivElement | null>(null);
+  function handleFormOutsideClick(): void {
+    setExpanded(false);
+  }
+  useOutsideClick(formContainer, handleFormOutsideClick);
   // TODO: Fallback UI 제공하기
   if (answersQuery.isLoading) return <div>loading</div>;
   if (answersQuery.isError) return <div>error</div>;
@@ -85,7 +93,21 @@ export function QAModal({
         <div>{question.content}</div>
       </div>
       {userId === author.id && (
-        <div>
+        <div
+          role="button"
+          tabIndex={0}
+          data-testid="answer-form-container"
+          aria-expanded={expanded}
+          onClick={() => {
+            setExpanded(true);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.keyCode === 13) {
+              event.preventDefault();
+              setExpanded(true);
+            }
+          }}
+        >
           <form aria-label="답변 생성 폼" />
         </div>
       )}
