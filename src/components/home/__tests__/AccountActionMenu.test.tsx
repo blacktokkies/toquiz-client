@@ -62,9 +62,12 @@ function setup(): {
 } {
   act(() => {
     setUserState({
+      id: -1,
       email: '이메일',
       nickname: '닉네임',
+      provider: 'LOCAL',
       createdAt: new Date().toString(),
+      updatedAt: new Date().toString(),
     });
   });
 

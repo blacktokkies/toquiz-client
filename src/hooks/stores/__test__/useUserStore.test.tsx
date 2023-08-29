@@ -6,11 +6,16 @@ import { initialUserState, type UserState } from '@/store/user-store';
 describe('useUserStore', () => {
   it('초기값으로 초기화된다', () => {
     const { result } = renderHook(() =>
-      useUserStore(({ email, nickname, createdAt }) => ({
-        email,
-        nickname,
-        createdAt,
-      })),
+      useUserStore(
+        ({ id, email, nickname, provider, createdAt, updatedAt }) => ({
+          id,
+          email,
+          nickname,
+          provider,
+          createdAt,
+          updatedAt,
+        }),
+      ),
     );
 
     expect(result.current).toEqual(initialUserState);
@@ -27,9 +32,12 @@ describe('useUserStore', () => {
     );
 
     const newUser: UserState = {
+      id: -1,
       email: 'test@email.com',
       nickname: 'testnickname',
+      provider: 'TEST',
       createdAt: new Date().toString(),
+      updatedAt: new Date().toString(),
     };
 
     act(() => {
@@ -77,9 +85,12 @@ describe('useUserStore', () => {
     );
 
     const newUser: UserState = {
+      id: -1,
       email: 'test@email.com',
       nickname: 'testnickname',
+      provider: 'TEST',
       createdAt: new Date().toString(),
+      updatedAt: new Date().toString(),
     };
 
     act(() => {

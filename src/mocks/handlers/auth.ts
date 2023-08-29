@@ -81,11 +81,7 @@ export const me = rest.get<never, never, GetMyInfoResponse | ErrorResponse>(
         ctx.status(200),
         ctx.json({
           statusCode: 200,
-          result: {
-            ...myAccount,
-            provider: 'dev-provider',
-            updatedAt: new Date().toString(),
-          },
+          result: myAccount,
         }),
       );
     else {
