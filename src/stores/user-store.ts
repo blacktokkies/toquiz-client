@@ -1,10 +1,15 @@
+import type { Member } from '@/lib/api/auth';
+
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 export interface UserState {
-  email: string;
-  nickname: string;
-  createdAt: string;
+  id: Member['id'];
+  email: Member['email'];
+  nickname: Member['nickname'];
+  provider: Member['provider'];
+  createdAt: Member['createdAt'];
+  updatedAt: Member['updatedAt'];
 }
 
 export interface UserActions {
@@ -14,9 +19,12 @@ export interface UserActions {
 }
 
 export const initialUserState: UserState = {
+  id: -1,
   email: '',
   nickname: '',
+  provider: '',
   createdAt: '',
+  updatedAt: '',
 };
 
 export const userStore = createStore(
@@ -36,8 +44,8 @@ export const userStore = createStore(
 
 export const getUserState = (): UserState => {
   const state = userStore.getState();
-  const { email, nickname, createdAt } = state;
-  return { email, nickname, createdAt };
+  const { id, email, nickname, provider, createdAt, updatedAt } = state;
+  return { id, email, nickname, provider, createdAt, updatedAt };
 };
 
 export const setUserState = (newUser: UserState): void => {

@@ -54,9 +54,12 @@ export interface LogInBody {
   password: Member['password'];
 }
 export interface LogInResult {
+  id: Member['id'];
   email: Member['email'];
   nickname: Member['nickname'];
+  provider: Member['provider'];
   createdAt: Member['createdAt'];
+  updatedAt: Member['updatedAt'];
   accessToken: string;
 }
 export type LogInResponse = SuccessResponse<LogInResult>;
@@ -81,6 +84,7 @@ export type LogoutError = InvalidAccessTokenError;
 
 /* ================================ [ 회원 정보 API ] ====================================== */
 export interface GetMyInfoResult {
+  id: Member['id'];
   email: Member['email'];
   nickname: Member['nickname'];
   provider: Member['provider'];
@@ -92,9 +96,12 @@ export type GetMyInfoError = InvalidAccessTokenError;
 
 /* ================================ [ 토큰 리프레쉬 API ] ====================================== */
 export interface RefreshResult {
+  id: Member['id'];
   email: Member['email'];
   nickname: Member['nickname'];
+  provider: Member['provider'];
   createdAt: Member['createdAt'];
+  updatedAt: Member['updatedAt'];
   accessToken: string;
 }
 export type RefreshResponse = SuccessResponse<RefreshResult>;
@@ -119,11 +126,11 @@ export type InvalidAccessTokenError = ErrorResponse & {
 /* ================================ [ 사용자 엔티티 ] ====================================== */
 
 export interface Member {
+  id: number;
   email: string;
   password: string;
   nickname: string;
   provider: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt?: string;
 }

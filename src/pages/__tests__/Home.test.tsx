@@ -7,8 +7,14 @@ import { OverlayProvider } from '@/contexts/OverlayContext';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { myPanelList } from '@/mocks/data/panel';
 import { Home } from '@/pages/Home';
-import { setUserState } from '@/store/user-store';
 
+vi.mock('@/hooks/stores/useUserStore', () => ({
+  useUserStore: () => ({
+    email: '테스트 이메일',
+    nickname: '테스트 닉네임',
+    createdAt: new Date().toString(),
+  }),
+}));
 describe('홈 페이지', () => {
   it('내 패널 모아보기 헤딩을 보여준다.', () => {
     setup();
@@ -17,11 +23,6 @@ describe('홈 페이지', () => {
   });
 
   it('사용자의 닉네임을 보여준다.', () => {
-    setUserState({
-      email: '테스트 이메일',
-      nickname: '테스트 닉네임',
-      createdAt: new Date().toString(),
-    });
     setup();
 
     expect(screen.getByText(/테스트 닉네임/i)).toBeInTheDocument();

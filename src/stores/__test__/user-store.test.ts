@@ -15,9 +15,12 @@ describe('userStore', () => {
 
   it('setUserState를 호출하면 사용자 상태를 변경한다', () => {
     const newUser: UserState = {
+      id: -1,
       email: 'test@email.com',
       nickname: 'testnickname',
+      provider: 'TEST',
       createdAt: new Date().toString(),
+      updatedAt: new Date().toString(),
     };
 
     setUserState(newUser);
@@ -37,9 +40,12 @@ describe('userStore', () => {
 
   it('clearUserState를 호출하면 사용자 상태를 초기화한다', () => {
     const newUser: UserState = {
+      id: -1,
       email: 'test@email.com',
       nickname: 'testnickname',
+      provider: 'TEST',
       createdAt: new Date().toString(),
+      updatedAt: new Date().toString(),
     };
 
     setUserState(newUser);
