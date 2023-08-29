@@ -5,7 +5,12 @@ import type {
 } from '@/lib/api/answer';
 import type { Question } from '@/lib/api/question';
 import type { ApiError } from '@/lib/apiClient';
-import type { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
+import type { NonNullableKeys } from '@/lib/types';
+import type {
+  MutationOptions,
+  UseMutationResult,
+  UseQueryResult,
+} from '@tanstack/react-query';
 
 import { useQuery, useMutation } from '@tanstack/react-query';
 
@@ -24,23 +29,38 @@ export const useAnswersQuery = (
   return query;
 };
 
-export const useCreateAnswerMutation = (
+/* ================================ [ 질문 좋아요 뮤테이션 ] ====================================== */
+export type CreateAnswerMutation = NonNullableKeys<
+  Pick<
+    MutationOptions<
+      CreateAnswerResult,
+      ApiError | SyntaxError,
+      Answer['content'],
+      ReturnType<typeof queryKey.answer.create>
+    >,
+    'mutationKey' | 'mutationFn'
+  >
+>;
+
+export const createAnswerMutation = (
   questionId: Question['id'],
+): CreateAnswerMutation => ({
+  mutationKey: queryKey.answer.create(),
+  mutationFn: async (content: Answer['content']) =>
+    createAnswer(questionId, content).then((res) => res.result),
+});
+
+export const useCreateAnswerMutation = <TContext = unknown>(
+  questionId: Question['id'],
+  options: MutationOptions<
+    CreateAnswerResult,
+    ApiError | SyntaxError,
+    Answer['content'],
+    TContext
+  > = {},
 ): UseMutationResult<
   CreateAnswerResult,
   ApiError | SyntaxError,
-  Answer['content']
-> => {
-  const key = queryKey.answer.create();
-  const mutation = useMutation<
-    CreateAnswerResult,
-    ApiError | SyntaxError,
-    Answer['content']
-  >(
-    key,
-    async (content: Answer['content']) =>
-      (await createAnswer(questionId, content)).result,
-  );
-
-  return mutation;
-};
+  Answer['content'],
+  TContext
+> => useMutation({ ...createAnswerMutation(questionId), ...options });
