@@ -36,15 +36,14 @@ export function QAModal({
   const now = useCurrentDate();
   const answersQuery = useAnswersQuery(questionId);
 
-  const [content, setContent] = useState('');
   const [expanded, setExpanded] = useState(false);
-
   const formContainer = useRef<HTMLDivElement | null>(null);
   function handleFormOutsideClick(): void {
     if (content.length <= 0) setExpanded(false);
   }
   useOutsideClick(formContainer, handleFormOutsideClick);
 
+  const [content, setContent] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const textareaRefCallback = useCallback(
     (node: HTMLTextAreaElement | null) => {
