@@ -26,7 +26,7 @@ export function QAModal({
 }: Props): JSX.Element {
   // [NOTE] 질문과 답변 모달은 패널 페이지에서만 사용되므로
   // 패널 페이지 로더가 반환하는 데이터가 null이 아님이 보장된다
-  const panel = useRouteLoaderData('panel') as Panel;
+  const { author, ...panel } = useRouteLoaderData('panel') as Panel;
   const now = useCurrentDate();
   const answersQuery = useAnswersQuery(questionId);
 
@@ -95,8 +95,7 @@ export function QAModal({
                     <Account className="fill-grey-darkest" />
                   </div>
                   <div className="font-bold whitespace-nowrap">
-                    {/* TODO: 답변 작성자 닉네임으로 바꿔야한다 */}
-                    {panel.authorId}
+                    {author.nickname}
                   </div>
                   <div className="text-grey-dark">
                     {formatDistance(now, new Date(answer.createdAt))}

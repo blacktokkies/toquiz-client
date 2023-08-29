@@ -71,18 +71,20 @@ export const updatePanel = rest.patch<
   async (req, res, ctx) => {
     const { title, description }: UpdatePanelBody = await req.json();
     const { panelId } = req.params;
+    const panel = myPanelList.find((panel) => panel.sid === panelId) ?? {
+      ...createMockPanel(),
+      sid: panelId,
+    };
 
     return res(
       ctx.status(200),
       ctx.json({
         statusCode: 200,
         result: {
-          sid: panelId,
-          authorId: 0,
+          ...panel,
           title,
           description,
-          createdAt: new Date().toDateString(),
-          updatedAt: new Date().toDateString(),
+          updatedAt: new Date().toString(),
         },
       }),
     );

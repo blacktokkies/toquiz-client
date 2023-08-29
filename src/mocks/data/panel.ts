@@ -6,7 +6,10 @@ export const createMockPanel = (): Panel => ({
   sid: faker.datatype.uuid(),
   title: faker.music.songName(),
   description: faker.lorem.sentences().slice(0, 50),
-  authorId: 0,
+  author: {
+    id: 0,
+    nickname: '개발 닉네임',
+  },
   createdAt: new Date().toDateString(),
   updatedAt: new Date().toDateString(),
 });

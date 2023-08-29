@@ -23,7 +23,10 @@ const panel: Panel = {
   sid: faker.datatype.uuid(),
   title: '테스트 패널 제목',
   description: '테스트 패널 설명',
-  authorId: 0,
+  author: {
+    id: -1,
+    nickname: '테스트 닉네임',
+  },
   createdAt: new Date().toDateString(),
   updatedAt: new Date().toDateString(),
 };
