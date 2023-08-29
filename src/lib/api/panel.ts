@@ -1,3 +1,4 @@
+import type { Member } from './auth';
 import type { SuccessResponse } from '@/lib/api/types';
 
 import { apiUrl } from '@/lib/api/apiUrl';
@@ -84,7 +85,10 @@ export interface Panel {
   sid: string;
   title: string;
   description?: string;
-  authorId: number;
+  author: {
+    id: Member['id'];
+    nickname: Member['nickname'];
+  };
   createdAt: string;
   updatedAt: string;
 }
