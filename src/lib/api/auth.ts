@@ -51,6 +51,13 @@ export const updateMyInfo = async (
     body,
   );
 
+export interface ResignBody {
+  password: Member['password'];
+}
+export type ResignResponse = SuccessResponse;
+export const resign = async (body: ResignBody): Promise<ResignResponse> =>
+  apiClient.post<ResignResponse, ResignBody>(apiUrl.auth.resign(), body);
+
 /* ================================ [ 회원가입 API ] ====================================== */
 export interface SignUpBody {
   email: Member['email'];
