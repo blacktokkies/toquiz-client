@@ -16,7 +16,7 @@ export const accountLoader: LoaderFunction = async () => {
   return null;
 };
 export function Account(): JSX.Element {
-  const { inputProps, errors } = useForm({
+  const { inputProps, errors, hasError } = useForm({
     inputConfigs: {
       nickname: {
         validate: (value) => isNickname(value),
@@ -60,6 +60,9 @@ export function Account(): JSX.Element {
               {...inputProps['confirm-password']}
               errorMessage={errors['confirm-password']}
             />
+            <button type="submit" disabled={hasError}>
+              변경 내용 저장
+            </button>
           </form>
         </section>
       </div>

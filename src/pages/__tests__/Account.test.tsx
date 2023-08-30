@@ -89,5 +89,20 @@ describe('내 계정 관리 페이지', () => {
         screen.getByText('동일한 비밀번호를 입력하세요'),
       ).toBeInTheDocument();
     });
+
+    it('사용자가 유효하지 않은 값을 입력하면 제출 버튼을 비활성화한다', () => {
+      (isNickname as Vi.Mock).mockImplementation(() => false);
+      render(<Account />);
+
+      const nicknameInput = screen.getByLabelText(/닉네임/);
+      fireEvent.change(nicknameInput, {
+        target: { value: '유효하지 않은 닉네임' },
+      });
+
+      const submitButton = screen.getByRole<HTMLButtonElement>('button', {
+        name: /변경 내용 저장/,
+      });
+      expect(submitButton.disabled).toBe(true);
+    });
   });
 });
