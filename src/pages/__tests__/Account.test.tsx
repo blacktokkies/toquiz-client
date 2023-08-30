@@ -135,7 +135,7 @@ describe('내 계정 관리 페이지', () => {
       });
       await userEvent.click(submitButton);
       expect(spyOnUpdateMyInfo).not.toHaveBeenCalled();
-      expect(screen.getByText('변경할 내용을 입력해주세요'));
+      expect(screen.getByText(/변경할 내용을 입력해주세요/));
     });
   });
 });
