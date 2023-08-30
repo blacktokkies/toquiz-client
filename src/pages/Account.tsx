@@ -5,6 +5,7 @@ import React, { useRef } from 'react';
 
 import { redirect } from 'react-router-dom';
 
+import { ResignModal } from '@/components/account/ResignModal';
 import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
 import { ModalController } from '@/components/system/ModalController';
@@ -123,7 +124,7 @@ export function Account(): JSX.Element {
             onClick={() => {
               overlay.open(({ close }) => (
                 <ModalController aria-label="회원 탈퇴 모달" close={close}>
-                  회원 탈퇴
+                  <ResignModal />
                 </ModalController>
               ));
             }}
