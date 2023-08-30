@@ -11,6 +11,7 @@ import type {
   UpdateMyInfoBody,
   ResignResponse,
   ResignBody,
+  ResignError,
 } from '@/lib/api/auth';
 import type { ApiError } from '@/lib/apiClient';
 import type { UseMutationResult } from '@tanstack/react-query';
@@ -78,13 +79,13 @@ export const useUpdateMyInfoMutation = (): UseMutationResult<
 
 export const useResignMutation = (): UseMutationResult<
   ResignResponse,
-  ApiError | SyntaxError,
+  ApiError<ResignError> | SyntaxError,
   ResignBody
 > => {
   const key = queryKey.auth.resign();
   const mutation = useMutation<
     ResignResponse,
-    ApiError | SyntaxError,
+    ApiError<ResignError> | SyntaxError,
     ResignBody
   >(key, resign);
   return mutation;
