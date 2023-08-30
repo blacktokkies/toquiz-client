@@ -2,10 +2,12 @@ import type * as Vi from 'vitest';
 
 import React from 'react';
 
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ResignModal } from '@/components/account/ResignModal';
+import * as authApis from '@/lib/api/auth';
+import { renderWithQueryClient } from '@/lib/test-utils';
 import { isPassword } from '@/lib/validator';
 
 vi.mock('@/lib/validator', () => ({
@@ -15,13 +17,13 @@ vi.mock('@/lib/validator', () => ({
 const handleClose = vi.fn();
 describe('ResignModal', () => {
   it('회원 탈퇴하기 헤딩을 보여준다', () => {
-    render(<ResignModal close={handleClose} />);
+    renderWithQueryClient(<ResignModal close={handleClose} />);
 
     expect(screen.getByRole('heading')).toHaveTextContent('회원 탈퇴하기');
   });
 
   it('취소 버튼을 누르면 close 함수를 호출한다', async () => {
-    render(<ResignModal close={handleClose} />);
+    renderWithQueryClient(<ResignModal close={handleClose} />);
 
     const closeButton = screen.getByRole('button', { name: /취소/ });
     await userEvent.click(closeButton);
@@ -30,7 +32,7 @@ describe('ResignModal', () => {
 
   it('사용자가 유효하지 않은 비밀번호를 입력하면 에러 메시지를 보여준다', async () => {
     (isPassword as Vi.Mock).mockImplementation(() => false);
-    render(<ResignModal close={handleClose} />);
+    renderWithQueryClient(<ResignModal close={handleClose} />);
 
     const passwordInput = screen.getByLabelText('비밀번호');
     await userEvent.type(passwordInput, '유효하지 않은 비밀번호');
@@ -44,7 +46,7 @@ describe('ResignModal', () => {
 
   it('사용자가 유효하지 않은 비밀번호 입력하면 제출 버튼을 비활성화한다', async () => {
     (isPassword as Vi.Mock).mockImplementation(() => false);
-    render(<ResignModal close={handleClose} />);
+    renderWithQueryClient(<ResignModal close={handleClose} />);
 
     const passwordInput = screen.getByLabelText('비밀번호');
     const submitButton = screen.getByRole<HTMLButtonElement>('button', {
@@ -53,5 +55,15 @@ describe('ResignModal', () => {
     await userEvent.type(passwordInput, '유효하지 않은 비밀번호');
 
     expect(submitButton.disabled).toBe(true);
+  });
+
+  it('사용자가 비밀번호를 제출하면 회원 탈퇴 API를 호출한다', async () => {
+    const spyOnResign = vi.spyOn(authApis, 'resign');
+    renderWithQueryClient(<ResignModal close={handleClose} />);
+    const submitButton = screen.getByRole<HTMLButtonElement>('button', {
+      name: '회원 탈퇴',
+    });
+    await userEvent.click(submitButton);
+    expect(spyOnResign).toHaveBeenCalled();
   });
 });
