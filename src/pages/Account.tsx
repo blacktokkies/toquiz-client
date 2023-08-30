@@ -14,15 +14,11 @@ export const accountLoader: LoaderFunction = async () => {
 };
 export function Account(): JSX.Element {
   return (
-    <div className="flex w-full h-full flex-col">
-      <div className="container flex h-full max-w-7xl flex-col">
-        <div className="px-5 py-7">
-          <h1 className="font text-2xl font-medium tracking-tighter md:text-5xl">
-            내 계정 관리
-          </h1>
-        </div>
-        <div className="flex flex-1 flex-col" />
-      </div>
+    <div className="flex-1 container flex flex-col gap-11 max-w-5xl px-5 pt-7 pb-16">
+      <h1 className="font text-2xl font-medium tracking-tighter md:text-5xl">
+        내 계정 관리
+      </h1>
+      <div className="flex flex-1 flex-col" />
     </div>
   );
 }
