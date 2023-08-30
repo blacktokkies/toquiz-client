@@ -7,7 +7,7 @@ import { redirect } from 'react-router-dom';
 import { LabelInput } from '@/components/system/LabelInput';
 import { useForm } from '@/hooks/useForm';
 import { isUserLoggedIn } from '@/lib/routeGuard';
-import { isNickname } from '@/lib/validator';
+import { isNickname, isPassword } from '@/lib/validator';
 
 export const accountLoader: LoaderFunction = async () => {
   const isLoggedIn = await isUserLoggedIn();
@@ -21,6 +21,11 @@ export function Account(): JSX.Element {
       nickname: {
         validate: (value) => isNickname(value),
         errorMessage: '2~20자 이하의 문자를 입력하세요',
+      },
+      password: {
+        validate: (value) => isPassword(value),
+        errorMessage:
+          '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
       },
     },
   });
@@ -38,6 +43,12 @@ export function Account(): JSX.Element {
               label="닉네임"
               {...inputProps.nickname}
               errorMessage={errors.nickname}
+            />
+            <LabelInput
+              id="password"
+              label="비밀번호"
+              {...inputProps.password}
+              errorMessage={errors.password}
             />
           </form>
         </section>

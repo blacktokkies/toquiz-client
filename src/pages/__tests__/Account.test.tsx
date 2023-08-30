@@ -4,11 +4,12 @@ import React from 'react';
 
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { isNickname } from '@/lib/validator';
+import { isNickname, isPassword } from '@/lib/validator';
 import { Account } from '@/pages/Account';
 
 vi.mock('@/lib/validator', () => ({
   isNickname: vi.fn(() => true),
+  isPassword: vi.fn(() => true),
 }));
 describe('내 계정 관리 페이지', () => {
   it('내 계정 관리 헤딩을 보여준다.', () => {
@@ -53,6 +54,22 @@ describe('내 계정 관리 페이지', () => {
 
       expect(
         screen.getByText('2~20자 이하의 문자를 입력하세요'),
+      ).toBeInTheDocument();
+    });
+
+    it('사용자가 유효하지 않은 비밀번호를 입력하면 에러 메시지를 보여준다', () => {
+      (isPassword as Vi.Mock).mockImplementation(() => false);
+      render(<Account />);
+
+      const passwordInput = screen.getByLabelText(/비밀번호/);
+      fireEvent.change(passwordInput, {
+        target: { value: '유효하지 않은 비밀번호' },
+      });
+
+      expect(
+        screen.getByText(
+          '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
+        ),
       ).toBeInTheDocument();
     });
   });
