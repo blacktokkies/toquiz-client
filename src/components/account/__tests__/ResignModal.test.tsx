@@ -4,11 +4,14 @@ import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { rest } from 'msw';
 
 import { ResignModal } from '@/components/account/ResignModal';
+import { apiUrl } from '@/lib/api/apiUrl';
 import * as authApis from '@/lib/api/auth';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { isPassword } from '@/lib/validator';
+import { server } from '@/mocks/server';
 
 vi.mock('@/lib/validator', () => ({
   isPassword: vi.fn(() => true),
@@ -82,6 +85,30 @@ describe('ResignModal', () => {
 
     await waitFor(() => {
       expect(navigateMockFn).toHaveBeenCalledWith('/');
+    });
+  });
+
+  it('[400] 비밀번호가 일치하지 않으면 에러 메시지를 보여준다', async () => {
+    server.use(
+      rest.post(apiUrl.auth.resign(), async (req, res, ctx) =>
+        res(
+          ctx.status(400),
+          ctx.json({
+            code: 'NOT_MATCH_PASSWORD',
+            statusCode: 400,
+            message: '비밀번호가 일치하지 않습니다.',
+          }),
+        ),
+      ),
+    );
+    renderWithQueryClient(<ResignModal close={handleClose} />);
+    const submitButton = screen.getByRole<HTMLButtonElement>('button', {
+      name: '회원 탈퇴',
+    });
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/비밀번호가 일치하지 않습니다/));
     });
   });
 });
