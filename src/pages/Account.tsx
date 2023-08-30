@@ -18,7 +18,11 @@ export function Account(): JSX.Element {
       <h1 className="font text-2xl font-medium tracking-tighter md:text-5xl">
         내 계정 관리
       </h1>
-      <div className="flex flex-1 flex-col" />
+      <div className="flex flex-1 flex-col">
+        <section>
+          <h2>프로필 수정</h2>
+        </section>
+      </div>
     </div>
   );
 }
