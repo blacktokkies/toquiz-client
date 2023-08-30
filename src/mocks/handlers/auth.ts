@@ -161,6 +161,7 @@ export const resign = rest.post<ResignBody, never, ResignResponse>(
   async (req, res, ctx) =>
     res(
       ctx.status(200),
+      ctx.cookie('refreshToken', '', { expires: new Date() }),
       ctx.json({
         statusCode: 200,
         message: '회원탈퇴에 성공하였습니다.',
