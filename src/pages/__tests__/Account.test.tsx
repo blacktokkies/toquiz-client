@@ -125,5 +125,16 @@ describe('내 계정 관리 페이지', () => {
         nickname: '닉네임',
       });
     });
+
+    it('사용자가 닉네임과 비밀번호를 모두 빈 값으로 제출하면 내 정보 수정 API를 호출하지 않는다', async () => {
+      const spyOnUpdateMyInfo = vi.spyOn(authApis, 'updateMyInfo');
+      renderWithQueryClient(<Account />);
+
+      const submitButton = screen.getByRole<HTMLButtonElement>('button', {
+        name: /변경 내용 저장/,
+      });
+      await userEvent.click(submitButton);
+      expect(spyOnUpdateMyInfo).not.toHaveBeenCalled();
+    });
   });
 });
