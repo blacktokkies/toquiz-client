@@ -32,8 +32,9 @@ describe('내 계정 관리 페이지', () => {
       expect(
         screen.getByRole<HTMLHeadingElement>('heading', {
           level: 2,
+          name: '프로필 수정',
         }),
-      ).toHaveTextContent('프로필 수정');
+      ).toBeInTheDocument();
     });
 
     it('프로필 수정 폼을 보여준다', () => {
@@ -136,6 +137,19 @@ describe('내 계정 관리 페이지', () => {
       await userEvent.click(submitButton);
       expect(spyOnUpdateMyInfo).not.toHaveBeenCalled();
       expect(screen.getByText(/변경할 내용을 입력해주세요/));
+    });
+  });
+
+  describe('회원 탈퇴', () => {
+    it('회원 탈퇴 헤딩을 보여준다', () => {
+      renderWithQueryClient(<Account />);
+
+      expect(
+        screen.getByRole<HTMLHeadingElement>('heading', {
+          level: 2,
+          name: '회원 탈퇴',
+        }),
+      );
     });
   });
 });

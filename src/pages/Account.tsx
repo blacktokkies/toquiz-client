@@ -106,6 +106,9 @@ export function Account(): JSX.Element {
             </div>
           </form>
         </section>
+        <section className="flex flex-col gap-6 py-6">
+          <h2 className="font-medium text-xl">회원 탈퇴</h2>
+        </section>
       </div>
     </div>
   );
