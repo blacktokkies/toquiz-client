@@ -124,7 +124,7 @@ export function Account(): JSX.Element {
             onClick={() => {
               overlay.open(({ close }) => (
                 <ModalController aria-label="회원 탈퇴 모달" close={close}>
-                  <ResignModal />
+                  <ResignModal close={close} />
                 </ModalController>
               ));
             }}
