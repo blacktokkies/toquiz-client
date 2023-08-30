@@ -9,7 +9,7 @@ interface Props {
   close: () => void;
 }
 export function ResignModal({ close }: Props): JSX.Element {
-  const { inputProps, errors } = useForm({
+  const { inputProps, errors, hasError } = useForm({
     inputConfigs: {
       password: {
         validate: (value) => isPassword(value),
@@ -29,6 +29,9 @@ export function ResignModal({ close }: Props): JSX.Element {
           {...inputProps.password}
           errorMessage={errors.password}
         />
+        <button type="submit" disabled={hasError}>
+          회원 탈퇴
+        </button>
       </form>
       <button type="button" onClick={close}>
         취소

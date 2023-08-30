@@ -41,4 +41,17 @@ describe('ResignModal', () => {
       ),
     ).toBeInTheDocument();
   });
+
+  it('사용자가 유효하지 않은 비밀번호 입력하면 제출 버튼을 비활성화한다', async () => {
+    (isPassword as Vi.Mock).mockImplementation(() => false);
+    render(<ResignModal close={handleClose} />);
+
+    const passwordInput = screen.getByLabelText('비밀번호');
+    const submitButton = screen.getByRole<HTMLButtonElement>('button', {
+      name: '회원 탈퇴',
+    });
+    await userEvent.type(passwordInput, '유효하지 않은 비밀번호');
+
+    expect(submitButton.disabled).toBe(true);
+  });
 });
