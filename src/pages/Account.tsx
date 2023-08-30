@@ -7,8 +7,10 @@ import { redirect } from 'react-router-dom';
 
 import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
+import { ModalController } from '@/components/system/ModalController';
 import { useUpdateMyInfoMutation } from '@/hooks/queries/auth';
 import { useForm } from '@/hooks/useForm';
+import { useOverlay } from '@/hooks/useOverlay';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 import { isNickname, isPassword } from '@/lib/validator';
 
@@ -59,6 +61,9 @@ export function Account(): JSX.Element {
       },
     },
   });
+
+  const overlay = useOverlay();
+
   return (
     <div className="flex-1 container flex flex-col max-w-5xl px-5 pt-7 pb-16">
       <h1 className="font text-2xl font-medium tracking-tighter md:text-5xl">
@@ -108,6 +113,18 @@ export function Account(): JSX.Element {
         </section>
         <section className="flex flex-col gap-6 py-6">
           <h2 className="font-medium text-xl">회원 탈퇴</h2>
+          <button
+            type="button"
+            onClick={() => {
+              overlay.open(({ close }) => (
+                <ModalController aria-label="회원 탈퇴 모달" close={close}>
+                  회원 탈퇴
+                </ModalController>
+              ));
+            }}
+          >
+            회원 영구 탈퇴
+          </button>
         </section>
       </div>
     </div>
