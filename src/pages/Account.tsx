@@ -1,3 +1,4 @@
+import type { UpdateMyInfoBody } from '@/lib/api/auth';
 import type { LoaderFunction } from 'react-router-dom';
 
 import React from 'react';
@@ -5,6 +6,7 @@ import React from 'react';
 import { redirect } from 'react-router-dom';
 
 import { LabelInput } from '@/components/system/LabelInput';
+import { useUpdateMyInfoMutation } from '@/hooks/queries/auth';
 import { useForm } from '@/hooks/useForm';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 import { isNickname, isPassword } from '@/lib/validator';
@@ -16,7 +18,8 @@ export const accountLoader: LoaderFunction = async () => {
   return null;
 };
 export function Account(): JSX.Element {
-  const { inputProps, errors, hasError } = useForm({
+  const updateMyInfoMutation = useUpdateMyInfoMutation();
+  const { inputProps, errors, hasError, formProps } = useForm({
     inputConfigs: {
       nickname: {
         validate: (value) => isNickname(value),
@@ -32,6 +35,15 @@ export function Account(): JSX.Element {
         errorMessage: '동일한 비밀번호를 입력하세요',
       },
     },
+    formConfig: {
+      onSubmit: ({ nickname, password }) => {
+        const body: UpdateMyInfoBody = {};
+        if (nickname) body.nickname = nickname;
+        if (password) body.password = password;
+
+        updateMyInfoMutation.mutate(body);
+      },
+    },
   });
   return (
     <div className="flex-1 container flex flex-col gap-11 max-w-5xl px-5 pt-7 pb-16">
@@ -41,7 +53,7 @@ export function Account(): JSX.Element {
       <div className="flex flex-1 flex-col">
         <section>
           <h2>프로필 수정</h2>
-          <form aria-label="프로필 수정 폼">
+          <form aria-label="프로필 수정 폼" {...formProps}>
             <LabelInput
               id="nickname"
               label="닉네임"
