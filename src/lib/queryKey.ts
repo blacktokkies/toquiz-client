@@ -6,6 +6,7 @@ const authQueryKey = {
   login: () => ['login'] as const,
   logout: () => ['logout'] as const,
   update: () => ['updateMyInfo'] as const,
+  resign: () => ['resign'] as const,
 } as const;
 
 const panelQueryKey = {
