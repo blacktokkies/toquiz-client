@@ -25,5 +25,15 @@ describe('내 계정 관리 페이지', () => {
         }),
       ).toHaveTextContent('프로필 수정');
     });
+
+    it('프로필 수정 폼을 보여준다', () => {
+      render(<Account />);
+
+      const form = screen.getByRole('form', {
+        name: /프로필 수정 폼/,
+      });
+
+      expect(form).toBeInTheDocument();
+    });
   });
 });
