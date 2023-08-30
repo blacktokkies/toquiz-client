@@ -41,7 +41,7 @@ export function Account(): JSX.Element {
         if (nickname) body.nickname = nickname;
         if (password) body.password = password;
 
-        updateMyInfoMutation.mutate(body);
+        if (nickname || password) updateMyInfoMutation.mutate(body);
       },
     },
   });
