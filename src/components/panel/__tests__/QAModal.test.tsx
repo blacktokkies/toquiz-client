@@ -270,7 +270,7 @@ describe('QAModal', () => {
       await userEvent.click(submitButton);
 
       expect(spyOnCreateAnswer).toHaveBeenCalled();
-      expect(screen.getAllByText(/안녕하세요/)[1]).toBeInTheDocument();
+      expect(screen.getByRole('listitem')).toHaveTextContent('안녕하세요');
     });
 
     it('답변 제출하면 답변 생성 API를 호출하고 성공 시 폼을 닫는다', async () => {
