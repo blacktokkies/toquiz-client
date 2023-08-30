@@ -21,6 +21,7 @@ export function Account(): JSX.Element {
       <div className="flex flex-1 flex-col">
         <section>
           <h2>프로필 수정</h2>
+          <form aria-label="프로필 수정 폼" />
         </section>
       </div>
     </div>
