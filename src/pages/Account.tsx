@@ -38,15 +38,22 @@ export function Account(): JSX.Element {
       },
     },
     formConfig: {
-      onSubmit: ({ nickname, password }) => {
+      onSubmit: ({ nickname, password }, e, refs) => {
         const body: UpdateMyInfoBody = {};
         if (nickname) body.nickname = nickname;
         if (password) body.password = password;
 
-        if (nickname || password) updateMyInfoMutation.mutate(body);
+        if (nickname || password)
+          updateMyInfoMutation.mutate(body, {
+            onSuccess: () => {
+              Object.values(refs).forEach((input) => (input.value = ''));
+            },
+          });
         else {
-          if (messageRef.current)
+          if (messageRef.current) {
+            refs.nickname?.focus();
             messageRef.current.textContent = '※변경할 내용을 입력해주세요';
+          }
         }
       },
     },
