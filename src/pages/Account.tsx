@@ -111,9 +111,14 @@ export function Account(): JSX.Element {
             </div>
           </form>
         </section>
-        <section className="flex flex-col gap-6 py-6">
+        <section className="flex flex-col justify-start items-start gap-6 py-6">
           <h2 className="font-medium text-xl">회원 탈퇴</h2>
-          <button
+          <p>
+            회원 탈퇴시 작성했던 패널은 자동으로 삭제되지 않습니다. 정말{' '}
+            <b>회원을 영구 탈퇴</b>하시겠습니까?
+          </p>
+          <Button
+            variant="danger"
             type="button"
             onClick={() => {
               overlay.open(({ close }) => (
@@ -124,7 +129,7 @@ export function Account(): JSX.Element {
             }}
           >
             회원 영구 탈퇴
-          </button>
+          </Button>
         </section>
       </div>
     </div>
