@@ -1,14 +1,19 @@
 import React from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import { LabelInput } from '@/components/system/LabelInput';
 import { useResignMutation } from '@/hooks/queries/auth';
 import { useForm } from '@/hooks/useForm';
+import { clearAccessToken } from '@/lib/apiClient';
 import { isPassword } from '@/lib/validator';
+import { clearUserState } from '@/store/user-store';
 
 interface Props {
   close: () => void;
 }
 export function ResignModal({ close }: Props): JSX.Element {
+  const navigate = useNavigate();
   const resignMutation = useResignMutation();
   const { inputProps, errors, hasError, formProps } = useForm({
     inputConfigs: {
@@ -19,8 +24,17 @@ export function ResignModal({ close }: Props): JSX.Element {
       },
     },
     formConfig: {
-      onSubmit: (body) => {
-        resignMutation.mutate(body);
+      onSubmit: ({ password }) => {
+        resignMutation.mutate(
+          { password },
+          {
+            onSuccess: () => {
+              clearAccessToken();
+              clearUserState();
+              navigate('/');
+            },
+          },
+        );
       },
     },
   });
