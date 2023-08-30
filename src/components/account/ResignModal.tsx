@@ -15,7 +15,7 @@ interface Props {
 export function ResignModal({ close }: Props): JSX.Element {
   const navigate = useNavigate();
   const resignMutation = useResignMutation();
-  const { inputProps, errors, hasError, formProps } = useForm({
+  const { inputProps, errors, hasError, formProps, setError } = useForm({
     inputConfigs: {
       password: {
         validate: (value) => isPassword(value),
@@ -32,6 +32,18 @@ export function ResignModal({ close }: Props): JSX.Element {
               clearAccessToken();
               clearUserState();
               navigate('/');
+            },
+            onError: (error) => {
+              if (error instanceof SyntaxError) return;
+
+              const { data } = error;
+              const { statusCode, code } = data;
+
+              if (statusCode === 400) {
+                if (code === 'NOT_MATCH_PASSWORD') {
+                  setError('password', '비밀번호가 일치하지 않습니다');
+                }
+              }
             },
           },
         );
