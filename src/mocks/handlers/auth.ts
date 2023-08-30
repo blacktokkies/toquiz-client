@@ -7,6 +7,8 @@ import type {
   LogoutResponse,
   RefreshResponse,
   GetMyInfoResponse,
+  UpdateMyInfoBody,
+  UpdateMyInfoResponse,
 } from '@/lib/api/auth';
 import type { ErrorResponse } from '@/lib/api/types';
 
@@ -131,3 +133,23 @@ export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
     }
   },
 );
+
+export const updateMyInfo = rest.patch<
+  UpdateMyInfoBody,
+  never,
+  UpdateMyInfoResponse
+>(apiUrl.auth.update(), async (req, res, ctx) => {
+  const { nickname }: UpdateMyInfoBody = await req.json();
+
+  if (nickname) myAccount.nickname = nickname;
+
+  return res(
+    ctx.status(200),
+    ctx.json({
+      statusCode: 200,
+      result: {
+        ...myAccount,
+      },
+    }),
+  );
+});
