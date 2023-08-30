@@ -1,7 +1,7 @@
 import type { UpdateMyInfoBody } from '@/lib/api/auth';
 import type { LoaderFunction } from 'react-router-dom';
 
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { redirect } from 'react-router-dom';
 
@@ -19,6 +19,7 @@ export const accountLoader: LoaderFunction = async () => {
   return null;
 };
 export function Account(): JSX.Element {
+  const messageRef = useRef<HTMLDivElement | null>(null);
   const updateMyInfoMutation = useUpdateMyInfoMutation();
   const { inputProps, errors, hasError, formProps } = useForm({
     inputConfigs: {
@@ -43,6 +44,10 @@ export function Account(): JSX.Element {
         if (password) body.password = password;
 
         if (nickname || password) updateMyInfoMutation.mutate(body);
+        else {
+          if (messageRef.current)
+            messageRef.current.textContent = '※변경할 내용을 입력해주세요';
+        }
       },
     },
   });
@@ -82,13 +87,15 @@ export function Account(): JSX.Element {
               {...inputProps['confirm-password']}
               errorMessage={errors['confirm-password']}
             />
-            <Button
-              className="ml-auto"
-              type="submit"
-              disabled={hasError || updateMyInfoMutation.isLoading}
-            >
-              변경 내용 저장
-            </Button>
+            <div className="flex flex-col items-end">
+              <Button
+                type="submit"
+                disabled={hasError || updateMyInfoMutation.isLoading}
+              >
+                변경 내용 저장
+              </Button>
+              <div ref={messageRef} className="text-primary" />
+            </div>
           </form>
         </section>
       </div>
