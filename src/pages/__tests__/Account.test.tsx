@@ -61,7 +61,7 @@ describe('내 계정 관리 페이지', () => {
       (isPassword as Vi.Mock).mockImplementation(() => false);
       render(<Account />);
 
-      const passwordInput = screen.getByLabelText(/비밀번호/);
+      const passwordInput = screen.getByLabelText('비밀번호');
       fireEvent.change(passwordInput, {
         target: { value: '유효하지 않은 비밀번호' },
       });
@@ -70,6 +70,23 @@ describe('내 계정 관리 페이지', () => {
         screen.getByText(
           '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
         ),
+      ).toBeInTheDocument();
+    });
+
+    it('사용자가 비밀번호 확인 인풋에 비밀번호 인풋과 동일하지 않은 값 입력하면 에러 메시지를 보여준다', () => {
+      render(<Account />);
+
+      const passwordInput = screen.getByLabelText('비밀번호');
+      const confirmPasswordInput = screen.getByLabelText(/비밀번호 확인/);
+      fireEvent.change(passwordInput, {
+        target: { value: '비밀번호' },
+      });
+      fireEvent.change(confirmPasswordInput, {
+        target: { value: '동일하지 않은 비밀번호' },
+      });
+
+      expect(
+        screen.getByText('동일한 비밀번호를 입력하세요'),
       ).toBeInTheDocument();
     });
   });

@@ -27,6 +27,10 @@ export function Account(): JSX.Element {
         errorMessage:
           '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
       },
+      'confirm-password': {
+        validate: (value, refs) => value === refs.password?.value,
+        errorMessage: '동일한 비밀번호를 입력하세요',
+      },
     },
   });
   return (
@@ -49,6 +53,12 @@ export function Account(): JSX.Element {
               label="비밀번호"
               {...inputProps.password}
               errorMessage={errors.password}
+            />
+            <LabelInput
+              id="confirm-password"
+              label="비밀번호 확인"
+              {...inputProps['confirm-password']}
+              errorMessage={errors['confirm-password']}
             />
           </form>
         </section>
