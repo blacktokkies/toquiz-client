@@ -9,6 +9,8 @@ import type {
   GetMyInfoResponse,
   UpdateMyInfoBody,
   UpdateMyInfoResponse,
+  ResignBody,
+  ResignResponse,
 } from '@/lib/api/auth';
 import type { ErrorResponse } from '@/lib/api/types';
 
@@ -153,3 +155,15 @@ export const updateMyInfo = rest.patch<
     }),
   );
 });
+
+export const resign = rest.post<ResignBody, never, ResignResponse>(
+  apiUrl.auth.resign(),
+  async (req, res, ctx) =>
+    res(
+      ctx.status(200),
+      ctx.json({
+        statusCode: 200,
+        message: '회원탈퇴에 성공하였습니다.',
+      }),
+    ),
+);

@@ -7,6 +7,7 @@ const auth = {
   refresh: () => `/api/auth/refresh`,
   me: () => `/api/members/me`,
   update: () => `/api/members/me`,
+  resign: () => `/api/auth/resign`,
 } as const;
 
 const panel = {
