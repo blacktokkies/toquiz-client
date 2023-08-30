@@ -126,7 +126,7 @@ describe('내 계정 관리 페이지', () => {
       });
     });
 
-    it('사용자가 닉네임과 비밀번호를 모두 빈 값으로 제출하면 내 정보 수정 API를 호출하지 않는다', async () => {
+    it('사용자가 닉네임과 비밀번호를 모두 빈 값으로 제출하면 내 정보 수정 API를 호출하지 않고 안내 문구를 보여준다', async () => {
       const spyOnUpdateMyInfo = vi.spyOn(authApis, 'updateMyInfo');
       renderWithQueryClient(<Account />);
 
@@ -135,6 +135,7 @@ describe('내 계정 관리 페이지', () => {
       });
       await userEvent.click(submitButton);
       expect(spyOnUpdateMyInfo).not.toHaveBeenCalled();
+      expect(screen.getByText('변경할 내용을 입력해주세요'));
     });
   });
 });
