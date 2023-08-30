@@ -47,6 +47,7 @@ export function Account(): JSX.Element {
           updateMyInfoMutation.mutate(body, {
             onSuccess: () => {
               Object.values(refs).forEach((input) => (input.value = ''));
+              if (messageRef.current) messageRef.current.textContent = '';
             },
           });
         else {
