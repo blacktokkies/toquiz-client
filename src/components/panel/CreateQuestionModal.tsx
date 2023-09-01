@@ -13,8 +13,16 @@ interface Props {
   close: () => void;
 }
 export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
+  const createQuestionMutation = useCreateQuestionMutation(panelId, {
+    onSuccess: () => {
+      close();
+    },
+    onError: () => {
+      // 패널 존재하지 않는 경우 패널이 존재하지 않습니다 오류 보여주기
+    },
+  });
+
   const [content, setContent] = useState('');
-  const createQuestionMutation = useCreateQuestionMutation(panelId);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const textareaRefCallback = useCallback(
     (node: HTMLTextAreaElement | null) => {
@@ -25,22 +33,6 @@ export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
     },
     [],
   );
-
-  function handleSubmit(): void {
-    createQuestionMutation.mutate(
-      {
-        content,
-      },
-      {
-        onSuccess: () => {
-          close();
-        },
-        onError: () => {
-          // 패널 존재하지 않는 경우 패널이 존재하지 않습니다 오류 보여주기
-        },
-      },
-    );
-  }
 
   function handleChange(e: ChangeEvent<HTMLTextAreaElement>): void {
     flushSync(() => {
@@ -79,7 +71,9 @@ export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
             content.length > 200 ||
             createQuestionMutation.isLoading
           }
-          onClick={handleSubmit}
+          onClick={() => {
+            createQuestionMutation.mutate({ content });
+          }}
         >
           질문 생성
         </Button>
