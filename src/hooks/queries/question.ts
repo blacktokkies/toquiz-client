@@ -3,7 +3,7 @@ import type {
   CreateQuestionBody,
   CreateQuestionResult,
   GetQuestionsParams,
-  GetQuestionsResult,
+  QuestionPage,
   LikeQuestionError,
   LikeQuestionParams,
   LikeQuestionResult,
@@ -12,9 +12,10 @@ import type {
 import type { ApiError } from '@/lib/apiClient';
 import type { NonNullableKeys } from '@/lib/types';
 import type {
-  MutationOptions,
+  UseMutationOptions,
   UseInfiniteQueryResult,
   UseMutationResult,
+  UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
 
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
@@ -22,55 +23,75 @@ import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { createQuestion, getQuestions, likeQuestion } from '@/lib/api/question';
 import { queryKey } from '@/lib/queryKey';
 
+/* ================================ [ 질문 목록 쿼리 ] ====================================== */
+export type QuestionsInfiniteQuery = NonNullableKeys<
+  Pick<
+    UseInfiniteQueryOptions<QuestionPage, ApiError | SyntaxError, QuestionPage>,
+    'queryFn' | 'queryKey' | 'getNextPageParam'
+  >
+>;
+export const questionsInfiniteQuery = (
+  panelId: Panel['sid'],
+  sort: GetQuestionsParams['sort'],
+): QuestionsInfiniteQuery => ({
+  queryKey: queryKey.question.list(panelId, sort),
+  queryFn: async ({ pageParam = 0 }) =>
+    (
+      await getQuestions(panelId, {
+        page: pageParam as GetQuestionsParams['page'],
+        sort,
+      })
+    ).result,
+  getNextPageParam: (lastPage) =>
+    lastPage.nextPage !== -1 ? lastPage.nextPage : undefined,
+});
 export const useQuestionsInfiniteQuery = (
   panelId: Panel['sid'],
   sort: GetQuestionsParams['sort'] = undefined,
-): UseInfiniteQueryResult<GetQuestionsResult, ApiError | SyntaxError> => {
-  const key = queryKey.question.list(panelId, sort);
-  const query = useInfiniteQuery<GetQuestionsResult, ApiError | SyntaxError>(
-    key,
-    async ({ pageParam = 0 }) =>
-      (
-        await getQuestions(panelId, {
-          page: pageParam as GetQuestionsParams['page'],
-          sort,
-        })
-      ).result,
-    {
-      getNextPageParam: (lastPage) =>
-        lastPage.nextPage !== -1 ? lastPage.nextPage : undefined,
-    },
-  );
+  options: UseInfiniteQueryOptions<QuestionPage, ApiError | SyntaxError> = {},
+): UseInfiniteQueryResult<QuestionPage, ApiError | SyntaxError> =>
+  useInfiniteQuery({ ...questionsInfiniteQuery(panelId, sort), ...options });
 
-  return query;
-};
-
-export const useCreateQuestionMutation = (
+/* ================================ [ 질문 생성 뮤테이션 ] ====================================== */
+export type CreateQuestionMutation = NonNullableKeys<
+  Pick<
+    UseMutationOptions<
+      CreateQuestionResult,
+      ApiError | SyntaxError,
+      CreateQuestionBody
+    >,
+    'mutationKey' | 'mutationFn'
+  >
+>;
+export const createQuestionMutation = (
   panelId: Panel['sid'],
+): CreateQuestionMutation => ({
+  mutationKey: queryKey.question.create(),
+  mutationFn: async (body) =>
+    createQuestion(panelId, body).then((res) => res.result),
+});
+export const useCreateQuestionMutation = <TContext = unknown>(
+  panelId: Panel['sid'],
+  options: UseMutationOptions<
+    CreateQuestionResult,
+    ApiError | SyntaxError,
+    CreateQuestionBody,
+    TContext
+  > = {},
 ): UseMutationResult<
   CreateQuestionResult,
   ApiError | SyntaxError,
-  CreateQuestionBody
-> => {
-  const key = queryKey.question.create();
-  const mutation = useMutation<
-    CreateQuestionResult,
-    ApiError | SyntaxError,
-    CreateQuestionBody
-  >(key, async (body) =>
-    createQuestion(panelId, body).then((res) => res.result),
-  );
-
-  return mutation;
-};
+  CreateQuestionBody,
+  TContext
+> => useMutation({ ...createQuestionMutation(panelId), ...options });
 
 /* ================================ [ 질문 좋아요 뮤테이션 ] ====================================== */
 export type LikeQuestionMutation = NonNullableKeys<
   Pick<
-    MutationOptions<
+    UseMutationOptions<
       LikeQuestionResult,
       ApiError | SyntaxError,
-      Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>,
+      { id: Question['id']; active: LikeQuestionParams['active'] },
       ReturnType<typeof queryKey.question.like>
     >,
     'mutationFn' | 'mutationKey'
@@ -83,21 +104,21 @@ export const likeQuestionMutation = (): LikeQuestionMutation => ({
 });
 
 export const useLikeQuestionMutation = <TContext = unknown>(
-  options: MutationOptions<
+  options: UseMutationOptions<
     LikeQuestionResult,
     ApiError<LikeQuestionError> | SyntaxError,
-    Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>,
+    { id: Question['id']; active: LikeQuestionParams['active'] },
     TContext
   > = {},
 ): UseMutationResult<
   LikeQuestionResult,
   ApiError<LikeQuestionError> | SyntaxError,
-  Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>,
+  { id: Question['id']; active: LikeQuestionParams['active'] },
   TContext
 > =>
   useMutation<
     LikeQuestionResult,
     ApiError<LikeQuestionError> | SyntaxError,
-    Pick<Question, 'id'> & Pick<LikeQuestionParams, 'active'>,
+    { id: Question['id']; active: LikeQuestionParams['active'] },
     TContext
   >({ ...likeQuestionMutation(), ...options });
