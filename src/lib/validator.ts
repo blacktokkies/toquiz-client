@@ -12,3 +12,7 @@ export const isPanelTitle: Validator = (value) =>
   /^.{3,40}$/.test(value.trim());
 export const isPanelDescription: Validator = (value) =>
   value.trim().length <= 50;
+export const isQuestion: Validator = (value) => {
+  const val = value.trim();
+  return val.length > 0 && val.length <= 200;
+};

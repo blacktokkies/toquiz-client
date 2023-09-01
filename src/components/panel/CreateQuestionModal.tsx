@@ -7,6 +7,7 @@ import { flushSync } from 'react-dom';
 
 import { Button } from '@/components/system/Button';
 import { useCreateQuestionMutation } from '@/hooks/queries/question';
+import { isQuestion } from '@/lib/validator';
 
 interface Props {
   panelId: Panel['sid'];
@@ -66,13 +67,9 @@ export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
         </Button>
         <Button
           type="submit"
-          disabled={
-            content.length === 0 ||
-            content.length > 200 ||
-            createQuestionMutation.isLoading
-          }
+          disabled={!isQuestion(content) || createQuestionMutation.isLoading}
           onClick={() => {
-            createQuestionMutation.mutate({ content });
+            createQuestionMutation.mutate({ content: content.trim() });
           }}
         >
           질문 생성
