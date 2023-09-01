@@ -12,59 +12,38 @@ import { renderWithQueryClient } from '@/lib/test-utils';
 
 const panelId: Panel['sid'] = faker.datatype.uuid();
 const handleClose = vi.fn();
-describe('CreatePanelModal', () => {
-  it('사용자가 입력하는 글자수를 보여준다', () => {
-    renderWithQueryClient(
-      <CreateQuestionModal panelId={panelId} close={handleClose} />,
-    );
 
-    const contentInput = screen.getByRole('textbox');
-    fireEvent.change(contentInput, { target: { value: '안녕하세요' } });
+describe('CreatePanelModal', () => {
+  it('사용자가 입력하는 글자수를 보여준다', async () => {
+    const { user, questionInput } = setup();
+    await user.type(questionInput, '안녕하세요');
 
     expect(screen.getByText(/5/)).toBeInTheDocument();
   });
 
-  it('사용자가 0자 혹은 200자 초과로 입력하면 제출 버튼을 비활성화한다', () => {
-    renderWithQueryClient(
-      <CreateQuestionModal panelId={panelId} close={handleClose} />,
-    );
-
-    const contentInput = screen.getByRole('textbox');
-    const submitButton = screen.getByRole<HTMLButtonElement>('button', {
-      name: /질문 생성/,
+  it('사용자가 0자 혹은 200자 초과로 입력하면 제출 버튼을 비활성화한다', async () => {
+    const { user, questionInput, submitButton } = setup();
+    await user.type(questionInput, ' ');
+    expect(submitButton.disabled).toBe(true);
+    fireEvent.change(questionInput, {
+      target: { value: '글'.repeat(200 + 1) },
     });
 
-    fireEvent.change(contentInput, { target: { value: '' } });
-    expect(submitButton.disabled).toBe(true);
-    fireEvent.change(contentInput, { target: { value: '글'.repeat(200 + 1) } });
     expect(submitButton.disabled).toBe(true);
   });
 
-  it('사용자가 1자 이상 200자 이하를 입력하면 제출 버튼을 활성화한다', () => {
-    renderWithQueryClient(
-      <CreateQuestionModal panelId={panelId} close={handleClose} />,
-    );
+  it('사용자가 1자 이상 200자 이하를 입력하면 제출 버튼을 활성화한다', async () => {
+    const { user, questionInput, submitButton } = setup();
+    await user.type(questionInput, '안녕하세요');
 
-    const contentInput = screen.getByRole('textbox');
-    const submitButton = screen.getByRole<HTMLButtonElement>('button', {
-      name: /질문 생성/,
-    });
-
-    fireEvent.change(contentInput, { target: { value: '안녕하세요' } });
     expect(submitButton.disabled).toBe(false);
   });
 
   it('질문을 제출하면 질문 생성 API를 호출한다', async () => {
     const spyOnCreateQuestion = vi.spyOn(questionApis, 'createQuestion');
-
-    renderWithQueryClient(
-      <CreateQuestionModal panelId={panelId} close={handleClose} />,
-    );
-
-    const input = screen.getByRole('textbox');
-    const submitButton = screen.getByRole('button', { name: '질문 생성' });
-    fireEvent.change(input, { target: { value: '안녕하세요' } });
-    await userEvent.click(submitButton);
+    const { user, questionInput, submitButton } = setup();
+    await user.type(questionInput, '안녕하세요');
+    await user.click(submitButton);
 
     expect(spyOnCreateQuestion).toHaveBeenCalledWith(panelId, {
       content: '안녕하세요',
@@ -72,14 +51,9 @@ describe('CreatePanelModal', () => {
   });
 
   it('질문 생성 성공 시 close 함수를 호출한다', async () => {
-    renderWithQueryClient(
-      <CreateQuestionModal panelId={panelId} close={handleClose} />,
-    );
-
-    const input = screen.getByRole('textbox');
-    const submitButton = screen.getByRole('button', { name: '질문 생성' });
-    fireEvent.change(input, { target: { value: '안녕하세요' } });
-    await userEvent.click(submitButton);
+    const { user, questionInput, submitButton } = setup();
+    await user.type(questionInput, '안녕하세요');
+    await user.click(submitButton);
 
     await waitFor(() => {
       expect(handleClose).toHaveBeenCalled();
@@ -87,13 +61,31 @@ describe('CreatePanelModal', () => {
   });
 
   it('취소 버튼을 누르면 close 함수를 호출한다', async () => {
-    renderWithQueryClient(
-      <CreateQuestionModal panelId={panelId} close={handleClose} />,
-    );
-
-    const closeButton = screen.getByRole('button', { name: '취소' });
-    await userEvent.click(closeButton);
+    const { user, closeButton } = setup();
+    await user.click(closeButton);
 
     expect(handleClose).toHaveBeenCalled();
   });
 });
+
+function setup(): {
+  user: ReturnType<typeof userEvent.setup>;
+  questionInput: HTMLTextAreaElement;
+  submitButton: HTMLButtonElement;
+  closeButton: HTMLButtonElement;
+} {
+  const user = userEvent.setup();
+  renderWithQueryClient(
+    <CreateQuestionModal panelId={panelId} close={handleClose} />,
+  );
+
+  const questionInput = screen.getByRole<HTMLTextAreaElement>('textbox');
+  const submitButton = screen.getByRole<HTMLButtonElement>('button', {
+    name: '질문 생성',
+  });
+  const closeButton = screen.getByRole<HTMLButtonElement>('button', {
+    name: /취소/,
+  });
+
+  return { user, questionInput, submitButton, closeButton };
+}
