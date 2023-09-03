@@ -87,17 +87,27 @@ export const useUpdatePanelMutation = <TContext = unknown>(
   TContext
 > => useMutation({ ...updatePanelMutation(panelId), ...options });
 
-export const useDeletePanelMutation = (): UseMutationResult<
-  DeletePanelResponse,
-  ApiError | SyntaxError,
-  Panel['sid']
-> => {
-  const key = queryKey.panel.delete();
-  const mutation = useMutation<
+/* ================================ [ 패널 삭제 뮤테이션 ] ====================================== */
+export type DeletePanelMutation = NonNullableKeys<
+  Pick<
+    MutationOptions<DeletePanelResponse, ApiError | SyntaxError, Panel['sid']>,
+    'mutationKey' | 'mutationFn'
+  >
+>;
+export const deletePanelMutation = (): DeletePanelMutation => ({
+  mutationKey: queryKey.panel.delete(),
+  mutationFn: deletePanel,
+});
+export const useDeletePanelMutation = <TContext = unknown>(
+  options: MutationOptions<
     DeletePanelResponse,
     ApiError | SyntaxError,
-    Panel['sid']
-  >(key, deletePanel);
-
-  return mutation;
-};
+    Panel['sid'],
+    TContext
+  > = {},
+): UseMutationResult<
+  DeletePanelResponse,
+  ApiError | SyntaxError,
+  Panel['sid'],
+  TContext
+> => useMutation({ ...deletePanelMutation(), ...options });
