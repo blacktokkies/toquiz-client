@@ -3,10 +3,12 @@ import type { ChangeEvent } from 'react';
 
 import React, { useCallback, useRef, useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { flushSync } from 'react-dom';
 
 import { Button } from '@/components/system/Button';
 import { useCreateQuestionMutation } from '@/hooks/queries/question';
+import { queryKey } from '@/lib/queryKey';
 import { isQuestion } from '@/lib/validator';
 
 interface Props {
@@ -14,8 +16,10 @@ interface Props {
   close: () => void;
 }
 export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
+  const queryClient = useQueryClient();
   const createQuestionMutation = useCreateQuestionMutation(panelId, {
     onSuccess: () => {
+      queryClient.invalidateQueries(queryKey.question.lists());
       close();
     },
     onError: () => {
