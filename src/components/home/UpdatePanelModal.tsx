@@ -9,6 +9,7 @@ import { produce } from 'immer';
 
 import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
+import { Spinner } from '@/components/vectors';
 import { useUpdatePanelMutation } from '@/hooks/queries/panel';
 import { useForm } from '@/hooks/useForm';
 import { queryKey } from '@/lib/queryKey';
@@ -26,6 +27,7 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
         queryKey.panel.lists(),
         updatePanel(newPanel),
       );
+      close();
     },
   });
   const messageRef = useRef<HTMLDivElement | null>(null);
@@ -50,14 +52,7 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
           return;
         }
 
-        updateMutation.mutate(
-          { title, description },
-          {
-            onSuccess: () => {
-              close();
-            },
-          },
-        );
+        updateMutation.mutate({ title, description });
       },
     },
   });
@@ -91,6 +86,7 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
         />
         <div className="flex gap-3 justify-end items-center">
           <Button
+            disabled={updateMutation.isLoading}
             type="button"
             variant="secondary"
             onClick={() => {
@@ -100,11 +96,16 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
             취소
           </Button>
           <Button
+            className="min-w-[95px]"
             type="submit"
             disabled={hasError || updateMutation.isLoading}
             onClick={formProps.onSubmit}
           >
-            패널 수정
+            {updateMutation.isLoading ? (
+              <Spinner className="animate-spin fill-white mx-auto" />
+            ) : (
+              '패널 수정'
+            )}
           </Button>
         </div>
       </form>
