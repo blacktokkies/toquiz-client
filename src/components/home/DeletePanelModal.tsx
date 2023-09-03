@@ -1,17 +1,41 @@
-import type { Panel } from '@/lib/api/panel';
+import type { MyPanelPage, Panel } from '@/lib/api/panel';
+import type { InfiniteData } from '@tanstack/react-query';
 
 import React from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
+import { produce } from 'immer';
+
 import { Button } from '@/components/system/Button';
 import { useDeletePanelMutation } from '@/hooks/queries/panel';
+import { queryKey } from '@/lib/queryKey';
 
 interface Props {
   close: () => void;
   panel: Panel;
 }
 export function DeletePanelModal({ close, panel }: Props): JSX.Element {
+  const queryClient = useQueryClient();
   const { sid, title } = panel;
-  const deletePanelMutation = useDeletePanelMutation();
+  const deletePanelMutation = useDeletePanelMutation({
+    onSuccess: (_, panelId) => {
+      queryClient.setQueryData<InfiniteData<MyPanelPage>>(
+        queryKey.panel.lists(),
+        (old) =>
+          produce(old, (draft) => {
+            if (!draft) return;
+
+            draft.pages.forEach((page) => {
+              page.panels = page.panels.filter(
+                (panel) => panel.sid !== panelId,
+              );
+            });
+          }),
+      );
+
+      close();
+    },
+  });
 
   return (
     <div className="flex flex-col p-7 gap-4">
