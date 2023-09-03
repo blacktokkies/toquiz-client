@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { flushSync } from 'react-dom';
 
 import { Button } from '@/components/system/Button';
+import { Spinner } from '@/components/vectors';
 import { useCreateQuestionMutation } from '@/hooks/queries/question';
 import { queryKey } from '@/lib/queryKey';
 import { isQuestion } from '@/lib/validator';
@@ -66,17 +67,27 @@ export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
         onChange={handleChange}
       />
       <div className="flex gap-4 justify-end items-center">
-        <Button type="button" variant="secondary" onClick={close}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={close}
+          disabled={createQuestionMutation.isLoading}
+        >
           취소
         </Button>
         <Button
+          className="min-w-[95px]"
           type="submit"
           disabled={!isQuestion(content) || createQuestionMutation.isLoading}
           onClick={() => {
             createQuestionMutation.mutate({ content: content.trim() });
           }}
         >
-          질문 생성
+          {createQuestionMutation.isLoading ? (
+            <Spinner className="animate-spin fill-white mx-auto" />
+          ) : (
+            '질문 생성'
+          )}
         </Button>
       </div>
     </div>
