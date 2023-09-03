@@ -9,7 +9,9 @@ import type {
   MyPanelPage,
 } from '@/lib/api/panel';
 import type { ApiError } from '@/lib/apiClient';
+import type { NonNullableKeys } from '@/lib/types';
 import type {
+  MutationOptions,
   UseInfiniteQueryResult,
   UseMutationResult,
 } from '@tanstack/react-query';
@@ -56,22 +58,34 @@ export const useCreatePanelMutation = (): UseMutationResult<
   return mutation;
 };
 
-export const useUpdatePanelMutation = (
+/* ================================ [ 패널 수정 뮤테이션 ] ====================================== */
+export type UpdatePanelMutation = NonNullableKeys<
+  Pick<
+    MutationOptions<UpdatePanelResult, ApiError | SyntaxError, UpdatePanelBody>,
+    'mutationKey' | 'mutationFn'
+  >
+>;
+
+export const updatePanelMutation = (
   panelId: Panel['sid'],
+): UpdatePanelMutation => ({
+  mutationKey: queryKey.panel.update(),
+  mutationFn: async (body) => updatePanel(panelId, body),
+});
+export const useUpdatePanelMutation = <TContext = unknown>(
+  panelId: Panel['sid'],
+  options: MutationOptions<
+    UpdatePanelResult,
+    ApiError | SyntaxError,
+    UpdatePanelBody,
+    TContext
+  > = {},
 ): UseMutationResult<
   UpdatePanelResult,
   ApiError | SyntaxError,
-  UpdatePanelBody
-> => {
-  const key = queryKey.panel.update();
-  const mutation = useMutation<
-    UpdatePanelResult,
-    ApiError | SyntaxError,
-    UpdatePanelBody
-  >(key, async (body) => updatePanel(panelId, body));
-
-  return mutation;
-};
+  UpdatePanelBody,
+  TContext
+> => useMutation({ ...updatePanelMutation(panelId), ...options });
 
 export const useDeletePanelMutation = (): UseMutationResult<
   DeletePanelResponse,
