@@ -162,6 +162,7 @@ export function QAModal({
       </div>
       {userId === author.id && (
         <div
+          ref={formContainer}
           className={clsx(
             'flex flex-col mx-2 py-3 border shadow-md',
             'py-3 px-4 border border-grey-light outline-none rounded-md',
