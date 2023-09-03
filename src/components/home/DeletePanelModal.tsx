@@ -21,16 +21,7 @@ export function DeletePanelModal({ close, panel }: Props): JSX.Element {
     onSuccess: (_, panelId) => {
       queryClient.setQueryData<InfiniteData<MyPanelPage>>(
         queryKey.panel.lists(),
-        (old) =>
-          produce(old, (draft) => {
-            if (!draft) return;
-
-            draft.pages.forEach((page) => {
-              page.panels = page.panels.filter(
-                (panel) => panel.sid !== panelId,
-              );
-            });
-          }),
+        removePanel(panelId),
       );
 
       close();
@@ -64,3 +55,14 @@ export function DeletePanelModal({ close, panel }: Props): JSX.Element {
     </div>
   );
 }
+
+const removePanel =
+  (panelId: Panel['sid']) =>
+  (prevPanels: InfiniteData<MyPanelPage> | undefined) =>
+    produce(prevPanels, (draft) => {
+      if (!draft) return;
+
+      draft.pages.forEach((page) => {
+        page.panels = page.panels.filter((panel) => panel.sid !== panelId);
+      });
+    });
