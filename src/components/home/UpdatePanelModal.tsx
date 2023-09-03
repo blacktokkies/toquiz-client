@@ -24,19 +24,7 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
     onSuccess: (newPanel) => {
       queryClient.setQueryData<InfiniteData<MyPanelPage>>(
         queryKey.panel.lists(),
-        (old) =>
-          produce(old, (draft) => {
-            if (!draft) return;
-
-            draft.pages.forEach((page) => {
-              page.panels.forEach((panel) => {
-                if (panel.sid === newPanel.sid) {
-                  panel.title = newPanel.title;
-                  panel.description = newPanel.description;
-                }
-              });
-            });
-          }),
+        updatePanel(newPanel),
       );
     },
   });
@@ -124,3 +112,18 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
     </div>
   );
 }
+
+const updatePanel =
+  (newPanel: Panel) => (prevPanels: InfiniteData<MyPanelPage> | undefined) =>
+    produce(prevPanels, (draft) => {
+      if (!draft) return;
+
+      draft.pages.forEach((page) => {
+        page.panels.forEach((panel) => {
+          if (panel.sid === newPanel.sid) {
+            panel.title = newPanel.title;
+            panel.description = newPanel.description;
+          }
+        });
+      });
+    });
