@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { produce } from 'immer';
 
 import { Button } from '@/components/system/Button';
+import { Spinner } from '@/components/vectors';
 import { useDeletePanelMutation } from '@/hooks/queries/panel';
 import { queryKey } from '@/lib/queryKey';
 
@@ -35,21 +36,28 @@ export function DeletePanelModal({ close, panel }: Props): JSX.Element {
         <span className="font-medium">{title}</span> 패널을 삭제하시겠어요?
       </p>
       <div className="flex gap-3 justify-end items-center">
-        <Button type="button" onClick={close} variant="secondary">
+        <Button
+          type="button"
+          onClick={close}
+          variant="secondary"
+          disabled={deletePanelMutation.isLoading}
+        >
           취소
         </Button>
         <Button
+          className="min-w-[95px]"
           variant="danger"
           type="button"
           onClick={() => {
-            deletePanelMutation.mutate(sid, {
-              onSuccess: () => {
-                close();
-              },
-            });
+            deletePanelMutation.mutate(sid);
           }}
+          disabled={deletePanelMutation.isLoading}
         >
-          패널 삭제
+          {deletePanelMutation.isLoading ? (
+            <Spinner className="animate-spin fill-white mx-auto" />
+          ) : (
+            '패널 삭제'
+          )}
         </Button>
       </div>
     </div>
