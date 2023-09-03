@@ -1,12 +1,17 @@
 import type { CreateOverlayContentProps } from '@/hooks/useOverlay';
-import type { Panel } from '@/lib/api/panel';
+import type { MyPanelPage, Panel } from '@/lib/api/panel';
+import type { InfiniteData } from '@tanstack/react-query';
 
 import React, { useRef } from 'react';
+
+import { useQueryClient } from '@tanstack/react-query';
+import { produce } from 'immer';
 
 import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
 import { useUpdatePanelMutation } from '@/hooks/queries/panel';
 import { useForm } from '@/hooks/useForm';
+import { queryKey } from '@/lib/queryKey';
 import { isPanelDescription, isPanelTitle } from '@/lib/validator';
 
 type Props = CreateOverlayContentProps & {
@@ -14,7 +19,27 @@ type Props = CreateOverlayContentProps & {
 };
 
 export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
-  const updateMutation = useUpdatePanelMutation(panel.sid);
+  const queryClient = useQueryClient();
+  const updateMutation = useUpdatePanelMutation(panel.sid, {
+    onSuccess: (newPanel) => {
+      queryClient.setQueryData<InfiniteData<MyPanelPage>>(
+        queryKey.panel.lists(),
+        (old) =>
+          produce(old, (draft) => {
+            if (!draft) return;
+
+            draft.pages.forEach((page) => {
+              page.panels.forEach((panel) => {
+                if (panel.sid === newPanel.sid) {
+                  panel.title = newPanel.title;
+                  panel.description = newPanel.description;
+                }
+              });
+            });
+          }),
+      );
+    },
+  });
   const messageRef = useRef<HTMLDivElement | null>(null);
 
   const { inputProps, errors, formProps, hasError } = useForm({
