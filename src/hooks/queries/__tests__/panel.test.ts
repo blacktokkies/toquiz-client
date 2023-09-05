@@ -5,12 +5,12 @@ import { renderHook, waitFor } from '@testing-library/react';
 
 import { createQueryClientWrapper } from '@/lib/test-utils';
 
-import { usePanelQuery } from '../panel';
+import { usePanelDetailQuery } from '../panel';
 
 describe('panel queries', () => {
-  it('usePanelQuery를 호출하면 getPanel이 호출된다', async () => {
+  it('usePanelDetailQuery를 호출하면 getPanel이 호출된다', async () => {
     const panelId: Panel['sid'] = faker.datatype.uuid();
-    const { result } = renderHook(() => usePanelQuery(panelId), {
+    const { result } = renderHook(() => usePanelDetailQuery(panelId), {
       wrapper: createQueryClientWrapper(),
     });
 
