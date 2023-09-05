@@ -15,6 +15,9 @@ const panelQueryKey = {
   create: () => ['createPanel'] as const,
   update: () => ['updatePanel'] as const,
   delete: () => ['deletePanel'] as const,
+  details: () => [...panelQueryKey.all, 'detail'] as const,
+  detail: (panelId: Panel['sid']) =>
+    [...panelQueryKey.details(), panelId] as const,
 } as const;
 
 const activeInfoQueryKeys = {
