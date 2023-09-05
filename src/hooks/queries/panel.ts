@@ -14,6 +14,7 @@ import type {
   MutationOptions,
   UseInfiniteQueryResult,
   UseMutationResult,
+  UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
 
@@ -28,13 +29,18 @@ import {
 } from '@/lib/api/panel';
 import { queryKey } from '@/lib/queryKey';
 
-export const usePanelQuery = (
+/* ================================ [ 패널 디테일 쿼리 ] ====================================== */
+export type PanelDetailQuery = NonNullableKeys<
+  Pick<UseQueryOptions<Panel, ApiError | SyntaxError>, 'queryKey' | 'queryFn'>
+>;
+export const panelDetailQuery = (panelId: Panel['sid']): PanelDetailQuery => ({
+  queryKey: queryKey.panel.detail(panelId),
+  queryFn: async () => (await getPanel(panelId)).result,
+});
+export const usePanelDetailQuery = (
   panelId: Panel['sid'],
 ): UseQueryResult<Panel, ApiError | SyntaxError> =>
-  useQuery(
-    queryKey.panel.detail(panelId),
-    async () => (await getPanel(panelId)).result,
-  );
+  useQuery(panelDetailQuery(panelId));
 
 export const useMyPanelsInfiniteQuery = (): UseInfiniteQueryResult<
   MyPanelPage,
