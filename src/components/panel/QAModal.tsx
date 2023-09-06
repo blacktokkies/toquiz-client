@@ -40,7 +40,7 @@ export function QAModal({
   const userId = useUserStore((state) => state.id);
   // [NOTE] 질문과 답변 모달은 패널 페이지에서만 사용되므로
   // 패널 페이지 로더가 반환하는 데이터가 null이 아님이 보장된다
-  const { author, ...panel } = useRouteLoaderData('panel') as Panel;
+  const panelLoaderData = useRouteLoaderData('panel') as Panel;
   const now = useCurrentDate();
   const answersQuery = useAnswersQuery(questionId);
 
@@ -107,6 +107,10 @@ export function QAModal({
       queryClient.invalidateQueries(queryKey.answer.list(questionId));
     },
   });
+
+  if (panelLoaderData === undefined) return <></>;
+
+  const { author, ...panel } = panelLoaderData;
 
   // TODO: Fallback UI 제공하기
   if (answersQuery.isLoading) return <div>loading</div>;
