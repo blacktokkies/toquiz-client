@@ -4,9 +4,7 @@ toquiz 클라이언트 개발 레포지토리입니다.
 
 ## toquiz client 실행하기
 
-환경 변수는 `.env.sample`을 확인하세요.
-
-### Mock Service Worker와 실행하기
+### 실행하기
 
 ```bash
 git clone https://github.com/blacktokkies/toquiz-client.git
@@ -15,16 +13,7 @@ yarn install
 yarn dev
 ```
 
-### API Proxy server와 실행하기
-
-```bash
-git clone https://github.com/blacktokkies/toquiz-client.git
-cd toquiz
-yarn install
-yarn dev:proxy
-```
-
-### Mock Service Worker와 테스트하기
+### 테스트하기
 
 ```bash
 git clone https://github.com/blacktokkies/toquiz-client.git
@@ -32,6 +21,19 @@ cd toquiz
 yarn install
 yarn test
 ```
+
+### 프록시 설정
+
+> 아래 예시는 `.env.sample`에서도 확인할 수 있습니다. 프록시를 설정하지 않으면 개발 모드에서는 Mock Service Worker가 모든 요청을 인터셉트합니다.
+
+```bash
+# .env.sample
+VITE_API_BASE_URL=http://localhost:8080
+VITE_SOCKET_BASE_URL=http://localhost:8080
+```
+
+- `/api`로 시작하는 요청은 `VITE_API_BASE_URL`로 프록시됩니다.
+- `/ws`로 시작하는 요청은 `VITE_SOCKET_BASE_URL`로 프록시됩니다.
 
 ---
 
