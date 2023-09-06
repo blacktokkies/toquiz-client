@@ -17,6 +17,7 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "@tanstack/react-query": "^4.24.4",
     "date-fns": "^2.30.0",
     "detect-node": "^2.1.0",
@@ -25,6 +26,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.0",
+    "sockjs-client": "^1.6.1",
     "validator": "^13.9.0",
     "zustand": "^4.3.4"
   },
@@ -39,6 +41,7 @@
     "@types/qs": "^6.9.7",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
+    "@types/sockjs-client": "^1.5.1",
     "@types/validator": "^13.7.12",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
