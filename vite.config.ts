@@ -27,10 +27,17 @@ export default defineConfig(({ mode }) => {
       }),
     ],
     server: {
-      proxy: mode === 'proxy' && {
+      host: 'localhost',
+      port: 5173,
+      proxy: {
         '/api': {
-          target: ENV.VITE_API_BASE_URL || 'http://localhost:3000',
+          target: ENV.VITE_API_BASE_URL || 'http://localhost:8080',
           changeOrigin: true,
+        },
+        '/ws': {
+          target: ENV.VITE_SOCKET_BASE_URL || 'http://localhost:8080',
+          changeOrigin: true,
+          ws: true,
         },
       },
     },
