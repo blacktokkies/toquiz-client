@@ -7,7 +7,6 @@ import type { LoaderFunctionArgs } from 'react-router-dom';
 
 import React, { useEffect } from 'react';
 
-import { Client } from '@stomp/stompjs';
 import { clsx } from 'clsx';
 import {
   useRouteError,
@@ -16,13 +15,13 @@ import {
   Link,
   useLoaderData,
 } from 'react-router-dom';
-import Socket from 'sockjs-client';
 
 import { CreateQuestionModal } from '@/components/panel/CreateQuestionModal';
 import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import { PanelHeader } from '@/components/panel/PanelHeader';
 import { ModalController } from '@/components/system/ModalController';
 import { Send, Logo } from '@/components/vectors';
+import { useSocketClient } from '@/contexts/SocketClientContext';
 import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
 import { panelDetailQuery } from '@/hooks/queries/panel';
 import { useOverlay } from '@/hooks/useOverlay';
@@ -60,30 +59,26 @@ export function Panel(): JSX.Element {
   >;
   const overlay = useOverlay();
 
+  const socketClient = useSocketClient();
   useEffect(() => {
-    let subscription: StompSubscription;
-    const client = new Client({
-      webSocketFactory: () => new Socket('/ws'),
-      debug: (msg) => {
-        console.log(msg);
-      },
-      onConnect: () => {
-        subscription = client.subscribe(
-          `/sub/panels/${panel.sid}`,
-          (message) => {
-            const { body } = message;
-            console.log(JSON.parse(body));
-          },
-        );
-      },
-    });
-    client.activate();
+    let subscription: StompSubscription | null = null;
+    socketClient.onConnect = () => {
+      subscription = socketClient.subscribe(
+        `/sub/panels/${panel.sid}`,
+        (message) => {
+          const { body } = message;
+          console.log(JSON.parse(body));
+        },
+      );
+    };
+
+    socketClient.activate();
 
     return () => {
-      client.unsubscribe(subscription.id);
-      client.deactivate();
+      if (subscription !== null) socketClient.unsubscribe(subscription.id);
+      socketClient.deactivate();
     };
-  }, [panel.sid]);
+  }, [socketClient, panel.sid]);
 
   function handleOpenModal(): void {
     overlay.open(({ close }) => (
