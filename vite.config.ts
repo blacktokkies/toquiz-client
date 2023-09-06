@@ -11,6 +11,13 @@ export default defineConfig(({ mode }) => {
   const ENV = loadEnv(mode, process.cwd(), '');
 
   return {
+    optimizeDeps: {
+      esbuildOptions: {
+        define: {
+          global: 'globalThis',
+        },
+      },
+    },
     plugins: [
       react(),
       tsconfigPaths(),
