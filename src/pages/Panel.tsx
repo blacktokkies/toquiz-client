@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-throw-literal */
 
 import type { Panel as PanelData } from '@/lib/api/panel';
+import type { StompSubscription } from '@stomp/stompjs';
 import type { QueryClient } from '@tanstack/react-query';
 import type { LoaderFunctionArgs } from 'react-router-dom';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
+import { Client } from '@stomp/stompjs';
 import { clsx } from 'clsx';
 import {
   useRouteError,
@@ -14,6 +16,7 @@ import {
   Link,
   useLoaderData,
 } from 'react-router-dom';
+import Socket from 'sockjs-client';
 
 import { CreateQuestionModal } from '@/components/panel/CreateQuestionModal';
 import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
@@ -56,6 +59,31 @@ export function Panel(): JSX.Element {
     ReturnType<ReturnType<typeof panelLoader>>
   >;
   const overlay = useOverlay();
+
+  useEffect(() => {
+    let subscription: StompSubscription;
+    const client = new Client({
+      webSocketFactory: () => new Socket('/ws'),
+      debug: (msg) => {
+        console.log(msg);
+      },
+      onConnect: () => {
+        subscription = client.subscribe(
+          `/sub/panels/${panel.sid}`,
+          (message) => {
+            const { body } = message;
+            console.log(JSON.parse(body));
+          },
+        );
+      },
+    });
+    client.activate();
+
+    return () => {
+      client.unsubscribe(subscription.id);
+      client.deactivate();
+    };
+  }, [panel.sid]);
 
   function handleOpenModal(): void {
     overlay.open(({ close }) => (
