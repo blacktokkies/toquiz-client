@@ -21,8 +21,8 @@ import { PanelHeader } from '@/components/panel/PanelHeader';
 import { ModalController } from '@/components/system/ModalController';
 import { Send, Logo } from '@/components/vectors';
 import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
+import { panelDetailQuery } from '@/hooks/queries/panel';
 import { useOverlay } from '@/hooks/useOverlay';
-import { getPanel } from '@/lib/api/panel';
 import { ApiError } from '@/lib/apiClient';
 
 // [NOTE] 로더 성공 반환값은 any 혹은 null로 고정한다
@@ -31,8 +31,11 @@ export const panelLoader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs): Promise<PanelData> => {
     const panelId = params.id!;
+    const panelQuery = panelDetailQuery(panelId);
     try {
-      const { result: panel } = await getPanel(panelId);
+      const panel =
+        queryClient.getQueryData<PanelData>(panelQuery.queryKey) ??
+        (await queryClient.fetchQuery<PanelData>(panelQuery));
       await queryClient.prefetchQuery(activeInfoDetailQuery(panelId));
       return panel;
     } catch (error) {
