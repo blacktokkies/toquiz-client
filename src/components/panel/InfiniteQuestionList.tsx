@@ -13,6 +13,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import { produce } from 'immer';
 
+import { useSocketClient } from '@/contexts/SocketClientContext';
 import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
 import {
   useLikeQuestionMutation,
@@ -44,6 +45,7 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
     [questionsQuery],
   );
 
+  const socketClient = useSocketClient();
   const queryClient = useQueryClient();
   const likeQuestionMutation = useLikeQuestionMutation<{
     prevQuestions: InfiniteData<QuestionPage> | undefined;
@@ -69,6 +71,19 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
       );
 
       return { prevActiveInfo, prevQuestions };
+    },
+    onSuccess: ({ id, likeNum }) => {
+      socketClient.publish({
+        destination: `/pub/panels/${panelId}`,
+        body: JSON.stringify({
+          domain: 'question',
+          method: 'like',
+          result: {
+            id,
+            likeNum,
+          },
+        }),
+      });
     },
     onError: (err, variables, context) => {
       if (err instanceof SyntaxError) return;
