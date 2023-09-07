@@ -13,6 +13,7 @@ import { useRouteLoaderData } from 'react-router-dom';
 
 import { Button } from '@/components/system/Button';
 import { ArrowBack, Account, Like } from '@/components/vectors';
+import { useSocketClient } from '@/contexts/SocketClientContext';
 import {
   useAnswersQuery,
   useCreateAnswerMutation,
@@ -74,6 +75,7 @@ export function QAModal({
     }
   }
 
+  const socketClient = useSocketClient();
   const queryClient = useQueryClient();
   const createAnswerMutation = useCreateAnswerMutation<{
     prevAnswers: GetAnswersResult | undefined;
@@ -102,6 +104,16 @@ export function QAModal({
       );
 
       return { prevAnswers };
+    },
+    onSuccess: (newAnswer) => {
+      socketClient.publish({
+        destination: `/pub/panels/${panelLoaderData.sid}`,
+        body: JSON.stringify({
+          domain: 'answer',
+          method: 'create',
+          result: { ...newAnswer, questionId },
+        }),
+      });
     },
     onSettled: () => {
       queryClient.invalidateQueries(queryKey.answer.list(questionId));
