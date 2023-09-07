@@ -8,6 +8,7 @@ import { flushSync } from 'react-dom';
 
 import { Button } from '@/components/system/Button';
 import { Spinner } from '@/components/vectors';
+import { useSocketClient } from '@/contexts/SocketClientContext';
 import { useCreateQuestionMutation } from '@/hooks/queries/question';
 import { queryKey } from '@/lib/queryKey';
 import { isQuestion } from '@/lib/validator';
@@ -17,10 +18,19 @@ interface Props {
   close: () => void;
 }
 export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
+  const socketClient = useSocketClient();
   const queryClient = useQueryClient();
   const createQuestionMutation = useCreateQuestionMutation(panelId, {
-    onSuccess: () => {
+    onSuccess: (newQuestion) => {
       queryClient.invalidateQueries(queryKey.question.lists());
+      socketClient.publish({
+        destination: `/pub/panels/${panelId}`,
+        body: JSON.stringify({
+          domain: 'question',
+          method: 'create',
+          ...newQuestion,
+        }),
+      });
       close();
     },
     onError: () => {
