@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-throw-literal */
 
+import type { Answer, GetAnswersResult } from '@/lib/api/answer';
 import type { Panel as PanelData } from '@/lib/api/panel';
 import type {
   LikeQuestionResult,
@@ -148,6 +149,24 @@ export function Panel(): JSX.Element {
                         }
                       });
                     });
+                  }),
+              );
+            }
+          }
+
+          if (domain === 'answer') {
+            if (method === 'create') {
+              const { questionId, ...newAnswer } = result as Answer & {
+                questionId: Question['id'];
+              };
+              queryClient.setQueryData<GetAnswersResult>(
+                queryKey.answer.list(questionId),
+                (old) =>
+                  produce(old, (draft) => {
+                    if (!draft) return;
+
+                    draft.answerNum += 1;
+                    draft.answers.unshift(newAnswer);
                   }),
               );
             }
