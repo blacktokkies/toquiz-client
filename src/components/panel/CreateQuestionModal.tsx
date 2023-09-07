@@ -28,7 +28,7 @@ export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
         body: JSON.stringify({
           domain: 'question',
           method: 'create',
-          ...newQuestion,
+          result: newQuestion,
         }),
       });
       close();
