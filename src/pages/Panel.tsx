@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-throw-literal */
 
 import type { Panel as PanelData } from '@/lib/api/panel';
-import type { Question, QuestionPage } from '@/lib/api/question';
+import type {
+  LikeQuestionResult,
+  Question,
+  QuestionPage,
+} from '@/lib/api/question';
 import type { StompSubscription } from '@stomp/stompjs';
 import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 import type { LoaderFunctionArgs } from 'react-router-dom';
@@ -106,6 +110,44 @@ export function Panel(): JSX.Element {
                     if (!draft) return;
 
                     draft.pages[0].questions.unshift(result as Question);
+                  }),
+              );
+            }
+
+            if (method === 'like') {
+              const { id, likeNum } = result as Pick<
+                LikeQuestionResult,
+                'id' | 'likeNum'
+              >;
+              queryClient.setQueryData<InfiniteData<QuestionPage>>(
+                queryKey.question.list(panel.sid),
+                (prevQuestions) =>
+                  produce(prevQuestions, (draft) => {
+                    if (!draft) return;
+
+                    draft.pages.forEach((page) => {
+                      page.questions.forEach((question) => {
+                        if (question.id === id) {
+                          question.likeNum = likeNum;
+                        }
+                      });
+                    });
+                  }),
+              );
+
+              queryClient.setQueryData<InfiniteData<QuestionPage>>(
+                queryKey.question.list(panel.sid, 'createdDate,DESC'),
+                (prevQuestions) =>
+                  produce(prevQuestions, (draft) => {
+                    if (!draft) return;
+
+                    draft.pages.forEach((page) => {
+                      page.questions.forEach((question) => {
+                        if (question.id === id) {
+                          question.likeNum = likeNum;
+                        }
+                      });
+                    });
                   }),
               );
             }
