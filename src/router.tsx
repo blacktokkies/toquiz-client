@@ -1,4 +1,3 @@
-import type { Client as SocketClient } from '@stomp/stompjs';
 import type { QueryClient } from '@tanstack/react-query';
 
 import React from 'react';
@@ -6,7 +5,6 @@ import React from 'react';
 import { Outlet, createBrowserRouter } from 'react-router-dom';
 
 import { HomeHeader } from '@/components/home/HomeHeader';
-import { SocketClientProvider } from '@/contexts/SocketClientContext';
 import { Account, accountLoader } from '@/pages/Account';
 import { Home, homeLoader } from '@/pages/Home';
 import { Index } from '@/pages/Index';
@@ -17,7 +15,6 @@ import { SignUp, signupLoader } from '@/pages/SignUp';
 
 export const createRouterWithQueryClient = (
   queryClient: QueryClient,
-  socketClient: SocketClient,
 ): ReturnType<typeof createBrowserRouter> =>
   createBrowserRouter([
     {
@@ -59,11 +56,7 @@ export const createRouterWithQueryClient = (
         {
           path: 'panel/:id',
           id: 'panel',
-          element: (
-            <SocketClientProvider client={socketClient}>
-              <Panel />
-            </SocketClientProvider>
-          ),
+          element: <Panel />,
           loader: panelLoader(queryClient),
           errorElement: <PanelErrorBoundary />,
         },

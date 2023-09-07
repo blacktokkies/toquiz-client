@@ -8,6 +8,8 @@ import Socket from 'sockjs-client';
 
 import { createRouterWithQueryClient } from '@/router';
 
+import { SocketClientProvider } from './contexts/SocketClientContext';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -17,7 +19,7 @@ const queryClient = new QueryClient({
 });
 
 const socketClient = new SocketClient({
-  webSocketFactory: () => new Socket('/wss'),
+  webSocketFactory: () => new Socket('/ws'),
   debug: (msg) => {
     console.log(msg);
   },
@@ -28,12 +30,14 @@ const socketClient = new SocketClient({
   },
 });
 
-const router = createRouterWithQueryClient(queryClient, socketClient);
+const router = createRouterWithQueryClient(queryClient);
 
 export function App(): JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <SocketClientProvider client={socketClient}>
+        <RouterProvider router={router} />
+      </SocketClientProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
