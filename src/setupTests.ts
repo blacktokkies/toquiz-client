@@ -66,3 +66,15 @@ afterEach(() => {
     removeFn();
   });
 });
+
+/* ===================== [ useSocketClient 모킹 ] ===================== */
+
+vi.mock('@/contexts/SocketClientContext', () => ({
+  useSocketClient: vi.fn(() => ({
+    subscribe: vi.fn(),
+    unsubscribe: vi.fn(),
+    publish: vi.fn(),
+    activate: vi.fn(),
+    deactivate: vi.fn(),
+  })),
+}));
