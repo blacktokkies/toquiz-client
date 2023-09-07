@@ -4,30 +4,31 @@ toquiz 클라이언트 개발 레포지토리입니다.
 
 ## toquiz client 실행하기
 
-### 실행하기
+### 준비
 
 ```bash
 git clone https://github.com/blacktokkies/toquiz-client.git
 cd toquiz
 yarn install
-yarn dev
 ```
 
-### 테스트하기
+### `yarn dev`
+
+Vite 개발 서버를 실행합니다. Mock Service Worker가 모든 요청을 인터셉트합니다.
+
+### `yarn test`
+
+Vitest로 테스트를 실행합니다. Mock Service Worker가 모든 요청을 인터셉트합니다.
+
+### `yarn dev:proxy`
+
+설정된 프록시로 Vite 개발 서버를 실행합니다. `.env.sample`에서 프록시 설정 기본값을 확인할 수 있습니다. 아래의 프록시 설정하기를 참고하세요.
+
+#### 프록시 설정하기
+
+프로젝트 루트에 `.env.proxy.local`을 작성합니다. 예시는 다음과 같습니다.
 
 ```bash
-git clone https://github.com/blacktokkies/toquiz-client.git
-cd toquiz
-yarn install
-yarn test
-```
-
-### 프록시 설정
-
-> 아래 예시는 `.env.sample`에서도 확인할 수 있습니다. 프록시를 설정하지 않으면 개발 모드에서는 Mock Service Worker가 모든 요청을 인터셉트합니다.
-
-```bash
-# .env.sample
 VITE_API_BASE_URL=http://localhost:8080
 VITE_SOCKET_BASE_URL=http://localhost:8080
 ```
