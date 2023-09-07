@@ -19,12 +19,7 @@ export type CreateAnswerPathParams = Record<'questionId', string>;
 export interface CreateAnswerBody {
   content: Answer['content'];
 }
-export interface CreateAnswerResult {
-  id: Answer['id'];
-  content: Answer['content'];
-  createdAt: Answer['createdAt'];
-  updatedAt: Answer['updatedAt'];
-}
+export type CreateAnswerResult = Answer;
 export type CreateAnswerResponse = SuccessResponse<CreateAnswerResult>;
 
 export const createAnswer = async (
