@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-throw-literal */
 
 import type { Panel as PanelData } from '@/lib/api/panel';
+import type { Question, QuestionPage } from '@/lib/api/question';
 import type { StompSubscription } from '@stomp/stompjs';
-import type { QueryClient } from '@tanstack/react-query';
+import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 import type { LoaderFunctionArgs } from 'react-router-dom';
 
 import React, { useEffect } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
+import { produce } from 'immer';
 import {
   useRouteError,
   json,
@@ -26,6 +29,7 @@ import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
 import { panelDetailQuery } from '@/hooks/queries/panel';
 import { useOverlay } from '@/hooks/useOverlay';
 import { ApiError } from '@/lib/apiClient';
+import { queryKey } from '@/lib/queryKey';
 
 // [NOTE] 로더 성공 반환값은 any 혹은 null로 고정한다
 // [NOTE] 로더 실패 반환값은 `Response`로 고정한다
@@ -53,12 +57,20 @@ export const panelLoader =
     }
   };
 
+interface SocketResponse {
+  domain: string;
+  method: string;
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  result: any;
+}
+
 export function Panel(): JSX.Element {
   const panel = useLoaderData() as Awaited<
     ReturnType<ReturnType<typeof panelLoader>>
   >;
   const overlay = useOverlay();
 
+  const queryClient = useQueryClient();
   const socketClient = useSocketClient();
   useEffect(() => {
     let subscription: StompSubscription | null = null;
@@ -66,8 +78,38 @@ export function Panel(): JSX.Element {
       subscription = socketClient.subscribe(
         `/sub/panels/${panel.sid}`,
         (message) => {
-          const { body } = message;
-          console.log(JSON.parse(body));
+          /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
+          const { domain, method, result } = JSON.parse(
+            message.body,
+          ) as SocketResponse;
+
+          if (domain === 'question') {
+            if (method === 'create') {
+              // TODO: 현재 active인 쿼리에 따라 하나만 setQueryData 해준다
+              // 예) 현재 최신순이면 최신순 쿼리만 setQueryData
+              queryClient.setQueryData<InfiniteData<QuestionPage>>(
+                queryKey.question.list(panel.sid),
+                (prevQuestions) =>
+                  produce(prevQuestions, (draft) => {
+                    if (!draft) return;
+
+                    draft.pages[draft.pages.length - 1].questions.push(
+                      result as Question,
+                    );
+                  }),
+              );
+
+              queryClient.setQueryData<InfiniteData<QuestionPage>>(
+                queryKey.question.list(panel.sid, 'createdDate,DESC'),
+                (prevQuestions) =>
+                  produce(prevQuestions, (draft) => {
+                    if (!draft) return;
+
+                    draft.pages[0].questions.unshift(result as Question);
+                  }),
+              );
+            }
+          }
         },
       );
     };
@@ -78,7 +120,7 @@ export function Panel(): JSX.Element {
       if (subscription !== null) socketClient.unsubscribe(subscription.id);
       socketClient.deactivate();
     };
-  }, [socketClient, panel.sid]);
+  }, [queryClient, socketClient, panel.sid]);
 
   function handleOpenModal(): void {
     overlay.open(({ close }) => (
