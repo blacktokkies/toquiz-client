@@ -78,6 +78,51 @@ export function Panel(): JSX.Element {
   const queryClient = useQueryClient();
   const socketClient = useSocketClient();
   useEffect(() => {
+    const handleCreateQuestion = (newQuestion: Question): void => {
+      queryClient.setQueryData<InfiniteData<QuestionPage>>(
+        queryKey.question.list(panel.sid),
+        addQuestionAtLast(newQuestion),
+      );
+
+      queryClient.setQueryData<InfiniteData<QuestionPage>>(
+        queryKey.question.list(panel.sid, 'createdDate,DESC'),
+        addQuestionAtStart(newQuestion),
+      );
+    };
+
+    const handleLikeQuestion = (
+      questionId: Question['id'],
+      likeNum: Question['likeNum'],
+    ): void => {
+      queryClient.setQueryData<InfiniteData<QuestionPage>>(
+        queryKey.question.list(panel.sid),
+        updateLikeNum(questionId, likeNum),
+      );
+
+      queryClient.setQueryData<InfiniteData<QuestionPage>>(
+        queryKey.question.list(panel.sid, 'createdDate,DESC'),
+        updateLikeNum(questionId, likeNum),
+      );
+    };
+
+    const handleCreateAnswer = (
+      questionId: Question['id'],
+      newAnswer: Answer,
+    ): void => {
+      queryClient.setQueryData<GetAnswersResult>(
+        queryKey.answer.list(questionId),
+        addAnswer(newAnswer),
+      );
+      queryClient.setQueryData<InfiniteData<QuestionPage>>(
+        queryKey.question.list(panel.sid),
+        increaseAnswerNum(questionId),
+      );
+      queryClient.setQueryData<InfiniteData<QuestionPage>>(
+        queryKey.question.list(panel.sid, 'createdDate,DESC'),
+        increaseAnswerNum(questionId),
+      );
+    };
+
     let subscription: StompSubscription | null = null;
     socketClient.onConnect = () => {
       subscription = socketClient.subscribe(
@@ -91,15 +136,7 @@ export function Panel(): JSX.Element {
           if (domain === 'question') {
             if (method === 'create') {
               const newQuestion = result as Question;
-              queryClient.setQueryData<InfiniteData<QuestionPage>>(
-                queryKey.question.list(panel.sid),
-                addQuestionAtLast(newQuestion),
-              );
-
-              queryClient.setQueryData<InfiniteData<QuestionPage>>(
-                queryKey.question.list(panel.sid, 'createdDate,DESC'),
-                addQuestionAtStart(newQuestion),
-              );
+              handleCreateQuestion(newQuestion);
             }
 
             if (method === 'like') {
@@ -107,15 +144,7 @@ export function Panel(): JSX.Element {
                 LikeQuestionResult,
                 'id' | 'likeNum'
               >;
-              queryClient.setQueryData<InfiniteData<QuestionPage>>(
-                queryKey.question.list(panel.sid),
-                updateLikeNum(questionId, likeNum),
-              );
-
-              queryClient.setQueryData<InfiniteData<QuestionPage>>(
-                queryKey.question.list(panel.sid, 'createdDate,DESC'),
-                updateLikeNum(questionId, likeNum),
-              );
+              handleLikeQuestion(questionId, likeNum);
             }
           }
 
@@ -124,18 +153,7 @@ export function Panel(): JSX.Element {
               const { questionId, ...newAnswer } = result as Answer & {
                 questionId: Question['id'];
               };
-              queryClient.setQueryData<GetAnswersResult>(
-                queryKey.answer.list(questionId),
-                addAnswer(newAnswer),
-              );
-              queryClient.setQueryData<InfiniteData<QuestionPage>>(
-                queryKey.question.list(panel.sid),
-                increaseAnswerNum(questionId),
-              );
-              queryClient.setQueryData<InfiniteData<QuestionPage>>(
-                queryKey.question.list(panel.sid, 'createdDate,DESC'),
-                increaseAnswerNum(questionId),
-              );
+              handleCreateAnswer(questionId, newAnswer);
             }
           }
         },
