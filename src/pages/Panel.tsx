@@ -90,8 +90,6 @@ export function Panel(): JSX.Element {
 
           if (domain === 'question') {
             if (method === 'create') {
-              // TODO: 현재 active인 쿼리에 따라 하나만 setQueryData 해준다
-              // 예) 현재 최신순이면 최신순 쿼리만 setQueryData
               queryClient.setQueryData<InfiniteData<QuestionPage>>(
                 queryKey.question.list(panel.sid),
                 (prevQuestions) =>
@@ -116,40 +114,18 @@ export function Panel(): JSX.Element {
             }
 
             if (method === 'like') {
-              const { id, likeNum } = result as Pick<
+              const { id: questionId, likeNum } = result as Pick<
                 LikeQuestionResult,
                 'id' | 'likeNum'
               >;
               queryClient.setQueryData<InfiniteData<QuestionPage>>(
                 queryKey.question.list(panel.sid),
-                (prevQuestions) =>
-                  produce(prevQuestions, (draft) => {
-                    if (!draft) return;
-
-                    draft.pages.forEach((page) => {
-                      page.questions.forEach((question) => {
-                        if (question.id === id) {
-                          question.likeNum = likeNum;
-                        }
-                      });
-                    });
-                  }),
+                updateLikeNum(questionId, likeNum),
               );
 
               queryClient.setQueryData<InfiniteData<QuestionPage>>(
                 queryKey.question.list(panel.sid, 'createdDate,DESC'),
-                (prevQuestions) =>
-                  produce(prevQuestions, (draft) => {
-                    if (!draft) return;
-
-                    draft.pages.forEach((page) => {
-                      page.questions.forEach((question) => {
-                        if (question.id === id) {
-                          question.likeNum = likeNum;
-                        }
-                      });
-                    });
-                  }),
+                updateLikeNum(questionId, likeNum),
               );
             }
           }
@@ -313,3 +289,18 @@ export function PanelErrorBoundary(): JSX.Element {
     </main>
   );
 }
+
+const updateLikeNum =
+  (questionId: Question['id'], likeNum: Question['likeNum']) =>
+  (prevQuestions?: InfiniteData<QuestionPage>) =>
+    produce(prevQuestions, (draft) => {
+      if (!draft) return;
+
+      draft.pages.forEach((page) => {
+        page.questions.forEach((question) => {
+          if (question.id === questionId) {
+            question.likeNum = likeNum;
+          }
+        });
+      });
+    });
