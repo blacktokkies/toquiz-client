@@ -5,6 +5,7 @@ import type {
   Question,
   QuestionPage,
 } from '@/lib/api/question';
+import type { LikeQuestionEvent } from '@/lib/socketClient';
 import type { InfiniteData } from '@tanstack/react-query';
 
 import React, { useCallback, useState } from 'react';
@@ -73,15 +74,12 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
       return { prevActiveInfo, prevQuestions };
     },
     onSuccess: ({ id, likeNum }) => {
-      socketClient.publish({
-        destination: `/pub/panels/${panelId}`,
-        body: JSON.stringify({
-          eventType: 'LIKE_QUESTION',
-          data: {
-            id,
-            likeNum,
-          },
-        }),
+      socketClient.publishToPanel<LikeQuestionEvent>(panelId, {
+        eventType: 'LIKE_QUESTION',
+        data: {
+          questionId: id,
+          likeNum,
+        },
       });
     },
     onError: (err, variables, context) => {
