@@ -62,7 +62,7 @@ export const panelLoader =
     }
   };
 
-interface SocketResponse {
+interface SocketBody {
   domain: string;
   method: string;
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -131,7 +131,7 @@ export function Panel(): JSX.Element {
           /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
           const { domain, method, result } = JSON.parse(
             message.body,
-          ) as SocketResponse;
+          ) as SocketBody;
 
           if (domain === 'question') {
             if (method === 'create') {
