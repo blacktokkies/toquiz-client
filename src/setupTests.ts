@@ -78,7 +78,6 @@ vi.mock('@/contexts/SocketClientContext', () => ({
     deactivate: vi.fn(),
 
     subscribePanel: vi.fn(),
-    unsubscribePanel: vi.fn(),
     publishToPanel: vi.fn(),
   })),
 }));
