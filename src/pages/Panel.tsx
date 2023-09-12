@@ -90,26 +90,15 @@ export function Panel(): JSX.Element {
 
           if (domain === 'question') {
             if (method === 'create') {
+              const newQuestion = result as Question;
               queryClient.setQueryData<InfiniteData<QuestionPage>>(
                 queryKey.question.list(panel.sid),
-                (prevQuestions) =>
-                  produce(prevQuestions, (draft) => {
-                    if (!draft) return;
-
-                    draft.pages[draft.pages.length - 1].questions.push(
-                      result as Question,
-                    );
-                  }),
+                addQuestionAtLast(newQuestion),
               );
 
               queryClient.setQueryData<InfiniteData<QuestionPage>>(
                 queryKey.question.list(panel.sid, 'createdDate,DESC'),
-                (prevQuestions) =>
-                  produce(prevQuestions, (draft) => {
-                    if (!draft) return;
-
-                    draft.pages[0].questions.unshift(result as Question);
-                  }),
+                addQuestionAtStart(newQuestion),
               );
             }
 
@@ -291,6 +280,22 @@ export function PanelErrorBoundary(): JSX.Element {
     </main>
   );
 }
+
+const addQuestionAtLast =
+  (newQuestion: Question) => (prevQuestions?: InfiniteData<QuestionPage>) =>
+    produce(prevQuestions, (draft) => {
+      if (!draft) return;
+
+      draft.pages[draft.pages.length - 1].questions.push(newQuestion);
+    });
+
+const addQuestionAtStart =
+  (newQuestion: Question) => (prevQuestions?: InfiniteData<QuestionPage>) =>
+    produce(prevQuestions, (draft) => {
+      if (!draft) return;
+
+      draft.pages[0].questions.unshift(newQuestion);
+    });
 
 const updateLikeNum =
   (questionId: Question['id'], likeNum: Question['likeNum']) =>
