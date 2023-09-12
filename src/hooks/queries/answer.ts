@@ -29,7 +29,7 @@ export const useAnswersQuery = (
   return query;
 };
 
-/* ================================ [ 질문 좋아요 뮤테이션 ] ====================================== */
+/* ================================ [ 답변 생성 뮤테이션 ] ====================================== */
 export type CreateAnswerMutation = NonNullableKeys<
   Pick<
     MutationOptions<
