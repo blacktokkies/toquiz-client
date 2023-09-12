@@ -26,9 +26,8 @@ export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
       socketClient.publish({
         destination: `/pub/panels/${panelId}`,
         body: JSON.stringify({
-          domain: 'question',
-          method: 'create',
-          result: newQuestion,
+          eventType: 'CREATE_QUESTION',
+          data: newQuestion,
         }),
       });
       close();

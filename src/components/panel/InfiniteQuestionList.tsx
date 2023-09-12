@@ -76,9 +76,8 @@ export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
       socketClient.publish({
         destination: `/pub/panels/${panelId}`,
         body: JSON.stringify({
-          domain: 'question',
-          method: 'like',
-          result: {
+          eventType: 'LIKE_QUESTION',
+          data: {
             id,
             likeNum,
           },
