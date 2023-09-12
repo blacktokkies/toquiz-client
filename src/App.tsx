@@ -21,7 +21,7 @@ const queryClient = new QueryClient({
 const socketClient = new SocketClient({
   webSocketFactory: () => new Socket('/ws'),
   debug: (msg) => {
-    console.log(msg);
+    if (import.meta.env.MODE === 'development') console.log(msg);
   },
   onWebSocketClose: () => {
     // activate 실패로 connection이 close된 경우,
