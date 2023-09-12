@@ -2,7 +2,7 @@ import type * as Vi from 'vitest';
 
 import React from 'react';
 
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { OverlayProvider } from '@/contexts/OverlayContext';
@@ -10,6 +10,7 @@ import * as authApis from '@/lib/api/auth';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { isNickname, isPassword } from '@/lib/validator';
 import { Account } from '@/pages/Account';
+import { getUserState } from '@/store/user-store';
 
 vi.mock('@/lib/validator', () => ({
   isNickname: vi.fn(() => true),
@@ -163,6 +164,28 @@ describe('내 계정 관리 페이지', () => {
       await userEvent.click(submitButton);
       expect(spyOnUpdateMyInfo).toHaveBeenCalledWith({
         nickname: '닉네임',
+      });
+    });
+
+    it('내 정보 수정 API가 성공하면 전역 스토어에 저장한다', async () => {
+      renderWithQueryClient(
+        <OverlayProvider>
+          <Account />
+        </OverlayProvider>,
+      );
+
+      const nicknameInput = screen.getByLabelText(/닉네임/);
+      fireEvent.change(nicknameInput, {
+        target: { value: '새로운 닉네임' },
+      });
+
+      const submitButton = screen.getByRole<HTMLButtonElement>('button', {
+        name: /변경 내용 저장/,
+      });
+      await userEvent.click(submitButton);
+
+      await waitFor(() => {
+        expect(getUserState().nickname).toBe('새로운 닉네임');
       });
     });
 

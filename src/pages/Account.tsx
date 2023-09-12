@@ -10,6 +10,7 @@ import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
 import { ModalController } from '@/components/system/ModalController';
 import { useUpdateMyInfoMutation } from '@/hooks/queries/auth';
+import { useUserStore } from '@/hooks/stores/useUserStore';
 import { useForm } from '@/hooks/useForm';
 import { useOverlay } from '@/hooks/useOverlay';
 import { isUserLoggedIn } from '@/lib/routeGuard';
@@ -22,8 +23,13 @@ export const accountLoader: LoaderFunction = async () => {
   return null;
 };
 export function Account(): JSX.Element {
+  const setUserStore = useUserStore((state) => state.setUser);
   const messageRef = useRef<HTMLDivElement | null>(null);
-  const updateMyInfoMutation = useUpdateMyInfoMutation();
+  const updateMyInfoMutation = useUpdateMyInfoMutation({
+    onSuccess: (updatedUser) => {
+      setUserStore(updatedUser);
+    },
+  });
   const { inputProps, errors, hasError, formProps } = useForm({
     inputConfigs: {
       nickname: {
