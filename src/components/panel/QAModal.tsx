@@ -193,6 +193,12 @@ export function QAModal({
           }}
           onKeyDown={(event) => {
             if (
+              event.target instanceof Node &&
+              event.target !== formContainer.current
+            )
+              return;
+
+            if (
               event.key === 'Enter' ||
               event.keyCode === 13 ||
               event.key === 'Space' ||
