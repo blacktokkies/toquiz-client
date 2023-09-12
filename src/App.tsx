@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { Client as SocketClient } from '@stomp/stompjs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider } from 'react-router-dom';
 import Socket from 'sockjs-client';
 
+import { SocketClient } from '@/lib/socketClient';
 import { createRouterWithQueryClient } from '@/router';
 
 import { SocketClientProvider } from './contexts/SocketClientContext';

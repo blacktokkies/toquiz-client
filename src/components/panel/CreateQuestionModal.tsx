@@ -1,4 +1,5 @@
 import type { Panel } from '@/lib/api/panel';
+import type { CreateQuestionEvent } from '@/lib/socketClient';
 import type { ChangeEvent } from 'react';
 
 import React, { useCallback, useRef, useState } from 'react';
@@ -23,12 +24,9 @@ export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
   const createQuestionMutation = useCreateQuestionMutation(panelId, {
     onSuccess: (newQuestion) => {
       queryClient.invalidateQueries(queryKey.question.lists());
-      socketClient.publish({
-        destination: `/pub/panels/${panelId}`,
-        body: JSON.stringify({
-          eventType: 'CREATE_QUESTION',
-          data: newQuestion,
-        }),
+      socketClient.publishToPanel<CreateQuestionEvent>(panelId, {
+        eventType: 'CREATE_QUESTION',
+        data: newQuestion,
       });
       close();
     },

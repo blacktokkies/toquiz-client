@@ -1,4 +1,4 @@
-import type { Client as SocketClient } from '@stomp/stompjs';
+import type { SocketClient } from '@/lib/socketClient';
 import type { PropsWithChildren } from 'react';
 
 import React, { createContext, useContext } from 'react';

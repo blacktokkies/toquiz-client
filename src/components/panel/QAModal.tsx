@@ -1,6 +1,7 @@
 import type { GetAnswersResult } from '@/lib/api/answer';
 import type { Panel } from '@/lib/api/panel';
 import type { Question } from '@/lib/api/question';
+import type { CreateAnswerEvent } from '@/lib/socketClient';
 import type { ChangeEvent } from 'react';
 
 import React, { useRef, useState, useCallback } from 'react';
@@ -106,12 +107,12 @@ export function QAModal({
       return { prevAnswers };
     },
     onSuccess: (newAnswer) => {
-      socketClient.publish({
-        destination: `/pub/panels/${panelLoaderData.sid}`,
-        body: JSON.stringify({
-          eventType: 'CREATE_ANSWER',
-          data: { ...newAnswer, questionId },
-        }),
+      socketClient.publishToPanel<CreateAnswerEvent>(panelLoaderData.sid, {
+        eventType: 'CREATE_ANSWER',
+        data: {
+          questionId,
+          answer: newAnswer,
+        },
       });
     },
     onSettled: () => {

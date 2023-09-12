@@ -2,11 +2,7 @@
 
 import type { Answer, GetAnswersResult } from '@/lib/api/answer';
 import type { Panel as PanelData } from '@/lib/api/panel';
-import type {
-  LikeQuestionResult,
-  Question,
-  QuestionPage,
-} from '@/lib/api/question';
+import type { Question, QuestionPage } from '@/lib/api/question';
 import type { StompSubscription } from '@stomp/stompjs';
 import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 import type { LoaderFunctionArgs } from 'react-router-dom';
@@ -61,12 +57,6 @@ export const panelLoader =
       throw error;
     }
   };
-
-interface SocketBody {
-  eventType: 'CREATE_QUESTION' | 'LIKE_QUESTION' | 'CREATE_ANSWER';
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  data: any;
-}
 
 export function Panel(): JSX.Element {
   const panel = useLoaderData() as Awaited<
@@ -124,26 +114,18 @@ export function Panel(): JSX.Element {
 
     let subscription: StompSubscription | null = null;
     socketClient.onConnect = () => {
-      subscription = socketClient.subscribe(
-        `/sub/panels/${panel.sid}`,
-        (message) => {
-          /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-          const { eventType, data } = JSON.parse(message.body) as SocketBody;
-
+      subscription = socketClient.subscribePanel(
+        panel.sid,
+        ({ eventType, data }) => {
           if (eventType === 'CREATE_QUESTION') {
-            const newQuestion = data as Question;
+            const newQuestion = data;
             handleCreateQuestion(newQuestion);
           } else if (eventType === 'LIKE_QUESTION') {
-            const { id: questionId, likeNum } = data as Pick<
-              LikeQuestionResult,
-              'id' | 'likeNum'
-            >;
+            const { questionId, likeNum } = data;
             handleLikeQuestion(questionId, likeNum);
           } else if (eventType === 'CREATE_ANSWER') {
-            const { questionId, ...newAnswer } = data as Answer & {
-              questionId: Question['id'];
-            };
-            handleCreateAnswer(questionId, newAnswer);
+            const { questionId, answer } = data;
+            handleCreateAnswer(questionId, answer);
           }
         },
       );
