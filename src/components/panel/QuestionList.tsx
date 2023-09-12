@@ -99,7 +99,7 @@ export function QuestionList({
                     {question.likeNum}
                   </button>
                 </div>
-                <div>{question.content}</div>
+                <div className="whitespace-pre-wrap">{question.content}</div>
               </div>
             </li>
           );

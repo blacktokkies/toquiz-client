@@ -174,7 +174,7 @@ export function QAModal({
             {question.likeNum}
           </button>
         </div>
-        <div>{question.content}</div>
+        <div className="whitespace-pre-wrap">{question.content}</div>
       </div>
       {userId === author.id && (
         <div
@@ -288,7 +288,7 @@ export function QAModal({
                   </div>
                 </div>
               </div>
-              <div>{answer.content}</div>
+              <div className="whitespace-pre-wrap">{answer.content}</div>
             </li>
           ))}
         </ul>
