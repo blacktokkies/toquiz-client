@@ -38,15 +38,6 @@ export const updateMyInfo = async (
     body,
   );
 
-export interface ResignBody {
-  password: Member['password'];
-}
-export type ResignResponse = SuccessResponse;
-export type ResignError = NotMatchPasswordResignError;
-export type NotMatchPasswordResignError = ErrorResponse & {
-  code: 'NOT_MATCH_PASSWORD';
-  statusCode: 400;
-};
 export const resign = async (body: ResignBody): Promise<ResignResponse> =>
   apiClient.post<ResignResponse, ResignBody>(apiUrl.auth.resign(), body);
 
@@ -150,6 +141,16 @@ export type NotExistMemberRefreshError = ErrorResponse & {
 export type InvalidRefreshTokenRefreshError = ErrorResponse & {
   code: 'INVALID_REFRESH_TOKEN';
   statusCode: 401;
+};
+/* ================================ [ 회원 탈퇴 API ] ====================================== */
+export interface ResignBody {
+  password: Member['password'];
+}
+export type ResignResponse = SuccessResponse;
+export type ResignError = NotMatchPasswordResignError;
+export type NotMatchPasswordResignError = ErrorResponse & {
+  code: 'NOT_MATCH_PASSWORD';
+  statusCode: 400;
 };
 
 /* ================================ [ 유효하지 않은 토큰 에러 ] ====================================== */
