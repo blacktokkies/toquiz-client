@@ -7,14 +7,18 @@ import type {
   LogoutError,
   SignUpResponse,
   LogoutResponse,
-  UpdateMyInfoResponse,
-  UpdateMyInfoBody,
   ResignResponse,
   ResignBody,
   ResignError,
+  UpdateMyInfoResult,
+  UpdateMyInfoBody,
 } from '@/lib/api/auth';
 import type { ApiError } from '@/lib/apiClient';
-import type { UseMutationResult } from '@tanstack/react-query';
+import type { NonNullableKeys } from '@/lib/types';
+import type {
+  UseMutationOptions,
+  UseMutationResult,
+} from '@tanstack/react-query';
 
 import { useMutation } from '@tanstack/react-query';
 
@@ -63,19 +67,33 @@ export const useLogoutMutation = (): UseMutationResult<
   return mutation;
 };
 
-export const useUpdateMyInfoMutation = (): UseMutationResult<
-  UpdateMyInfoResponse,
-  ApiError | SyntaxError,
-  UpdateMyInfoBody
-> => {
-  const key = queryKey.auth.update();
-  const mutation = useMutation<
-    UpdateMyInfoResponse,
+/* ================================ [ 회원 정보 수정 뮤테이션 ] ====================================== */
+export type UpdateMyInfoMutation = NonNullableKeys<
+  Pick<
+    UseMutationOptions<
+      UpdateMyInfoResult,
+      ApiError | SyntaxError,
+      UpdateMyInfoBody
+    >,
+    'mutationKey' | 'mutationFn'
+  >
+>;
+
+export const updateMyInfoMutation = (): UpdateMyInfoMutation => ({
+  mutationKey: queryKey.auth.update(),
+  mutationFn: async (body) => (await updateMyInfo(body)).result,
+});
+export const useUpdateMyInfoMutation = (
+  options: UseMutationOptions<
+    UpdateMyInfoResult,
     ApiError | SyntaxError,
     UpdateMyInfoBody
-  >(key, updateMyInfo);
-  return mutation;
-};
+  > = {},
+): UseMutationResult<
+  UpdateMyInfoResult,
+  ApiError | SyntaxError,
+  UpdateMyInfoBody
+> => useMutation({ ...updateMyInfoMutation(), ...options });
 
 export const useResignMutation = (): UseMutationResult<
   ResignResponse,
