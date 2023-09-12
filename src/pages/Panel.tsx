@@ -139,6 +139,14 @@ export function Panel(): JSX.Element {
                 queryKey.answer.list(questionId),
                 addAnswer(newAnswer),
               );
+              queryClient.setQueryData<InfiniteData<QuestionPage>>(
+                queryKey.question.list(panel.sid),
+                increaseAnswerNum(questionId),
+              );
+              queryClient.setQueryData<InfiniteData<QuestionPage>>(
+                queryKey.question.list(panel.sid, 'createdDate,DESC'),
+                increaseAnswerNum(questionId),
+              );
             }
           }
         },
@@ -294,6 +302,21 @@ const updateLikeNum =
         page.questions.forEach((question) => {
           if (question.id === questionId) {
             question.likeNum = likeNum;
+          }
+        });
+      });
+    });
+
+const increaseAnswerNum =
+  (questionId: Question['id']) =>
+  (prevQuestions?: InfiniteData<QuestionPage>) =>
+    produce(prevQuestions, (draft) => {
+      if (!draft) return;
+
+      draft.pages.forEach((page) => {
+        page.questions.forEach((question) => {
+          if (question.id === questionId) {
+            question.answerNum += 1;
           }
         });
       });
