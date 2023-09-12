@@ -63,10 +63,9 @@ export const panelLoader =
   };
 
 interface SocketBody {
-  domain: string;
-  method: string;
+  eventType: 'CREATE_QUESTION' | 'LIKE_QUESTION' | 'CREATE_ANSWER';
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  result: any;
+  data: any;
 }
 
 export function Panel(): JSX.Element {
@@ -129,32 +128,22 @@ export function Panel(): JSX.Element {
         `/sub/panels/${panel.sid}`,
         (message) => {
           /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
-          const { domain, method, result } = JSON.parse(
-            message.body,
-          ) as SocketBody;
+          const { eventType, data } = JSON.parse(message.body) as SocketBody;
 
-          if (domain === 'question') {
-            if (method === 'create') {
-              const newQuestion = result as Question;
-              handleCreateQuestion(newQuestion);
-            }
-
-            if (method === 'like') {
-              const { id: questionId, likeNum } = result as Pick<
-                LikeQuestionResult,
-                'id' | 'likeNum'
-              >;
-              handleLikeQuestion(questionId, likeNum);
-            }
-          }
-
-          if (domain === 'answer') {
-            if (method === 'create') {
-              const { questionId, ...newAnswer } = result as Answer & {
-                questionId: Question['id'];
-              };
-              handleCreateAnswer(questionId, newAnswer);
-            }
+          if (eventType === 'CREATE_QUESTION') {
+            const newQuestion = data as Question;
+            handleCreateQuestion(newQuestion);
+          } else if (eventType === 'LIKE_QUESTION') {
+            const { id: questionId, likeNum } = data as Pick<
+              LikeQuestionResult,
+              'id' | 'likeNum'
+            >;
+            handleLikeQuestion(questionId, likeNum);
+          } else if (eventType === 'CREATE_ANSWER') {
+            const { questionId, ...newAnswer } = data as Answer & {
+              questionId: Question['id'];
+            };
+            handleCreateAnswer(questionId, newAnswer);
           }
         },
       );

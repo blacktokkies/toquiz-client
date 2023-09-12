@@ -109,9 +109,8 @@ export function QAModal({
       socketClient.publish({
         destination: `/pub/panels/${panelLoaderData.sid}`,
         body: JSON.stringify({
-          domain: 'answer',
-          method: 'create',
-          result: { ...newAnswer, questionId },
+          eventType: 'CREATE_ANSWER',
+          data: { ...newAnswer, questionId },
         }),
       });
     },
