@@ -137,13 +137,7 @@ export function Panel(): JSX.Element {
               };
               queryClient.setQueryData<GetAnswersResult>(
                 queryKey.answer.list(questionId),
-                (old) =>
-                  produce(old, (draft) => {
-                    if (!draft) return;
-
-                    draft.answerNum += 1;
-                    draft.answers.unshift(newAnswer);
-                  }),
+                addAnswer(newAnswer),
               );
             }
           }
@@ -304,3 +298,11 @@ const updateLikeNum =
         });
       });
     });
+
+const addAnswer = (newAnswer: Answer) => (prevAsnwers?: GetAnswersResult) =>
+  produce(prevAsnwers, (draft) => {
+    if (!draft) return;
+
+    draft.answerNum += 1;
+    draft.answers.unshift(newAnswer);
+  });
