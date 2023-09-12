@@ -16,10 +16,6 @@ export class SocketClient extends Client {
     });
   }
 
-  unsubscribePanel(id: StompSubscription['id']): void {
-    super.unsubscribe(id);
-  }
-
   publishToPanel<T extends SocketEvent>(panelId: Panel['sid'], event: T): void {
     super.publish({
       destination: `/pub/panels/${panelId}`,
