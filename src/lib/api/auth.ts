@@ -30,19 +30,6 @@ export const refresh = async (): Promise<RefreshResult> =>
     })
     .then((data) => data.result);
 
-export interface UpdateMyInfoBody {
-  nickname?: Member['nickname'];
-  password?: Member['password'];
-}
-export interface UpdateMyInfoResult {
-  id: Member['id'];
-  email: Member['email'];
-  nickname: Member['nickname'];
-  provider: Member['provider'];
-  createdAt: Member['createdAt'];
-  updatedAt: Member['updatedAt'];
-}
-export type UpdateMyInfoResponse = SuccessResponse<UpdateMyInfoResult>;
 export const updateMyInfo = async (
   body: UpdateMyInfoBody,
 ): Promise<UpdateMyInfoResponse> =>
@@ -126,6 +113,21 @@ export interface GetMyInfoResult {
 }
 export type GetMyInfoResponse = SuccessResponse<GetMyInfoResult>;
 export type GetMyInfoError = InvalidAccessTokenError;
+
+/* ================================ [ 회원 정보 수정 API ] ====================================== */
+export interface UpdateMyInfoBody {
+  nickname?: Member['nickname'];
+  password?: Member['password'];
+}
+export interface UpdateMyInfoResult {
+  id: Member['id'];
+  email: Member['email'];
+  nickname: Member['nickname'];
+  provider: Member['provider'];
+  createdAt: Member['createdAt'];
+  updatedAt: Member['updatedAt'];
+}
+export type UpdateMyInfoResponse = SuccessResponse<UpdateMyInfoResult>;
 
 /* ================================ [ 토큰 리프레쉬 API ] ====================================== */
 export interface RefreshResult {
