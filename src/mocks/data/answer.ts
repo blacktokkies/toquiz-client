@@ -2,9 +2,12 @@ import type { Answer } from '@/lib/api/answer';
 
 import { faker } from '@faker-js/faker';
 
-let id = 0;
+export const createMockAnswerId = (() => {
+  let id = 0;
+  return () => id++;
+})();
 export const createMockAnswer = (): Answer => ({
-  id: id++,
+  id: createMockAnswerId(),
   content: faker.lorem.sentence(),
   createdAt: new Date().toString(),
   updatedAt: new Date().toString(),
