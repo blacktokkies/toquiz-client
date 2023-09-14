@@ -2,9 +2,12 @@ import type { Question } from '@/lib/api/question';
 
 import { faker } from '@faker-js/faker';
 
-let id = 0;
+export const createMockQuestionId = (() => {
+  let id = 0;
+  return () => id++;
+})();
 export const createMockQuestion = (): Question => ({
-  id: id++,
+  id: createMockQuestionId(),
   content: faker.lorem.sentences().slice(0, 200),
   answerNum: faker.datatype.number(5),
   likeNum: faker.datatype.number(10),
@@ -12,7 +15,6 @@ export const createMockQuestion = (): Question => ({
   createdAt: new Date().toString(),
   updatedAt: new Date().toString(),
 });
-
 export const createMockQuestionList = (size: number): Question[] =>
   [...Array(size).keys()].map(createMockQuestion);
 
