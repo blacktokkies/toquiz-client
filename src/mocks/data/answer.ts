@@ -16,4 +16,7 @@ export const createMockAnswer = (): Answer => ({
 export const createMockAnswerList = (size: number): Answer[] =>
   [...Array(size).keys()].map(createMockAnswer);
 
-export const mockAnswerList: Answer[] = createMockAnswerList(30 * 3);
+export let mockAnswerList: Answer[] = createMockAnswerList(30 * 3);
+export const initMockAnswerList = (): void => {
+  mockAnswerList = createMockAnswerList(30 * 3);
+};
