@@ -11,33 +11,7 @@ import { OverlayProvider } from '@/contexts/OverlayContext';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { createMockPanel } from '@/mocks/data/panel';
 
-const panel: PanelData = createMockPanel();
-
-describe('패널 페이지 헤더', () => {
-  it('패널 이름을 보여준다', () => {
-    const { title } = setup();
-
-    expect(title).toHaveTextContent(panel.title);
-  });
-
-  it('내 계정 아이콘을 누르면 계정 액션 메뉴를 보여준다', async () => {
-    const { accountButton } = setup();
-    await userEvent.click(accountButton);
-
-    expect(screen.getByRole('dialog', { name: /내 계정 액션 메뉴/ }));
-  });
-
-  it('메뉴 아이콘을 누르면 사이드시트를 보여준다', async () => {
-    const { menuButton } = setup();
-    await userEvent.click(menuButton);
-
-    expect(
-      screen.getByRole('complementary', { name: /메뉴/ }),
-    ).toBeInTheDocument();
-  });
-});
-
-function setup(): {
+function setup({ panel }: { panel: PanelData }): {
   title: HTMLHeadingElement;
   menuButton: HTMLButtonElement;
   accountButton: HTMLButtonElement;
@@ -60,3 +34,28 @@ function setup(): {
 
   return { title, menuButton, accountButton };
 }
+
+describe('패널 페이지 헤더', () => {
+  it('패널 이름을 보여준다', () => {
+    const panel = createMockPanel();
+    const { title } = setup({ panel });
+
+    expect(title).toHaveTextContent(panel.title);
+  });
+
+  it('내 계정 아이콘을 누르면 계정 액션 메뉴를 보여준다', async () => {
+    const { accountButton } = setup({ panel: createMockPanel() });
+    await userEvent.click(accountButton);
+
+    expect(screen.getByRole('dialog', { name: /내 계정 액션 메뉴/ }));
+  });
+
+  it('메뉴 아이콘을 누르면 사이드시트를 보여준다', async () => {
+    const { menuButton } = setup({ panel: createMockPanel() });
+    await userEvent.click(menuButton);
+
+    expect(
+      screen.getByRole('complementary', { name: /메뉴/ }),
+    ).toBeInTheDocument();
+  });
+});

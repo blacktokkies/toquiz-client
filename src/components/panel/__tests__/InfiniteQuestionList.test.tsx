@@ -4,7 +4,6 @@ import type { QueryClient } from '@tanstack/react-query';
 
 import React from 'react';
 
-import { faker } from '@faker-js/faker';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
@@ -14,19 +13,28 @@ import { apiUrl } from '@/lib/api/apiUrl';
 import * as questionApis from '@/lib/api/question';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { delay } from '@/lib/test-utils/delay';
+import { createMockPanelId } from '@/mocks/data/panel';
 import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
 vi.mock('@/hooks/useOverlay', () => ({ useOverlay: vi.fn() }));
 
-const panelId: Panel['sid'] = faker.datatype.uuid();
+function setup({ panelId }: { panelId: Panel['sid'] }): {
+  queryClient: QueryClient;
+} {
+  const { queryClient } = renderWithQueryClient(
+    <InfiniteQuestionList panelId={panelId} />,
+  );
+
+  return { queryClient };
+}
 
 describe('InfiniteQuestionList', () => {
   describe('질문 목록 렌더링', () => {
     it('질문 목록 가져오기 API를 호출하고 성공 시 질문 목록을 렌더링한다', async () => {
       const { questions } = overrideGetQuestionsWithSingleQuestion();
       const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
-      setup();
+      setup({ panelId: createMockPanelId() });
 
       expect(spyOnGetQuestions).toHaveBeenCalled();
       await waitFor(() => {
@@ -35,8 +43,10 @@ describe('InfiniteQuestionList', () => {
     });
 
     it('사용자가 스크롤하면 getQuestions를 호출한다', async () => {
-      const { waitForFinish } = setup();
-      await waitForFinish();
+      const { queryClient } = setup({ panelId: createMockPanelId() });
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
 
       const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
       fireEvent.scroll(window);
@@ -47,8 +57,11 @@ describe('InfiniteQuestionList', () => {
 
   describe('질문 목록 정렬', () => {
     it('최신순 버튼을 누르면 최신순으로 질문 목록 API 호출한다', async () => {
-      const { waitForFinish } = setup();
-      await waitForFinish();
+      const panelId: Panel['sid'] = createMockPanelId();
+      const { queryClient } = setup({ panelId });
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
 
       const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
       const recentButton = screen.getByRole('button', { name: '최신순' });
@@ -61,8 +74,11 @@ describe('InfiniteQuestionList', () => {
     });
 
     it('좋아요순 버튼 누르면 좋아요순으로 질문 목록 API 호출한다', async () => {
-      const { waitForFinish } = setup();
-      await waitForFinish();
+      const panelId: Panel['sid'] = createMockPanelId();
+      const { queryClient } = setup({ panelId });
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
 
       const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
       const recentButton = screen.getByRole('button', { name: '최신순' });
@@ -78,8 +94,10 @@ describe('InfiniteQuestionList', () => {
 
   describe('좋아요 버튼', () => {
     it('좋아요 버튼을 누르면 질문 좋아요 API 요청한다', async () => {
-      const { waitForFinish } = setup();
-      await waitForFinish();
+      const { queryClient } = setup({ panelId: createMockPanelId() });
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
 
       const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
       const likeButton = screen.getAllByRole('button', { name: /좋아요 / })[0];
@@ -89,8 +107,10 @@ describe('InfiniteQuestionList', () => {
     });
 
     it('이때 좋아요 API 응답을 기다리지 않고 화면에 토글 결과를 보여준다', async () => {
-      const { waitForFinish } = setup();
-      await waitForFinish();
+      const { queryClient } = setup({ panelId: createMockPanelId() });
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
 
       const spyOnLikeQuestion = vi.spyOn(questionApis, 'likeQuestion');
       const likeButton = screen.getAllByRole('button', { name: /좋아요 / })[0];
@@ -109,8 +129,10 @@ describe('InfiniteQuestionList', () => {
           statusCode: 400,
           message: '유효하지 않은 좋아요 활성화 요청입니다.',
         });
-        const { waitForFinish } = setup();
-        await waitForFinish();
+        const { queryClient } = setup({ panelId: createMockPanelId() });
+        await waitFor(() => {
+          expect(queryClient.isFetching()).toBe(0);
+        });
 
         const likeButton = screen.getByRole('button', { name: /좋아요 / });
         const prevLikeNum = Number(likeButton.textContent);
@@ -139,8 +161,10 @@ describe('InfiniteQuestionList', () => {
           );
         }),
       );
-      const { waitForFinish } = setup();
-      await waitForFinish();
+      const { queryClient } = setup({ panelId: createMockPanelId() });
+      await waitFor(() => {
+        expect(queryClient.isFetching()).toBe(0);
+      });
 
       const likeButton = screen.getByRole('button', { name: /좋아요 / });
       await userEvent.click(likeButton);
@@ -150,22 +174,6 @@ describe('InfiniteQuestionList', () => {
     });
   });
 });
-
-function setup(): {
-  queryClient: QueryClient;
-  waitForFinish: () => Promise<void>;
-} {
-  const { queryClient } = renderWithQueryClient(
-    <InfiniteQuestionList panelId={panelId} />,
-  );
-
-  const waitForFinish = async (): Promise<void> =>
-    waitFor(() => {
-      expect(queryClient.isFetching()).toBe(0);
-    });
-
-  return { queryClient, waitForFinish };
-}
 
 export function overrideLikeQuestionWithError(data: ErrorResponse): void {
   server.use(

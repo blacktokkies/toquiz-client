@@ -4,7 +4,6 @@ import type { RouteObject } from 'react-router-dom';
 
 import React from 'react';
 
-import { faker } from '@faker-js/faker';
 import { QueryClientProvider, type QueryClient } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import { rest } from 'msw';
@@ -17,16 +16,15 @@ import { apiUrl } from '@/lib/api/apiUrl';
 import * as panelApis from '@/lib/api/panel';
 import { createQueryClient } from '@/lib/test-utils';
 import { mockMyActiveInfo } from '@/mocks/data/active-info';
+import { createMockPanelId } from '@/mocks/data/panel';
 import { server } from '@/mocks/server';
 import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
-
-const panelId: PanelData['sid'] = faker.datatype.uuid();
 
 describe('/panel/:id route', () => {
   it('로더에서 패널 정보 가져오기 API와 내 활동 정보 가져오기 API를 호출한다', async () => {
     const spyOnGetPanel = vi.spyOn(panelApis, 'getPanel');
     const spyOnGetMyActiveInfo = vi.spyOn(activeInfoApis, 'getMyActiveInfo');
-    setup();
+    const { panelId } = setup();
 
     expect(spyOnGetPanel).toBeCalledWith(panelId);
     await waitFor(() => {
@@ -35,7 +33,7 @@ describe('/panel/:id route', () => {
   });
 
   it('내 활동 정보 가져오기 API가 성공 응답을 반환하면 캐시에 저장된다', async () => {
-    const { queryClient } = setup();
+    const { queryClient, panelId } = setup();
 
     await waitFor(() => {
       expect(
@@ -76,7 +74,9 @@ function overrideGetPanelResponseWithError(data: ErrorResponse): void {
 
 function setup(): {
   queryClient: QueryClient;
+  panelId: PanelData['sid'];
 } {
+  const panelId: PanelData['sid'] = createMockPanelId();
   const queryClient = createQueryClient();
   const routes: RouteObject[] = [
     {
@@ -107,5 +107,5 @@ function setup(): {
     ),
   });
 
-  return { queryClient };
+  return { queryClient, panelId };
 }

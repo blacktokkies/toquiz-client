@@ -2,66 +2,17 @@ import type { Panel } from '@/lib/api/panel';
 
 import React from 'react';
 
-import { faker } from '@faker-js/faker';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as panelApis from '@/lib/api/panel';
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { createMockPanel } from '@/mocks/data/panel';
 
 import { DeletePanelModal } from '../DeletePanelModal';
 
 const handleClose = vi.fn();
-const panel: Panel = {
-  sid: faker.datatype.uuid(),
-  title: '테스트 패널 제목',
-  description: '테스트 패널 설명',
-  author: {
-    id: -1,
-    nickname: '테스트 닉네임',
-  },
-  createdAt: new Date().toDateString(),
-  updatedAt: new Date().toDateString(),
-};
-
-describe('DeletePanelModal', () => {
-  it('패널 삭제하기 헤딩을 보여준다', () => {
-    setup();
-
-    expect(screen.getByRole('heading')).toHaveTextContent(/패널 삭제하기/);
-  });
-
-  describe('패널 삭제 버튼을 누르면', () => {
-    it('패널 삭제 API를 호출한다', async () => {
-      const spyOnDeletePanel = vi.spyOn(panelApis, 'deletePanel');
-      const { deleteButton } = setup();
-      await userEvent.click(deleteButton);
-
-      expect(spyOnDeletePanel).toHaveBeenCalled();
-    });
-
-    it('패널 삭제 API가 성공 응답 시 close 함수를 호출한다', async () => {
-      const spyOnDeletePanel = vi.spyOn(panelApis, 'deletePanel');
-      const { deleteButton } = setup();
-      await userEvent.click(deleteButton);
-
-      expect(spyOnDeletePanel).toHaveBeenCalled();
-
-      await waitFor(() => {
-        expect(handleClose).toHaveBeenCalled();
-      });
-    });
-  });
-
-  it('취소 버튼을 누르면 close 함수가 호출된다', async () => {
-    const { closeButton } = setup();
-    await userEvent.click(closeButton);
-
-    expect(handleClose).toHaveBeenCalled();
-  });
-});
-
-function setup(): {
+function setup({ panel }: { panel: Panel }): {
   closeButton: HTMLButtonElement;
   deleteButton: HTMLButtonElement;
 } {
@@ -75,3 +26,43 @@ function setup(): {
   });
   return { closeButton, deleteButton };
 }
+
+describe('DeletePanelModal', () => {
+  it('패널 삭제하기 헤딩을 보여준다', () => {
+    setup({ panel: createMockPanel() });
+
+    expect(screen.getByRole('heading')).toHaveTextContent(/패널 삭제하기/);
+  });
+
+  describe('패널 삭제 버튼을 누르면', () => {
+    it('패널 삭제 API를 호출한다', async () => {
+      const spyOnDeletePanel = vi.spyOn(panelApis, 'deletePanel');
+      const { deleteButton } = setup({ panel: createMockPanel() });
+
+      await userEvent.click(deleteButton);
+
+      expect(spyOnDeletePanel).toHaveBeenCalled();
+    });
+
+    it('패널 삭제 API가 성공 응답 시 close 함수를 호출한다', async () => {
+      const spyOnDeletePanel = vi.spyOn(panelApis, 'deletePanel');
+      const { deleteButton } = setup({ panel: createMockPanel() });
+
+      await userEvent.click(deleteButton);
+
+      expect(spyOnDeletePanel).toHaveBeenCalled();
+
+      await waitFor(() => {
+        expect(handleClose).toHaveBeenCalled();
+      });
+    });
+  });
+
+  it('취소 버튼을 누르면 close 함수가 호출된다', async () => {
+    const { closeButton } = setup({ panel: createMockPanel() });
+
+    await userEvent.click(closeButton);
+
+    expect(handleClose).toHaveBeenCalled();
+  });
+});

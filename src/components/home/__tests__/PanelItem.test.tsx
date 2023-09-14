@@ -2,49 +2,15 @@ import type { Panel } from '@/lib/api/panel';
 
 import React from 'react';
 
-import { faker } from '@faker-js/faker';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { PanelItem } from '@/components/home/PanelItem';
+import { createMockPanel } from '@/mocks/data/panel';
 
-const panel: Panel = {
-  sid: faker.datatype.uuid(),
-  title: '테스트 패널 제목',
-  description: '테스트 패널 설명',
-  author: {
-    id: -1,
-    nickname: '테스트 닉네임',
-  },
-  createdAt: new Date().toDateString(),
-  updatedAt: new Date().toDateString(),
-};
 const handleOpenActionMenu = vi.fn();
 const handleTitleClick = vi.fn();
-
-describe('PanelItem', () => {
-  it('패널 제목과 설명을 렌더링한다', () => {
-    setup();
-    expect(screen.getByText(/패널 제목/)).toBeInTheDocument();
-    expect(screen.getByText(/패널 설명/)).toBeInTheDocument();
-  });
-
-  it('더보기 아이콘을 누르면 openActionMenu 함수를 호출한다', async () => {
-    const { moreButton } = setup();
-    await userEvent.click(moreButton);
-
-    expect(handleOpenActionMenu).toHaveBeenCalled();
-  });
-
-  it('패널 제목을 누르면 onPanelTitleClick 함수를 호출한다', async () => {
-    const { titleButton } = setup();
-    await userEvent.click(titleButton);
-
-    expect(handleTitleClick).toHaveBeenCalled();
-  });
-});
-
-function setup(): {
+function setup({ panel }: { panel: Panel }): {
   moreButton: HTMLButtonElement;
   titleButton: HTMLButtonElement;
 } {
@@ -65,3 +31,31 @@ function setup(): {
 
   return { moreButton, titleButton };
 }
+
+describe('PanelItem', () => {
+  it('패널 제목과 설명을 렌더링한다', () => {
+    setup({
+      panel: {
+        ...createMockPanel(),
+        title: '테스트 패널 제목',
+        description: '테스트 패널 설명',
+      },
+    });
+    expect(screen.getByText(/테스트 패널 제목/)).toBeInTheDocument();
+    expect(screen.getByText(/테스트 패널 설명/)).toBeInTheDocument();
+  });
+
+  it('더보기 아이콘을 누르면 openActionMenu 함수를 호출한다', async () => {
+    const { moreButton } = setup({ panel: createMockPanel() });
+    await userEvent.click(moreButton);
+
+    expect(handleOpenActionMenu).toHaveBeenCalled();
+  });
+
+  it('패널 제목을 누르면 onPanelTitleClick 함수를 호출한다', async () => {
+    const { titleButton } = setup({ panel: createMockPanel() });
+    await userEvent.click(titleButton);
+
+    expect(handleTitleClick).toHaveBeenCalled();
+  });
+});

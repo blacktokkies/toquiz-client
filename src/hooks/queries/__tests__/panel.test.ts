@@ -1,15 +1,15 @@
 import type { Panel } from '@/lib/api/panel';
 
-import { faker } from '@faker-js/faker';
 import { renderHook, waitFor } from '@testing-library/react';
 
 import { createQueryClientWrapper } from '@/lib/test-utils';
+import { createMockPanelId } from '@/mocks/data/panel';
 
 import { usePanelDetailQuery } from '../panel';
 
 describe('panel queries', () => {
   it('usePanelDetailQuery를 호출하면 getPanel이 호출된다', async () => {
-    const panelId: Panel['sid'] = faker.datatype.uuid();
+    const panelId: Panel['sid'] = createMockPanelId();
     const { result } = renderHook(() => usePanelDetailQuery(panelId), {
       wrapper: createQueryClientWrapper(),
     });
