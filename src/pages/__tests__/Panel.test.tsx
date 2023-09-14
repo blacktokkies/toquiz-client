@@ -3,12 +3,14 @@ import type {
   GetQuestionsPathParams,
   GetQuestionsResponse,
 } from '@/lib/api/question';
+import type * as Vi from 'vitest';
 
 import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
+import { useLoaderData } from 'react-router-dom';
 
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { apiUrl } from '@/lib/api/apiUrl';
@@ -19,38 +21,37 @@ import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 import { Panel } from '@/pages/Panel';
 
-const panel: PanelData = createMockPanel();
-
 vi.mock('react-router-dom', async (importOriginal) => {
   const router = (await importOriginal()) ?? {};
-  return { ...router, useLoaderData: vi.fn(() => panel) };
+  return { ...router, useLoaderData: vi.fn() };
 });
+
+function setup({ panel }: { panel: PanelData }): void {
+  (useLoaderData as Vi.Mock).mockImplementation(() => panel);
+  renderWithQueryClient(
+    <OverlayProvider>
+      <Panel />
+    </OverlayProvider>,
+  );
+}
 
 describe('패널 페이지', () => {
   it('헤더를 보여준다', () => {
-    renderWithQueryClient(
-      <OverlayProvider>
-        <Panel />
-      </OverlayProvider>,
-    );
+    setup({ panel: createMockPanel() });
 
     expect(screen.getByRole('banner')).toBeInTheDocument();
   });
 
   it('질문 목록을 렌더링한다', async () => {
-    const question = createMockQuestion();
     overrideGetQuestionsWithSuccess({
       statusCode: 200,
       result: {
-        questions: [{ ...question, content: '안녕하세요' }],
+        questions: [{ ...createMockQuestion(), content: '안녕하세요' }],
         nextPage: -1,
       },
     });
-    renderWithQueryClient(
-      <OverlayProvider>
-        <Panel />
-      </OverlayProvider>,
-    );
+
+    setup({ panel: createMockPanel() });
 
     await waitFor(() => {
       expect(screen.getAllByText(/안녕하세요/)[0]).toBeInTheDocument();
@@ -58,11 +59,7 @@ describe('패널 페이지', () => {
   });
 
   it('질문 생성 모달 열기 버튼을 누르면 질문 생성 모달을 보여준다', async () => {
-    renderWithQueryClient(
-      <OverlayProvider>
-        <Panel />
-      </OverlayProvider>,
-    );
+    setup({ panel: createMockPanel() });
 
     const openButton = screen.getByRole('button', {
       name: /질문 생성 모달 열기/,

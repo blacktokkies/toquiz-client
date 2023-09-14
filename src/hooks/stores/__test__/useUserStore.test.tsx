@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 
 import { useUserStore } from '@/hooks/stores/useUserStore';
+import { createMockUserId } from '@/mocks/data/auth';
 import { initialUserState, type UserState } from '@/store/user-store';
 
 describe('useUserStore', () => {
@@ -32,7 +33,7 @@ describe('useUserStore', () => {
     );
 
     const newUser: UserState = {
-      id: -1,
+      id: createMockUserId(),
       email: 'test@email.com',
       nickname: 'testnickname',
       provider: 'TEST',
@@ -85,7 +86,7 @@ describe('useUserStore', () => {
     );
 
     const newUser: UserState = {
-      id: -1,
+      id: createMockUserId(),
       email: 'test@email.com',
       nickname: 'testnickname',
       provider: 'TEST',

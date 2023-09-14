@@ -9,7 +9,9 @@ describe('auth api', () => {
     const body: UpdateMyInfoBody = {
       nickname: '닉네임',
     };
+
     const { result } = await updateMyInfo(body);
+
     expect(result.nickname).toBe(body.nickname);
   });
 
@@ -17,7 +19,9 @@ describe('auth api', () => {
     const body = {
       password: '비밀번호',
     };
+
     const { message } = await resign(body);
+
     expect(message).toBe('회원탈퇴에 성공하였습니다.');
   });
 });
