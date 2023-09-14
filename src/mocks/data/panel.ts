@@ -4,8 +4,9 @@ import { faker } from '@faker-js/faker';
 
 import { mockUser } from './auth';
 
+export const createMockPanelId = (): Panel['sid'] => faker.datatype.uuid();
 export const createMockPanel = (): Panel => ({
-  sid: faker.datatype.uuid(),
+  sid: createMockPanelId(),
   title: faker.music.songName(),
   description: faker.lorem.sentences().slice(0, 50),
   author: {
@@ -15,7 +16,6 @@ export const createMockPanel = (): Panel => ({
   createdAt: new Date().toDateString(),
   updatedAt: new Date().toDateString(),
 });
-
 export const createMockPanleList = (size: number): Panel[] =>
   [...Array(size).keys()].map(createMockPanel);
 
