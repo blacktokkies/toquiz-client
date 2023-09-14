@@ -18,13 +18,13 @@ import { rest } from 'msw';
 
 import { apiUrl } from '@/lib/api/apiUrl';
 import { API_BASE_URL } from '@/lib/apiClient';
-import { myAccount } from '@/mocks/data/auth';
+import { mockUser } from '@/mocks/data/auth';
 
 export const signUp = rest.post<SignUpBody, never, SignUpResponse>(
   `${API_BASE_URL}${apiUrl.auth.signup()}`,
   async (req, res, ctx) => {
     const { nickname }: SignUpBody = await req.json();
-    myAccount.nickname = nickname;
+    mockUser.nickname = nickname;
 
     return res(
       ctx.status(200),
@@ -40,7 +40,7 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
   `${API_BASE_URL}${apiUrl.auth.login()}`,
   async (req, res, ctx) => {
     const { email }: LogInBody = await req.json();
-    myAccount.email = email;
+    mockUser.email = email;
 
     return res(
       ctx.status(200),
@@ -48,7 +48,7 @@ export const login = rest.post<LogInBody, never, LogInResponse>(
       ctx.json({
         statusCode: 200,
         result: {
-          ...myAccount,
+          ...mockUser,
           email,
           accessToken: 'dev-accessToken',
         },
@@ -85,7 +85,7 @@ export const me = rest.get<never, never, GetMyInfoResponse | ErrorResponse>(
         ctx.status(200),
         ctx.json({
           statusCode: 200,
-          result: myAccount,
+          result: mockUser,
         }),
       );
     else {
@@ -118,7 +118,7 @@ export const refresh = rest.post<never, never, RefreshResponse | ErrorResponse>(
         ctx.json({
           statusCode: 200,
           result: {
-            ...myAccount,
+            ...mockUser,
             accessToken: 'dev-accessToken',
           },
         }),
@@ -143,14 +143,14 @@ export const updateMyInfo = rest.patch<
 >(apiUrl.auth.update(), async (req, res, ctx) => {
   const { nickname }: UpdateMyInfoBody = await req.json();
 
-  if (nickname) myAccount.nickname = nickname;
+  if (nickname) mockUser.nickname = nickname;
 
   return res(
     ctx.status(200),
     ctx.json({
       statusCode: 200,
       result: {
-        ...myAccount,
+        ...mockUser,
       },
     }),
   );
