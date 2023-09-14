@@ -7,7 +7,7 @@ import { rest } from 'msw';
 
 import { apiUrl } from '@/lib/api/apiUrl';
 import { API_BASE_URL } from '@/lib/apiClient';
-import { myActiveInfoMock } from '@/mocks/data/active-info';
+import { mockMyActiveInfo } from '@/mocks/data/active-info';
 
 export const getMyActiveInfo = rest.get<
   never,
@@ -24,7 +24,7 @@ export const getMyActiveInfo = rest.get<
       ctx.cookie('active_info_id', activeInfoToken, { httpOnly: true }),
       ctx.json({
         statusCode: 200,
-        result: myActiveInfoMock,
+        result: mockMyActiveInfo,
       }),
     );
   },

@@ -3,6 +3,7 @@ import fetch from 'cross-fetch';
 
 import { server } from '@/mocks/server';
 
+import { initMockMyActiveInfo } from './mocks/data/active-info';
 import { initMockAnswerList } from './mocks/data/answer';
 import { initMockUser } from './mocks/data/auth';
 import { initMockMyPanelList } from './mocks/data/panel';
@@ -37,6 +38,7 @@ afterEach(() => {
   initMockMyPanelList();
   initMockQuestionList();
   initMockAnswerList();
+  initMockMyActiveInfo();
 });
 
 /* ===================== [ IntersectionObserver 모킹 ] ===================== */

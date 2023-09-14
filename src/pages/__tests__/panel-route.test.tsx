@@ -16,7 +16,7 @@ import * as activeInfoApis from '@/lib/api/active-Info';
 import { apiUrl } from '@/lib/api/apiUrl';
 import * as panelApis from '@/lib/api/panel';
 import { createQueryClient } from '@/lib/test-utils';
-import { myActiveInfoMock } from '@/mocks/data/active-info';
+import { mockMyActiveInfo } from '@/mocks/data/active-info';
 import { server } from '@/mocks/server';
 import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 
@@ -40,7 +40,7 @@ describe('/panel/:id route', () => {
     await waitFor(() => {
       expect(
         queryClient.getQueryData(activeInfoDetailQuery(panelId).queryKey),
-      ).toEqual(myActiveInfoMock);
+      ).toEqual(mockMyActiveInfo);
     });
   });
 
