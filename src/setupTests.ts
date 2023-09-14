@@ -5,6 +5,7 @@ import { server } from '@/mocks/server';
 
 import { initMockUser } from './mocks/data/auth';
 import { initMockMyPanelList } from './mocks/data/panel';
+import { initMockQuestionList } from './mocks/data/question';
 
 globalThis.fetch = fetch;
 
@@ -33,6 +34,7 @@ afterAll(() => {
 afterEach(() => {
   initMockUser();
   initMockMyPanelList();
+  initMockQuestionList();
 });
 
 /* ===================== [ IntersectionObserver 모킹 ] ===================== */
