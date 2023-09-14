@@ -15,7 +15,7 @@ import { rest } from 'msw';
 
 import { apiUrl } from '@/lib/api/apiUrl';
 import { API_BASE_URL } from '@/lib/apiClient';
-import { createMockPanel, myPanelList } from '@/mocks/data/panel';
+import { createMockPanel, mockMyPanelList } from '@/mocks/data/panel';
 
 export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
   `${API_BASE_URL}${apiUrl.panel.getMyPanels()}`,
@@ -24,9 +24,9 @@ export const getMyPanels = rest.get<never, never, GetMyPanelsResponse>(
 
     const start = Number(page);
     const end = (start + 1) * 10;
-    const panels = myPanelList.slice(start, end);
+    const panels = mockMyPanelList.slice(start, end);
 
-    const nextPage = end === myPanelList.length ? -1 : start + 1;
+    const nextPage = end === mockMyPanelList.length ? -1 : start + 1;
 
     return res(
       ctx.status(200),
@@ -71,7 +71,7 @@ export const updatePanel = rest.patch<
   async (req, res, ctx) => {
     const { title, description }: UpdatePanelBody = await req.json();
     const { panelId } = req.params;
-    const panel = myPanelList.find((panel) => panel.sid === panelId) ?? {
+    const panel = mockMyPanelList.find((panel) => panel.sid === panelId) ?? {
       ...createMockPanel(),
       sid: panelId,
     };
@@ -110,7 +110,7 @@ export const getPanel = rest.get<never, GetPanelPathParams, GetPanelResponse>(
   `${API_BASE_URL}${apiUrl.panel.get(':panelId')}`,
   async (req, res, ctx) => {
     const { panelId } = req.params;
-    const panel = myPanelList.find((panel) => panel.sid === panelId) ?? {
+    const panel = mockMyPanelList.find((panel) => panel.sid === panelId) ?? {
       ...createMockPanel(),
       sid: panelId,
     };
