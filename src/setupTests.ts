@@ -3,6 +3,8 @@ import fetch from 'cross-fetch';
 
 import { server } from '@/mocks/server';
 
+import { initMockUser } from './mocks/data/auth';
+
 globalThis.fetch = fetch;
 
 vi.mock('zustand');
@@ -23,6 +25,12 @@ afterEach(() => {
 });
 afterAll(() => {
   server.close();
+});
+
+/* ===================== [ mock 데이터 초기화 ] ===================== */
+
+afterEach(() => {
+  initMockUser();
 });
 
 /* ===================== [ IntersectionObserver 모킹 ] ===================== */
