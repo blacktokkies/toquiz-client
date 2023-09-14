@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { renderWithQueryClient } from '@/lib/test-utils';
-import { myPanelList } from '@/mocks/data/panel';
+import { mockMyPanelList } from '@/mocks/data/panel';
 import { Home } from '@/pages/Home';
 
 vi.mock('@/hooks/stores/useUserStore', () => ({
@@ -32,7 +32,9 @@ describe('홈 페이지', () => {
     setup();
 
     await waitFor(() => {
-      expect(screen.getAllByText(myPanelList[0].title)[0]).toBeInTheDocument();
+      expect(
+        screen.getAllByText(mockMyPanelList[0].title)[0],
+      ).toBeInTheDocument();
     });
   });
 });

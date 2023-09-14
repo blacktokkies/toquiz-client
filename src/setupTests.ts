@@ -4,6 +4,7 @@ import fetch from 'cross-fetch';
 import { server } from '@/mocks/server';
 
 import { initMockUser } from './mocks/data/auth';
+import { initMockMyPanelList } from './mocks/data/panel';
 
 globalThis.fetch = fetch;
 
@@ -31,6 +32,7 @@ afterAll(() => {
 
 afterEach(() => {
   initMockUser();
+  initMockMyPanelList();
 });
 
 /* ===================== [ IntersectionObserver 모킹 ] ===================== */
