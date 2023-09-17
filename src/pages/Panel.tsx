@@ -85,7 +85,7 @@ export function Panel(): JSX.Element {
     ): void => {
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
         queryKey.question.list(panel.sid),
-        updateLikeNum(questionId, likeNum),
+        updateLikeNumAndSort(questionId, likeNum),
       );
 
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
@@ -299,6 +299,25 @@ const updateLikeNum =
           }
         });
       });
+    });
+
+const updateLikeNumAndSort =
+  (questionId: Question['id'], likeNum: Question['likeNum']) =>
+  (prevQuestions?: InfiniteData<QuestionPage>) =>
+    produce(prevQuestions, (draft) => {
+      if (!draft) return;
+
+      const allQuestions = draft.pages.flatMap((page) => page.questions);
+      const questionIdx = allQuestions.findIndex(
+        (question) => question.id === questionId,
+      );
+      if (questionIdx !== -1) {
+        allQuestions[questionIdx].likeNum = likeNum;
+        allQuestions.sort((a, b) => b.likeNum - a.likeNum);
+        draft.pages.forEach((page) => {
+          page.questions = allQuestions.splice(0, 30);
+        });
+      }
     });
 
 const increaseAnswerNum =
