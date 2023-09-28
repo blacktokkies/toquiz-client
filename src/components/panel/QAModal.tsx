@@ -20,7 +20,6 @@ import {
   useCreateAnswerMutation,
 } from '@/hooks/queries/answer';
 import { useUserStore } from '@/hooks/stores/useUserStore';
-import { useCurrentDate } from '@/hooks/useCurrentDate';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { queryKey } from '@/lib/queryKey';
 
@@ -45,7 +44,6 @@ export function QAModal({
   // [NOTE] 질문과 답변 모달은 패널 페이지에서만 사용되므로
   // 패널 페이지 로더가 반환하는 데이터가 null이 아님이 보장된다
   const panelLoaderData = useRouteLoaderData('panel') as Panel;
-  const now = useCurrentDate();
   const answersQuery = useAnswersQuery(questionId);
 
   const [expanded, setExpanded] = useState(false);
@@ -237,7 +235,7 @@ export function QAModal({
         </div>
       )}
       <div className="flex-1">
-        <AnswerList answers={answers} nickname={author.nickname} now={now} />
+        <AnswerList answers={answers} nickname={author.nickname} />
       </div>
     </div>
   );

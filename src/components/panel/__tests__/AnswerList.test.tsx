@@ -14,9 +14,7 @@ describe('AnswerList', () => {
       { ...createMockAnswer(), content: '안녕하세요' },
       { ...createMockAnswer(), content: '반가워요' },
     ];
-    render(
-      <AnswerList nickname={'닉네임'} answers={answers} now={new Date()} />,
-    );
+    render(<AnswerList nickname={'닉네임'} answers={answers} />);
 
     expect(screen.getByText(/안녕하세요/)).toBeInTheDocument();
     expect(screen.getByText(/반가워요/)).toBeInTheDocument();
