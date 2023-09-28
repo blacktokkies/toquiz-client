@@ -39,12 +39,12 @@ export function QuestionList({
   sort,
   questionPages,
 }: Props): JSX.Element {
-  const now = useCurrentDate();
   // [NOTE] 패널 페이지 로더에서 활동 정보 디테일 쿼리를 `staleTime: Infinity`로 prefetch하므로
   // 패널 페이지 렌더링 중에는 활동 정보 디테일 쿼리의 데이터가 언제나 fresh하다는 것이 보장된다
   /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
   const activeInfo = useActiveInfoDetailQuery(panelId).data!;
   const likeSet = new Set(activeInfo.likedIds);
+
   const socketClient = useSocketClient();
   const queryClient = useQueryClient();
   const likeQuestionMutation = useLikeQuestionMutation<{
@@ -119,15 +119,16 @@ export function QuestionList({
       queryClient.invalidateQueries(queryKey.question.lists());
     },
   });
+
   const handleLikeButtonClick = (question: Question): void => {
     likeQuestionMutation.mutate({
       id: question.id,
-      active: !activeInfo.likedIds.includes(question.id),
+      active: !likeSet.has(question.id),
     });
   };
 
   const overlay = useOverlay();
-  function openModal(question: Question): void {
+  function openQAModal(question: Question): void {
     overlay.open(({ close }) => (
       <QAModal
         close={close}
@@ -142,16 +143,18 @@ export function QuestionList({
 
   const handleQuestionItemClick =
     (question: Question) => (event: MouseEvent<HTMLDivElement>) => {
-      openModal(question);
+      openQAModal(question);
     };
 
   const handleQuestionItemKeydown =
     (question: Question) => (event: KeyboardEvent<HTMLDivElement>) => {
       if (event.key === 'Enter' || event.keyCode === 13) {
         event.preventDefault();
-        openModal(question);
+        openQAModal(question);
       }
     };
+
+  const now = useCurrentDate();
 
   return (
     <ul className="flex flex-col gap-3">
