@@ -5,8 +5,8 @@ import React from 'react';
 
 import { clsx } from 'clsx';
 
+import { TimeDiff } from '@/components/system/TimeDiff';
 import { Like, Account } from '@/components/vectors';
-import { formatDistance } from '@/lib/format-date';
 
 interface Props {
   question: Question;
@@ -29,9 +29,11 @@ export function QuestionItem({
             <Account className="fill-grey-darkest" />
           </div>
           <div className="font-bold whitespace-nowrap">익명</div>
-          <div className="text-grey-dark">
-            {formatDistance(now, new Date(question.createdAt))}
-          </div>
+          <TimeDiff
+            className="text-grey-dark"
+            base={now}
+            target={new Date(question.createdAt)}
+          />
           {question.answerNum ? (
             <span className="ml-1 px-3 rounded-2xl bg-primary text-white text-sm">
               답변 {question.answerNum}개

@@ -2,15 +2,15 @@ import type { Answer } from '@/lib/api/answer';
 
 import React from 'react';
 
+import { TimeDiff } from '@/components/system/TimeDiff';
 import { Account } from '@/components/vectors';
-import { formatDistance } from '@/lib/format-date';
 
 interface Props {
   nickname: string;
   answers: Answer[];
-  now: Date;
 }
-export function AnswerList({ nickname, answers, now }: Props): JSX.Element {
+export function AnswerList({ nickname, answers }: Props): JSX.Element {
+  const now = new Date();
   return (
     <ul>
       {answers.map((answer) => (
@@ -24,9 +24,11 @@ export function AnswerList({ nickname, answers, now }: Props): JSX.Element {
                 <Account className="fill-grey-darkest" />
               </div>
               <div className="font-bold whitespace-nowrap">{nickname}</div>
-              <div className="text-grey-dark">
-                {formatDistance(now, new Date(answer.createdAt))}
-              </div>
+              <TimeDiff
+                className="text-grey-dark"
+                base={now}
+                target={new Date(answer.createdAt)}
+              />
             </div>
           </div>
           <div className="whitespace-pre-wrap">{answer.content}</div>

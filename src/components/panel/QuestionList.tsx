@@ -21,7 +21,6 @@ import {
   useActiveInfoDetailQuery,
 } from '@/hooks/queries/active-info';
 import { useLikeQuestionMutation } from '@/hooks/queries/question';
-import { useCurrentDate } from '@/hooks/useCurrentDate';
 import { useOverlay } from '@/hooks/useOverlay';
 import { ApiError } from '@/lib/apiClient';
 import { queryKey } from '@/lib/queryKey';
@@ -154,7 +153,7 @@ export function QuestionList({
       }
     };
 
-  const now = useCurrentDate();
+  const now = new Date();
 
   return (
     <ul className="flex flex-col gap-3">
