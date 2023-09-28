@@ -41,8 +41,8 @@ export function QuestionList({
   questionPages,
 }: Props): JSX.Element {
   const now = useCurrentDate();
-  // [NOTE] 패널 페이지 로더에서 active info query를 `staleTime: Infinity`로 prefetch하므로
-  // active info query의 데이터가 fresh하다는 것이 보장된다
+  // [NOTE] 패널 페이지 로더에서 활동 정보 디테일 쿼리를 `staleTime: Infinity`로 prefetch하므로
+  // 패널 페이지 렌더링 중에는 활동 정보 디테일 쿼리의 데이터가 언제나 fresh하다는 것이 보장된다
   /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
   const activeInfo = useActiveInfoDetailQuery(panelId).data!;
   const likeSet = new Set(activeInfo.likedIds);
@@ -120,7 +120,6 @@ export function QuestionList({
       queryClient.invalidateQueries(queryKey.question.lists());
     },
   });
-
   const handleLikeButtonClick = (question: Question) => () => {
     likeQuestionMutation.mutate({
       id: question.id,
