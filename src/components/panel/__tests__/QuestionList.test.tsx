@@ -1,21 +1,17 @@
 import type { Panel } from '@/lib/api/panel';
 import type { GetQuestionsParams, QuestionPage } from '@/lib/api/question';
 import type { QueryClient } from '@tanstack/react-query';
-import type * as Vi from 'vitest';
 
 import React from 'react';
 
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { QuestionList } from '@/components/panel/QuestionList';
 import { OverlayProvider } from '@/contexts/OverlayContext';
-import { useActiveInfoDetailQuery } from '@/hooks/queries/active-info';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { createMockPanel, createMockPanelId } from '@/mocks/data/panel';
-import {
-  createMockQuestion,
-  createMockQuestionList,
-} from '@/mocks/data/question';
+import { createMockQuestionList } from '@/mocks/data/question';
 
 vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
   const queries = (await importOriginal()) ?? {};
@@ -44,8 +40,6 @@ function setup({
   questionPages: QuestionPage[];
 }): {
   queryClient: QueryClient;
-  likeButton: HTMLButtonElement;
-  questionItem: HTMLElement;
 } {
   const { queryClient } = renderWithQueryClient(
     <OverlayProvider>
@@ -58,81 +52,52 @@ function setup({
     </OverlayProvider>,
   );
 
-  const likeButton = screen.getByRole<HTMLButtonElement>('button', {
-    name: /좋아요 버튼/,
-  });
-  const questionItem = screen.getByRole('button', {
-    name: /질문과 답변 모달 열기/,
-  });
-
-  return { queryClient, likeButton, questionItem };
+  return { queryClient };
 }
 
 describe('QuestionList', () => {
-  it('질문마다 답변 개수를 보여준다', () => {
+  it('질문을 누르면 모달을 보여준다', async () => {
     setup({
       panelId: createMockPanelId(),
       sort: undefined,
       questionPages: [
         {
-          questions: [{ ...createMockQuestion(), answerNum: 3 }],
+          questions: createMockQuestionList(3),
           nextPage: -1,
         },
       ],
     });
 
-    expect(screen.getByText(`답변 3개`)).toBeInTheDocument();
+    const questionItem = screen.getAllByRole('button', {
+      name: /질문과 답변 모달 열기/,
+    })[0];
+    await userEvent.click(questionItem);
+
+    expect(
+      screen.getByRole('dialog', { name: /질문과 답변 모달/ }),
+    ).toBeInTheDocument();
   });
 
-  it('질문에 답변이 없으면 답변 개수를 보여주지 않는다', () => {
+  it('모달에서 <- 아이콘 누르면 모달이 닫힌다', async () => {
     setup({
       panelId: createMockPanelId(),
       sort: undefined,
       questionPages: [
         {
-          questions: [{ ...createMockQuestion(), answerNum: 0 }],
+          questions: createMockQuestionList(3),
           nextPage: -1,
         },
       ],
     });
 
-    expect(screen.queryByText(`답변 0개`)).not.toBeInTheDocument();
-  });
+    const questionItem = screen.getAllByRole('button', {
+      name: /질문과 답변 모달 열기/,
+    })[0];
+    await userEvent.click(questionItem);
+    const dialog = screen.getByRole('dialog', { name: /질문과 답변 모달/ });
+    const goBackButton = screen.getByRole('button', { name: /뒤로 가기/ });
+    await userEvent.click(goBackButton);
 
-  describe('likedIds', () => {
-    it('likedIds에 속한 질문은 좋아요 버튼이 활성화되어있다', () => {
-      const question = createMockQuestion();
-      (useActiveInfoDetailQuery as Vi.Mock).mockImplementation(() => ({
-        data: {
-          createdIds: [],
-          likedIds: [question.id],
-        },
-      }));
-      const { likeButton } = setup({
-        panelId: createMockPanelId(),
-        sort: undefined,
-        questionPages: [
-          {
-            questions: [question],
-            nextPage: -1,
-          },
-        ],
-      });
-      expect(likeButton).toHaveAttribute('aria-pressed', 'true');
-    });
-
-    it('likedIds에 속하지 않은 질문은 좋아요 버튼이 비활성화되어있다', () => {
-      const { likeButton } = setup({
-        panelId: createMockPanelId(),
-        sort: undefined,
-        questionPages: [
-          {
-            questions: createMockQuestionList(1),
-            nextPage: -1,
-          },
-        ],
-      });
-      expect(likeButton).toHaveAttribute('aria-pressed', 'false');
-    });
+    expect(dialog).not.toBeInTheDocument();
   });
 });

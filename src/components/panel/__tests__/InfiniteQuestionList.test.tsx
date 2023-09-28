@@ -167,38 +167,41 @@ describe('InfiniteQuestionList', () => {
           expect(likeButton).toHaveTextContent(String(prevLikeNum));
         });
       });
-    });
 
-    // TODO: 질문 목록에서 삭제하기 전에 토스트 띄워주면 좋을 거 같다
-    it('[404] 질문이 존재하지 않습니다 이면 질문을 질문 목록에서 삭제한다', async () => {
-      const questions = [createMockQuestion()];
-      overrideGetQuestionsWithSuccess({
-        questions,
-        nextPage: -1,
+      // TODO: 질문 목록에서 삭제하기 전에 토스트 띄워주면 좋을 거 같다
+      it('[404] 질문이 존재하지 않습니다 이면 질문을 질문 목록에서 삭제한다', async () => {
+        const questions = [createMockQuestion()];
+        overrideGetQuestionsWithSuccess({
+          questions,
+          nextPage: -1,
+        });
+        server.use(
+          rest.post(
+            apiUrl.question.like(':questionId'),
+            async (_, res, ctx) => {
+              questions.splice(0, 1);
+              return res(
+                ctx.status(404),
+                ctx.json({
+                  code: 'NOT_EXIST_QUESTION',
+                  statusCode: 404,
+                  message: '해당 질문이 존재하지 않습니다.',
+                }),
+              );
+            },
+          ),
+        );
+        const { queryClient } = setup({ panelId: createMockPanelId() });
+        await waitFor(() => {
+          expect(queryClient.isFetching()).toBe(0);
+        });
+
+        const likeButton = screen.getByRole('button', { name: /좋아요 / });
+        await userEvent.click(likeButton);
+
+        await delay(300);
+        expect(likeButton).not.toBeInTheDocument();
       });
-      server.use(
-        rest.post(apiUrl.question.like(':questionId'), async (_, res, ctx) => {
-          questions.splice(0, 1);
-          return res(
-            ctx.status(404),
-            ctx.json({
-              code: 'NOT_EXIST_QUESTION',
-              statusCode: 404,
-              message: '해당 질문이 존재하지 않습니다.',
-            }),
-          );
-        }),
-      );
-      const { queryClient } = setup({ panelId: createMockPanelId() });
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
-
-      const likeButton = screen.getByRole('button', { name: /좋아요 / });
-      await userEvent.click(likeButton);
-
-      await delay(300);
-      expect(likeButton).not.toBeInTheDocument();
     });
   });
 });
