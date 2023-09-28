@@ -139,7 +139,7 @@ export function Panel(): JSX.Element {
     };
   }, [queryClient, socketClient, panel.sid]);
 
-  function handleOpenModal(): void {
+  function openCreateQuestionModal(): void {
     overlay.open(({ close }) => (
       <ModalController close={close} aria-label="질문 생성 모달">
         <CreateQuestionModal close={close} panelId={panel.sid} />
@@ -159,7 +159,7 @@ export function Panel(): JSX.Element {
           'hover:bg-primary-hover',
         )}
         type="button"
-        onClick={handleOpenModal}
+        onClick={openCreateQuestionModal}
       >
         <Send className="w-9 h-9 fill-white" />
         <span className="sr-only">질문 생성 모달 열기</span>
