@@ -9,6 +9,7 @@ import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 
 import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
+import { OverlayProvider } from '@/contexts/OverlayContext';
 import { apiUrl } from '@/lib/api/apiUrl';
 import * as questionApis from '@/lib/api/question';
 import { renderWithQueryClient } from '@/lib/test-utils';
@@ -17,7 +18,6 @@ import { createMockPanelId } from '@/mocks/data/panel';
 import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
-vi.mock('@/hooks/useOverlay', () => ({ useOverlay: vi.fn() }));
 vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
   const queries = (await importOriginal()) ?? {};
   return {
@@ -35,7 +35,9 @@ function setup({ panelId }: { panelId: Panel['sid'] }): {
   queryClient: QueryClient;
 } {
   const { queryClient } = renderWithQueryClient(
-    <InfiniteQuestionList panelId={panelId} />,
+    <OverlayProvider>
+      <InfiniteQuestionList panelId={panelId} />
+    </OverlayProvider>,
   );
 
   return { queryClient };
@@ -44,17 +46,24 @@ function setup({ panelId }: { panelId: Panel['sid'] }): {
 describe('InfiniteQuestionList', () => {
   describe('질문 목록 렌더링', () => {
     it('질문 목록 가져오기 API를 호출하고 성공 시 질문 목록을 렌더링한다', async () => {
-      const { questions } = overrideGetQuestionsWithSingleQuestion();
+      overrideGetQuestionsWithSuccess({
+        questions: [{ ...createMockQuestion(), content: '안녕하세요' }],
+        nextPage: -1,
+      });
       const spyOnGetQuestions = vi.spyOn(questionApis, 'getQuestions');
       setup({ panelId: createMockPanelId() });
 
       expect(spyOnGetQuestions).toHaveBeenCalled();
       await waitFor(() => {
-        expect(screen.getByText(questions[0].content)).toBeInTheDocument();
+        expect(screen.getByText(/안녕하세요/)).toBeInTheDocument();
       });
     });
 
     it('사용자가 스크롤하면 getQuestions를 호출한다', async () => {
+      overrideGetQuestionsWithSuccess({
+        questions: [{ ...createMockQuestion(), content: '안녕하세요' }],
+        nextPage: 1,
+      });
       const { queryClient } = setup({ panelId: createMockPanelId() });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
@@ -135,7 +144,10 @@ describe('InfiniteQuestionList', () => {
 
     describe('좋아요 API가 에러를 응답하면 복구한다', () => {
       it('[400] 유효하지 않은 좋아요 활성화/비활성화 이면 기존 좋아요 개수로 보여준다', async () => {
-        overrideGetQuestionsWithSingleQuestion();
+        overrideGetQuestionsWithSuccess({
+          questions: [{ ...createMockQuestion(), content: '안녕하세요' }],
+          nextPage: -1,
+        });
         overrideLikeQuestionWithError({
           code: 'INVALID_ACTIVE_LIKE_QUESTION',
           statusCode: 400,
@@ -159,7 +171,11 @@ describe('InfiniteQuestionList', () => {
 
     // TODO: 질문 목록에서 삭제하기 전에 토스트 띄워주면 좋을 거 같다
     it('[404] 질문이 존재하지 않습니다 이면 질문을 질문 목록에서 삭제한다', async () => {
-      const { questions } = overrideGetQuestionsWithSingleQuestion();
+      const questions = [createMockQuestion()];
+      overrideGetQuestionsWithSuccess({
+        questions,
+        nextPage: -1,
+      });
       server.use(
         rest.post(apiUrl.question.like(':questionId'), async (_, res, ctx) => {
           questions.splice(0, 1);
@@ -187,7 +203,7 @@ describe('InfiniteQuestionList', () => {
   });
 });
 
-export function overrideLikeQuestionWithError(data: ErrorResponse): void {
+function overrideLikeQuestionWithError(data: ErrorResponse): void {
   server.use(
     rest.post(apiUrl.question.like(':questionId'), async (_, res, ctx) =>
       /* 낙관적 업데이트 확인 위해 임의의 딜레이 설정 */
@@ -196,21 +212,18 @@ export function overrideLikeQuestionWithError(data: ErrorResponse): void {
   );
 }
 
-function overrideGetQuestionsWithSingleQuestion(): {
-  questions: questionApis.Question[];
-} {
-  const questions = [{ ...createMockQuestion(), content: '안녕하세요' }];
+function overrideGetQuestionsWithSuccess(
+  data: questionApis.QuestionPage,
+): void {
   server.use(
     rest.get(apiUrl.question.getQuestions(':panelId'), async (req, res, ctx) =>
       res(
         ctx.status(200),
         ctx.json({
           statusCode: 200,
-          result: { questions, nextPage: -1 },
+          result: data,
         }),
       ),
     ),
   );
-
-  return { questions };
 }
