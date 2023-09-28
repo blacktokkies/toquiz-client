@@ -18,6 +18,18 @@ import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
 vi.mock('@/hooks/useOverlay', () => ({ useOverlay: vi.fn() }));
+vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
+  const queries = (await importOriginal()) ?? {};
+  return {
+    ...queries,
+    useActiveInfoDetailQuery: vi.fn(() => ({
+      data: {
+        createdIds: [],
+        likedIds: [],
+      },
+    })),
+  };
+});
 
 function setup({ panelId }: { panelId: Panel['sid'] }): {
   queryClient: QueryClient;

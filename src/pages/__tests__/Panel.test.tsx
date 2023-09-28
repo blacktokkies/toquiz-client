@@ -25,6 +25,18 @@ vi.mock('react-router-dom', async (importOriginal) => {
   const router = (await importOriginal()) ?? {};
   return { ...router, useLoaderData: vi.fn() };
 });
+vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
+  const queries = (await importOriginal()) ?? {};
+  return {
+    ...queries,
+    useActiveInfoDetailQuery: vi.fn(() => ({
+      data: {
+        createdIds: [],
+        likedIds: [],
+      },
+    })),
+  };
+});
 
 function setup({ panel }: { panel: PanelData }): void {
   (useLoaderData as Vi.Mock).mockImplementation(() => panel);

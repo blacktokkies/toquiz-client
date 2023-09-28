@@ -1,103 +1,58 @@
-import type { MyActiveInfo } from '@/lib/api/active-Info';
+import type { Panel } from '@/lib/api/panel';
+import type { GetQuestionsParams, QuestionPage } from '@/lib/api/question';
+import type { QueryClient } from '@tanstack/react-query';
+import type * as Vi from 'vitest';
 
 import React from 'react';
 
 import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 
 import { QuestionList } from '@/components/panel/QuestionList';
 import { OverlayProvider } from '@/contexts/OverlayContext';
+import { useActiveInfoDetailQuery } from '@/hooks/queries/active-info';
 import { renderWithQueryClient } from '@/lib/test-utils';
-import { createMockPanel } from '@/mocks/data/panel';
-import { createMockQuestion } from '@/mocks/data/question';
+import { createMockPanel, createMockPanelId } from '@/mocks/data/panel';
+import {
+  createMockQuestion,
+  createMockQuestionList,
+} from '@/mocks/data/question';
 
-vi.mock('react-router-dom', async (importOriginal) => {
-  const router = (await importOriginal()) ?? {};
-  return { ...router, useRouteLoaderData: vi.fn(() => createMockPanel()) };
+vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
+  const queries = (await importOriginal()) ?? {};
+  return {
+    ...queries,
+    useActiveInfoDetailQuery: vi.fn(() => ({
+      data: {
+        createdIds: [],
+        likedIds: [],
+      },
+    })),
+  };
 });
 
-const handleLikeButtonClick = vi.fn();
-const handleLikeButtonClickFn = vi.fn(() => handleLikeButtonClick);
+vi.mock('react-router-dom', () => ({
+  useRouteLoaderData: vi.fn(() => createMockPanel()),
+}));
 
-const createLikeIds = vi.fn(() => [] as MyActiveInfo['likedIds']);
-const createQuestion = vi.fn(() => createMockQuestion());
-const createQuestionPages = vi.fn(() => [
-  {
-    questions: [createQuestion()],
-    nextPage: -1,
-  },
-]);
-
-describe('QuestionList', () => {
-  it('질문마다 답변 개수를 보여준다', () => {
-    const question = { ...createMockQuestion(), answerNum: 3 };
-    createQuestion.mockImplementation(() => question);
-    setup();
-
-    expect(screen.getByText(`답변 3개`)).toBeInTheDocument();
-  });
-
-  it('질문에 답변이 없으면 답변 개수를 보여주지 않는다', () => {
-    const question = { ...createMockQuestion(), answerNum: 0 };
-    createQuestion.mockImplementation(() => question);
-    setup();
-
-    expect(screen.queryByText(`답변 0개`)).not.toBeInTheDocument();
-  });
-
-  it('좋아요 버튼을 누를 때마다 onLikeButtonClick이 반환하는 함수를 호출한다', async () => {
-    const { likeButton } = setup();
-
-    await userEvent.click(likeButton);
-    expect(handleLikeButtonClick).toHaveBeenCalled();
-  });
-
-  describe('likeIds', () => {
-    it('likeIds에 속한 질문은 좋아요 버튼이 활성화되어있다', () => {
-      const question = createMockQuestion();
-      createQuestion.mockImplementation(() => question);
-      createLikeIds.mockImplementation(() => [question.id]);
-      const { likeButton } = setup();
-      expect(likeButton).toHaveAttribute('aria-pressed', 'true');
-    });
-
-    it('likeIds에 속하지 않은 질문은 좋아요 버튼이 비활성화되어있다', () => {
-      const { likeButton } = setup();
-      expect(likeButton).toHaveAttribute('aria-pressed', 'false');
-    });
-  });
-
-  it('질문을 누르면 모달을 보여준다', async () => {
-    const { questionItem } = setup();
-    await userEvent.click(questionItem);
-
-    expect(
-      screen.getByRole('dialog', { name: /질문과 답변 모달/ }),
-    ).toBeInTheDocument();
-  });
-
-  it('모달에서 <- 아이콘 누르면 모달이 닫힌다', async () => {
-    const { questionItem } = setup();
-    await userEvent.click(questionItem);
-
-    const dialog = screen.getByRole('dialog', { name: /질문과 답변 모달/ });
-    const goBackButton = screen.getByRole('button', { name: /뒤로 가기/ });
-    await userEvent.click(goBackButton);
-
-    expect(dialog).not.toBeInTheDocument();
-  });
-});
-
-function setup(): {
+function setup({
+  panelId,
+  sort,
+  questionPages,
+}: {
+  panelId: Panel['sid'];
+  sort: GetQuestionsParams['sort'];
+  questionPages: QuestionPage[];
+}): {
+  queryClient: QueryClient;
   likeButton: HTMLButtonElement;
   questionItem: HTMLElement;
 } {
-  renderWithQueryClient(
+  const { queryClient } = renderWithQueryClient(
     <OverlayProvider>
       <QuestionList
-        onLikeButtonClick={handleLikeButtonClickFn}
-        questionPages={createQuestionPages()}
-        likeIds={createLikeIds()}
+        panelId={panelId}
+        sort={sort}
+        questionPages={questionPages}
       />
       ,
     </OverlayProvider>,
@@ -110,5 +65,74 @@ function setup(): {
     name: /질문과 답변 모달 열기/,
   });
 
-  return { likeButton, questionItem };
+  return { queryClient, likeButton, questionItem };
 }
+
+describe('QuestionList', () => {
+  it('질문마다 답변 개수를 보여준다', () => {
+    setup({
+      panelId: createMockPanelId(),
+      sort: undefined,
+      questionPages: [
+        {
+          questions: [{ ...createMockQuestion(), answerNum: 3 }],
+          nextPage: -1,
+        },
+      ],
+    });
+
+    expect(screen.getByText(`답변 3개`)).toBeInTheDocument();
+  });
+
+  it('질문에 답변이 없으면 답변 개수를 보여주지 않는다', () => {
+    setup({
+      panelId: createMockPanelId(),
+      sort: undefined,
+      questionPages: [
+        {
+          questions: [{ ...createMockQuestion(), answerNum: 0 }],
+          nextPage: -1,
+        },
+      ],
+    });
+
+    expect(screen.queryByText(`답변 0개`)).not.toBeInTheDocument();
+  });
+
+  describe('likedIds', () => {
+    it('likedIds에 속한 질문은 좋아요 버튼이 활성화되어있다', () => {
+      const question = createMockQuestion();
+      (useActiveInfoDetailQuery as Vi.Mock).mockImplementation(() => ({
+        data: {
+          createdIds: [],
+          likedIds: [question.id],
+        },
+      }));
+      const { likeButton } = setup({
+        panelId: createMockPanelId(),
+        sort: undefined,
+        questionPages: [
+          {
+            questions: [question],
+            nextPage: -1,
+          },
+        ],
+      });
+      expect(likeButton).toHaveAttribute('aria-pressed', 'true');
+    });
+
+    it('likedIds에 속하지 않은 질문은 좋아요 버튼이 비활성화되어있다', () => {
+      const { likeButton } = setup({
+        panelId: createMockPanelId(),
+        sort: undefined,
+        questionPages: [
+          {
+            questions: createMockQuestionList(1),
+            nextPage: -1,
+          },
+        ],
+      });
+      expect(likeButton).toHaveAttribute('aria-pressed', 'false');
+    });
+  });
+});
