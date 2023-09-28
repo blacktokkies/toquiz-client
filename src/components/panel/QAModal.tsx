@@ -137,13 +137,7 @@ export function QAModal({
       aria-label="질문과 답변 모달"
       className="fixed inset-0 flex flex-col gap-6 overflow-auto justify-start bg-white"
     >
-      <header className="flex justify-start items-center gap-2 bg-primary-dark shadow-md px-3 min-h-[64px]">
-        <button type="button" className="rounded-full p-1" onClick={close}>
-          <ArrowBack className="fill-white" />
-          <span className="sr-only">뒤로 가기</span>
-        </button>
-        <span className="text-white">{panel.title}</span>
-      </header>
+      <ModalHeader title={panel.title} onGoBackButtonClick={close} />
       <QuestionItem
         question={question}
         isActived={isActived}
@@ -268,5 +262,27 @@ export function QAModal({
         </ul>
       </div>
     </div>
+  );
+}
+
+function ModalHeader({
+  title,
+  onGoBackButtonClick,
+}: {
+  title: string;
+  onGoBackButtonClick: () => void;
+}): JSX.Element {
+  return (
+    <header className="flex justify-start items-center gap-2 bg-primary-dark shadow-md px-3 min-h-[64px]">
+      <button
+        type="button"
+        className="rounded-full p-1"
+        onClick={onGoBackButtonClick}
+      >
+        <ArrowBack className="fill-white" />
+        <span className="sr-only">뒤로 가기</span>
+      </button>
+      <span className="text-white">{title}</span>
+    </header>
   );
 }
