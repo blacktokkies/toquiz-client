@@ -20,6 +20,6 @@ describe('AnswerList', () => {
 
     expect(screen.getByText(/안녕하세요/)).toBeInTheDocument();
     expect(screen.getByText(/반가워요/)).toBeInTheDocument();
-    expect(screen.getByText(/닉네임/)).toBeInTheDocument();
+    expect(screen.getAllByText(/닉네임/)[0]).toBeInTheDocument();
   });
 });
