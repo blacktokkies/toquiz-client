@@ -13,7 +13,7 @@ import { flushSync } from 'react-dom';
 import { useRouteLoaderData } from 'react-router-dom';
 
 import { Button } from '@/components/system/Button';
-import { ArrowBack, Account } from '@/components/vectors';
+import { ArrowBack } from '@/components/vectors';
 import { useSocketClient } from '@/contexts/SocketClientContext';
 import {
   useAnswersQuery,
@@ -22,9 +22,9 @@ import {
 import { useUserStore } from '@/hooks/stores/useUserStore';
 import { useCurrentDate } from '@/hooks/useCurrentDate';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
-import { formatDistance } from '@/lib/format-date';
 import { queryKey } from '@/lib/queryKey';
 
+import { AnswerList } from './AnswerList';
 import { QuestionItem } from './QuestionItem';
 
 interface Props {
@@ -237,29 +237,7 @@ export function QAModal({
         </div>
       )}
       <div className="flex-1">
-        <ul>
-          {answers.map((answer) => (
-            <li
-              key={answer.id}
-              className="flex flex-col gap-3 p-5 w-full border-y border-grey-light"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex justify-start items-center gap-1 overflow-hidden">
-                  <div role="img" aria-hidden>
-                    <Account className="fill-grey-darkest" />
-                  </div>
-                  <div className="font-bold whitespace-nowrap">
-                    {author.nickname}
-                  </div>
-                  <div className="text-grey-dark">
-                    {formatDistance(now, new Date(answer.createdAt))}
-                  </div>
-                </div>
-              </div>
-              <div className="whitespace-pre-wrap">{answer.content}</div>
-            </li>
-          ))}
-        </ul>
+        <AnswerList answers={answers} nickname={author.nickname} now={now} />
       </div>
     </div>
   );
