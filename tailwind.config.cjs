@@ -12,6 +12,9 @@ module.exports = {
       xl: '1200px',
     },
     colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      inherit: 'inherit',
       backdrop: 'rgba(36, 36, 36, 0.45)',
       white: '#FFFFFF',
       black: '#000000',
