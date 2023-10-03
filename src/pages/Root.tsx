@@ -11,7 +11,6 @@ import {
   Link,
 } from 'react-router-dom';
 
-import { Logo } from '@/components/vectors/Logo';
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { tryRefreshToken } from '@/lib/routeGuard';
 
@@ -42,9 +41,11 @@ export function Root(): JSX.Element {
               'flex flex-col items-center gap-4',
             )}
           >
-            <div role="img" aria-label="toquiz 로고">
-              <Logo className="h-24 w-24 animate-bounce" />
-            </div>
+            <img
+              src="/Logo.png"
+              className="h-24 w-24 animate-bounce"
+              alt="toquiz 로고"
+            />
             <div className="flex items-center gap-3">
               <div className="animate-pulse rounded-full bg-primary h-3 w-3" />
               <div className="animate-pulse rounded-full bg-primary h-3 w-3" />
@@ -113,9 +114,11 @@ export const RootErrorBoundary = (): JSX.Element => {
               </div>
             </div>
             <Link to="/" className="underline font-semibold">
-              <div role="img" aria-label="toquiz 로고">
-                <Logo className="h-20 w-20 md:h-40 md:w-40" />
-              </div>
+              <img
+                src="/Logo.png"
+                className="h-20 w-20 md:h-40 md:w-40"
+                alt="toquiz 로고"
+              />
             </Link>
           </div>
         </main>
@@ -173,9 +176,11 @@ export const RootErrorBoundary = (): JSX.Element => {
           </div>
         </div>
         <Link to="/" className="underline font-semibold">
-          <div role="img" aria-label="toquiz 로고">
-            <Logo className="h-20 w-20 md:h-40 md:w-40" />
-          </div>
+          <img
+            src="/Logo.png"
+            className="h-20 w-20 md:h-40 md:w-40"
+            alt="toquiz 로고"
+          />
         </Link>
       </div>
     </main>

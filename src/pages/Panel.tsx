@@ -24,7 +24,6 @@ import { CreateQuestionModal } from '@/components/panel/CreateQuestionModal';
 import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import { PanelHeader } from '@/components/panel/PanelHeader';
 import { ModalController } from '@/components/system/ModalController';
-import { Logo } from '@/components/vectors/Logo';
 import { useSocketClient } from '@/contexts/SocketClientContext';
 import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
 import { panelDetailQuery } from '@/hooks/queries/panel';
@@ -206,9 +205,11 @@ export function PanelErrorBoundary(): JSX.Element {
               </div>
             </div>
             <Link to="/home" className="underline font-semibold">
-              <div role="img" aria-label="toquiz 로고">
-                <Logo className="h-20 w-20 md:h-40 md:w-40" />
-              </div>
+              <img
+                src="/Logo.png"
+                className="h-20 w-20 md:h-40 md:w-40"
+                alt="toquiz 로고"
+              />
             </Link>
           </div>
         </div>
@@ -266,9 +267,11 @@ export function PanelErrorBoundary(): JSX.Element {
           </div>
         </div>
         <Link to="/" className="underline font-semibold">
-          <div role="img" aria-label="toquiz 로고">
-            <Logo className="h-20 w-20 md:h-40 md:w-40" />
-          </div>
+          <img
+            src="/Logo.png"
+            className="h-20 w-20 md:h-40 md:w-40"
+            alt="toquiz 로고"
+          />
         </Link>
       </div>
     </main>

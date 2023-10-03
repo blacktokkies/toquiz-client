@@ -3,8 +3,6 @@ import React from 'react';
 import { clsx } from 'clsx';
 import { Link } from 'react-router-dom';
 
-import { Logo } from '@/components/vectors/Logo';
-
 export const Index = (): JSX.Element => (
   <main className="flex flex-col h-full overflow-auto bg-off-white">
     <header className="border-b border-grey-light">
@@ -40,9 +38,11 @@ export const Index = (): JSX.Element => (
         'sm:justify-center sm:py-10',
       )}
     >
-      <div role="img" aria-label="toquiz 로고">
-        <Logo className="h-28 w-h-28 sm:h-40 sm:w-40" />
-      </div>
+      <img
+        src="/Logo.png"
+        className="h-28 w-h-28 sm:h-40 sm:w-40"
+        alt="toquiz 로고"
+      />
       <div className="flex flex-col justify-start gap-3">
         <div>
           <p className="text-5xl font-bold sm:text-7xl">익명으로 질문을</p>
