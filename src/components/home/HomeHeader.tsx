@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom';
 
 import { AccountActionMenu } from '@/components/home/AccountActionMenu';
 import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
-import { Logo, Account } from '@/components/vectors';
+import { Logo } from '@/components/vectors/Logo';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 export function HomeHeader(): JSX.Element {
   return (
@@ -22,11 +25,11 @@ export function HomeHeader(): JSX.Element {
           <button
             type="button"
             className="hover:bg-grey-light rounded-full p-2"
-            aria-label="내 계정 아이콘"
           >
-            <div role="img" aria-label="내 계정 아이콘">
-              <Account className="fill-grey-darkest" />
-            </div>
+            <svg className="w-6 h-6 text-grey-darkest">
+              <use href={`${Icons}#account`} />
+            </svg>
+            <span className="sr-only">내 계정 아이콘</span>
           </button>
         </OpenActionMenuArea>
       </div>

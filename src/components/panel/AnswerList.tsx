@@ -3,7 +3,9 @@ import type { Answer } from '@/lib/api/answer';
 import React from 'react';
 
 import { TimeDiff } from '@/components/system/TimeDiff';
-import { Account } from '@/components/vectors';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 interface Props {
   nickname: string;
@@ -20,9 +22,9 @@ export function AnswerList({ nickname, answers }: Props): JSX.Element {
         >
           <div className="flex items-center justify-between">
             <div className="flex justify-start items-center gap-1 overflow-hidden">
-              <div role="img" aria-hidden>
-                <Account className="fill-grey-darkest" />
-              </div>
+              <svg className="w-6 h-6 text-grey-darkest">
+                <use href={`${Icons}#account`} />
+              </svg>
               <div className="font-bold whitespace-nowrap">{nickname}</div>
               <TimeDiff
                 className="text-grey-dark"

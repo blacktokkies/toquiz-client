@@ -10,7 +10,7 @@ import { PanelActionMenu } from '@/components/home/PanelActionMenu';
 import { PanelItem } from '@/components/home/PanelItem';
 import { UpdatePanelModal } from '@/components/home/UpdatePanelModal';
 import { ModalController } from '@/components/system/ModalController';
-import { Logo } from '@/components/vectors';
+import { Logo } from '@/components/vectors/Logo';
 import { useOverlay } from '@/hooks/useOverlay';
 
 import { DeletePanelModal } from './DeletePanelModal';

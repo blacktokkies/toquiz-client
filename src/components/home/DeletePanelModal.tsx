@@ -7,9 +7,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { produce } from 'immer';
 
 import { Button } from '@/components/system/Button';
-import { Spinner } from '@/components/vectors';
 import { useDeletePanelMutation } from '@/hooks/queries/panel';
 import { queryKey } from '@/lib/queryKey';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 interface Props {
   close: () => void;
@@ -54,7 +56,12 @@ export function DeletePanelModal({ close, panel }: Props): JSX.Element {
           disabled={deletePanelMutation.isLoading}
         >
           {deletePanelMutation.isLoading ? (
-            <Spinner className="animate-spin fill-white mx-auto" />
+            <>
+              <svg className="animate-spin text-white mx-auto w-6 h-6">
+                <use href={`${Icons}#spinner`} />
+              </svg>
+              <span className="sr-only">패널 삭제 중</span>
+            </>
           ) : (
             '패널 삭제'
           )}

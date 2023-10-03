@@ -24,13 +24,16 @@ import { CreateQuestionModal } from '@/components/panel/CreateQuestionModal';
 import { InfiniteQuestionList } from '@/components/panel/InfiniteQuestionList';
 import { PanelHeader } from '@/components/panel/PanelHeader';
 import { ModalController } from '@/components/system/ModalController';
-import { Send, Logo } from '@/components/vectors';
+import { Logo } from '@/components/vectors/Logo';
 import { useSocketClient } from '@/contexts/SocketClientContext';
 import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
 import { panelDetailQuery } from '@/hooks/queries/panel';
 import { useOverlay } from '@/hooks/useOverlay';
 import { ApiError } from '@/lib/apiClient';
 import { queryKey } from '@/lib/queryKey';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 // [NOTE] 로더 성공 반환값은 any 혹은 null로 고정한다
 // [NOTE] 로더 실패 반환값은 `Response`로 고정한다
@@ -161,7 +164,9 @@ export function Panel(): JSX.Element {
         type="button"
         onClick={openCreateQuestionModal}
       >
-        <Send className="w-9 h-9 fill-white" />
+        <svg className="w-9 h-9 text-white">
+          <use href={`${Icons}#send`} />
+        </svg>
         <span className="sr-only">질문 생성 모달 열기</span>
       </button>
     </main>

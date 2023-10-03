@@ -2,8 +2,10 @@ import type { Panel } from '@/lib/api/panel';
 
 import React from 'react';
 
-import { Clipboard } from '@/components/vectors';
 import { formatToKRLocaleString } from '@/lib/format-date';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 interface Props {
   panel: Panel;
@@ -32,9 +34,9 @@ export function PanelSidebar({ panel }: Props): JSX.Element {
             );
           }}
         >
-          <div role="img" aria-label="메뉴 아이콘">
-            <Clipboard className="fill-grey-dark" />
-          </div>
+          <svg className="w-6 h-6 text-grey-dark">
+            <use href={`${Icons}#clipboard`} />
+          </svg>
           <div>패널 URL 복사하기</div>
         </button>
       </div>

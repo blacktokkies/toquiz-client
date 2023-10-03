@@ -5,9 +5,11 @@ import React from 'react';
 import { redirect } from 'react-router-dom';
 
 import { InfinitePanelGrid } from '@/components/home/InfinitePanelGrid';
-import { Account } from '@/components/vectors';
 import { useUserStore } from '@/hooks/stores/useUserStore';
 import { isUserLoggedIn } from '@/lib/routeGuard';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 // https://reactrouter.com/en/main/fetch/redirect
 export const homeLoader: LoaderFunction = async () => {
@@ -31,9 +33,9 @@ export const Home = (): JSX.Element => {
           내 패널 모아보기
         </h1>
         <span className="flex gap-1 items-center py-1">
-          <div role="img" aria-label="내 계정 아이콘">
-            <Account className="w-5 h-5" />
-          </div>
+          <svg className="w-5 h-5 text-grey-darkest">
+            <use href={`${Icons}#account`} />
+          </svg>
           <span className="text-sm">{user.nickname}</span>
         </span>
       </div>

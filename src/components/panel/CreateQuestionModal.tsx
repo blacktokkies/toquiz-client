@@ -8,11 +8,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import { flushSync } from 'react-dom';
 
 import { Button } from '@/components/system/Button';
-import { Spinner } from '@/components/vectors';
 import { useSocketClient } from '@/contexts/SocketClientContext';
 import { useCreateQuestionMutation } from '@/hooks/queries/question';
 import { queryKey } from '@/lib/queryKey';
 import { isQuestion } from '@/lib/validator';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 interface Props {
   panelId: Panel['sid'];
@@ -91,7 +93,12 @@ export function CreateQuestionModal({ panelId, close }: Props): JSX.Element {
           }}
         >
           {createQuestionMutation.isLoading ? (
-            <Spinner className="animate-spin fill-white mx-auto" />
+            <>
+              <svg className="animate-spin text-white mx-auto w-6 h-6">
+                <use href={`${Icons}#spinner`} />
+              </svg>
+              <span className="sr-only">질문 생성 중</span>
+            </>
           ) : (
             '질문 생성'
           )}
