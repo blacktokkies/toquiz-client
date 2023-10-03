@@ -6,7 +6,9 @@ import React from 'react';
 import { clsx } from 'clsx';
 
 import { TimeDiff } from '@/components/system/TimeDiff';
-import { Like, Account } from '@/components/vectors';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 interface Props {
   question: Question;
@@ -25,9 +27,9 @@ export function QuestionItem({
     <div className="flex flex-col gap-3 p-5 w-full border border-grey-light rounded-md">
       <div className="flex items-center justify-between">
         <div className="flex justify-start items-center gap-1 overflow-hidden">
-          <div role="img" aria-hidden>
-            <Account className="fill-grey-darkest" />
-          </div>
+          <svg className="w-6 h-6 text-grey-darkest">
+            <use href={`${Icons}#account`} />
+          </svg>
           <div className="font-bold whitespace-nowrap">익명</div>
           <TimeDiff
             className="text-grey-dark"
@@ -46,13 +48,15 @@ export function QuestionItem({
           className={clsx(
             'flex itesm-center gap-2 py-1 px-2 rounded-2xl border-2 text-sm',
             isActived
-              ? 'border-green font-bold text-green bg-green-light fill-green hover:bg-green-lighter active:opacity-80'
-              : 'border-grey-light text-grey-dark fill-grey-dark hover:bg-grey-lighter active:opacity-80',
+              ? 'border-green font-bold text-green bg-green-light hover:bg-green-lighter active:opacity-80'
+              : 'border-grey-light text-grey-dark hover:bg-grey-lighter active:opacity-80',
           )}
           type="button"
           onClick={onLikeButtonClick}
         >
-          <Like className="w-5 h-5" />
+          <svg className="w-6 h-6 text-inherit">
+            <use href={`${Icons}#like`} />
+          </svg>
           {question.likeNum}
         </button>
       </div>

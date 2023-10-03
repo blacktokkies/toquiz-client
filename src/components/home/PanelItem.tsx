@@ -6,8 +6,10 @@ import React from 'react';
 import { clsx } from 'clsx';
 
 import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
-import { More } from '@/components/vectors/More';
 import { formatToKRLocaleString } from '@/lib/format-date';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 interface Props {
   panel: Panel;
@@ -44,14 +46,11 @@ export const PanelItem = ({
           </span>
         </div>
         <OpenActionMenuArea aria-label="패널 액션 메뉴" open={openActionMenu}>
-          <button type="button" aria-label="더보기">
-            <div
-              role="img"
-              aria-label="더보기 아이콘"
-              className="fill-grey-dark"
-            >
-              <More />
-            </div>
+          <button type="button">
+            <svg className="w-6 h-6 text-grey-dark">
+              <use href={`${Icons}#more`} />
+            </svg>
+            <span className="sr-only">더보기 아이콘</span>
           </button>
         </OpenActionMenuArea>
       </div>

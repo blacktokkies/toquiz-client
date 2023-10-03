@@ -3,7 +3,7 @@ import React from 'react';
 import { clsx } from 'clsx';
 import { Link } from 'react-router-dom';
 
-import { Logo } from '@/components/vectors';
+import { Logo } from '@/components/vectors/Logo';
 
 export const Index = (): JSX.Element => (
   <main className="flex flex-col h-full overflow-auto bg-off-white">

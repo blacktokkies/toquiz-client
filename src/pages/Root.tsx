@@ -11,7 +11,7 @@ import {
   Link,
 } from 'react-router-dom';
 
-import { Logo } from '@/components/vectors';
+import { Logo } from '@/components/vectors/Logo';
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { tryRefreshToken } from '@/lib/routeGuard';
 

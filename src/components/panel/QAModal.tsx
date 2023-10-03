@@ -13,7 +13,6 @@ import { flushSync } from 'react-dom';
 import { useRouteLoaderData } from 'react-router-dom';
 
 import { Button } from '@/components/system/Button';
-import { ArrowBack } from '@/components/vectors';
 import { useSocketClient } from '@/contexts/SocketClientContext';
 import {
   useAnswersQuery,
@@ -22,6 +21,9 @@ import {
 import { useUserStore } from '@/hooks/stores/useUserStore';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { queryKey } from '@/lib/queryKey';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 import { AnswerList } from './AnswerList';
 import { QuestionItem } from './QuestionItem';
@@ -255,7 +257,9 @@ function ModalHeader({
         className="rounded-full p-1"
         onClick={onGoBackButtonClick}
       >
-        <ArrowBack className="fill-white" />
+        <svg className="w-6 h-6 text-white">
+          <use href={`${Icons}#arrow-back`} />
+        </svg>
         <span className="sr-only">뒤로 가기</span>
       </button>
       <span className="text-white">{title}</span>

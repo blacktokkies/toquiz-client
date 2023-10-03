@@ -9,11 +9,13 @@ import { produce } from 'immer';
 
 import { Button } from '@/components/system/Button';
 import { LabelInput } from '@/components/system/LabelInput';
-import { Spinner } from '@/components/vectors';
 import { useUpdatePanelMutation } from '@/hooks/queries/panel';
 import { useForm } from '@/hooks/useForm';
 import { queryKey } from '@/lib/queryKey';
 import { isPanelDescription, isPanelTitle } from '@/lib/validator';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 type Props = CreateOverlayContentProps & {
   panel: Panel;
@@ -102,7 +104,12 @@ export function UpdatePanelModal({ close, panel }: Props): JSX.Element {
             onClick={formProps.onSubmit}
           >
             {updateMutation.isLoading ? (
-              <Spinner className="animate-spin fill-white mx-auto" />
+              <>
+                <svg className="animate-spin text-white mx-auto w-6 h-6">
+                  <use href={`${Icons}#spinner`} />
+                </svg>
+                <span className="sr-only">패널 수정 중</span>
+              </>
             ) : (
               '패널 수정'
             )}

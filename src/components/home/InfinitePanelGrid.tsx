@@ -6,9 +6,11 @@ import { CreatePanelModal } from '@/components/home/CreatePanelModal';
 import { PanelGrid } from '@/components/home/PanelGrid';
 import { IntersectionArea } from '@/components/system/IntersectionArea';
 import { ModalController } from '@/components/system/ModalController';
-import { Add } from '@/components/vectors';
 import { useMyPanelsInfiniteQuery } from '@/hooks/queries/panel';
 import { useOverlay } from '@/hooks/useOverlay';
+
+/* eslint-disable import/no-absolute-path */
+import Icons from '/icons.svg?url';
 
 export const InfinitePanelGrid = (): JSX.Element => {
   const panelsQuery = useMyPanelsInfiniteQuery();
@@ -50,11 +52,11 @@ export const InfinitePanelGrid = (): JSX.Element => {
         )}
         type="button"
         onClick={handleClick}
-        aria-label="패널 생성 아이콘"
       >
-        <div role="img" aria-label="패널 생성 아이콘" className="fill-white">
-          <Add />
-        </div>
+        <svg className="text-white w-12 h-12">
+          <use href={`${Icons}#add`} />
+        </svg>
+        <span className="sr-only">패널 생성 아이콘</span>
       </button>
     </div>
   );
