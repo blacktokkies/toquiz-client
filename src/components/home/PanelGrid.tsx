@@ -10,7 +10,6 @@ import { PanelActionMenu } from '@/components/home/PanelActionMenu';
 import { PanelItem } from '@/components/home/PanelItem';
 import { UpdatePanelModal } from '@/components/home/UpdatePanelModal';
 import { ModalController } from '@/components/system/ModalController';
-import { Logo } from '@/components/vectors/Logo';
 import { useOverlay } from '@/hooks/useOverlay';
 
 import { DeletePanelModal } from './DeletePanelModal';
@@ -76,7 +75,7 @@ export function PanelGrid({ panelPages }: Props): JSX.Element {
       <div className="w-full h-full flex flex-col justify-center items-center">
         <div className="flex items-center gap-1 font-bold">
           <div className="text-lg">아직 작성한 패널이 없습니다</div>
-          <Logo role="img" aria-label="로고" width="36" height="36" />
+          <img src="/Logo.png" className="h-9 w-9" alt="toquiz 로고" />
         </div>
         <div className="text-grey-dark">
           새로운 패널을 만들어 질문을 받아보세요!

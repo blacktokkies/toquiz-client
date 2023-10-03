@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import { AccountActionMenu } from '@/components/home/AccountActionMenu';
 import { OpenActionMenuArea } from '@/components/system/OpenActionMenuArea';
-import { Logo } from '@/components/vectors/Logo';
 
 /* eslint-disable import/no-absolute-path */
 import Icons from '/icons.svg?url';
@@ -14,9 +13,7 @@ export function HomeHeader(): JSX.Element {
     <header className="bg-white shadow-md">
       <div className="container flex justify-between items-center max-w-7xl px-5 h-16">
         <Link to="/home" className="rounded-full">
-          <div role="img" aria-label="toquiz 로고">
-            <Logo className="h-11 w-11" />
-          </div>
+          <img src="/Logo.png" className="h-11 w-11" alt="toquiz 로고" />
         </Link>
         <OpenActionMenuArea
           aria-label="내 계정 액션 메뉴"
