@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, splitVendorChunkPlugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import checker from 'vite-plugin-checker';
@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       tsconfigPaths(),
+      splitVendorChunkPlugin(),
       checker({
         typescript: true,
         eslint: { lintCommand: 'eslint "./src/**/*.{ts,tsx}"' },
@@ -30,6 +31,21 @@ export default defineConfig(({ mode }) => {
         filename: 'report/stats.html',
       }),
     ],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id: string) {
+            if (
+              id.includes('react-router-dom') ||
+              id.includes('@remix-run') ||
+              id.includes('react-router')
+            ) {
+              return '@react-router';
+            }
+          },
+        },
+      },
+    },
     server: {
       host: 'localhost',
       port: 5173,
