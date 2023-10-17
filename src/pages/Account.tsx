@@ -16,13 +16,13 @@ import { useOverlay } from '@/hooks/useOverlay';
 import { isUserLoggedIn } from '@/lib/routeGuard';
 import { isNickname, isPassword } from '@/lib/validator';
 
-export const accountLoader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async () => {
   const isLoggedIn = await isUserLoggedIn();
 
   if (!isLoggedIn) return redirect('/login');
   return null;
 };
-export function Account(): JSX.Element {
+export function Component(): JSX.Element {
   const setUserStore = useUserStore((state) => state.setUser);
   const messageRef = useRef<HTMLDivElement | null>(null);
   const updateMyInfoMutation = useUpdateMyInfoMutation({

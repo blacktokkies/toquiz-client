@@ -2,16 +2,10 @@ import type { QueryClient } from '@tanstack/react-query';
 
 import React from 'react';
 
-import { Outlet, createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
-import { HomeHeader } from '@/components/home/HomeHeader';
-import { Account, accountLoader } from '@/pages/Account';
-import { Home, homeLoader } from '@/pages/Home';
 import { Index } from '@/pages/Index';
-import { Login, loginLoader } from '@/pages/Login';
-import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
 import { Root, RootErrorBoundary, rootLoader } from '@/pages/Root';
-import { SignUp, signupLoader } from '@/pages/SignUp';
 
 export const createRouterWithQueryClient = (
   queryClient: QueryClient,
@@ -29,36 +23,32 @@ export const createRouterWithQueryClient = (
         },
         {
           path: 'signup',
-          element: <SignUp />,
-          loader: signupLoader,
+          lazy: async () => import('@/pages/SignUp'),
         },
         {
           path: 'login',
-          element: <Login />,
-          loader: loginLoader,
+          lazy: async () => import('@/pages/Login'),
         },
         {
-          element: (
-            <main className="flex flex-col h-full overflow-auto">
-              <HomeHeader />
-              <Outlet />
-            </main>
-          ),
+          lazy: async () => import('@/pages/HomeLayout'),
           children: [
             {
               path: 'home',
-              element: <Home />,
-              loader: homeLoader,
+              lazy: async () => import('@/pages/Home'),
             },
-            { path: 'account', element: <Account />, loader: accountLoader },
+            {
+              path: 'account',
+              lazy: async () => import('@/pages/Account'),
+            },
           ],
         },
         {
           path: 'panel/:id',
           id: 'panel',
-          element: <Panel />,
-          loader: panelLoader(queryClient),
-          errorElement: <PanelErrorBoundary />,
+          lazy: async () => {
+            const { loader, ...rest } = await import('@/pages/Panel');
+            return { ...rest, loader: loader(queryClient) };
+          },
         },
       ],
     },

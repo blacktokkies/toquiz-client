@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { mockMyPanelList } from '@/mocks/data/panel';
-import { Home } from '@/pages/Home';
+import { Component as Home } from '@/pages/Home';
 
 vi.mock('@/hooks/stores/useUserStore', () => ({
   useUserStore: () => ({

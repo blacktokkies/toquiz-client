@@ -12,14 +12,14 @@ import { isUserLoggedIn } from '@/lib/routeGuard';
 import Icons from '/icons.svg?url';
 
 // https://reactrouter.com/en/main/fetch/redirect
-export const homeLoader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async () => {
   const isLoggedIn = await isUserLoggedIn();
 
   if (!isLoggedIn) return redirect('/login');
   return null;
 };
 
-export const Home = (): JSX.Element => {
+export const Component = (): JSX.Element => {
   const user = useUserStore(({ email, nickname, createdAt }) => ({
     email,
     nickname,

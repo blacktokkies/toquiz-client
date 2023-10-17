@@ -18,7 +18,11 @@ import { createQueryClient } from '@/lib/test-utils';
 import { mockMyActiveInfo } from '@/mocks/data/active-info';
 import { createMockPanelId } from '@/mocks/data/panel';
 import { server } from '@/mocks/server';
-import { Panel, panelLoader, PanelErrorBoundary } from '@/pages/Panel';
+import {
+  Component as Panel,
+  loader as panelLoader,
+  ErrorBoundary as PanelErrorBoundary,
+} from '@/pages/Panel';
 
 describe('/panel/:id route', () => {
   it('로더에서 패널 정보 가져오기 API와 내 활동 정보 가져오기 API를 호출한다', async () => {

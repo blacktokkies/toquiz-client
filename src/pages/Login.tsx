@@ -19,14 +19,14 @@ export const LOGIN_ERROR_MESSAGE = {
   password: '8~20자 이하의 영문 대소문자, 숫자, 특수기호를 입력하세요',
 } as const;
 
-export const loginLoader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async () => {
   const isLoggedIn = await isUserLoggedIn();
 
   if (isLoggedIn) return redirect('/home');
   return null;
 };
 
-export function Login(): JSX.Element {
+export function Component(): JSX.Element {
   const setUser = useUserStore((state) => state.setUser);
 
   const navigate = useNavigate();

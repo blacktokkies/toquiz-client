@@ -19,14 +19,14 @@ export const SIGN_UP_ERROR_MESSAGE = {
   nickname: '2~20자 이하의 문자를 입력하세요',
 } as const;
 
-export const signupLoader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async () => {
   const isLoggedIn = await isUserLoggedIn();
 
   if (isLoggedIn) return redirect('/home');
   return null;
 };
 
-export function SignUp(): JSX.Element {
+export function Component(): JSX.Element {
   const signUpMutation = useSignUpMutation();
   const navigate = useNavigate();
   const { inputProps, errors, formProps, hasError, setError } = useForm({

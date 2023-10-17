@@ -36,7 +36,7 @@ import Icons from '/icons.svg?url';
 
 // [NOTE] 로더 성공 반환값은 any 혹은 null로 고정한다
 // [NOTE] 로더 실패 반환값은 `Response`로 고정한다
-export const panelLoader =
+export const loader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs): Promise<PanelData> => {
     const panelId = params.id!;
@@ -60,9 +60,9 @@ export const panelLoader =
     }
   };
 
-export function Panel(): JSX.Element {
+export function Component(): JSX.Element {
   const panel = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof panelLoader>>
+    ReturnType<ReturnType<typeof loader>>
   >;
   const overlay = useOverlay();
 
@@ -172,7 +172,7 @@ export function Panel(): JSX.Element {
   );
 }
 
-export function PanelErrorBoundary(): JSX.Element {
+export function ErrorBoundary(): JSX.Element {
   const error = useRouteError();
 
   if (isRouteErrorResponse(error)) {

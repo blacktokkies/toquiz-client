@@ -10,7 +10,7 @@ import { OverlayProvider } from '@/contexts/OverlayContext';
 import * as authApis from '@/lib/api/auth';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { isNickname, isPassword } from '@/lib/validator';
-import { Account } from '@/pages/Account';
+import { Component as Account } from '@/pages/Account';
 import { getUserState } from '@/store/user-store';
 
 vi.mock('@/lib/validator', () => ({
