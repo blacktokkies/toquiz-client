@@ -1,4 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/fonts/NotoSansKR-Regular.eot),
+    url(/fonts/NotoSansKR-Regular.woff2) format('woff2'),
+    url(/fonts/NotoSansKR-Regular.woff) format('woff'),
+    url(/fonts/NotoSansKR-Regular.ttf) format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 500;
+  src: url(/fonts/NotoSansKR-Medium.eot),
+    url(/fonts/NotoSansKR-Medium.woff2) format('woff2'),
+    url(/fonts/NotoSansKR-Medium.woff) format('woff'),
+    url(/fonts/NotoSansKR-Medium.ttf) format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 600;
+  src: url(/fonts/NotoSansKR-SemiBold.eot),
+    url(/fonts/NotoSansKR-SemiBold.woff2) format('woff2'),
+    url(/fonts/NotoSansKR-SemiBold.woff) format('woff'),
+    url(/fonts/NotoSansKR-SemiBold.ttf) format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 700;
+  src: url(/fonts/NotoSansKR-Bold.eot),
+    url(/fonts/NotoSansKR-Bold.woff2) format('woff2'),
+    url(/fonts/NotoSansKR-Bold.woff) format('woff'),
+    url(/fonts/NotoSansKR-Bold.ttf) format('truetype');
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,9 +62,8 @@ body,
 
 body {
   font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, system-ui,
-    Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR',
-    'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    sans-serif;
+    Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic',
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
   letter-spacing: -0.48px;
 }
 
