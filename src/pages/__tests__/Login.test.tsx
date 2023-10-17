@@ -11,7 +11,7 @@ import { apiUrl } from '@/lib/api/apiUrl';
 import * as authApis from '@/lib/api/auth';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
-import { Login } from '@/pages/Login';
+import { Component as Login } from '@/pages/Login';
 import { getUserState } from '@/stores/user-store';
 
 vi.mock('@/lib/validator', () => ({

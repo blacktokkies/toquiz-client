@@ -19,7 +19,7 @@ import { renderWithQueryClient } from '@/lib/test-utils';
 import { createMockPanel } from '@/mocks/data/panel';
 import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
-import { Panel } from '@/pages/Panel';
+import { Component as Panel } from '@/pages/Panel';
 
 vi.mock('react-router-dom', async (importOriginal) => {
   const router = (await importOriginal()) ?? {};

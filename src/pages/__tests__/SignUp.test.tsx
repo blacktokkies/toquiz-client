@@ -11,7 +11,7 @@ import { apiUrl } from '@/lib/api/apiUrl';
 import * as apis from '@/lib/api/auth';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { server } from '@/mocks/server';
-import { SignUp } from '@/pages/SignUp';
+import { Component as SignUp } from '@/pages/SignUp';
 
 vi.mock('@/lib/validator', () => ({
   isEmail: vi.fn(() => true),
