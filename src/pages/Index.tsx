@@ -40,13 +40,14 @@ export const Index = (): JSX.Element => (
     >
       <img
         src="/Logo.png"
-        className="h-28 w-h-28 sm:h-40 sm:w-40"
+        className="h-28 w-28 sm:h-40 sm:w-40"
         alt="toquiz 로고"
       />
       <div className="flex flex-col justify-start gap-3">
         <div>
-          <p className="text-5xl font-bold sm:text-7xl">익명으로 질문을</p>
-          <p className="text-5xl font-bold sm:text-7xl">받아보세요</p>
+          <p className="text-5xl font-bold sm:text-7xl whitespace-pre-line">
+            {`익명으로 질문을\n받아보세요`}
+          </p>
         </div>
         <p className="text-grey-dark sm:text-lg">
           강의나 세미나를 진행할 때, 혹은 친구 사이에 부담없이 익명으로 질문을
