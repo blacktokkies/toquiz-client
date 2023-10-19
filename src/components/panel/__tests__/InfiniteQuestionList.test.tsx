@@ -111,6 +111,11 @@ describe('InfiniteQuestionList', () => {
     });
   });
 
+  // [NOTE] 좋아요 버튼의 onClick 핸들러가 QuestionList 내부에 선언되어 있으나
+  // 이 핸들러를 InfiniteQuestionList에서 테스트하는 이유는 다음과 같다:
+  // (1) InfiniteQuestionList는 질문 목록 쿼리의 data 프로퍼티를 QuestionList에 props로 전달한다
+  // (2) 좋아요 버튼 핸들러는 질문 목록 쿼리의 데이터를 변경한다.
+  // => QuestionList에서 테스트하면 화면에 변경된 데이터가 나타나는지는 알 수 없다
   describe('좋아요 버튼', () => {
     it('좋아요 버튼을 누르면 질문 좋아요 API 요청한다', async () => {
       const { queryClient } = setup({ panelId: createMockPanelId() });
