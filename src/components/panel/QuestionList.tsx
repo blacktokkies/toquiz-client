@@ -38,10 +38,12 @@ export function QuestionList({
   sort,
   questionPages,
 }: Props): JSX.Element {
-  // [NOTE] 패널 페이지 로더에서 활동 정보 디테일 쿼리를 `staleTime: Infinity`로 prefetch하므로
-  // 패널 페이지 렌더링 중에는 활동 정보 디테일 쿼리의 데이터가 언제나 fresh하다는 것이 보장된다
+  // [NOTE] 패널 페이지 로더에서 활동 정보 쿼리를 fetch하므로
+  // 첫번째 렌더링 중에 데이터가 `undefined`가 아님이 보장된다
   /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-  const activeInfo = useActiveInfoDetailQuery(panelId).data!;
+  const activeInfo = useActiveInfoDetailQuery(panelId, {
+    refetchOnMount: false,
+  }).data!;
   const likeSet = new Set(activeInfo.likedIds);
 
   const socketClient = useSocketClient();
