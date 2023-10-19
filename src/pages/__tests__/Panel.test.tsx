@@ -3,14 +3,12 @@ import type {
   GetQuestionsPathParams,
   GetQuestionsResponse,
 } from '@/lib/api/question';
-import type * as Vi from 'vitest';
 
 import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
-import { useLoaderData } from 'react-router-dom';
 
 import { OverlayProvider } from '@/contexts/OverlayContext';
 import { apiUrl } from '@/lib/api/apiUrl';
@@ -21,10 +19,18 @@ import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 import { Component as Panel } from '@/pages/Panel';
 
+const mockParams = vi.fn<[], { panelId: string }>();
 vi.mock('react-router-dom', async (importOriginal) => {
   const router = (await importOriginal()) ?? {};
-  return { ...router, useLoaderData: vi.fn() };
+  return { ...router, useParams: () => mockParams() };
 });
+
+const mockPanelDetailQuery = vi.fn<[], { data: PanelData }>();
+vi.mock('@/hooks/queries/panel', async (importOriginal) => {
+  const queries = (await importOriginal()) ?? {};
+  return { ...queries, usePanelDetailQuery: () => mockPanelDetailQuery() };
+});
+
 vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
   const queries = (await importOriginal()) ?? {};
   return {
@@ -39,7 +45,13 @@ vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
 });
 
 function setup({ panel }: { panel: PanelData }): void {
-  (useLoaderData as Vi.Mock).mockImplementation(() => panel);
+  mockParams.mockImplementation(() => ({
+    panelId: panel.sid,
+  }));
+  mockPanelDetailQuery.mockImplementation(() => ({
+    data: panel,
+  }));
+
   renderWithQueryClient(
     <OverlayProvider>
       <Panel />
