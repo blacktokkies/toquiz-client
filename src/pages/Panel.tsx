@@ -41,33 +41,32 @@ export const loader =
   async ({ params }: LoaderFunctionArgs): Promise<PanelData> => {
     const panelId = params.id!;
     const panelQuery = panelDetailQuery(panelId);
+    const activeInfoQuery = activeInfoDetailQuery(panelId);
     try {
       const panel =
         queryClient.getQueryData<PanelData>(panelQuery.queryKey) ??
         (await queryClient.fetchQuery<PanelData>(panelQuery));
-      await queryClient.prefetchQuery(activeInfoDetailQuery(panelId));
+      await queryClient.prefetchQuery(activeInfoQuery);
       return panel;
     } catch (error) {
       if (error instanceof ApiError) {
-        throw json(
+        const apiError = json(
           { ...error.data, id: panelId },
           {
             status: error.response.status,
           },
         );
+        throw apiError;
       }
       throw error;
     }
   };
 
 export function Component(): JSX.Element {
-  const panel = useLoaderData() as Awaited<
-    ReturnType<ReturnType<typeof loader>>
-  >;
-  const overlay = useOverlay();
-
+  const panel = useLoaderData() as PanelData;
   const queryClient = useQueryClient();
   const socketClient = useSocketClient();
+
   useEffect(() => {
     const handleCreateQuestion = (newQuestion: Question): void => {
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
@@ -141,6 +140,7 @@ export function Component(): JSX.Element {
     };
   }, [queryClient, socketClient, panel.sid]);
 
+  const overlay = useOverlay();
   function openCreateQuestionModal(): void {
     overlay.open(({ close }) => (
       <ModalController close={close} aria-label="질문 생성 모달">
@@ -148,6 +148,7 @@ export function Component(): JSX.Element {
       </ModalController>
     ));
   }
+
   return (
     <main className="flex flex-col h-full overflow-auto">
       <PanelHeader panel={panel} />
