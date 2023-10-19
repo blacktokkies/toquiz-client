@@ -1,4 +1,5 @@
 import type { MyActiveInfo } from '@/lib/api/active-Info';
+import type { GetAnswersResult } from '@/lib/api/answer';
 import type { Panel } from '@/lib/api/panel';
 import type {
   Question,
@@ -51,6 +52,7 @@ export function QuestionList({
   const likeQuestionMutation = useLikeQuestionMutation<{
     prevQuestions: InfiniteData<QuestionPage> | undefined;
     prevActiveInfo: MyActiveInfo | undefined;
+    prevAnswers: GetAnswersResult | undefined;
   }>({
     onMutate: async ({ id, active }) => {
       await queryClient.cancelQueries(queryKey.question.lists());
@@ -71,6 +73,14 @@ export function QuestionList({
         );
       }
 
+      const prevAnswers = queryClient.getQueryData<GetAnswersResult>(
+        queryKey.answer.list(id),
+      );
+      queryClient.setQueryData<GetAnswersResult>(
+        queryKey.answer.list(id),
+        updateAnswers(active),
+      );
+
       const prevActiveInfo = queryClient.getQueryData<MyActiveInfo>(
         activeInfoDetailQuery(panelId).queryKey,
       );
@@ -79,7 +89,7 @@ export function QuestionList({
         updateLikedList(id, active),
       );
 
-      return { prevActiveInfo, prevQuestions };
+      return { prevActiveInfo, prevQuestions, prevAnswers };
     },
     onSuccess: ({ id, likeNum }) => {
       socketClient.publishToPanel<LikeQuestionEvent>(panelId, {
@@ -110,6 +120,10 @@ export function QuestionList({
             queryKey.activeInfo.detail(panelId),
             context?.prevActiveInfo,
           );
+          queryClient.setQueryData<GetAnswersResult>(
+            queryKey.answer.list(variables.id),
+            context?.prevAnswers,
+          );
         }
       } else if (statusCode === 404) {
         if (code === 'NOT_EXIST_QUESTION') {
@@ -121,15 +135,22 @@ export function QuestionList({
             queryKey.activeInfo.detail(panelId),
             removeQuestionFromLikedList(variables.id),
           );
+          queryClient.setQueryData<GetAnswersResult>(
+            queryKey.answer.list(variables.id),
+            undefined,
+          );
         }
       }
     },
   });
 
-  const handleLikeButtonClick = (question: Question): void => {
+  const handleLikeButtonClick = (
+    question: Question,
+    isActived: boolean,
+  ): void => {
     likeQuestionMutation.mutate({
       id: question.id,
-      active: !likeSet.has(question.id),
+      active: !isActived,
     });
   };
 
@@ -140,10 +161,7 @@ export function QuestionList({
         close={close}
         panelId={panelId}
         questionId={question.id}
-        isActived={likeSet.has(question.id)}
-        onLikeButtonClick={() => {
-          handleLikeButtonClick(question);
-        }}
+        onLikeButtonClick={handleLikeButtonClick}
       />
     ));
   }
@@ -183,7 +201,7 @@ export function QuestionList({
                   now={now}
                   onLikeButtonClick={(e) => {
                     e.stopPropagation();
-                    handleLikeButtonClick(question);
+                    handleLikeButtonClick(question, isActived);
                   }}
                 />
               </div>
@@ -266,4 +284,13 @@ const removeQuestionFromLikedList =
       if (!draft) return;
 
       draft.likedIds = draft.likedIds.filter((likeId) => likeId !== questionId);
+    });
+
+const updateAnswers =
+  (active: boolean) => (prevAnswers: GetAnswersResult | undefined) =>
+    produce(prevAnswers, (draft) => {
+      if (!draft) return;
+
+      if (active) draft.likeNum += 1;
+      else draft.likeNum -= 1;
     });
