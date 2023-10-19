@@ -17,10 +17,12 @@ export class SocketClient extends Client {
   }
 
   publishToPanel<T extends SocketEvent>(panelId: Panel['sid'], event: T): void {
-    super.publish({
-      destination: `/pub/panels/${panelId}`,
-      body: JSON.stringify(event),
-    });
+    try {
+      super.publish({
+        destination: `/pub/panels/${panelId}`,
+        body: JSON.stringify(event),
+      });
+    } catch (err) {}
   }
 }
 
