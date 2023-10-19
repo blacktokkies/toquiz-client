@@ -131,6 +131,7 @@ export function QuestionList({
     overlay.open(({ close }) => (
       <QAModal
         close={close}
+        panelId={panelId}
         questionId={question.id}
         isActived={likeSet.has(question.id)}
         onLikeButtonClick={() => {
