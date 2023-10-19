@@ -58,10 +58,18 @@ export function QuestionList({
       const prevQuestions = queryClient.getQueryData<
         InfiniteData<QuestionPage>
       >(queryKey.question.list(panelId, sort));
-      queryClient.setQueryData<InfiniteData<QuestionPage>>(
-        queryKey.question.list(panelId, sort),
-        updateQuestion(id, active),
-      );
+
+      if (sort === 'createdDate,DESC') {
+        queryClient.setQueryData<InfiniteData<QuestionPage>>(
+          queryKey.question.list(panelId, sort),
+          updateQuestion(id, active),
+        );
+      } else {
+        queryClient.setQueryData<InfiniteData<QuestionPage>>(
+          queryKey.question.list(panelId, sort),
+          updateQuestionAndSort(id, active),
+        );
+      }
 
       const prevActiveInfo = queryClient.getQueryData<MyActiveInfo>(
         activeInfoDetailQuery(panelId).queryKey,
@@ -115,9 +123,6 @@ export function QuestionList({
           );
         }
       }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries(queryKey.question.lists());
     },
   });
 
@@ -205,6 +210,26 @@ const updateQuestion =
           }
         });
       });
+    });
+
+const updateQuestionAndSort =
+  (questionId: Question['id'], active: boolean) =>
+  (prevQuestions?: InfiniteData<QuestionPage>) =>
+    produce(prevQuestions, (draft) => {
+      if (!draft) return;
+
+      const allQuestions = draft.pages.flatMap((page) => page.questions);
+      const questionIdx = allQuestions.findIndex(
+        (question) => question.id === questionId,
+      );
+      if (questionIdx !== -1) {
+        if (active) allQuestions[questionIdx].likeNum += 1;
+        else allQuestions[questionIdx].likeNum -= 1;
+        allQuestions.sort((a, b) => b.likeNum - a.likeNum);
+        draft.pages.forEach((page) => {
+          page.questions = allQuestions.splice(0, 30);
+        });
+      }
     });
 
 const removeQuestion =
