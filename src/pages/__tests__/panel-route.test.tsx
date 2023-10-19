@@ -92,7 +92,7 @@ function setup(): {
       ),
       children: [
         {
-          path: '/panel/:id',
+          path: '/panel/:panelId',
           element: <Panel />,
           loader: panelLoader(queryClient),
           errorElement: <PanelErrorBoundary />,
