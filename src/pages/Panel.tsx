@@ -17,7 +17,7 @@ import {
   json,
   isRouteErrorResponse,
   Link,
-  useLoaderData,
+  useParams,
 } from 'react-router-dom';
 
 import { CreateQuestionModal } from '@/components/panel/CreateQuestionModal';
@@ -26,7 +26,7 @@ import { PanelHeader } from '@/components/panel/PanelHeader';
 import { ModalController } from '@/components/system/ModalController';
 import { useSocketClient } from '@/contexts/SocketClientContext';
 import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
-import { panelDetailQuery } from '@/hooks/queries/panel';
+import { panelDetailQuery, usePanelDetailQuery } from '@/hooks/queries/panel';
 import { useOverlay } from '@/hooks/useOverlay';
 import { ApiError } from '@/lib/apiClient';
 import { queryKey } from '@/lib/queryKey';
@@ -63,19 +63,27 @@ export const loader =
   };
 
 export function Component(): JSX.Element {
-  const panel = useLoaderData() as PanelData;
+  const params = useParams<{ panelId: PanelData['sid'] }>();
+  const panelId = params.panelId!;
+
+  // [NOTE] 패널 페이지 로더에서 패널 정보 쿼리를 prefetch하므로
+  // 첫번째 렌더링 중에 데이터가 `undefined`가 아님이 보장된다
+  const panel = usePanelDetailQuery(panelId, {
+    refetchOnMount: false,
+  }).data!;
+
   const queryClient = useQueryClient();
   const socketClient = useSocketClient();
 
   useEffect(() => {
     const handleCreateQuestion = (newQuestion: Question): void => {
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
-        queryKey.question.list(panel.sid),
+        queryKey.question.list(panelId),
         addQuestionAtLast(newQuestion),
       );
 
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
-        queryKey.question.list(panel.sid, 'createdDate,DESC'),
+        queryKey.question.list(panelId, 'createdDate,DESC'),
         addQuestionAtStart(newQuestion),
       );
     };
@@ -85,12 +93,12 @@ export function Component(): JSX.Element {
       likeNum: Question['likeNum'],
     ): void => {
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
-        queryKey.question.list(panel.sid),
+        queryKey.question.list(panelId),
         updateLikeNumAndSort(questionId, likeNum),
       );
 
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
-        queryKey.question.list(panel.sid, 'createdDate,DESC'),
+        queryKey.question.list(panelId, 'createdDate,DESC'),
         updateLikeNum(questionId, likeNum),
       );
     };
@@ -104,11 +112,11 @@ export function Component(): JSX.Element {
         addAnswer(newAnswer),
       );
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
-        queryKey.question.list(panel.sid),
+        queryKey.question.list(panelId),
         increaseAnswerNum(questionId),
       );
       queryClient.setQueryData<InfiniteData<QuestionPage>>(
-        queryKey.question.list(panel.sid, 'createdDate,DESC'),
+        queryKey.question.list(panelId, 'createdDate,DESC'),
         increaseAnswerNum(questionId),
       );
     };
@@ -116,7 +124,7 @@ export function Component(): JSX.Element {
     let subscription: StompSubscription | null = null;
     socketClient.onConnect = () => {
       subscription = socketClient.subscribePanel(
-        panel.sid,
+        panelId,
         ({ eventType, data }) => {
           if (eventType === 'CREATE_QUESTION') {
             const newQuestion = data;
@@ -138,13 +146,13 @@ export function Component(): JSX.Element {
       if (subscription !== null) socketClient.unsubscribe(subscription.id);
       socketClient.deactivate();
     };
-  }, [queryClient, socketClient, panel.sid]);
+  }, [queryClient, socketClient, panelId]);
 
   const overlay = useOverlay();
   function openCreateQuestionModal(): void {
     overlay.open(({ close }) => (
       <ModalController close={close} aria-label="질문 생성 모달">
-        <CreateQuestionModal close={close} panelId={panel.sid} />
+        <CreateQuestionModal close={close} panelId={panelId} />
       </ModalController>
     ));
   }
@@ -153,7 +161,7 @@ export function Component(): JSX.Element {
     <main className="flex flex-col h-full overflow-auto">
       <PanelHeader panel={panel} />
       <div className="flex-1 container flex flex-col max-w-2xl px-5 py-7">
-        <InfiniteQuestionList panelId={panel.sid} />
+        <InfiniteQuestionList panelId={panelId} />
       </div>
       <button
         className={clsx(
