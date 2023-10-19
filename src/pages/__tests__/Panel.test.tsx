@@ -1,3 +1,4 @@
+import type { MyActiveInfo } from '@/lib/api/active-Info';
 import type { Panel as PanelData } from '@/lib/api/panel';
 import type {
   GetQuestionsPathParams,
@@ -14,6 +15,7 @@ import { OverlayProvider } from '@/contexts/OverlayContext';
 import { apiUrl } from '@/lib/api/apiUrl';
 import { API_BASE_URL } from '@/lib/apiClient';
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { createMockActiveInfo } from '@/mocks/data/active-info';
 import { createMockPanel } from '@/mocks/data/panel';
 import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
@@ -30,16 +32,12 @@ vi.mock('@/hooks/queries/panel', async (importOriginal) => {
   return { ...queries, usePanelDetailQuery: () => mockPanelDetailQuery() };
 });
 
+const mockActiveInfoDetailQuery = vi.fn<[], { data: MyActiveInfo }>();
 vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
   const queries = (await importOriginal()) ?? {};
   return {
     ...queries,
-    useActiveInfoDetailQuery: vi.fn(() => ({
-      data: {
-        createdIds: [],
-        likedIds: [],
-      },
-    })),
+    useActiveInfoDetailQuery: () => mockActiveInfoDetailQuery(),
   };
 });
 
@@ -47,6 +45,9 @@ function setup({ panel }: { panel: PanelData }): void {
   mockCurrentPanelId.mockImplementation(() => panel.sid);
   mockPanelDetailQuery.mockImplementation(() => ({
     data: panel,
+  }));
+  mockActiveInfoDetailQuery.mockImplementation(() => ({
+    data: createMockActiveInfo(),
   }));
 
   renderWithQueryClient(
