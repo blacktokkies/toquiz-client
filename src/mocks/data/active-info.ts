@@ -10,3 +10,8 @@ export const initMockMyActiveInfo = (): void => {
     likedIds: [],
   };
 };
+
+export const createMockActiveInfo = (): MyActiveInfo => ({
+  createdIds: [],
+  likedIds: [],
+});
