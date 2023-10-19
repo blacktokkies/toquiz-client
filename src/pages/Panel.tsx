@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-throw-literal */
 
+import type { MyActiveInfo } from '@/lib/api/active-Info';
 import type { Answer, GetAnswersResult } from '@/lib/api/answer';
 import type { Panel as PanelData } from '@/lib/api/panel';
 import type { Question, QuestionPage } from '@/lib/api/question';
@@ -17,7 +18,6 @@ import {
   json,
   isRouteErrorResponse,
   Link,
-  useParams,
 } from 'react-router-dom';
 
 import { CreateQuestionModal } from '@/components/panel/CreateQuestionModal';
@@ -27,10 +27,8 @@ import { ModalController } from '@/components/system/ModalController';
 import { useSocketClient } from '@/contexts/SocketClientContext';
 import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
 import { panelDetailQuery, usePanelDetailQuery } from '@/hooks/queries/panel';
+import { useCurrentPanelId } from '@/hooks/useCurrentPanelId';
 import { useOverlay } from '@/hooks/useOverlay';
-
-import type { MyActiveInfo } from '@/lib/api/active-Info';
-
 import { ApiError } from '@/lib/apiClient';
 import { queryKey } from '@/lib/queryKey';
 
@@ -64,8 +62,7 @@ export const loader =
   };
 
 export function Component(): JSX.Element {
-  const params = useParams<{ panelId: PanelData['sid'] }>();
-  const panelId = params.panelId!;
+  const panelId = useCurrentPanelId();
 
   // [NOTE] 패널 페이지 로더에서 패널 정보 쿼리를 fetch하므로
   // 첫번째 렌더링 중에 데이터가 `undefined`가 아님이 보장된다
