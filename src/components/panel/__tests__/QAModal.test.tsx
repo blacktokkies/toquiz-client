@@ -1,3 +1,7 @@
+import type {
+  GetAnswersPathParams,
+  GetAnswersResponse,
+} from '@/lib/api/answer';
 import type { Panel } from '@/lib/api/panel';
 import type { Question } from '@/lib/api/question';
 import type { UserState } from '@/store/user-store';
@@ -12,9 +16,13 @@ import { rest } from 'msw';
 import { QAModal } from '@/components/panel/QAModal';
 import * as answerApis from '@/lib/api/answer';
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { createMockAnswer } from '@/mocks/data/answer';
 import { createMockUserId } from '@/mocks/data/auth';
 import { createMockPanel } from '@/mocks/data/panel';
-import { createMockQuestionId } from '@/mocks/data/question';
+import {
+  createMockQuestionId,
+  createMockQuestion,
+} from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
 const mockPanelDetailQuery = vi.fn<[], { data: Panel }>();
@@ -72,38 +80,29 @@ describe('QAModal', () => {
 
   it('답변 목록 API를 호출하고 성공 시 질문과 답변 목록을 보여준다', async () => {
     const spyOnGetAnswers = vi.spyOn(answerApis, 'getAnswers');
-
     server.use(
-      rest.get(`/api/questions/:questionId/answers`, async (req, res, ctx) => {
-        const questionId = req.params.questionId;
+      rest.get<never, GetAnswersPathParams, GetAnswersResponse>(
+        `/api/questions/:questionId/answers`,
+        async (req, res, ctx) => {
+          const questionId = req.params.questionId;
 
-        return res(
-          ctx.status(200),
-          ctx.json({
-            statusCode: 200,
-            result: {
-              id: questionId,
-              content: '질문이다',
-              answerNum: 1,
-              likeNum: 1,
-              authorId: '64dcd6c6c00ec65a803f3a69',
-              createdAt: '2023-08-16T23:05:18.309742',
-              updatedAt: '2023-08-16T23:08:19.852377',
-              answers: [
-                {
-                  id: 1,
-                  content: '답변이다',
-                  createdAt: '2023-08-16T23:08:19.844645',
-                  updatedAt: '2023-08-16T23:08:19.844645',
-                },
-              ],
-            },
-          }),
-        );
-      }),
+          return res(
+            ctx.status(200),
+            ctx.json({
+              statusCode: 200,
+              result: {
+                ...createMockQuestion(),
+                id: Number(questionId),
+                content: '질문이다',
+                answers: [{ ...createMockAnswer(), content: '답변이다' }],
+              },
+            }),
+          );
+        },
+      ),
     );
-
     const { queryClient } = setup();
+
     expect(spyOnGetAnswers).toHaveBeenCalled();
     await waitFor(() => {
       expect(queryClient.isFetching()).toBe(0);
@@ -116,10 +115,7 @@ describe('QAModal', () => {
   describe('답변 생성 폼', () => {
     it('패널 생성자라면 답변 생성 폼을 보여준다', async () => {
       const panel = createMockPanel();
-      const { queryClient } = setup({
-        panel,
-        userId: panel.author.id,
-      });
+      const { queryClient } = setup({ panel, userId: panel.author.id });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
       });
@@ -133,10 +129,7 @@ describe('QAModal', () => {
 
     it('패널 생성자가 아니면 답변 생성 폼을 보여주지 않는다', async () => {
       const panel = createMockPanel();
-      const { queryClient } = setup({
-        panel,
-        userId: panel.author.id + 1,
-      });
+      const { queryClient } = setup({ panel, userId: panel.author.id + 1 });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
       });
@@ -150,10 +143,7 @@ describe('QAModal', () => {
 
     it('닫힌 폼을 누르면 확장되며, 폼 바깥을 누르면 닫힌다', async () => {
       const panel = createMockPanel();
-      const { queryClient } = setup({
-        panel,
-        userId: panel.author.id,
-      });
+      const { queryClient } = setup({ panel, userId: panel.author.id });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
       });
@@ -170,10 +160,8 @@ describe('QAModal', () => {
 
     it('사용자가 한 글자 이상 입력했다면 폼 바깥을 눌러도 닫지 않는다', async () => {
       const panel = createMockPanel();
-      const { queryClient } = setup({
-        panel,
-        userId: panel.author.id,
-      });
+      const { queryClient } = setup({ panel, userId: panel.author.id });
+
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
       });
@@ -191,10 +179,8 @@ describe('QAModal', () => {
 
     it('취소 버튼 누르면 폼을 닫는다', async () => {
       const panel = createMockPanel();
-      const { queryClient } = setup({
-        panel,
-        userId: panel.author.id,
-      });
+      const { queryClient } = setup({ panel, userId: panel.author.id });
+
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
       });
@@ -211,10 +197,8 @@ describe('QAModal', () => {
 
     it('사용자가 0자 혹은 200자 초과로 입력하면 제출 버튼을 비활성화한다', async () => {
       const panel = createMockPanel();
-      const { queryClient } = setup({
-        panel,
-        userId: panel.author.id,
-      });
+      const { queryClient } = setup({ panel, userId: panel.author.id });
+
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
       });
@@ -234,10 +218,8 @@ describe('QAModal', () => {
 
     it('사용자가 입력하는 글자수를 보여준다', async () => {
       const panel = createMockPanel();
-      const { queryClient } = setup({
-        panel,
-        userId: panel.author.id,
-      });
+      const { queryClient } = setup({ panel, userId: panel.author.id });
+
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
       });
@@ -255,13 +237,12 @@ describe('QAModal', () => {
     it('답변 제출하면 답변 생성 API를 호출하고 성공 시 폼을 닫는다', async () => {
       const spyOnCreateAnswer = vi.spyOn(answerApis, 'createAnswer');
       const panel = createMockPanel();
-      const { queryClient } = setup({
-        panel,
-        userId: panel.author.id,
-      });
+      const { queryClient } = setup({ panel, userId: panel.author.id });
+
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
       });
+
       const formContainer = screen.getByRole('button', {
         name: /답변 생성 폼 열기/,
       });
