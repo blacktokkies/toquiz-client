@@ -6,24 +6,23 @@ import type {
   GetAnswersPathParams,
   GetAnswersResponse,
 } from '@/lib/api/answer';
+import type { Panel } from '@/lib/api/panel';
 import type { Question } from '@/lib/api/question';
+import type { UserState } from '@/store/user-store';
 import type { QueryClient } from '@tanstack/react-query';
-import type * as Vi from 'vitest';
 
 import React from 'react';
 
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
-import { useRouteLoaderData } from 'react-router-dom';
 
 import { QAModal } from '@/components/panel/QAModal';
-import { useUserStore } from '@/hooks/stores/useUserStore';
 import * as answerApis from '@/lib/api/answer';
 import { apiUrl } from '@/lib/api/apiUrl';
 import { renderWithQueryClient } from '@/lib/test-utils';
 import { createMockAnswer } from '@/mocks/data/answer';
-import { createMockUser } from '@/mocks/data/auth';
+import { createMockUserId } from '@/mocks/data/auth';
 import { createMockPanel } from '@/mocks/data/panel';
 import {
   createMockQuestion,
@@ -31,26 +30,42 @@ import {
 } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
-vi.mock('react-router-dom', async (importOriginal) => {
-  const router = (await importOriginal()) ?? {};
-  return { ...router, useRouteLoaderData: vi.fn(() => createMockPanel()) };
-});
+const mockParams = vi.fn<[], { panelId: string }>();
+vi.mock('react-router-dom', () => ({
+  useParams: () => mockParams(),
+}));
 
+const mockPanelDetailQuery = vi.fn<[], { data: Panel }>();
+vi.mock('@/hooks/queries/panel', () => ({
+  usePanelDetailQuery: () => mockPanelDetailQuery(),
+}));
+
+const mockUserId = vi.fn<[], UserState['id']>();
 vi.mock('@/hooks/stores/useUserStore', () => ({
-  useUserStore: vi.fn(() => createMockUser()),
+  useUserStore: () => mockUserId(),
 }));
 
 const handleClose = vi.fn();
 const handleLikeButtonClick = vi.fn();
 function setup({
-  questionId,
-  isActived,
+  panel = createMockPanel(),
+  userId = createMockUserId(),
+  questionId = createMockQuestionId(),
+  isActived = false,
 }: {
-  questionId: Question['id'];
-  isActived: boolean;
-}): {
+  panel?: Panel;
+  userId?: UserState['id'];
+  questionId?: Question['id'];
+  isActived?: boolean;
+} = {}): {
   queryClient: QueryClient;
 } {
+  mockParams.mockImplementation(() => ({
+    panelId: panel.sid,
+  }));
+  mockPanelDetailQuery.mockImplementation(() => ({ data: panel }));
+  mockUserId.mockImplementation(() => userId);
+
   const { queryClient } = renderWithQueryClient(
     <QAModal
       close={handleClose}
@@ -64,10 +79,7 @@ function setup({
 }
 describe('QAModal', () => {
   it('<- 아이콘을 누르면 close 함수가 호출된다', async () => {
-    const { queryClient } = setup({
-      questionId: createMockQuestionId(),
-      isActived: true,
-    });
+    const { queryClient } = setup();
     await waitFor(() => {
       expect(queryClient.isFetching()).toBe(0);
     });
@@ -82,13 +94,15 @@ describe('QAModal', () => {
     const spyOnGetAnswers = vi.spyOn(answerApis, 'getAnswers');
 
     server.use(
-      rest.get(`/api/questions/:questionId/answers`, async (req, res, ctx) =>
-        res(
+      rest.get(`/api/questions/:questionId/answers`, async (req, res, ctx) => {
+        const questionId = req.params.questionId;
+
+        return res(
           ctx.status(200),
           ctx.json({
             statusCode: 200,
             result: {
-              id: 1,
+              id: questionId,
               content: '질문이다',
               answerNum: 1,
               likeNum: 1,
@@ -105,14 +119,11 @@ describe('QAModal', () => {
               ],
             },
           }),
-        ),
-      ),
+        );
+      }),
     );
 
-    const { queryClient } = setup({
-      questionId: createMockQuestionId(),
-      isActived: true,
-    });
+    const { queryClient } = setup();
     expect(spyOnGetAnswers).toHaveBeenCalled();
     await waitFor(() => {
       expect(queryClient.isFetching()).toBe(0);
@@ -125,11 +136,9 @@ describe('QAModal', () => {
   describe('답변 생성 폼', () => {
     it('패널 생성자라면 답변 생성 폼을 보여준다', async () => {
       const panel = createMockPanel();
-      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
-      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
       const { queryClient } = setup({
-        questionId: createMockQuestionId(),
-        isActived: true,
+        panel,
+        userId: panel.author.id,
       });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
@@ -144,11 +153,9 @@ describe('QAModal', () => {
 
     it('패널 생성자가 아니면 답변 생성 폼을 보여주지 않는다', async () => {
       const panel = createMockPanel();
-      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
-      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id + 1);
       const { queryClient } = setup({
-        questionId: createMockQuestionId(),
-        isActived: true,
+        panel,
+        userId: panel.author.id + 1,
       });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
@@ -163,11 +170,9 @@ describe('QAModal', () => {
 
     it('닫힌 폼을 누르면 확장되며, 폼 바깥을 누르면 닫힌다', async () => {
       const panel = createMockPanel();
-      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
-      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
       const { queryClient } = setup({
-        questionId: createMockQuestionId(),
-        isActived: true,
+        panel,
+        userId: panel.author.id,
       });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
@@ -185,11 +190,9 @@ describe('QAModal', () => {
 
     it('사용자가 한 글자 이상 입력했다면 폼 바깥을 눌러도 닫지 않는다', async () => {
       const panel = createMockPanel();
-      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
-      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
       const { queryClient } = setup({
-        questionId: createMockQuestionId(),
-        isActived: true,
+        panel,
+        userId: panel.author.id,
       });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
@@ -208,11 +211,9 @@ describe('QAModal', () => {
 
     it('취소 버튼 누르면 폼을 닫는다', async () => {
       const panel = createMockPanel();
-      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
-      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
       const { queryClient } = setup({
-        questionId: createMockQuestionId(),
-        isActived: true,
+        panel,
+        userId: panel.author.id,
       });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
@@ -230,11 +231,9 @@ describe('QAModal', () => {
 
     it('사용자가 0자 혹은 200자 초과로 입력하면 제출 버튼을 비활성화한다', async () => {
       const panel = createMockPanel();
-      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
-      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
       const { queryClient } = setup({
-        questionId: createMockQuestionId(),
-        isActived: true,
+        panel,
+        userId: panel.author.id,
       });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
@@ -255,11 +254,9 @@ describe('QAModal', () => {
 
     it('사용자가 입력하는 글자수를 보여준다', async () => {
       const panel = createMockPanel();
-      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
-      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
       const { queryClient } = setup({
-        questionId: createMockQuestionId(),
-        isActived: true,
+        panel,
+        userId: panel.author.id,
       });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);
@@ -320,11 +317,10 @@ describe('QAModal', () => {
       );
       const spyOnCreateAnswer = vi.spyOn(answerApis, 'createAnswer');
       const panel = createMockPanel();
-      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
-      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
-
       const { queryClient } = setup({
-        questionId,
+        panel,
+        userId: panel.author.id,
+        questionId: createMockQuestionId(),
         isActived: true,
       });
       await waitFor(() => {
@@ -348,12 +344,9 @@ describe('QAModal', () => {
     it('답변 제출하면 답변 생성 API를 호출하고 성공 시 폼을 닫는다', async () => {
       const spyOnCreateAnswer = vi.spyOn(answerApis, 'createAnswer');
       const panel = createMockPanel();
-      (useRouteLoaderData as Vi.Mock).mockImplementation(() => panel);
-      (useUserStore as Vi.Mock).mockImplementation(() => panel.author.id);
-
       const { queryClient } = setup({
-        questionId: createMockQuestionId(),
-        isActived: true,
+        panel,
+        userId: panel.author.id,
       });
       await waitFor(() => {
         expect(queryClient.isFetching()).toBe(0);

@@ -28,6 +28,9 @@ import { useSocketClient } from '@/contexts/SocketClientContext';
 import { activeInfoDetailQuery } from '@/hooks/queries/active-info';
 import { panelDetailQuery, usePanelDetailQuery } from '@/hooks/queries/panel';
 import { useOverlay } from '@/hooks/useOverlay';
+
+import type { MyActiveInfo } from '@/lib/api/active-Info';
+
 import { ApiError } from '@/lib/apiClient';
 import { queryKey } from '@/lib/queryKey';
 
@@ -38,16 +41,14 @@ import Icons from '/icons.svg?url';
 // [NOTE] 로더 실패 반환값은 `Response`로 고정한다
 export const loader =
   (queryClient: QueryClient) =>
-  async ({ params }: LoaderFunctionArgs): Promise<PanelData> => {
+  async ({ params }: LoaderFunctionArgs): Promise<null> => {
     const panelId = params.panelId!;
     const panelQuery = panelDetailQuery(panelId);
     const activeInfoQuery = activeInfoDetailQuery(panelId);
     try {
-      const panel =
-        queryClient.getQueryData<PanelData>(panelQuery.queryKey) ??
-        (await queryClient.fetchQuery<PanelData>(panelQuery));
-      await queryClient.prefetchQuery(activeInfoQuery);
-      return panel;
+      await queryClient.fetchQuery<PanelData>(panelQuery);
+      await queryClient.fetchQuery<MyActiveInfo>(activeInfoQuery);
+      return null;
     } catch (error) {
       if (error instanceof ApiError) {
         const apiError = json(
@@ -66,7 +67,7 @@ export function Component(): JSX.Element {
   const params = useParams<{ panelId: PanelData['sid'] }>();
   const panelId = params.panelId!;
 
-  // [NOTE] 패널 페이지 로더에서 패널 정보 쿼리를 prefetch하므로
+  // [NOTE] 패널 페이지 로더에서 패널 정보 쿼리를 fetch하므로
   // 첫번째 렌더링 중에 데이터가 `undefined`가 아님이 보장된다
   const panel = usePanelDetailQuery(panelId, {
     refetchOnMount: false,

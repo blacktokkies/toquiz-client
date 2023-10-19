@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import { produce } from 'immer';
 import { flushSync } from 'react-dom';
-import { useRouteLoaderData } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Button } from '@/components/system/Button';
 import { useSocketClient } from '@/contexts/SocketClientContext';
@@ -18,11 +18,12 @@ import {
   useAnswersQuery,
   useCreateAnswerMutation,
 } from '@/hooks/queries/answer';
+import { usePanelDetailQuery } from '@/hooks/queries/panel';
 import { useUserStore } from '@/hooks/stores/useUserStore';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import { queryKey } from '@/lib/queryKey';
 
-/* eslint-disable import/no-absolute-path */
+/* eslint-disable import/no-absolute-path, @typescript-eslint/no-non-null-assertion */
 import Icons from '/icons.svg?url';
 
 import { AnswerList } from './AnswerList';
@@ -43,9 +44,13 @@ export function QAModal({
   isActived,
 }: Props): JSX.Element {
   const userId = useUserStore((state) => state.id);
-  // [NOTE] 질문과 답변 모달은 패널 페이지에서만 사용되므로
-  // 패널 페이지 로더가 반환하는 데이터가 null이 아님이 보장된다
-  const panelLoaderData = useRouteLoaderData('panel') as Panel;
+  const params = useParams<{ panelId: Panel['sid'] }>();
+  const panelId = params.panelId!;
+  // [NOTE] 패널 페이지 로더에서 패널 정보 쿼리를 fetch하므로
+  // 첫번째 렌더링 중에 데이터가 `undefined`가 아님이 보장된다
+  const { author, ...panel } = usePanelDetailQuery(panelId, {
+    refetchOnMount: false,
+  }).data!;
   const answersQuery = useAnswersQuery(questionId);
 
   const [expanded, setExpanded] = useState(false);
@@ -109,7 +114,7 @@ export function QAModal({
       return { prevAnswers };
     },
     onSuccess: (newAnswer) => {
-      socketClient.publishToPanel<CreateAnswerEvent>(panelLoaderData.sid, {
+      socketClient.publishToPanel<CreateAnswerEvent>(panelId, {
         eventType: 'CREATE_ANSWER',
         data: {
           questionId,
@@ -121,10 +126,6 @@ export function QAModal({
       queryClient.invalidateQueries(queryKey.answer.list(questionId));
     },
   });
-
-  if (panelLoaderData === undefined) return <></>;
-
-  const { author, ...panel } = panelLoaderData;
 
   // TODO: Fallback UI 제공하기
   if (answersQuery.isLoading) return <div>loading</div>;
