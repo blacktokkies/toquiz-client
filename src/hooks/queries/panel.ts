@@ -39,8 +39,9 @@ export const panelDetailQuery = (panelId: Panel['sid']): PanelDetailQuery => ({
 });
 export const usePanelDetailQuery = (
   panelId: Panel['sid'],
+  options: UseQueryOptions<Panel, ApiError | SyntaxError> = {},
 ): UseQueryResult<Panel, ApiError | SyntaxError> =>
-  useQuery(panelDetailQuery(panelId));
+  useQuery({ ...panelDetailQuery(panelId), ...options });
 
 export const useMyPanelsInfiniteQuery = (): UseInfiniteQueryResult<
   MyPanelPage,
