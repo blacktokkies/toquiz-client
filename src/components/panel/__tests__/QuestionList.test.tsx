@@ -26,12 +26,6 @@ vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
   };
 });
 
-const mockParams = vi.fn<[], { panelId: string }>();
-vi.mock('react-router-dom', async (importOriginal) => {
-  const router = (await importOriginal()) ?? {};
-  return { ...router, useParams: () => mockParams() };
-});
-
 const mockPanelDetailQuery = vi.fn<[], { data: Panel }>();
 vi.mock('@/hooks/queries/panel', async (importOriginal) => {
   const queries = (await importOriginal()) ?? {};
@@ -49,7 +43,6 @@ function setup({
 }): {
   queryClient: QueryClient;
 } {
-  mockParams.mockImplementation(() => ({ panelId }));
   mockPanelDetailQuery.mockImplementation(() => ({
     data: { panelId, ...createMockPanel() },
   }));
@@ -61,7 +54,6 @@ function setup({
         sort={sort}
         questionPages={questionPages}
       />
-      ,
     </OverlayProvider>,
   );
 

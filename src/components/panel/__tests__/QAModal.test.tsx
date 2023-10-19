@@ -30,11 +30,6 @@ import {
 } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
-const mockParams = vi.fn<[], { panelId: string }>();
-vi.mock('react-router-dom', () => ({
-  useParams: () => mockParams(),
-}));
-
 const mockPanelDetailQuery = vi.fn<[], { data: Panel }>();
 vi.mock('@/hooks/queries/panel', () => ({
   usePanelDetailQuery: () => mockPanelDetailQuery(),
@@ -60,15 +55,13 @@ function setup({
 } = {}): {
   queryClient: QueryClient;
 } {
-  mockParams.mockImplementation(() => ({
-    panelId: panel.sid,
-  }));
   mockPanelDetailQuery.mockImplementation(() => ({ data: panel }));
   mockUserId.mockImplementation(() => userId);
 
   const { queryClient } = renderWithQueryClient(
     <QAModal
       close={handleClose}
+      panelId={panel.sid}
       questionId={questionId}
       isActived={isActived}
       onLikeButtonClick={handleLikeButtonClick}

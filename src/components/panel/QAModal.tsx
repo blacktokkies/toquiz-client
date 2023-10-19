@@ -10,7 +10,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import { produce } from 'immer';
 import { flushSync } from 'react-dom';
-import { useParams } from 'react-router-dom';
 
 import { Button } from '@/components/system/Button';
 import { useSocketClient } from '@/contexts/SocketClientContext';
@@ -31,6 +30,7 @@ import { QuestionItem } from './QuestionItem';
 
 interface Props {
   close: () => void;
+  panelId: Panel['sid'];
   questionId: Question['id'];
   onLikeButtonClick: () => void;
   isActived: boolean;
@@ -39,13 +39,12 @@ interface Props {
 let id = 0;
 export function QAModal({
   close,
+  panelId,
   questionId,
   onLikeButtonClick,
   isActived,
 }: Props): JSX.Element {
   const userId = useUserStore((state) => state.id);
-  const params = useParams<{ panelId: Panel['sid'] }>();
-  const panelId = params.panelId!;
   // [NOTE] 패널 페이지 로더에서 패널 정보 쿼리를 fetch하므로
   // 첫번째 렌더링 중에 데이터가 `undefined`가 아님이 보장된다
   const { author, ...panel } = usePanelDetailQuery(panelId, {
