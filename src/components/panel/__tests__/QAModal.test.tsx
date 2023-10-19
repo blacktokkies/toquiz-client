@@ -1,11 +1,3 @@
-import type {
-  Answer,
-  CreateAnswerBody,
-  CreateAnswerPathParams,
-  CreateAnswerResponse,
-  GetAnswersPathParams,
-  GetAnswersResponse,
-} from '@/lib/api/answer';
 import type { Panel } from '@/lib/api/panel';
 import type { Question } from '@/lib/api/question';
 import type { UserState } from '@/store/user-store';
@@ -19,15 +11,10 @@ import { rest } from 'msw';
 
 import { QAModal } from '@/components/panel/QAModal';
 import * as answerApis from '@/lib/api/answer';
-import { apiUrl } from '@/lib/api/apiUrl';
 import { renderWithQueryClient } from '@/lib/test-utils';
-import { createMockAnswer } from '@/mocks/data/answer';
 import { createMockUserId } from '@/mocks/data/auth';
 import { createMockPanel } from '@/mocks/data/panel';
-import {
-  createMockQuestion,
-  createMockQuestionId,
-} from '@/mocks/data/question';
+import { createMockQuestionId } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
 const mockPanelDetailQuery = vi.fn<[], { data: Panel }>();
@@ -263,75 +250,6 @@ describe('QAModal', () => {
       fireEvent.change(answerInput, { target: { value: '안녕하세요' } });
 
       expect(screen.getByText(/5자/)).toBeInTheDocument();
-    });
-
-    it('답변 제출하면 일단 화면에 보여준다', async () => {
-      const questionId = createMockQuestionId();
-      const answers: Answer[] = [];
-      server.use(
-        rest.get<never, GetAnswersPathParams, GetAnswersResponse>(
-          apiUrl.answer.getAnswers(':questionId'),
-          async (req, res, ctx) =>
-            res(
-              ctx.status(200),
-              ctx.json({
-                statusCode: 200,
-                result: {
-                  ...createMockQuestion(),
-                  id: questionId,
-                  answers,
-                },
-              }),
-            ),
-        ),
-      );
-
-      server.use(
-        rest.post<
-          CreateAnswerBody,
-          CreateAnswerPathParams,
-          CreateAnswerResponse
-        >(apiUrl.answer.create(':panelId'), async (req, res, ctx) => {
-          const { content }: CreateAnswerBody = await req.json();
-          const answer = {
-            ...createMockAnswer(),
-            content,
-          };
-          answers.push(answer);
-
-          return res(
-            ctx.status(200),
-            ctx.json({
-              statusCode: 200,
-              result: answer,
-            }),
-          );
-        }),
-      );
-      const spyOnCreateAnswer = vi.spyOn(answerApis, 'createAnswer');
-      const panel = createMockPanel();
-      const { queryClient } = setup({
-        panel,
-        userId: panel.author.id,
-        questionId: createMockQuestionId(),
-        isActived: true,
-      });
-      await waitFor(() => {
-        expect(queryClient.isFetching()).toBe(0);
-      });
-      const formContainer = screen.getByRole('button', {
-        name: /답변 생성 폼 열기/,
-      });
-      await userEvent.click(formContainer);
-      const answerInput = screen.getByRole('textbox');
-      fireEvent.change(answerInput, { target: { value: '안녕하세요' } });
-      const submitButton = screen.getByRole('button', {
-        name: '답변 생성',
-      });
-      await userEvent.click(submitButton);
-
-      expect(spyOnCreateAnswer).toHaveBeenCalled();
-      expect(screen.getByRole('listitem')).toHaveTextContent('안녕하세요');
     });
 
     it('답변 제출하면 답변 생성 API를 호출하고 성공 시 폼을 닫는다', async () => {

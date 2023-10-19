@@ -8,7 +8,6 @@ import React, { useRef, useState, useCallback } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { clsx } from 'clsx';
-import { produce } from 'immer';
 import { flushSync } from 'react-dom';
 
 import { Button } from '@/components/system/Button';
@@ -36,7 +35,6 @@ interface Props {
   isActived: boolean;
 }
 
-let id = 0;
 export function QAModal({
   close,
   panelId,
@@ -87,31 +85,6 @@ export function QAModal({
   const createAnswerMutation = useCreateAnswerMutation<{
     prevAnswers: GetAnswersResult | undefined;
   }>(questionId, {
-    onMutate: async (content) => {
-      await queryClient.cancelQueries(queryKey.question.lists());
-      await queryClient.cancelQueries(queryKey.answer.list(questionId));
-
-      const prevAnswers = queryClient.getQueryData<GetAnswersResult>(
-        queryKey.answer.list(questionId),
-      );
-      queryClient.setQueryData<GetAnswersResult>(
-        queryKey.answer.list(questionId),
-        (old) =>
-          produce(old, (draft) => {
-            if (!draft) return;
-
-            draft.answerNum += 1;
-            draft.answers.push({
-              id: id--,
-              content,
-              createdAt: new Date().toString(),
-              updatedAt: new Date().toString(),
-            });
-          }),
-      );
-
-      return { prevAnswers };
-    },
     onSuccess: (newAnswer) => {
       socketClient.publishToPanel<CreateAnswerEvent>(panelId, {
         eventType: 'CREATE_ANSWER',
