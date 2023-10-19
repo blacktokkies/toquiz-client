@@ -1,4 +1,3 @@
-import type { MyActiveInfo } from '@/lib/api/active-Info';
 import type { Panel } from '@/lib/api/panel';
 import type { ErrorResponse } from '@/lib/api/types';
 import type { QueryClient } from '@tanstack/react-query';
@@ -20,11 +19,15 @@ import { createMockPanelId } from '@/mocks/data/panel';
 import { createMockQuestion } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
 
-vi.mock('@/hooks/queries/active-info', () => ({
-  useActiveInfoDetailQuery: vi.fn<[], { data: MyActiveInfo }>(() => ({
-    data: createMockActiveInfo(),
-  })),
-}));
+vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
+  const queries = (await importOriginal()) ?? {};
+  return {
+    ...queries,
+    useActiveInfoDetailQuery: vi.fn(() => ({
+      data: createMockActiveInfo(),
+    })),
+  };
+});
 
 function setup({ panelId }: { panelId: Panel['sid'] }): {
   queryClient: QueryClient;
