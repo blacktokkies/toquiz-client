@@ -39,7 +39,7 @@ import Icons from '/icons.svg?url';
 export const loader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs): Promise<PanelData> => {
-    const panelId = params.id!;
+    const panelId = params.panelId!;
     const panelQuery = panelDetailQuery(panelId);
     const activeInfoQuery = activeInfoDetailQuery(panelId);
     try {

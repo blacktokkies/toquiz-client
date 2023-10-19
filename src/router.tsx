@@ -43,7 +43,7 @@ export const createRouterWithQueryClient = (
           ],
         },
         {
-          path: 'panel/:id',
+          path: 'panel/:panelId',
           id: 'panel',
           lazy: async () => {
             const { loader, ...rest } = await import('@/pages/Panel');
