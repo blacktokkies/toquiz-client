@@ -17,6 +17,7 @@ type Sort = GetQuestionsParams['sort'];
 
 export function InfiniteQuestionList({ panelId }: Props): JSX.Element {
   const [sort, setSort] = useState<Sort>(undefined);
+
   const questionsQuery = useQuestionsInfiniteQuery(panelId, sort);
   const fetchQuestions = useCallback(
     (isIntersecting: boolean) => {
