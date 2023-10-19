@@ -12,6 +12,7 @@ import { flushSync } from 'react-dom';
 
 import { Button } from '@/components/system/Button';
 import { useSocketClient } from '@/contexts/SocketClientContext';
+import { useActiveInfoDetailQuery } from '@/hooks/queries/active-info';
 import {
   useAnswersQuery,
   useCreateAnswerMutation,
@@ -31,8 +32,7 @@ interface Props {
   close: () => void;
   panelId: Panel['sid'];
   questionId: Question['id'];
-  onLikeButtonClick: () => void;
-  isActived: boolean;
+  onLikeButtonClick: (question: Question, isActived: boolean) => void;
 }
 
 export function QAModal({
@@ -40,8 +40,16 @@ export function QAModal({
   panelId,
   questionId,
   onLikeButtonClick,
-  isActived,
 }: Props): JSX.Element {
+  // [NOTE] 패널 페이지 로더에서 활동 정보 쿼리를 fetch하므로
+  // 첫번째 렌더링 중에 데이터가 `undefined`가 아님이 보장된다
+  /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+  const activeInfo = useActiveInfoDetailQuery(panelId, {
+    refetchOnMount: false,
+  }).data!;
+  const likeSet = new Set(activeInfo.likedIds);
+  const isActived = likeSet.has(questionId);
+
   const userId = useUserStore((state) => state.id);
   // [NOTE] 패널 페이지 로더에서 패널 정보 쿼리를 fetch하므로
   // 첫번째 렌더링 중에 데이터가 `undefined`가 아님이 보장된다
@@ -114,7 +122,9 @@ export function QAModal({
       <QuestionItem
         question={question}
         isActived={isActived}
-        onLikeButtonClick={onLikeButtonClick}
+        onLikeButtonClick={() => {
+          onLikeButtonClick(question, isActived);
+        }}
         now={new Date()}
       />
       {userId === author.id && (

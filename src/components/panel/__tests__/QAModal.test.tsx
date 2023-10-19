@@ -1,3 +1,4 @@
+import type { MyActiveInfo } from '@/lib/api/active-Info';
 import type {
   GetAnswersPathParams,
   GetAnswersResponse,
@@ -16,6 +17,7 @@ import { rest } from 'msw';
 import { QAModal } from '@/components/panel/QAModal';
 import * as answerApis from '@/lib/api/answer';
 import { renderWithQueryClient } from '@/lib/test-utils';
+import { createMockActiveInfo } from '@/mocks/data/active-info';
 import { createMockAnswer } from '@/mocks/data/answer';
 import { createMockUserId } from '@/mocks/data/auth';
 import { createMockPanel } from '@/mocks/data/panel';
@@ -24,6 +26,15 @@ import {
   createMockQuestion,
 } from '@/mocks/data/question';
 import { server } from '@/mocks/server';
+
+const mockActiveInfoDetailQuery = vi.fn<[], { data: MyActiveInfo }>();
+vi.mock('@/hooks/queries/active-info', async (importOriginal) => {
+  const queries = (await importOriginal()) ?? {};
+  return {
+    ...queries,
+    useActiveInfoDetailQuery: () => mockActiveInfoDetailQuery(),
+  };
+});
 
 const mockPanelDetailQuery = vi.fn<[], { data: Panel }>();
 vi.mock('@/hooks/queries/panel', () => ({
@@ -41,15 +52,16 @@ function setup({
   panel = createMockPanel(),
   userId = createMockUserId(),
   questionId = createMockQuestionId(),
-  isActived = false,
 }: {
   panel?: Panel;
   userId?: UserState['id'];
   questionId?: Question['id'];
-  isActived?: boolean;
 } = {}): {
   queryClient: QueryClient;
 } {
+  mockActiveInfoDetailQuery.mockImplementation(() => ({
+    data: createMockActiveInfo(),
+  }));
   mockPanelDetailQuery.mockImplementation(() => ({ data: panel }));
   mockUserId.mockImplementation(() => userId);
 
@@ -58,7 +70,6 @@ function setup({
       close={handleClose}
       panelId={panel.sid}
       questionId={questionId}
-      isActived={isActived}
       onLikeButtonClick={handleLikeButtonClick}
     />,
   );
